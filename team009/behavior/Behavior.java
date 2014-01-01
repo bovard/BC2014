@@ -33,6 +33,7 @@ public abstract class Behavior extends Node {
 
 	/**
 	 * Executes the node
+     * Returns true if the behavior has completed, false otherwise
 	 */
-	public abstract void run() throws GameActionException;
+	public abstract boolean run() throws GameActionException;
 }
