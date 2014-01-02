@@ -1,9 +1,10 @@
-package team009.behavior;
+package team009.behavior.behaviors;
 
 import java.util.Random;
 
 import battlecode.common.Clock;
 import battlecode.common.GameActionException;
+import team009.behavior.Node;
 
 
 public abstract class Behavior extends Node {

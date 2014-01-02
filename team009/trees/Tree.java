@@ -1,9 +1,8 @@
 package team009.trees;
 
 import battlecode.common.Clock;
-import battlecode.common.GameActionException;
-import team009.behavior.Behavior;
-import team009.behavior.Decision;
+import team009.behavior.behaviors.Behavior;
+import team009.behavior.decisions.Decision;
 import team009.behavior.Node;
 
 import team009.robot.TeamRobot;
@@ -23,6 +22,7 @@ public abstract class Tree {
 	
 	public void run() {
 		boolean newB = true;
+        boolean done = false;
 		while (true) {
 			int round = Clock.getRoundNum();
 			
@@ -52,7 +52,13 @@ public abstract class Tree {
 				// if it's new call start
 				// call run
 				if (current instanceof Behavior) {
-					((Behavior)current).run();
+					done = ((Behavior)current).run();
+                    // if the behavior says that it's done, go back to the parent to do the next thing
+                    if (done) {
+                        current = current.parent;
+                        newB = true;
+                        continue;
+                    }
 				}
 				// if we are on a decision Node
 				// call select and set the thing it returns to the current, then loop again (continue)
