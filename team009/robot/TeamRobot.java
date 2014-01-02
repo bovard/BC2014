@@ -1,10 +1,11 @@
 package team009.robot;
 
+import battlecode.common.Clock;
 import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
 import team009.RobotInformation;
+import team009.behavior.Node;
 import team009.communication.Communicator;
-import team009.trees.Tree;
 
 /**
  * This is the Robot Class, you'll need to extend it
@@ -16,7 +17,7 @@ import team009.trees.Tree;
  */
 public abstract class TeamRobot {
 	
-	protected Tree tree;
+	protected Node treeRoot;
 	public RobotController rc;
 	public RobotInformation info;
 	public Communicator com;
@@ -37,12 +38,46 @@ public abstract class TeamRobot {
 	/**
 	 * Called at the end of a robots turn, can load things...
 	 */
-	public void load() throws GameActionException {};
+	public void postProcessing() throws GameActionException {};
 	
 	/**
 	 * We should never return from this 
 	 */
 	public void run() {
-		tree.run();
+        while (true) {
+            int round = Clock.getRoundNum();
+
+            try {
+                // at the start of the round, update with an environment check
+                this.environmentCheck();
+
+                // have the tree choose what to do
+                treeRoot.run();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            // then postProcessing with whatever remains of our byte code
+            try {
+                this.postProcessing();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                System.out.println("Load error: " );
+                e.printStackTrace();
+            }
+
+            // only yield if we're still on the same clock turn
+            // if we aren't that means that we ended up skipping
+            // our turn because we went too long
+            if (round == Clock.getRoundNum()) {
+                this.rc.yield();
+                this.rc.setIndicatorString(0, "-");
+            } else {
+                System.out.println("BYTECODE LIMIT EXCEEDED!");
+            }
+        }
+
 	}
 }
