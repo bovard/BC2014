@@ -6,18 +6,17 @@ import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import battlecode.common.Team;
 import battlecode.common.TerrainTile;
-import team122.robot.Soldier;
-import team122.robot.TeamRobot;
+import team009.robot.TeamRobot;
 
 public class SoldierMove {
 
-	protected Soldier robot;
+	protected TeamRobot robot;
 	public MapLocation destination;
 	private Direction bug;
 	private Direction lastBug;
 	private Direction bugGoal;
 	
-	public SoldierMove(Soldier robot) {
+	public SoldierMove(TeamRobot robot) {
 		this.robot = robot;
 	}
 	
@@ -36,7 +35,8 @@ public class SoldierMove {
 	}
 	
 	public boolean atDestination() {
-		if (robot.currentLoc.equals(destination)) {
+        // TODO: get rid of currentLoc
+		if (robot.rc.getLocation().equals(destination)) {
 			return true;
 		}
 		return false;
@@ -49,18 +49,20 @@ public class SoldierMove {
 	public void dumbMove() throws GameActionException {
 		if (!robot.rc.isActive())
 			return;
-		
-		Direction toMove = robot.currentLoc.directionTo(destination);
+
+        // TODO: get rid of currentLoc
+        MapLocation currentLoc = robot.rc.getLocation();
+		Direction toMove = currentLoc.directionTo(destination);
 		
 		if (toMove == Direction.NONE || toMove == Direction.OMNI)
 			return;
 		
 		// if there is a move toward our goal without mines, take it
-		if (robot.rc.canMove(toMove) && robot.rc.senseMine(robot.currentLoc.add(toMove)) == null) {
+		if (robot.rc.canMove(toMove) && robot.rc.senseMine(currentLoc.add(toMove)) == null) {
 			robot.rc.move(toMove);
-		} else if (robot.rc.canMove(toMove.rotateLeft()) && robot.rc.senseMine(robot.currentLoc.add(toMove.rotateLeft())) == null) {
+		} else if (robot.rc.canMove(toMove.rotateLeft()) && robot.rc.senseMine(currentLoc.add(toMove.rotateLeft())) == null) {
 			robot.rc.move(toMove.rotateLeft());
-		} else if (robot.rc.canMove(toMove.rotateRight()) && robot.rc.senseMine(robot.currentLoc.add(toMove.rotateRight())) == null) {
+		} else if (robot.rc.canMove(toMove.rotateRight()) && robot.rc.senseMine(currentLoc.add(toMove.rotateRight())) == null) {
 			robot.rc.move(toMove.rotateRight());
 		}
 		// otherwise move though the minefield!
@@ -76,8 +78,10 @@ public class SoldierMove {
 	public void move() throws GameActionException {
 		if (!robot.rc.isActive())
 			return;
-			
-		Direction toMove = robot.currentLoc.directionTo(destination);
+
+        // TODO: get rid of currentLoc
+        MapLocation currentLoc = robot.rc.getLocation();
+		Direction toMove = currentLoc.directionTo(destination);
 		
 		if (toMove == Direction.NONE || toMove == Direction.OMNI)
 			return;
@@ -85,9 +89,9 @@ public class SoldierMove {
 		if (bug != null) {
 			
 			if (robot.rc.canMove(bugGoal)) {
-				Team mine = robot.rc.senseMine(robot.currentLoc.add(bugGoal)); 
+				Team mine = robot.rc.senseMine(currentLoc.add(bugGoal));
 				if (mine == Team.NEUTRAL || mine == robot.info.enemyTeam) {
-					robot.rc.defuseMine(robot.currentLoc.add(bugGoal));
+					robot.rc.defuseMine(currentLoc.add(bugGoal));
 				} else {
 					robot.rc.move(bugGoal);
 					lastBug = bug;
@@ -110,28 +114,30 @@ public class SoldierMove {
 	
 	private void moveWithDiffuse(Direction toMove) throws GameActionException {
 		MapLocation ahead, left, right;
-		ahead = robot.currentLoc.add(toMove);
-		left = robot.currentLoc.add(toMove.rotateLeft());
-		right = robot.currentLoc.add(toMove.rotateRight());
+        // TODO: get rid of currentLoc
+        MapLocation currentLoc = robot.rc.getLocation();
+		ahead = currentLoc.add(toMove);
+		left = currentLoc.add(toMove.rotateLeft());
+		right = currentLoc.add(toMove.rotateRight());
 
 		
 		Team mineAheadTeam, mineLeftTeam, mineRightTeam, mineHereTeam;
 		mineAheadTeam = robot.rc.senseMine(ahead);
 		mineLeftTeam = robot.rc.senseMine(left);
 		mineRightTeam = robot.rc.senseMine(right);
-		mineHereTeam = robot.rc.senseMine(robot.currentLoc);
+		mineHereTeam = robot.rc.senseMine(currentLoc);
 		
 		// if we have stepped on a mine
 		if (mineHereTeam == robot.info.enemyTeam || mineHereTeam == Team.NEUTRAL) {
 			// run away!
 			// get off the mine square!
-			toMove = robot.currentLoc.directionTo(robot.info.hq);
+			toMove = currentLoc.directionTo(robot.info.hq);
 			boolean done = false;
 			int i = 0;
 			while(!done && i < 8) {
 				i++;
 				if(robot.rc.canMove(toMove)) {
-					Team mineTeam = robot.rc.senseMine(robot.currentLoc.add(toMove));
+					Team mineTeam = robot.rc.senseMine(currentLoc.add(toMove));
 					if (mineTeam != Team.NEUTRAL && mineTeam != robot.info.enemyTeam) {
 						robot.rc.move(toMove);
 						done = true;
@@ -142,8 +148,8 @@ public class SoldierMove {
 		}
 		
 		// if we are next to our location but there is a mine on it
-		else if (robot.currentLoc.isAdjacentTo(destination) && (robot.rc.senseMine(robot.currentLoc.add(toMove)) == Team.NEUTRAL || 
-				robot.rc.senseMine(robot.currentLoc.add(toMove)) == robot.info.enemyTeam)) {
+		else if (currentLoc.isAdjacentTo(destination) && (robot.rc.senseMine(currentLoc.add(toMove)) == Team.NEUTRAL ||
+				robot.rc.senseMine(currentLoc.add(toMove)) == robot.info.enemyTeam)) {
 			robot.rc.defuseMine(destination);
 		}
 		
@@ -190,9 +196,9 @@ public class SoldierMove {
 		}
 		
 		// still can't move?  Activate/change bug direction
-		if (robot.rc.senseTerrainTile(robot.currentLoc.add(toMove)) == TerrainTile.OFF_MAP) {
+		if (robot.rc.senseTerrainTile(currentLoc.add(toMove)) == TerrainTile.OFF_MAP) {
 			bug = null;
-		} else if (bugGoal != null && robot.rc.senseTerrainTile(robot.currentLoc.add(bugGoal)) == TerrainTile.OFF_MAP) {
+		} else if (bugGoal != null && robot.rc.senseTerrainTile(currentLoc.add(bugGoal)) == TerrainTile.OFF_MAP) {
 			bug = null;
 		} else if (robot.rc.isActive()) {
 			// we aren't in bug and can't move, activate bug

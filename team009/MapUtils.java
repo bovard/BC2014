@@ -1,4 +1,8 @@
+package team009;
+
 import java.util.Arrays;
+
+import team009.RobotInformation;
 
 import battlecode.common.Direction;
 import battlecode.common.MapLocation;
@@ -77,10 +81,6 @@ public class MapUtils {
 	/**
 	 * The quicksort algorithm uses recursion, maybe we can make it
 	 * into while loops.
-	 * 
-	 * @param numbers
-	 * @param low
-	 * @param high
 	 */
 	private static void _quicksort(int[] locsDists, MapLocation[] locs, int low, int high) {
 		int i = low, j = high;
@@ -122,10 +122,6 @@ public class MapUtils {
 	/**
 	 * The quicksort algorithm uses recursion, maybe we can make it
 	 * into while loops.
-	 * 
-	 * @param numbers
-	 * @param low
-	 * @param high
 	 */
 	private static void _quicksort_descend(int[] locsDists, MapLocation[] locs, int low, int high) {
 		int i = low, j = high;

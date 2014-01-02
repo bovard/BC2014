@@ -1,6 +1,8 @@
+package team009;
+
 import java.util.HashMap;
 
-import team122.communication.Communicator;
+import team009.communication.Communicator;
 import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;

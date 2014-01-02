@@ -1,4 +1,5 @@
 import battlecode.common.RobotController;
+import team009.Tile;
 
 public class AStar {
 	

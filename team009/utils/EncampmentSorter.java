@@ -3,7 +3,7 @@ package team009.utils;
 
 import java.util.Arrays;
 
-import team122.robot.HQ;
+//import team009.robot.HQ;
 import battlecode.common.Clock;
 import battlecode.common.MapLocation;
 import battlecode.common.Robot;
@@ -185,10 +185,11 @@ public class EncampmentSorter {
 	public void refresh() {
 		
 		//Processes a generator and an artillery back and forth.
-		do {
-			_processGenerator();
-			_processArtillery();
-		} while (Clock.getBytecodesLeft() > HQ.MINIMUM_BYTECODES_LEFT);
+        // TODO
+		//do {
+	    //  _processGenerator();
+		//	_processArtillery();
+		//} while (Clock.getBytecodesLeft() > HQ.MINIMUM_BYTECODES_LEFT);
 	}
 	
 	public boolean sort() {
@@ -211,7 +212,6 @@ public class EncampmentSorter {
 	/**
 	 * Calculates for the next x amount of turns (10,000 byte codes * turns)
 	 * 
-	 * @param turns
 	 * @return
 	 */
 	public boolean calculate() {
@@ -227,7 +227,7 @@ public class EncampmentSorter {
 
 		// 110 bytecodes
 		for (i = _currentRound; Clock.getRoundNum() - startingClock < 1
-				&& Clock.getBytecodesLeft() > HQ.MINIMUM_BYTECODES_LEFT && i < totalEncampments; i++) {
+				&& /* Clock.getBytecodesLeft() > HQ.MINIMUM_BYTECODES_LEFT && TODO */ i < totalEncampments; i++) {
 			enc = encampments[i];
 			encampmentDistances[i] = hq.distanceSquaredTo(enc);
 			enemyDistances[i] = enemy.distanceSquaredTo(enc);
@@ -278,7 +278,7 @@ public class EncampmentSorter {
 		
 		Team team = rc.getTeam();
 		if (__artilleryIndex < artilleryLength) {
-			for (;__artilleryIndex < artilleryLength && Clock.getBytecodesLeft() > HQ.MINIMUM_BYTECODES_LEFT; __artilleryIndex++) {
+			for (;__artilleryIndex < artilleryLength /* TODO && Clock.getBytecodesLeft() > HQ.MINIMUM_BYTECODES_LEFT*/; __artilleryIndex++) {
 				
 				//We claim to have an encampment here and if we do not then we set it to false
 				//and break from the loop so artillery can have some processing as well.
@@ -300,7 +300,7 @@ public class EncampmentSorter {
 
 		Team team = rc.getTeam();
 		if (__generatorIndex < generatorLength) {
-			for (;__generatorIndex < generatorLength && Clock.getBytecodesLeft() > HQ.MINIMUM_BYTECODES_LEFT; __generatorIndex++) {
+			for (;__generatorIndex < generatorLength /* TODO && Clock.getBytecodesLeft() > HQ.MINIMUM_BYTECODES_LEFT*/; __generatorIndex++) {
 				
 				//We claim to have an encampment here and if we do not then we set it to false
 				//and break from the loop so artillery can have some processing as well.

@@ -1,6 +1,5 @@
 package team009.communication;
 
-import team122.robot.HQ;
 import battlecode.common.Clock;
 import battlecode.common.GameActionException;
 import battlecode.common.GameConstants;
@@ -89,9 +88,6 @@ public class Communicator {
 	 * X = X Location
 	 * Y = Y Location
 	 * 
-	 * @param channels
-	 * @param loc
-	 * @param data
 	 * @throws GameActionException
 	 */
 	public void communicateWithPosition(CommunicationDecoder dec, int channel, int round) throws GameActionException {
@@ -147,9 +143,10 @@ public class Communicator {
 	 * @throws GameActionException 
 	 */
 	public void nukeIsArmed() throws GameActionException {
-		
-		communicate(CHANNEL_NUKE_IS_ARMED, Clock.getRoundNum(), HQ.NUKE_IS_ARMED);
-		communicate(CHANNEL_NUKE_IS_ARMED_BACKUP, Clock.getRoundNum(), HQ.NUKE_IS_ARMED);
+
+        // TODO: these
+		//communicate(CHANNEL_NUKE_IS_ARMED, Clock.getRoundNum(), HQ.NUKE_IS_ARMED);
+		//communicate(CHANNEL_NUKE_IS_ARMED_BACKUP, Clock.getRoundNum(), HQ.NUKE_IS_ARMED);
 	}
 
 	
@@ -159,31 +156,33 @@ public class Communicator {
 	 * @throws GameActionException 
 	 */
 	public void attack() throws GameActionException {
-		
-		communicate(CHANNEL_SWARMER_ATTACK, Clock.getRoundNum(), HQ.ATTACK_CODE);
+
+        // TODO: these
+		//communicate(CHANNEL_SWARMER_ATTACK, Clock.getRoundNum(), HQ.ATTACK_CODE);
 	}
 	
 	/**
 	 * Attempts to retaliate against the enemy.
 	 */
 	public void retaliate() throws GameActionException {
-		communicate(CHANNEL_RETALIATE, Clock.getRoundNum(), HQ.RETALIATE);
+        // TODO: these
+		// communicate(CHANNEL_RETALIATE, Clock.getRoundNum(), HQ.RETALIATE);
 	}
 	
 	/**
 	 * If the nuke is armed then alert like crazy.
-	 * @param round
-	 * @throws GameActionException 
+	 * @throws GameActionException
 	 */
 	public boolean isNukeArmed() throws GameActionException {
 		
 		int nukeArmedCode = receive(CHANNEL_NUKE_IS_ARMED, Clock.getRoundNum(), 0);
-		if (nukeArmedCode == receive(CHANNEL_NUKE_IS_ARMED_BACKUP, Clock.getRoundNum(), 0) && 
-				nukeArmedCode == HQ.NUKE_IS_ARMED) {
+        // TODO: these
+		//if (nukeArmedCode == receive(CHANNEL_NUKE_IS_ARMED_BACKUP, Clock.getRoundNum(), 0) &&
+		//		nukeArmedCode == HQ.NUKE_IS_ARMED) {
 			
 			//Nuke is armed
-			return true;
-		}
+		//	return true;
+		//}
 		return false;
 	}
 	
@@ -193,7 +192,9 @@ public class Communicator {
 	 * @throws GameActionException
 	 */
 	public boolean shouldAttack() throws GameActionException {
-		return receive(CHANNEL_SWARMER_ATTACK, Clock.getRoundNum()) == HQ.ATTACK_CODE;
+        // TODO: these
+		// return receive(CHANNEL_SWARMER_ATTACK, Clock.getRoundNum()) == HQ.ATTACK_CODE;
+        return false;
 	}
 	
 	/**

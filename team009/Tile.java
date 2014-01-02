@@ -1,3 +1,5 @@
+package team009;
+
 import battlecode.common.MapLocation;
 
 public class Tile {		

@@ -2,9 +2,9 @@ package team009.robot;
 
 import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
-import team122.RobotInformation;
-import team122.communication.Communicator;
-import team122.trees.Tree;
+import team009.RobotInformation;
+import team009.communication.Communicator;
+import team009.trees.Tree;
 
 /**
  * This is the Robot Class, you'll need to extend it

@@ -8,12 +8,14 @@ import battlecode.common.MapLocation;
 import battlecode.common.RobotInfo;
 import battlecode.common.RobotType;
 import battlecode.common.Robot;
-import team122.robot.Artillery;
+import team009.robot.TeamRobot;
+//import team009.robot.Artillery;
 
 public class ArtilleryShotCalculator {
 
 	private int[][] map;
-	private Artillery robot;
+	//private Artillery robot;
+    private TeamRobot robot;
 	private MapLocation me;
 	private int size;
 	private int middle;
@@ -21,7 +23,7 @@ public class ArtilleryShotCalculator {
 	private int[] yToCheck;
 	private int toCheck;
 	
-	public ArtilleryShotCalculator(Artillery robot) {
+	public ArtilleryShotCalculator(TeamRobot robot) {
 		this.robot = robot;
 		me = robot.rc.getLocation();
 		//this.middle = (int)(1 + Math.sqrt(RobotType.ARTILLERY.attackRadiusMaxSquared)) + 1;
@@ -105,7 +107,7 @@ public class ArtilleryShotCalculator {
 		map = new int[size][size];
 		int x,y;
 		
-		Robot[] objs = robot.nearbyObjects;
+		Robot[] objs = null; //robot.nearbyObjects; TODO: this
 		xToCheck = new int[objs.length];
 		yToCheck = new int[objs.length];
 		toCheck = 0;

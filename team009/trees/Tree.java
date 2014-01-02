@@ -2,12 +2,11 @@ package team009.trees;
 
 import battlecode.common.Clock;
 import battlecode.common.GameActionException;
-import team122.behavior.Behavior;
-import team122.behavior.Decision;
-import team122.behavior.Node;
+import team009.behavior.Behavior;
+import team009.behavior.Decision;
+import team009.behavior.Node;
 
-import team122.robot.HQ;
-import team122.robot.TeamRobot;
+import team009.robot.TeamRobot;
 
 
 public abstract class Tree {

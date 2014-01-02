@@ -1,6 +1,7 @@
 package team009.communication;
 
-import team122.behavior.soldier.SoldierSelector;
+// TODO
+//import team009.behavior.soldier.SoldierSelector;
 import battlecode.common.MapLocation;
 
 public class SoldierDecoder extends CommunicationDecoder {
@@ -14,7 +15,8 @@ public class SoldierDecoder extends CommunicationDecoder {
 	}
 	
 	public SoldierDecoder(int encamperType, MapLocation loc) {
-		this.soldierType = SoldierSelector.SOLDIER_ENCAMPER;
+        // TODO
+		// this.soldierType = SoldierSelector.SOLDIER_ENCAMPER;
 		this.groupOrEncampmentType = encamperType;
 		this.loc = loc;
 	}

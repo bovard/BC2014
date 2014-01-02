@@ -1,10 +1,10 @@
 package team009.combat;
 
 
-import team122.RobotInformation;
-import team122.navigation.SoldierMove;
-import team122.robot.Soldier;
-import team122.utils.Timer;
+import team009.RobotInformation;
+import team009.navigation.SoldierMove;
+import team009.robot.TeamRobot;
+import team009.utils.Timer;
 import battlecode.common.Clock;
 import battlecode.common.Direction;
 import battlecode.common.GameActionException;
@@ -17,7 +17,7 @@ import battlecode.common.Team;
 public class MoveCalculator {
 	
 	private char[][] map;
-	private Soldier robot;
+	private TeamRobot robot;
 	private boolean soldierNearby;
 	private boolean positionSoldierNearby;
 	private SoldierMove combatMove;
@@ -26,15 +26,16 @@ public class MoveCalculator {
 	private final int SIZE = 7;
 	
 	
-	public MoveCalculator(Soldier robot) {
+	public MoveCalculator(TeamRobot robot) {
 		this.robot = robot;
 		combatMove = new SoldierMove(robot);
 	}
 	
 	public void move (Robot[] nearby, MapLocation loc) throws GameActionException{
 		//int time = -Clock.getBytecodeNum();
-		
-		if (robot.currentLoc.isAdjacentTo(robot.info.enemyHq)) {
+
+        // TODO: get rid of getLocation
+		if (robot.rc.getLocation().isAdjacentTo(robot.info.enemyHq)) {
 			return;
 		}
 		
@@ -78,7 +79,8 @@ public class MoveCalculator {
 		
 		// if there are no enemy soldiers nearby, move!
 		if (robot.rc.isActive() && !soldierNearby) {
-			Robot r = robot.enemiesInSight[0];
+			// Robot r = robot.enemiesInSight[0]; // TODO FIX THIS
+            Robot r = null;
 			RobotInfo info = robot.rc.senseRobotInfo(r);
 			combatMove.destination = info.location;
 			combatMove.move();
@@ -98,8 +100,10 @@ public class MoveCalculator {
 			if (score >= 12 && score <= 27 ) {
 				dir = robot.info.enemyDir;
 				for (int i = 0; i < 8; i++ ) {
-					if(robot.rc.senseMine(robot.currentLoc.add(dir)) == robot.info.enemyTeam) {
-						robot.rc.defuseMine(robot.currentLoc.add(dir));
+                    // TODO: get rid of getLocation
+                    MapLocation currentLoc = robot.rc.getLocation();
+					if(robot.rc.senseMine(currentLoc.add(dir)) == robot.info.enemyTeam) {
+						robot.rc.defuseMine(currentLoc.add(dir));
 						return;
 					}
 					dir = dir.rotateLeft();
@@ -120,11 +124,13 @@ public class MoveCalculator {
 			
 			// an active enemy soldier
 			if (info.type == RobotType.SOLDIER && info.roundsUntilMovementIdle < 3) {
-				int distance = robot.currentLoc.distanceSquaredTo(info.location);
+                // TODO: get rid of getLocation
+                MapLocation currentLoc = robot.rc.getLocation();
+				int distance = currentLoc.distanceSquaredTo(info.location);
 				// if they have lower health
 				if (info.energon <= robot.rc.getEnergon()) {
 					// we are close, go for the kill!
-					if (distance < 8 && !robot.currentLoc.isAdjacentTo(info.location)) {
+					if (distance < 8 && !currentLoc.isAdjacentTo(info.location)) {
 						combatMove.destination = info.location;
 						combatMove.move();
 					}
@@ -135,7 +141,7 @@ public class MoveCalculator {
 				else {
 					
 					if (distance > 3) {
-						combatMove.destination = robot.currentLoc.add(robot.currentLoc.directionTo(info.location).opposite());
+						combatMove.destination = currentLoc.add(currentLoc.directionTo(info.location).opposite());
 						combatMove.move();
 					}
 				}
@@ -187,6 +193,8 @@ public class MoveCalculator {
 			}
 		}
 
+        /*
+        TODO:
 		for (MapLocation l : robot.allied_mines) {
 			int x = l.x - loc.x;
 			int y = l.y - loc.y;
@@ -204,6 +212,7 @@ public class MoveCalculator {
 			int y = l.y - loc.y;
 			map[MIDDLE + x][MIDDLE + y] = 'g';
 		}
+		*/
 		
 		soldierNearby = false;
 		for (Robot r : nearby) {
