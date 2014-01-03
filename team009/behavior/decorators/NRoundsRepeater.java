@@ -1,5 +1,6 @@
 package team009.behavior.decorators;
 
+import battlecode.common.Clock;
 import battlecode.common.GameActionException;
 import team009.behavior.Node;
 import team009.robot.TeamRobot;
@@ -7,23 +8,17 @@ import team009.robot.TeamRobot;
 /**
  * Created by bovardtiberi on 1/2/14.
  */
-public class NTimesRepeater extends Decorator {
+public class NRoundsRepeater extends Decorator {
+    private int round;
+    private int startingRound;
 
-    // the number of times to repeat the decorated node
-    private int repetitions;
-    private int repeated = 0;
-
-    public NTimesRepeater(TeamRobot robot, Node decorated, int repetitions) {
+    public NRoundsRepeater(TeamRobot robot, Node decorated, int round) {
         super(robot, decorated);
-        this.repetitions = repetitions;
+        this.round = round;
     }
 
     public void reset() {
-        this.repeated = 0;
-    }
-
-    public boolean post() {
-        return this.repeated == this.repetitions;
+        this.startingRound = Clock.getBytecodeNum();
     }
 
     public boolean run() throws GameActionException {
@@ -32,12 +27,13 @@ public class NTimesRepeater extends Decorator {
         }
 
         if (this.decorated.post()) {
-            this.repeated += 1;
             this.decorated.reset();
         }
 
         return this.decorated.run();
     }
 
-
+    public boolean post() {
+        return Clock.getRoundNum() == startingRound + round;
+    }
 }

@@ -3,6 +3,7 @@ package team009.behavior;
 import java.util.ArrayList;
 
 import battlecode.common.GameActionException;
+import team009.robot.TeamRobot;
 
 /**
  * The base Node.
@@ -11,8 +12,10 @@ import battlecode.common.GameActionException;
  */
 public abstract class Node {
 	public ArrayList<Node> children;
+    protected TeamRobot robot;
 
-	public Node() {
+	public Node(TeamRobot robot) {
+        this.robot = robot;
 		children = new ArrayList<Node>();
 	}
 	
