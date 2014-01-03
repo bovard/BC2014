@@ -11,6 +11,8 @@ Going for 1st place (or at least the finals again)!
     * ```rm -rf teams```
 3. Clone this repo in the teams folder:
     * ```git clone git@bitbucket.org:bovard.tiberi/battlecode-2014.git teams```
+4. Open the parent directory up in the IDE of your choice
+    * I'm using IntelliJ CE and it works well
 
 
 # Behavior Tree
