@@ -24,5 +24,5 @@ The behavior tree works a bit different this year. It starts from the root node 
 4. We've added a post() method to show if the behavior has completed. This should be called every time before calling the node
 5. We've added a reset() which should be called when a node is completed or needs to be reset
 
-See TeamRobot.run() to see how the trees work on action now!
+See TeamRobot.run() to see how the trees work in action now!
 
