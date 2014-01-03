@@ -1,7 +1,7 @@
-package team009.behavior.decorators;
+package team009.bt.decorators;
 
 import battlecode.common.GameActionException;
-import team009.behavior.Node;
+import team009.bt.Node;
 import team009.robot.TeamRobot;
 
 /**

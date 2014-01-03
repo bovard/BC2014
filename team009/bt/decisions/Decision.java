@@ -1,6 +1,6 @@
-package team009.behavior.decisions;
+package team009.bt.decisions;
 
-import team009.behavior.Node;
+import team009.bt.Node;
 import team009.robot.TeamRobot;
 
 public abstract class Decision extends Node {

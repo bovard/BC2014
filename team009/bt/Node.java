@@ -1,4 +1,4 @@
-package team009.behavior;
+package team009.bt;
 
 import java.util.ArrayList;
 
@@ -20,7 +20,7 @@ public abstract class Node {
 	}
 	
 	/**
-	 * pre checks if the preconditions are met for a behavior to occur
+	 * pre checks if the preconditions are met for a node to occur
 	 *
 	 * For example: A precondition for mining or de-mining is that you aren't in
 	 * firing range of an enemy (you might see one though!)
@@ -36,13 +36,13 @@ public abstract class Node {
 	public abstract boolean pre() throws GameActionException;
 
     /**
-     * post checks to see if the behavior has completed successfully!
+     * post checks to see if the node has completed successfully!
      *
      * for a behavior this may be getting to a certain square
-     * for a selector this is having a behavior succeed
+     * for a selector this is having a child succeed
      * for a sequence this is having all child behaviors succeed
      *
-     * Note: post should ALWAYS be checked before running a behavior
+     * Note: post should ALWAYS be checked before running a node
      *
      * @return if the goal condition has been met for the node
      * @throws GameActionException

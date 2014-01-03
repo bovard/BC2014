@@ -1,10 +1,9 @@
-package team009.behavior.behaviors;
+package team009.bt.behaviors;
 
 import java.util.Random;
 
 import battlecode.common.Clock;
-import battlecode.common.GameActionException;
-import team009.behavior.Node;
+import team009.bt.Node;
 import team009.robot.TeamRobot;
 
 

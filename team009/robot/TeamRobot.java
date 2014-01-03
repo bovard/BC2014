@@ -4,7 +4,7 @@ import battlecode.common.Clock;
 import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
 import team009.RobotInformation;
-import team009.behavior.Node;
+import team009.bt.Node;
 import team009.communication.Communicator;
 
 /**
