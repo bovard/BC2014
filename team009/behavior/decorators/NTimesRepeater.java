@@ -6,13 +6,13 @@ import team009.behavior.Node;
 /**
  * Created by bovardtiberi on 1/2/14.
  */
-public class Repeater extends Decorator {
+public class NTimesRepeater extends Decorator {
 
     // the number of times to repeat the decorated node
     private int repititions;
     private int repeated = 0;
 
-    public Repeater(Node decorated, int repititions) {
+    public NTimesRepeater(Node decorated, int repititions) {
         super(decorated);
         this.repititions = repititions;
     }
