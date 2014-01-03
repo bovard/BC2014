@@ -46,10 +46,13 @@ public abstract class Node {
 
     /**
      * should be called after a goal is met
+     *
+     * Note: CANNOT change pre/post conditions or bad things will happen!
+     *
      * @return
      * @throws GameActionException
      */
-    public abstract boolean reset() throws GameActionException;
+    public abstract void reset() throws GameActionException;
 
     /**
      * run should run the behavior/selector/sequence returns true if an action was
