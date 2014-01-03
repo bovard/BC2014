@@ -2,6 +2,7 @@ package team009.robot;
 
 import battlecode.common.Clock;
 import battlecode.common.GameActionException;
+import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
 import team009.RobotInformation;
 import team009.bt.Node;
@@ -18,6 +19,7 @@ import team009.communication.Communicator;
 public abstract class TeamRobot {
 	
 	protected Node treeRoot;
+    public MapLocation currentLoc;
 	public RobotController rc;
 	public RobotInformation info;
 	public Communicator com;
@@ -34,12 +36,15 @@ public abstract class TeamRobot {
 	 * check to see if enemies are near. 
 	 * 
 	 */
-	public abstract void environmentCheck() throws GameActionException;
+	public void environmentCheck() throws GameActionException {
+        this.currentLoc = rc.getLocation();
+
+    }
 	
 	/**
 	 * Called at the end of a robots turn, can load things...
 	 */
-	public void postProcessing() throws GameActionException {};
+	public void postProcessing() throws GameActionException {}
 
     /**
      * Called during the constructor to load up the right bt
