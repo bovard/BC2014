@@ -26,6 +26,7 @@ public abstract class TeamRobot {
 		this.rc = rc;
 		this.info = info;
 		com = new Communicator(rc);
+        this.treeRoot = getTreeRoot();
 	}
 	
 	/**
@@ -39,7 +40,13 @@ public abstract class TeamRobot {
 	 * Called at the end of a robots turn, can load things...
 	 */
 	public void postProcessing() throws GameActionException {};
-	
+
+    /**
+     * Called during the constructor to load up the right bt
+     * @return the root of the BT for the bot
+     */
+    protected abstract Node getTreeRoot();
+
 	/**
 	 * We should never return from this 
 	 */
