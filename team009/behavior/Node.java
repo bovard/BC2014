@@ -39,6 +39,8 @@ public abstract class Node {
      * for a selector this is having a behavior succeed
      * for a sequence this is having all child behaviors succeed
      *
+     * Note: post should ALWAYS be checked before running a behavior
+     *
      * @return if the goal condition has been met for the node
      * @throws GameActionException
      */
