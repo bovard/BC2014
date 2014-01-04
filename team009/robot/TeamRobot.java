@@ -23,6 +23,7 @@ public abstract class TeamRobot {
 	public RobotController rc;
 	public RobotInformation info;
 	public Communicator com;
+    public MapLocation targetLocation;
 	
 	public TeamRobot(RobotController rc, RobotInformation info) {
 		this.rc = rc;
