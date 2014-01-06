@@ -44,10 +44,4 @@ public class RobotInformation {
 		this.rc = rc;
 	}
 	
-	public double updateMineDensity() throws GameActionException {
-		neutralMines = rc.senseMineLocations(center, width * 1000, Team.NEUTRAL);
-		mineDensity = neutralMines.length / (width * height);
-		
-		return mineDensity;
-	}
 }

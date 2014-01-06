@@ -1,15 +1,7 @@
 package team009.combat;
 
-
-import battlecode.common.Clock;
-import battlecode.common.GameActionException;
-import battlecode.common.GameConstants;
-import battlecode.common.MapLocation;
-import battlecode.common.RobotInfo;
-import battlecode.common.RobotType;
-import battlecode.common.Robot;
+import battlecode.common.*;
 import team009.robot.TeamRobot;
-//import team009.robot.Artillery;
 
 public class ArtilleryShotCalculator {
 
@@ -36,8 +28,6 @@ public class ArtilleryShotCalculator {
 	public void shoot() throws GameActionException{
 		
 		
-		System.out.println(GameConstants.ARTILLERY_SPLASH_RATIO);
-		
 		// set up the map
 		_setUp();
 		
@@ -45,16 +35,16 @@ public class ArtilleryShotCalculator {
 		int value, bestValue = 0;
 		int x = 0, y = 0;
 		int xi, yi;
-		
+
 		int i = 0;
 		do {
 			xi = xToCheck[i];
 			yi = yToCheck[i];
 			value =  map[xi-1][yi-1] + map[xi-1][yi] + map[xi-1][yi+1] + map[xi][yi-1] + map[xi][yi+1] + map[xi+1][yi-1] + map[xi+1][yi] + map[xi+1][yi+1];
 			if (map[xi][yi] == 100) {
-				value += RobotType.ARTILLERY.attackPower * GameConstants.ARTILLERY_SPLASH_RATIO;
+				value += RobotType.HQ.attackPower * RobotType.HQ.splashPower;
 			} else {
-				value += (1/GameConstants.ARTILLERY_SPLASH_RATIO) * map[xi][yi];
+				value += (1/RobotType.HQ.splashPower) * map[xi][yi];
 			}
 			robot.rc.setIndicatorString(0, "Value: " + value);
 			if (value > bestValue) {
@@ -80,9 +70,9 @@ public class ArtilleryShotCalculator {
 					yi = yToCheck[i] + iy;
 					value =  map[xi-1][yi-1] + map[xi-1][yi] + map[xi-1][yi+1] + map[xi][yi-1] + map[xi][yi+1] + map[xi+1][yi-1] + map[xi+1][yi] + map[xi+1][yi+1];
 					if (map[xi][yi] == 100) {
-						value += RobotType.ARTILLERY.attackPower * GameConstants.ARTILLERY_SPLASH_RATIO;
+						value += RobotType.HQ.attackPower * RobotType.HQ.splashPower;
 					} else {
-						value += (1/GameConstants.ARTILLERY_SPLASH_RATIO) * map[xi][yi];
+						value += (1/RobotType.HQ.splashPower) * map[xi][yi];
 					}
 					robot.rc.setIndicatorString(0, "Value: " + value);
 					if (value > bestValue) {
@@ -124,10 +114,10 @@ public class ArtilleryShotCalculator {
 				xToCheck[toCheck] = x;
 				yToCheck[toCheck] = y;
 				toCheck++;
-				if (info.energon <= RobotType.ARTILLERY.attackPower * GameConstants.ARTILLERY_SPLASH_RATIO){
+				if (info.health <= RobotType.HQ.attackPower * RobotType.HQ.splashPower){
 					map[x][y] = 100;
 				} else {
-					map[x][y] = (int) (RobotType.ARTILLERY.attackPower * GameConstants.ARTILLERY_SPLASH_RATIO);
+					map[x][y] = (int) (RobotType.HQ.attackPower * RobotType.HQ.splashPower);
 				}
 				
 			} 
@@ -135,11 +125,11 @@ public class ArtilleryShotCalculator {
 			// if it's our robot try not to hit it
 			else if (info.team == robot.info.myTeam) {
 				if (info.type == RobotType.SOLDIER) {
-					map[x][y] = (int) (-1 * RobotType.ARTILLERY.attackPower * GameConstants.ARTILLERY_SPLASH_RATIO);
+					map[x][y] = (int) (-1 * RobotType.HQ.attackPower * RobotType.HQ.splashPower);
 				} else if (info.type == RobotType.HQ) {
 					map[x][y] = -100;
 				} else {
-					map[x][y] = (int) (-2 * RobotType.ARTILLERY.attackPower * GameConstants.ARTILLERY_SPLASH_RATIO);
+					map[x][y] = (int) (-2 * RobotType.HQ.attackPower * RobotType.HQ.splashPower);
 				}
 			}
 		}

@@ -95,10 +95,6 @@ public class MoveCalculator {
 			if (score >= 12 && score <= 27 ) {
 				dir = robot.info.enemyDir;
 				for (int i = 0; i < 8; i++ ) {
-					if(robot.rc.senseMine(robot.currentLoc.add(dir)) == robot.info.enemyTeam) {
-						robot.rc.defuseMine(robot.currentLoc.add(dir));
-						return;
-					}
 					dir = dir.rotateLeft();
 				}
 			}
@@ -119,7 +115,7 @@ public class MoveCalculator {
 			if (info.type == RobotType.SOLDIER && info.roundsUntilMovementIdle < 3) {
 				int distance = robot.currentLoc.distanceSquaredTo(info.location);
 				// if they have lower health
-				if (info.energon <= robot.rc.getEnergon()) {
+				if (info.health <= robot.rc.getHealth()) {
 					// we are close, go for the kill!
 					if (distance < 8 && !robot.currentLoc.isAdjacentTo(info.location)) {
 						combatMove.destination = info.location;
