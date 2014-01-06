@@ -18,7 +18,7 @@ public class GreedyEncampment {
 	 */
 	public static final MapLocation GetGreedyGenerator(RobotController rc, MapLocation hq, MapLocation enemy, MapLocation[] noCaptures) throws GameActionException {
 		Direction dir = hq.directionTo(enemy).rotateLeft();
-		MapLocation[] encampments = rc.senseEncampmentSquares(hq.add(dir).add(dir).add(dir), GREEDY_RADIUS_GENERATOR, Team.NEUTRAL);
+		MapLocation[] encampments = null; // TODO: fix this rc.senseEncampmentSquares(hq.add(dir).add(dir).add(dir), GREEDY_RADIUS_GENERATOR, Team.NEUTRAL);
 		int enemyDistance = hq.distanceSquaredTo(enemy);
 		
 		//Short circuit.
@@ -52,8 +52,11 @@ public class GreedyEncampment {
 		Direction dirToEnemy = hq.directionTo(enemy);
 		
 		//Moves out 5 squares.
-		MapLocation[] encampments = rc.senseEncampmentSquares(
+		MapLocation[] encampments = null;
+        /* TODO fix this
+                rc.senseEncampmentSquares(
 				hq.add(dirToEnemy).add(dirToEnemy).add(dirToEnemy).add(dirToEnemy).add(dirToEnemy), GREEDY_RADIUS_ARTILLERY, Team.NEUTRAL);
+				*/
 		
 		//Short circuit.
 		if (encampments.length == 0) {

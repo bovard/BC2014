@@ -71,9 +71,6 @@ public class EncampmentSorter {
 		hqX = hq.x;
 		hqY = hq.y;
 		enemy = rc.senseEnemyHQLocation();
-		artMaxEnemyHQ = RobotType.ARTILLERY.attackRadiusMaxSquared
-				+ hq.distanceSquaredTo(enemy);
-		artRange = ARTILLERY_PERP_DISTANCE;
 		double x = hq.x - enemy.x;
 		double y = hq.y - enemy.y;
 
@@ -88,7 +85,7 @@ public class EncampmentSorter {
 
 		int width = rc.getMapWidth();
 		int height = rc.getMapHeight();
-		double mineDensity = rc.senseMineLocations(enemy, 100000, Team.NEUTRAL).length * 1.0 / (width * height);
+		double mineDensity = 0;
 		
 		__roundsToWait = (int)((width + height) * (1 + mineDensity * 2));
 	}
@@ -105,7 +102,7 @@ public class EncampmentSorter {
 	 * Gets the encampments
 	 */
 	public void getEncampments() {
-		encampments = rc.senseAllEncampmentSquares();
+		encampments = null; // TODO: fix this rc.senseAllEncampmentSquares();
 		totalEncampments = encampments.length;
 		encampmentDistances = new int[totalEncampments];
 		enemyDistances = new int[totalEncampments];
