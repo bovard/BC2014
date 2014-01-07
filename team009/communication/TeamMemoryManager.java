@@ -21,6 +21,8 @@ public class TeamMemoryManager {
     }
 
     public void markPastureKilled() {
+        // TODO: not sure what the best way to do this is, shoud the pastures
+        // call this when they die or the HQ keep track of them and update it?
         pasturesKilled++;
         robot.rc.setTeamMemory(PASTURES_KILLED, pasturesKilled);
     }
