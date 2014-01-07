@@ -34,9 +34,20 @@ public class HQBase extends Behavior {
     public boolean run() throws GameActionException {
         // Spawn a guy at a random location
         if (robot.rc.isActive()) {
-            Direction [] allDirs = Direction.values();
-            Direction dir = allDirs[((int)(Math.random()*8))];
-            robot.rc.spawn(dir);
+            Direction dir;
+            boolean done = false;
+            int tries = 0;
+            while(!done && tries < 8) {
+                tries++;
+                Direction [] allDirs = Direction.values();
+                dir = allDirs[((int)(Math.random()*8))];
+                if (robot.rc.canMove(dir)) {
+                    done = true;
+                }
+            }
+            if (done) {
+                robot.rc.spawn(dir);
+            }
         }
         return true;
     }
