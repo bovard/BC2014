@@ -2,6 +2,8 @@ package team009.bt.decisions;
 
 import battlecode.common.GameActionException;
 import team009.bt.behaviors.HQBalanced;
+import team009.bt.behaviors.HQDefensive;
+import team009.bt.behaviors.HQOffensive;
 import team009.communication.TeamMemoryManager;
 import team009.robot.TeamRobot;
 
@@ -19,8 +21,8 @@ public class HQSelector extends Decision {
         memoryManager = new TeamMemoryManager(robot);
         strat = memoryManager.getHQStrategy();
         // TODO: Add in the Defensive Pasture and Pasture Hunting behaviors
-        children.add(DEFENSIVE_PASTURE, new HQBalanced(robot));
-        children.add(PASTURE_HUNTERING, new HQBalanced(robot));
+        children.add(DEFENSIVE_PASTURE, new HQDefensive(robot));
+        children.add(PASTURE_HUNTERING, new HQOffensive(robot));
         children.add(BALANCED, new HQBalanced(robot));
     }
 
