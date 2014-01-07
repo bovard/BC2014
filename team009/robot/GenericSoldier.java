@@ -4,6 +4,7 @@ import battlecode.common.RobotController;
 import team009.RobotInformation;
 import team009.bt.Node;
 import team009.bt.behaviors.DumbSoldier;
+import team009.bt.builder.TreeBuilder;
 import team009.bt.decisions.SoldierTypeDecision;
 
 /**
@@ -16,9 +17,6 @@ public class GenericSoldier extends TeamRobot {
 
     @Override
     protected Node getTreeRoot() {
-        Node root = new SoldierTypeDecision(this);
-        root.addChild(new DumbSoldier(this));
-
-        return root;
+        return TreeBuilder.getSoldierTree(this);
     }
 }
