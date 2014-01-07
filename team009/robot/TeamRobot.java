@@ -6,42 +6,31 @@ import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
 import team009.RobotInformation;
 import team009.bt.Node;
-import team009.communication.Communicator;
 
-/**
- * This is the Robot Class, you'll need to extend it
- * 
- * Every Robot should have a 
- * 
- * @author bovard.tiberi
- *
- */
 public abstract class TeamRobot {
-	
+
 	protected Node treeRoot;
     public MapLocation currentLoc;
 	public RobotController rc;
 	public RobotInformation info;
-	public Communicator com;
     public MapLocation targetLocation;
-	
+
 	public TeamRobot(RobotController rc, RobotInformation info) {
 		this.rc = rc;
 		this.info = info;
-		com = new Communicator(rc);
         this.treeRoot = getTreeRoot();
 	}
-	
+
 	/**
 	 * This will check the environment around the robot, check for messages
-	 * check to see if enemies are near. 
-	 * 
+	 * check to see if enemies are near.
+	 *
 	 */
 	public void environmentCheck() throws GameActionException {
         this.currentLoc = rc.getLocation();
 
     }
-	
+
 	/**
 	 * Called at the end of a robots turn, can load things...
 	 */
@@ -54,7 +43,7 @@ public abstract class TeamRobot {
     protected abstract Node getTreeRoot();
 
 	/**
-	 * We should never return from this 
+	 * We should never return from this
 	 */
 	public void run() {
         while (true) {

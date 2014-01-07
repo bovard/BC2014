@@ -1,12 +1,13 @@
 package team009.bt.behaviors;
-
 import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import team009.robot.TeamRobot;
 
-public class HQBase extends Behavior {
-    public HQBase(TeamRobot robot) {
+public class DumbSoldier extends Behavior {
+    private Direction direction = null;
+    public DumbSoldier(TeamRobot robot, Direction direction) {
         super(robot);
+        this.direction = direction;
     }
 
     @Override
@@ -30,22 +31,14 @@ public class HQBase extends Behavior {
     @Override
     public boolean run() throws GameActionException {
         // Spawn a guy at a random location
-        if (robot.rc.isActive()) {
-            Direction dir = Direction.NORTH;
-            boolean done = false;
-            int tries = 0;
-            while(!done && tries < 8) {
-                tries++;
-                Direction [] allDirs = Direction.values();
-                dir = allDirs[((int)(Math.random()*8))];
-                if (robot.rc.canMove(dir)) {
-                    done = true;
-                }
-            }
-            if (done) {
-                robot.rc.spawn(dir);
+        if (rc.isActive()) {
+            if (rc.canMove(direction)) {
+                rc.move(direction);
+            } else {
+                rc.setIndicatorString(0, "I AM STUCK!!!");
             }
         }
         return true;
     }
 }
+

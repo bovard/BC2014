@@ -14,6 +14,7 @@ public class RobotInformation {
 	public int width;
 	public int height;
 	public int enemyHqDistance;
+    public Direction enemyDir;
 	public RobotController rc;
 
 	/**

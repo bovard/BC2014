@@ -1,13 +1,8 @@
 package team009.bt.behaviors;
 
 import battlecode.common.GameActionException;
-import battlecode.common.MapLocation;
 import team009.navigation.BasicMove;
 import team009.robot.TeamRobot;
-
-/**
- * Created by bovardtiberi on 1/3/14.
- */
 public class MoveToLocation extends Behavior {
     protected BasicMove move;
 

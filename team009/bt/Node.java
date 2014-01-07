@@ -3,6 +3,7 @@ package team009.bt;
 import java.util.ArrayList;
 
 import battlecode.common.GameActionException;
+import battlecode.common.RobotController;
 import team009.robot.TeamRobot;
 
 /**
@@ -13,12 +14,14 @@ import team009.robot.TeamRobot;
 public abstract class Node {
 	public ArrayList<Node> children;
     protected TeamRobot robot;
+    protected RobotController rc;
 
 	public Node(TeamRobot robot) {
         this.robot = robot;
+        this.rc = robot.rc;
 		children = new ArrayList<Node>();
 	}
-	
+
 	/**
 	 * pre checks if the preconditions are met for a node to occur
 	 *
@@ -66,6 +69,5 @@ public abstract class Node {
      * @throws GameActionException
      */
     public abstract boolean run() throws GameActionException;
-	
-	
+
 }
