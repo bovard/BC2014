@@ -6,6 +6,8 @@ import battlecode.common.RobotController;
 
 public class MapUtils {
 
+    public static Direction[] allDirs = Direction.values();
+
 	/**
 	 * Sorts the map locations in accending distance order
 	 * @param locs
@@ -18,6 +20,10 @@ public class MapUtils {
 
 		sort(locs, dists, ascending);
 	}
+
+    public static Direction getRandomDir() {
+        return allDirs[((int)(Math.random()*8))];
+    }
 
 	/**
 	 * Sorts the map in accending order.

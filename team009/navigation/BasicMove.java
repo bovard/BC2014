@@ -3,7 +3,6 @@ package team009.navigation;
 import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
-import battlecode.common.Team;
 import battlecode.common.TerrainTile;
 import team009.robot.TeamRobot;
 
@@ -68,55 +67,66 @@ public class BasicMove {
 		}
 	}
 
-	public void move() throws GameActionException {
+    public void move() throws GameActionException {
+        move(false);
+
+    }
+
+    public void sneak() throws GameActionException {
+        move(true);
+    }
+
+	public void move(boolean sneak) throws GameActionException {
 		if (!robot.rc.isActive())
 			return;
 
 		Direction toMove = robot.currentLoc.directionTo(destination);
+        Direction result = null;
 
 		if (toMove == Direction.NONE || toMove == Direction.OMNI)
 			return;
 
 		if (bug != null) {
-
 			if (robot.rc.canMove(bugGoal)) {
-                robot.rc.move(bugGoal);
+                result = bugGoal;
                 lastBug = bug;
                 bug = null;
                 bugGoal = null;
 
 			} else {
 				robot.rc.setIndicatorString(0, "In bug moving " + bug.toString());
-				moveWithDiffuse(bug);
+				result = moveBug(bug);
 			}
 		}
 
 		if (bug == null && robot.rc.isActive()) {
-			moveWithDiffuse(toMove);
+			result = moveBug(toMove);
 		}
 
+        if (result != null) {
+            if (sneak) {
+                robot.rc.sneak(result);
+            } else {
+                robot.rc.move(result);
+            }
+        }
 
 	}
 
-	private void moveWithDiffuse(Direction toMove) throws GameActionException {
-		MapLocation ahead, left, right;
-		ahead = robot.currentLoc.add(toMove);
-		left = robot.currentLoc.add(toMove.rotateLeft());
-		right = robot.currentLoc.add(toMove.rotateRight());
+	private Direction moveBug(Direction toMove) throws GameActionException {
+        Direction result = null;
 
 		// if there are no mines just try moving somewhere
-		if (true) {
-			if (robot.rc.canMove(toMove)) {
-				robot.rc.move(toMove);
-			} else if (robot.rc.canMove(toMove.rotateLeft())) {
-				robot.rc.move(toMove.rotateLeft());
-			} else if (robot.rc.canMove(toMove.rotateRight())) {
-				robot.rc.move(toMove.rotateRight());
-			}
-		}
+        if (robot.rc.canMove(toMove)) {
+            result = toMove;
+        } else if (robot.rc.canMove(toMove.rotateLeft())) {
+            result = toMove.rotateLeft();
+        } else if (robot.rc.canMove(toMove.rotateRight())) {
+            result = toMove.rotateRight();
+        }
 
 		// still can't move?  Activate/change bug direction
-		if (robot.rc.senseTerrainTile(robot.currentLoc.add(toMove)) == TerrainTile.OFF_MAP) {
+		else if (robot.rc.senseTerrainTile(robot.currentLoc.add(toMove)) == TerrainTile.OFF_MAP) {
 			bug = null;
 		} else if (bugGoal != null && robot.rc.senseTerrainTile(robot.currentLoc.add(bugGoal)) == TerrainTile.OFF_MAP) {
 			bug = null;
@@ -139,6 +149,7 @@ public class BasicMove {
 				bug = bug.opposite();
 			}
 		}
+        return result;
 
 	}
 
