@@ -8,7 +8,6 @@ import battlecode.common.Clock;
 import battlecode.common.MapLocation;
 import battlecode.common.Robot;
 import battlecode.common.RobotController;
-import battlecode.common.RobotType;
 import battlecode.common.Team;
 
 public class EncampmentSorter {
