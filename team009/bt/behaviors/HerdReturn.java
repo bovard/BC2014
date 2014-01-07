@@ -5,10 +5,10 @@ import battlecode.common.MapLocation;
 import team009.navigation.BasicMove;
 import team009.robot.TeamRobot;
 
-public class HeardReturn extends Behavior {
+public class HerdReturn extends Behavior {
     protected MapLocation pastureLocation;
     protected BasicMove move;
-    public HeardReturn(TeamRobot robot, MapLocation pastureLocation) {
+    public HerdReturn(TeamRobot robot, MapLocation pastureLocation) {
         super(robot);
         this.pastureLocation = pastureLocation;
         move = new BasicMove(robot);

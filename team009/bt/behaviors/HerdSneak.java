@@ -7,7 +7,7 @@ import team009.MapUtils;
 import team009.navigation.BasicMove;
 import team009.robot.TeamRobot;
 
-public class HeardSneak extends Behavior {
+public class HerdSneak extends Behavior {
     protected Direction heardDirection;
     protected MapLocation pastureLocation;
     protected MapLocation startingLocation;
@@ -16,7 +16,7 @@ public class HeardSneak extends Behavior {
 
     protected BasicMove move;
 
-    public HeardSneak(TeamRobot robot, MapLocation pastureLocation) {
+    public HerdSneak(TeamRobot robot, MapLocation pastureLocation) {
         super(robot);
         move = new BasicMove(robot);
         this.pastureLocation = pastureLocation;
