@@ -61,6 +61,7 @@ public abstract class TeamRobot {
             int round = Clock.getRoundNum();
 
             try {
+                System.out.println("TeamRobot run");
                 // at the start of the round, update with an environment check
                 this.environmentCheck();
 
