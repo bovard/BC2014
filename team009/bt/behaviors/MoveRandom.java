@@ -3,9 +3,9 @@ import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import team009.robot.TeamRobot;
 
-public class DumbSoldier extends Behavior {
+public class MoveRandom extends Behavior {
 
-    public DumbSoldier(TeamRobot robot) {
+    public MoveRandom(TeamRobot robot) {
         super(robot);
     }
 
