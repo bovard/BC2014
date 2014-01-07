@@ -10,7 +10,7 @@ import team009.bt.decisions.SoldierSelector;
 
 public class GenericSoldier extends TeamRobot {
     public boolean seesEnemy;
-    public GameObject[] enemies;
+    public Robot[] enemies;
 
     public GenericSoldier(RobotController rc, RobotInformation info) {
         super(rc, info);
