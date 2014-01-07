@@ -11,6 +11,7 @@ public abstract class TeamRobot {
 
 	protected Node treeRoot;
     public MapLocation currentLoc;
+    public int round;
 	public RobotController rc;
 	public RobotInformation info;
     public MapLocation targetLocation;
@@ -28,6 +29,7 @@ public abstract class TeamRobot {
 	 */
 	public void environmentCheck() throws GameActionException {
         this.currentLoc = rc.getLocation();
+        this.round = Clock.getRoundNum();
 
     }
 

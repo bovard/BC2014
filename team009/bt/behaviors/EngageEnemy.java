@@ -4,7 +4,6 @@ import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.RobotInfo;
 import team009.robot.GenericSoldier;
-import team009.robot.TeamRobot;
 
 public class EngageEnemy extends Behavior {
     GenericSoldier gs;

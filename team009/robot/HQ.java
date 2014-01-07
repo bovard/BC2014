@@ -3,7 +3,7 @@ package team009.robot;
 import battlecode.common.RobotController;
 import team009.RobotInformation;
 import team009.bt.Node;
-import team009.bt.behaviors.HQBase;
+import team009.bt.decisions.HQSelector;
 
 public class HQ extends TeamRobot {
 
@@ -13,7 +13,7 @@ public class HQ extends TeamRobot {
 
     @Override
     protected Node getTreeRoot() {
-        Node root = new HQBase(this);
+        Node root = new HQSelector(this);
 
         return root;
     }

@@ -4,13 +4,12 @@ import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import team009.bt.decisions.SoldierSelector;
-import team009.communication.CommunicationDecoder;
 import team009.communication.Communicator;
 import team009.robot.TeamRobot;
 
-public class HQBase extends Behavior {
+public class HQBalanced extends Behavior {
     private int pastureCount = 0;
-    public HQBase(TeamRobot robot) {
+    public HQBalanced(TeamRobot robot) {
         super(robot);
     }
 
