@@ -13,9 +13,11 @@ public class RobotPlayer {
                 if (rc.getType() == RobotType.HQ) {
                     new HQ(rc, info).run();
                 }
+                rc.yield();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 }
