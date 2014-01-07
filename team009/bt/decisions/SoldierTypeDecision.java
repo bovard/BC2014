@@ -43,13 +43,9 @@ public class SoldierTypeDecision extends Decision {
                 SoldierDecoder decoder = Communicator.ReadNewSoldier(rc);
 
                 if (decoder.soldierType == SOLDIER_TYPE_DUMB) {
-                    children.add(new DumbSoldier(robot, Direction.NORTH));
+                    children.get(SOLDIER_TYPE_DUMB).run();
                 }
             }
-
-            // TODO: Is this right? because this does not feel right
-            // TODO: This may be awkward because of the fact i don't want to initialize a bunch of nodes.
-            children.get(0).run();
         }
         return true;
     }

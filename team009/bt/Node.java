@@ -22,6 +22,10 @@ public abstract class Node {
 		children = new ArrayList<Node>();
 	}
 
+    public void addChild(Node node) {
+        this.children.add(node);
+    }
+
 	/**
 	 * pre checks if the preconditions are met for a node to occur
 	 *
