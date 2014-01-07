@@ -13,7 +13,6 @@ public class PastureSelector extends Selector {
 
     public PastureSelector(TeamRobot robot, MapLocation pastureLocation) {
         super(robot);
-        addChild(new EngageEnemy((GenericSoldier)robot));
         addChild(new MoveToLocation(robot, pastureLocation));
         addChild(new PastureCapture(robot));
     }
