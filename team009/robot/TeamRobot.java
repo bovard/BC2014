@@ -50,7 +50,6 @@ public abstract class TeamRobot {
             int round = Clock.getRoundNum();
 
             try {
-                System.out.println("TeamRobot run");
                 // at the start of the round, update with an environment check
                 this.environmentCheck();
 
@@ -66,7 +65,6 @@ public abstract class TeamRobot {
             try {
                 this.postProcessing();
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 System.out.println("Load error: " );
                 e.printStackTrace();
             }

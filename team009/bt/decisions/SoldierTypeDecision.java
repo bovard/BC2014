@@ -1,8 +1,6 @@
 package team009.bt.decisions;
-import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import team009.bt.Node;
-import team009.bt.behaviors.DumbSoldier;
 import team009.communication.Communicator;
 import team009.communication.SoldierDecoder;
 import team009.robot.TeamRobot;
@@ -10,6 +8,7 @@ import team009.robot.TeamRobot;
 public class SoldierTypeDecision extends Decision {
 
     private Node soldier = null;
+    private SoldierDecoder decoder = null;
 
     public SoldierTypeDecision(TeamRobot robot) {
         super(robot);
@@ -35,16 +34,13 @@ public class SoldierTypeDecision extends Decision {
 
     @Override
     public boolean run() throws GameActionException {
-        // Spawn a guy at a random location
+        if (decoder == null) {
+            decoder = Communicator.ReadNewSoldier(rc);
+        }
         if (rc.isActive()) {
-
             // select the soldier from the com
-            if (soldier == null) {
-                SoldierDecoder decoder = Communicator.ReadNewSoldier(rc);
-
-                if (decoder.soldierType == SOLDIER_TYPE_DUMB) {
-                    children.get(SOLDIER_TYPE_DUMB).run();
-                }
+            if (decoder.soldierType == SOLDIER_TYPE_DUMB) {
+                children.get(SOLDIER_TYPE_DUMB).run();
             }
         }
         return true;

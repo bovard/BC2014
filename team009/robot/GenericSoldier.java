@@ -3,9 +3,7 @@ package team009.robot;
 import battlecode.common.RobotController;
 import team009.RobotInformation;
 import team009.bt.Node;
-import team009.bt.behaviors.DumbSoldier;
 import team009.bt.builder.TreeBuilder;
-import team009.bt.decisions.SoldierTypeDecision;
 
 /**
  * Created by bovardtiberi on 1/6/14.
