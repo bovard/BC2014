@@ -9,9 +9,6 @@ import team009.bt.builder.TreeBuilder;
 
 import java.awt.*;
 
-/**
- * Created by bovardtiberi on 1/6/14.
- */
 public class GenericSoldier extends TeamRobot {
     public boolean seesEnemy;
     public GameObject[] enemies;
