@@ -26,6 +26,7 @@ public class EngageEnemy extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
+        rc.setIndicatorString(0, "I am engaging!");
         return false;
     }
 }

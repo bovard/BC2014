@@ -2,12 +2,11 @@ package team009.robot;
 
 import battlecode.common.GameActionException;
 import battlecode.common.GameObject;
+import battlecode.common.Robot;
 import battlecode.common.RobotController;
 import team009.RobotInformation;
 import team009.bt.Node;
-import team009.bt.builder.TreeBuilder;
-
-import java.awt.*;
+import team009.bt.decisions.SoldierSelector;
 
 public class GenericSoldier extends TeamRobot {
     public boolean seesEnemy;
@@ -20,12 +19,12 @@ public class GenericSoldier extends TeamRobot {
     @Override
     public void environmentCheck() throws GameActionException {
         super.environmentCheck();
-        enemies = rc.senseNearbyGameObjects(Robot.class);
+        enemies = rc.senseNearbyGameObjects(Robot.class, 100, info.enemyTeam);
         seesEnemy = enemies.length > 0;
     }
 
     @Override
     protected Node getTreeRoot() {
-        return TreeBuilder.getSoldierTree(this);
+        return new SoldierSelector(this);
     }
 }

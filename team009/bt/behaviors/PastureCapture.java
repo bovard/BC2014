@@ -1,18 +1,13 @@
-package team009.bt.decisions;
+package team009.bt.behaviors;
 
 import battlecode.common.GameActionException;
-import team009.bt.Node;
-import team009.bt.behaviors.EngageEnemy;
-import team009.bt.behaviors.MoveRandom;
-import team009.robot.GenericSoldier;
+import battlecode.common.MapLocation;
+import battlecode.common.RobotType;
 import team009.robot.TeamRobot;
 
-public class DumbSoldierSelector extends Selector {
-
-    public DumbSoldierSelector(TeamRobot robot) {
+public class PastureCapture extends Behavior {
+    public PastureCapture(TeamRobot robot) {
         super(robot);
-        addChild(new EngageEnemy((GenericSoldier) robot));
-        addChild(new MoveRandom(robot));
     }
 
     @Override
@@ -28,5 +23,14 @@ public class DumbSoldierSelector extends Selector {
     @Override
     public void reset() throws GameActionException {
 
+    }
+
+    @Override
+    public boolean run() throws GameActionException {
+        if (rc.isActive()) {
+            rc.construct(RobotType.PASTR);
+        }
+
+        return true;
     }
 }

@@ -14,11 +14,11 @@ public class BasicMove {
 	private Direction bug;
 	private Direction lastBug;
 	private Direction bugGoal;
-	
+
 	public BasicMove(TeamRobot robot) {
 		this.robot = robot;
 	}
-	
+
 	public void setDestination(MapLocation destination) {
 		if (destination.x >= robot.info.width) {
 			destination = new MapLocation(robot.info.width - 1, destination.y);
@@ -32,14 +32,11 @@ public class BasicMove {
 		}
 		this.destination = destination;
 	}
-	
+
 	public boolean atDestination() {
-		if (robot.currentLoc.equals(destination)) {
-			return true;
-		}
-		return false;
+		return robot.currentLoc.equals(destination);
 	}
-	
+
 	/**
 	 * Dumb Move will walk over mines, and probably die. For use in extreme circumstances only!
 	 * @throws GameActionException
@@ -49,10 +46,10 @@ public class BasicMove {
 			return;
 
 		Direction toMove = robot.currentLoc.directionTo(destination);
-		
+
 		if (toMove == Direction.NONE || toMove == Direction.OMNI)
 			return;
-		
+
 		// if there is a move toward our goal without mines, take it
 		if (robot.rc.canMove(toMove)) {
 			robot.rc.move(toMove);
@@ -68,7 +65,7 @@ public class BasicMove {
 			robot.rc.move(toMove.rotateLeft());
 		} else if (robot.rc.canMove(toMove.rotateRight())) {
 			robot.rc.move(toMove.rotateRight());
-		} 
+		}
 	}
 
 	public void move() throws GameActionException {
@@ -76,12 +73,12 @@ public class BasicMove {
 			return;
 
 		Direction toMove = robot.currentLoc.directionTo(destination);
-		
+
 		if (toMove == Direction.NONE || toMove == Direction.OMNI)
 			return;
-		
+
 		if (bug != null) {
-			
+
 			if (robot.rc.canMove(bugGoal)) {
                 robot.rc.move(bugGoal);
                 lastBug = bug;
@@ -93,11 +90,11 @@ public class BasicMove {
 				moveWithDiffuse(bug);
 			}
 		}
-		
+
 		if (bug == null && robot.rc.isActive()) {
 			moveWithDiffuse(toMove);
 		}
-		
+
 
 	}
 
@@ -148,22 +145,22 @@ public class BasicMove {
 	public static MapLocation BoundToBoard(TeamRobot robot, MapLocation loc) {
         if (robot.rc.senseTerrainTile(loc) == TerrainTile.OFF_MAP) {
                 int newX = loc.x, newY = loc.y;
-                
+
                 if (newX < 0) {
                         newX = 0;
                 } else if (newX >= robot.info.width) {
                         newX = robot.info.width - 1;
                 }
-                
+
                 if (newY < 0) {
                         newY = 0;
                 } else if (newY >= robot.info.height) {
                         newY = robot.info.height - 1;
                 }
-                
+
                 return new MapLocation(newX, newY);
         }
         return loc;
 	}
-	
+
 }

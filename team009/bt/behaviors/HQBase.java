@@ -2,9 +2,14 @@ package team009.bt.behaviors;
 
 import battlecode.common.Direction;
 import battlecode.common.GameActionException;
+import battlecode.common.MapLocation;
+import team009.bt.decisions.SoldierSelector;
+import team009.communication.CommunicationDecoder;
+import team009.communication.Communicator;
 import team009.robot.TeamRobot;
 
 public class HQBase extends Behavior {
+    private int pastureCount = 0;
     public HQBase(TeamRobot robot) {
         super(robot);
     }
@@ -43,6 +48,22 @@ public class HQBase extends Behavior {
                 }
             }
             if (done) {
+
+                if (Math.random() > 0.75) {
+                    MapLocation pasture = new MapLocation(2, 2);
+                    if (pastureCount == 1) {
+                        pasture = new MapLocation(robot.info.width - 2, 2);
+                    } else if (pastureCount == 2) {
+                        pasture = new MapLocation(2, robot.info.height - 2);
+                    } else if (pastureCount == 3) {
+                        pasture = new MapLocation(robot.info.width - 2, robot.info.height - 2);
+                        pastureCount = 0;
+                    }
+                    Communicator.WriteNewSoldier(rc, SoldierSelector.SOLDIER_TYPE_PASTURE, pasture);
+                    pastureCount++;
+                } else {
+                    Communicator.WriteNewSoldier(rc, SoldierSelector.SOLDIER_TYPE_DUMB, new MapLocation(1, 1));
+                }
                 robot.rc.spawn(dir);
             }
         }

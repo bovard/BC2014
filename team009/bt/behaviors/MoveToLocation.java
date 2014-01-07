@@ -1,36 +1,34 @@
 package team009.bt.behaviors;
 
 import battlecode.common.GameActionException;
+import battlecode.common.MapLocation;
 import team009.navigation.BasicMove;
 import team009.robot.TeamRobot;
 public class MoveToLocation extends Behavior {
     protected BasicMove move;
 
-    public MoveToLocation(TeamRobot robot) {
+    public MoveToLocation(TeamRobot robot, MapLocation location) {
         super(robot);
+        move = new BasicMove(robot);
+        move.setDestination(location);
     }
 
     @Override
     public boolean pre() throws GameActionException {
-        return robot.targetLocation != null;
+        return !move.atDestination();
     }
 
     @Override
     public boolean post() throws GameActionException {
-        return robot.currentLoc.equals(move.destination);
+        return false;
     }
 
     @Override
     public void reset() throws GameActionException {
-        move.setDestination(null);
     }
 
     @Override
     public boolean run() throws GameActionException {
-        if (move.destination == null) {
-            move.setDestination(robot.targetLocation);
-        }
-
         move.move();
         return true;
     }

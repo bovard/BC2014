@@ -1,18 +1,21 @@
 package team009.bt.decisions;
 
 import battlecode.common.GameActionException;
-import team009.bt.Node;
+import battlecode.common.MapLocation;
 import team009.bt.behaviors.EngageEnemy;
 import team009.bt.behaviors.MoveRandom;
+import team009.bt.behaviors.MoveToLocation;
+import team009.bt.behaviors.PastureCapture;
 import team009.robot.GenericSoldier;
 import team009.robot.TeamRobot;
 
-public class DumbSoldierSelector extends Selector {
+public class PastureSelector extends Selector {
 
-    public DumbSoldierSelector(TeamRobot robot) {
+    public PastureSelector(TeamRobot robot, MapLocation pastureLocation) {
         super(robot);
-        addChild(new EngageEnemy((GenericSoldier) robot));
-        addChild(new MoveRandom(robot));
+        addChild(new EngageEnemy((GenericSoldier)robot));
+        addChild(new MoveToLocation(robot, pastureLocation));
+        addChild(new PastureCapture(robot));
     }
 
     @Override

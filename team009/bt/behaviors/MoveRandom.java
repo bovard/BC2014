@@ -30,6 +30,7 @@ public class MoveRandom extends Behavior {
     @Override
     public boolean run() throws GameActionException {
         // move randomly
+        rc.setIndicatorString(0, "I am stuck!!");
         if (rc.isActive()) {
 
             Direction dir = Direction.NORTH;
