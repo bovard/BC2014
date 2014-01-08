@@ -1,6 +1,7 @@
 package team009.bt.behaviors;
 import battlecode.common.Direction;
 import battlecode.common.GameActionException;
+import team009.MapUtils;
 import team009.robot.TeamRobot;
 
 public class MoveRandom extends Behavior {
@@ -31,24 +32,21 @@ public class MoveRandom extends Behavior {
     public boolean run() throws GameActionException {
         // move randomly
         rc.setIndicatorString(0, "I am stuck!!");
-        if (rc.isActive()) {
 
-            Direction dir = Direction.NORTH;
-            boolean done = false;
-            int tries = 0;
-            while(!done && tries < 8) {
-                tries++;
-                Direction [] allDirs = Direction.values();
-                dir = allDirs[((int)(Math.random()*8))];
-                if (robot.rc.canMove(dir)) {
-                    done = true;
-                }
+        Direction dir = null;
+        boolean done = false;
+        int tries = 0;
+        while(!done && tries < 8) {
+            tries++;
+            dir = MapUtils.getRandomDir();
+            if (robot.rc.canMove(dir)) {
+                done = true;
             }
-            if (done) {
-                rc.move(dir);
-            } else {
-                rc.setIndicatorString(0, "I AM STUCK!!!");
-            }
+        }
+        if (done) {
+            rc.move(dir);
+        } else {
+            rc.setIndicatorString(0, "I AM STUCK!!!");
         }
         return true;
     }

@@ -35,12 +35,10 @@ public class HerdReplace extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
-        if (robot.rc.isActive()) {
-            if (robot.currentLoc.equals(pastureLocation)) {
-                robot.rc.construct(RobotType.PASTR);
-            } else {
-                move.move();
-            }
+        if (robot.currentLoc.equals(pastureLocation)) {
+            robot.rc.construct(RobotType.PASTR);
+        } else {
+            move.move();
         }
         return true;
     }

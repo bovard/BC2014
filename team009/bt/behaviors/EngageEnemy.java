@@ -30,7 +30,7 @@ public class EngageEnemy extends Behavior {
     @Override
     public boolean run() throws GameActionException {
 
-        // Soldier selector takes care of "isActive" check.
+        // TeamRobot run takes care of "isActive" check.
         for (int i = 0; i < gs.enemies.length; i++) {
             RobotInfo info = rc.senseRobotInfo(gs.enemies[i]);
 

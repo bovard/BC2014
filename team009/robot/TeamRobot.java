@@ -54,7 +54,9 @@ public abstract class TeamRobot {
                 this.environmentCheck();
 
                 // have the tree choose what to do
-                treeRoot.run();
+                if (rc.isActive()) {
+                    treeRoot.run();
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();

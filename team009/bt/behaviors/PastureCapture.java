@@ -1,7 +1,6 @@
 package team009.bt.behaviors;
 
 import battlecode.common.GameActionException;
-import battlecode.common.MapLocation;
 import battlecode.common.RobotType;
 import team009.robot.TeamRobot;
 
@@ -27,10 +26,7 @@ public class PastureCapture extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
-        if (rc.isActive()) {
-            rc.construct(RobotType.PASTR);
-        }
-
+        rc.construct(RobotType.PASTR);
         return true;
     }
 }

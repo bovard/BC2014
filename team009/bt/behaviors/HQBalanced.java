@@ -36,7 +36,7 @@ public class HQBalanced extends Behavior {
     @Override
     public boolean run() throws GameActionException {
         // Spawn a guy at a random location
-        if (robot.rc.isActive() && robot.rc.senseRobotCount() < GameConstants.MAX_ROBOTS) {
+        if (robot.rc.senseRobotCount() < GameConstants.MAX_ROBOTS) {
             if (pastureCount < 2 || herderCount < 2) {
                 MapLocation pasture = new MapLocation(2, 2);
                 if (pastureCount == 0) {

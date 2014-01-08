@@ -15,8 +15,6 @@ public class HerderSelector extends Decision {
 
     public HerderSelector(Herder robot, MapLocation pastureLocation) {
         super(robot);
-        System.out.print("Init with pastr location: ");
-        System.out.println(pastureLocation.toString());
         this.pastureLocation = pastureLocation;
         engage = new EngageEnemy(robot);
         heard = new HerdSequence(robot, pastureLocation);
