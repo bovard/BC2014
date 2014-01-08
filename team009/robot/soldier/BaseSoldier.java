@@ -2,12 +2,10 @@ package team009.robot.soldier;
 
 import battlecode.common.*;
 import team009.RobotInformation;
-import team009.bt.Node;
-import team009.bt.decisions.SoldierSelector;
 import team009.communication.Communicator;
 import team009.robot.TeamRobot;
 
-public class BaseSoldier extends TeamRobot {
+public abstract class BaseSoldier extends TeamRobot {
     public boolean seesEnemy;
     public Robot[] enemies;
     public int group;
@@ -26,10 +24,5 @@ public class BaseSoldier extends TeamRobot {
         if (Communicator.WriteRound(round)) {
             Communicator.WriteTypeAndGroup(rc, type, group);
         }
-    }
-
-    @Override
-    protected Node getTreeRoot() {
-        return new SoldierSelector(this);
     }
 }

@@ -20,12 +20,17 @@ public class SoldierSpawner {
             SoldierDecoder decoder = Communicator.ReadNewSoldier(rc);
 
             int type = decoder.soldierType;
+            System.out.println("type: " + type);
+            System.out.println("group: " + decoder.group);
+            System.out.println("location: " + decoder.loc);
             if (type == SOLDIER_TYPE_DUMB) {
                 robot = new DumbSoldier(rc, info);
             } else if (type == SOLDIER_TYPE_PASTURE_CAPTURER) {
                 robot = new PastureCapture(rc, info, decoder.loc);
             } else if (type == SOLDIER_TYPE_HERDER) {
                 robot = new Herder(rc, info, decoder.loc);
+            } else {
+                System.out.println("Didn't find a valid robot!");
             }
 
             robot.group = decoder.group;
@@ -35,4 +40,10 @@ public class SoldierSpawner {
         }
         return robot;
     }
+
+
+    // -----------------------------------------------------
+    // Commands
+    // -----------------------------------------------------
+    public static final int RETREAT_TO_PASTURE = 1;
 }

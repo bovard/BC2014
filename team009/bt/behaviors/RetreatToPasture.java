@@ -2,11 +2,11 @@ package team009.bt.behaviors;
 
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
-import team009.bt.decisions.SoldierSelector;
 import team009.communication.Communicator;
 import team009.communication.GroupCommandDecoder;
 import team009.navigation.BasicMove;
 import team009.robot.soldier.BaseSoldier;
+import team009.robot.soldier.SoldierSpawner;
 
 public class RetreatToPasture extends Behavior {
     BaseSoldier gs;
@@ -27,7 +27,7 @@ public class RetreatToPasture extends Behavior {
             GroupCommandDecoder decoder = Communicator.ReadFromGroup(rc, gs.group);
 
             // Time to retreat!
-            if (decoder.data && decoder.command == SoldierSelector.RETREAT_TO_PASTURE) {
+            if (decoder.data && decoder.command == SoldierSpawner.RETREAT_TO_PASTURE) {
                 runningToDestination = true;
             }
         }
@@ -54,7 +54,7 @@ public class RetreatToPasture extends Behavior {
         if (!runningToDestination) {
             move.setDestination(location);
             runningToDestination = true;
-            Communicator.WriteToGroup(rc, gs.group, SoldierSelector.RETREAT_TO_PASTURE);
+            Communicator.WriteToGroup(rc, gs.group, SoldierSpawner.RETREAT_TO_PASTURE);
         }
 
         // Moves toward location

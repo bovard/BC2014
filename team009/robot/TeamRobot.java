@@ -18,7 +18,6 @@ public abstract class TeamRobot {
 	public TeamRobot(RobotController rc, RobotInformation info) {
 		this.rc = rc;
 		this.info = info;
-        this.treeRoot = getTreeRoot();
 	}
 
 	/**

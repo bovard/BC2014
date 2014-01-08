@@ -8,6 +8,7 @@ import team009.bt.behaviors.Pasture;
 public class Pastr extends TeamRobot {
     public Pastr(RobotController rc, RobotInformation info) {
         super(rc, info);
+        treeRoot = getTreeRoot();
     }
 
     @Override

@@ -11,7 +11,9 @@ public class Herder extends BaseSoldier {
 
     public Herder(RobotController rc, RobotInformation info, MapLocation location) {
         super(rc, info);
-        pastrLocation = location;
+        System.out.print("Init Herder with pastr location: ");
+        System.out.println(location.toString());
+        treeRoot = getTreeRoot();
     }
 
     @Override

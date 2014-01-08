@@ -11,6 +11,7 @@ public class PastureCapture extends BaseSoldier {
     public PastureCapture(RobotController rc, RobotInformation info, MapLocation location) {
         super(rc, info);
         pastrLocation = location;
+        treeRoot = getTreeRoot();
     }
 
     @Override

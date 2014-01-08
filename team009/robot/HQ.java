@@ -17,9 +17,9 @@ public class HQ extends TeamRobot {
 
     public HQ(RobotController rc, RobotInformation info) {
         super(rc, info);
-
         maxSoldiers = SoldierSpawner.SOLDIER_COUNT * SoldierSpawner.MAX_GROUP_COUNT;
         soldierCounts = new SoldierCountDecoder[maxSoldiers];
+        treeRoot = getTreeRoot();
     }
 
     @Override

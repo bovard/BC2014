@@ -5,8 +5,6 @@ import battlecode.common.MapLocation;
 import team009.bt.Node;
 import team009.bt.behaviors.EngageEnemy;
 import team009.bt.behaviors.HerdReplace;
-import team009.robot.soldier.BaseSoldier;
-import team009.robot.TeamRobot;
 import team009.robot.soldier.Herder;
 
 public class HerderSelector extends Decision {
@@ -17,6 +15,8 @@ public class HerderSelector extends Decision {
 
     public HerderSelector(Herder robot, MapLocation pastureLocation) {
         super(robot);
+        System.out.print("Init with pastr location: ");
+        System.out.println(pastureLocation.toString());
         this.pastureLocation = pastureLocation;
         engage = new EngageEnemy(robot);
         heard = new HerdSequence(robot, pastureLocation);

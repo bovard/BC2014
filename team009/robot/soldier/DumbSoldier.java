@@ -8,6 +8,7 @@ import team009.bt.decisions.DumbSoldierSelector;
 public class DumbSoldier extends BaseSoldier {
     public DumbSoldier(RobotController rc, RobotInformation info) {
         super(rc, info);
+        treeRoot = getTreeRoot();
     }
 
     @Override
