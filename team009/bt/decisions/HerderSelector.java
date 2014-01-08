@@ -4,18 +4,21 @@ import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import team009.bt.Node;
 import team009.bt.behaviors.EngageEnemy;
+import team009.bt.behaviors.HerdReplace;
 import team009.robot.GenericSoldier;
 
 public class HerderSelector extends Decision {
     protected MapLocation pastureLocation;
     protected Node engage;
     protected Node heard;
+    protected Node replace;
 
     public HerderSelector(GenericSoldier robot, MapLocation pastureLocation) {
         super(robot);
         this.pastureLocation = pastureLocation;
         engage = new EngageEnemy(robot);
         heard = new HerdSequence(robot, pastureLocation);
+        replace = new HerdReplace(robot, pastureLocation);
     }
 
     @Override
@@ -41,7 +44,13 @@ public class HerderSelector extends Decision {
         if (engage.pre()) {
             return engage.run();
         }
-        // if there aren't, pick a direction from the pasture, go till you can't go anymore (or max distance)
+
+        // if our pastr has been killed, replace it!
+        if (replace.pre()) {
+            return replace.run();
+        }
+
+        // Otherwise pick a direction from the pasture, go till you can't go anymore (or max distance)
         // then turn around and move back
         return heard.run();
 
