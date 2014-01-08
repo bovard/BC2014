@@ -29,6 +29,8 @@ public class TeamMemoryManager {
 
     public int getHQStrategy() {
         // Memory defaults to 0
+        // TODO: Use this
+        /*
         long [] memory = robot.rc.getTeamMemory();
         if (memory[PASTURES_KILLED] > 5) {
             return HQSelector.DEFENSIVE_PASTURE;
@@ -37,6 +39,8 @@ public class TeamMemoryManager {
         } else {
             return HQSelector.BALANCED;
         }
+        */
+        return HQSelector.BALANCED;
     }
 
 }
