@@ -67,4 +67,10 @@ public class SoldierSelector extends Decision {
     public static int SOLDIER_TYPE_HEADER = 3;
     public static int SOLDIER_COUNT = 4;
     public static final int MAX_GROUP_COUNT = 5;
+
+    // -----------------------------------------------------
+    // Commands
+    // -----------------------------------------------------
+    public static final int STALE_COMMAND_ROUNDS = 15;
+    public static final int RETREAT_TO_PASTURE = 42;
 }

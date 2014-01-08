@@ -41,7 +41,7 @@ public class HQ extends TeamRobot {
                 int group = i % groupCount;
                 int type = i / groupCount;
                 soldierCounts[i] = Communicator.ReadTypeAndGroup(rc, type, group);
-                Communicator.ClearChannel(rc, type, group);
+                Communicator.ClearCountChannel(rc, type, group);
 
                 if (group == 0) {
                     soldierString += "Type: " + soldierCounts[i].soldierType + " : Count: " + soldierCounts[i].count + " ";
