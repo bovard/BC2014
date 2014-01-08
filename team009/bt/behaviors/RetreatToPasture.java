@@ -1,45 +1,68 @@
 package team009.bt.behaviors;
 
-import battlecode.common.Direction;
 import battlecode.common.GameActionException;
-import battlecode.common.RobotInfo;
+import battlecode.common.MapLocation;
+import team009.bt.decisions.SoldierSelector;
+import team009.communication.Communicator;
+import team009.communication.GroupCommandDecoder;
+import team009.navigation.BasicMove;
 import team009.robot.GenericSoldier;
 
 public class RetreatToPasture extends Behavior {
     GenericSoldier gs;
-    boolean informedTeam = false;
-    int roundInformedTeam = -1;
+    boolean runningToDestination = false;
+    MapLocation location;
+    BasicMove move;
 
-    public RetreatToPasture(GenericSoldier robot) {
+    public RetreatToPasture(GenericSoldier robot, MapLocation location) {
         super(robot);
         gs = robot;
+        this.location = location;
+        move = new BasicMove(robot);
     }
 
     @Override
     public boolean pre() throws GameActionException {
-        return gs.seesEnemy;
+        if (Communicator.ReadRound(robot.round)) {
+            GroupCommandDecoder decoder = Communicator.ReadFromGroup(rc, gs.group);
+
+            // Time to retreat!
+            if (decoder.data && decoder.command == SoldierSelector.RETREAT_TO_PASTURE) {
+                runningToDestination = true;
+            }
+        }
+
+        // intentional >=
+        return (runningToDestination || gs.seesEnemy) &&
+                robot.currentLoc.distanceSquaredTo(location) >= CLOSE_TO_PASTURE;
     }
 
     @Override
     public boolean post() throws GameActionException {
-        return false;
+        return robot.currentLoc.distanceSquaredTo(location) <= CLOSE_TO_PASTURE;
     }
 
     @Override
     public void reset() throws GameActionException {
-
+        runningToDestination = false;
     }
 
     @Override
     public boolean run() throws GameActionException {
-        if (!informedTeam) {
-            roundInformedTeam = robot.round;
-            informedTeam = true;
 
-
+        // Checks if we need to inform team.
+        if (!runningToDestination) {
+            move.setDestination(location);
+            runningToDestination = true;
+            Communicator.WriteToGroup(rc, gs.group, SoldierSelector.RETREAT_TO_PASTURE);
         }
+
+        // Moves toward location
+        move.move();
 
         return true;
     }
+
+    public static final int CLOSE_TO_PASTURE = 6;
 }
 

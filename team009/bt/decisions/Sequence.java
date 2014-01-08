@@ -24,7 +24,7 @@ public abstract class Sequence extends Decision {
         if (counter < children.size() + 1) {
             return toRun.run();
         } else {
-            System.out.println("Something is borked!");
+            rc.setIndicatorString(3, "OMG!! Something is borked.");
             return false;
         }
 

@@ -55,12 +55,39 @@ public class Communicator {
         return new SoldierCountDecoder(data);
     }
 
+    public static GroupCommandDecoder ReadFromGroup(RobotController rc, int group) throws GameActionException {
+        GroupCommandDecoder decoder = new GroupCommandDecoder(rc.readBroadcast(GROUP_CHANNEL_BASE + group));
+        decoder.ttl--;
+
+        // Shortcut it, clear the channel
+        if (decoder.ttl <= 0) {
+
+            // Clears channel
+            ClearCommandChannel(rc, group);
+            return new GroupCommandDecoder(0);
+        }
+
+        _Broadcast(rc, GROUP_CHANNEL_BASE + group, decoder);
+        return decoder;
+    }
+
     //-----------------------------------------------------
     // UTILS
     //-----------------------------------------------------
 
-    public static void ClearChannel(RobotController rc, int soldierType, int group) throws GameActionException {
-        rc.broadcast(soldierType * SoldierSelector.MAX_GROUP_COUNT + group, 0);
+    public static void ClearCountChannel(RobotController rc, int soldierType, int group) throws GameActionException {
+        _Broadcast(rc, soldierType * SoldierSelector.MAX_GROUP_COUNT + group, 0);
+    }
+
+    public static void ClearCommandChannel(RobotController rc, int group) throws GameActionException {
+        _Broadcast(rc, GROUP_CHANNEL_BASE + group, 0);
+    }
+
+    public static void ResetTimeToLiveGroupCommand(RobotController rc, int group) throws GameActionException {
+        int channel = GROUP_CHANNEL_BASE + group;
+        GroupCommandDecoder decoder = new GroupCommandDecoder(rc.readBroadcast(channel));
+        decoder.resetTTL();
+        _Broadcast(rc, channel, decoder.getData());
     }
 
     public static boolean ReadRound(int round) {
@@ -72,10 +99,14 @@ public class Communicator {
     }
 
     private static void _Broadcast(RobotController rc, int channel, CommunicationDecoder decoder) throws GameActionException {
-        rc.broadcast(channel, decoder.getData());
+        _Broadcast(rc, channel, decoder.getData());
 
         // TODO: $DEBUG$
         rc.setIndicatorString(1, "Broadcasted: " + decoder.getData() + " : " + decoder.toString());
+    }
+
+    private static void _Broadcast(RobotController rc, int channel, int data) throws GameActionException {
+        rc.broadcast(channel, data);
     }
 
     /*****************************************************

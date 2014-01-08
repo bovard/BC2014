@@ -4,9 +4,6 @@ import battlecode.common.GameActionException;
 import team009.bt.Node;
 import team009.robot.TeamRobot;
 
-/**
- * Created by mpaulson on 1/6/14.
- */
 public abstract class Selector extends Decision {
 
     public Selector(TeamRobot robot) {
