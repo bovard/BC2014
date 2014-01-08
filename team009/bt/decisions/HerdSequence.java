@@ -12,8 +12,8 @@ public class HerdSequence extends Sequence {
     public HerdSequence(Herder robot, MapLocation pastureLocation) {
         super(robot);
         this.pastureLocation = pastureLocation;
-        children.add(new HerdSneak(robot, pastureLocation));
         children.add(new HerdReturn(robot, pastureLocation));
+        children.add(new HerdSneak(robot, pastureLocation));
         lastRun = 0;
     }
 
