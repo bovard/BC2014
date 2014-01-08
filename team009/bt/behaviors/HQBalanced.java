@@ -62,7 +62,7 @@ public class HQBalanced extends Behavior {
                         pastureCount = 0;
                     }
                     if (herderCount < pastureCount) {
-                        Communicator.WriteNewSoldier(rc, SoldierSelector.SOLDIER_TYPE_HERDER, pasture);
+                        Communicator.WriteNewSoldier(rc, SoldierSelector.SOLDIER_TYPE_HEADER, pasture);
                         herderCount++;
                     } else {
                         Communicator.WriteNewSoldier(rc, SoldierSelector.SOLDIER_TYPE_PASTURE, pasture);

@@ -1,16 +1,16 @@
 package team009.robot;
 
-import battlecode.common.GameActionException;
-import battlecode.common.GameObject;
-import battlecode.common.Robot;
-import battlecode.common.RobotController;
+import battlecode.common.*;
 import team009.RobotInformation;
 import team009.bt.Node;
 import team009.bt.decisions.SoldierSelector;
+import team009.communication.Communicator;
 
 public class GenericSoldier extends TeamRobot {
     public boolean seesEnemy;
     public Robot[] enemies;
+    public int group;
+    public int type;
 
     public GenericSoldier(RobotController rc, RobotInformation info) {
         super(rc, info);
@@ -21,6 +21,10 @@ public class GenericSoldier extends TeamRobot {
         super.environmentCheck();
         enemies = rc.senseNearbyGameObjects(Robot.class, 100, info.enemyTeam);
         seesEnemy = enemies.length > 0;
+
+        if (Clock.getRoundNum() % RobotInformation.INFORMATION_ROUND_MOD == 0) {
+            Communicator.WriteTypeAndGroup(rc, type, group);
+        }
     }
 
     @Override

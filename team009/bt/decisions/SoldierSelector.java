@@ -1,6 +1,7 @@
 package team009.bt.decisions;
 import battlecode.common.GameActionException;
 import team009.bt.Node;
+import team009.bt.behaviors.Pasture;
 import team009.communication.Communicator;
 import team009.communication.SoldierDecoder;
 import team009.robot.GenericSoldier;
@@ -11,18 +12,23 @@ public class SoldierSelector extends Decision {
     private Node soldier = null;
     private SoldierDecoder decoder = null;
 
-    public SoldierSelector(TeamRobot robot) {
+    public SoldierSelector(GenericSoldier robot) {
         super(robot);
 
         try {
             decoder = Communicator.ReadNewSoldier(rc);
             int type = decoder.soldierType;
+            robot.group = decoder.group;
+            robot.type = type;
+
             if (type == SOLDIER_TYPE_DUMB) {
                 soldier = new DumbSoldierSelector(robot);
-            } else if (type == SOLDIER_TYPE_PASTURE) {
+            } else if (type == SOLDIER_TYPE_PASTURE_CAPTURER) {
                 soldier = new PastureSelector(robot, decoder.loc);
-            } else if (type == SOLDIER_TYPE_HERDER) {
+            } else if (type == SOLDIER_TYPE_HEADER) {
                 soldier = new HerderSelector(robot, decoder.loc);
+            } else if (type == SOLDIER_TYPE_PASTURE) {
+                soldier = new Pasture(robot);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -56,6 +62,7 @@ public class SoldierSelector extends Decision {
     }
 
     public static int SOLDIER_TYPE_DUMB = 0;
-    public static int SOLDIER_TYPE_PASTURE = 1;
-    public static int SOLDIER_TYPE_HERDER = 2;
+    public static int SOLDIER_TYPE_PASTURE_CAPTURER = 1;
+    public static int SOLDIER_TYPE_PASTURE = 2;
+    public static int SOLDIER_TYPE_HEADER = 3;
 }
