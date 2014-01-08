@@ -36,5 +36,4 @@ public class RobotInformation {
 	}
 
     public static final int INFORMATION_ROUND_MOD = 5;
-    public static final int MAX_GROUP_COUNT = 5;
 }

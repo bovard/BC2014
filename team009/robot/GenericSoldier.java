@@ -22,7 +22,7 @@ public class GenericSoldier extends TeamRobot {
         enemies = rc.senseNearbyGameObjects(Robot.class, 100, info.enemyTeam);
         seesEnemy = enemies.length > 0;
 
-        if (Clock.getRoundNum() % RobotInformation.INFORMATION_ROUND_MOD == 0) {
+        if (Communicator.WriteRound()) {
             Communicator.WriteTypeAndGroup(rc, type, group);
         }
     }

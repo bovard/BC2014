@@ -14,12 +14,17 @@ public class SoldierCountDecoder extends CommunicationDecoder {
     public SoldierCountDecoder(int data) {
         group = data / GROUP_MULTIPLIER;
         soldierType = (data % GROUP_MULTIPLIER) / SOLDIER_TYPE_MULTIPLIER;
-        count = data / 25;
+        count = (data % SOLDIER_TYPE_MULTIPLIER);
     }
 
     @Override
     public int getData() {
         return soldierType * SOLDIER_TYPE_MULTIPLIER + group * GROUP_MULTIPLIER + count;
+    }
+
+    @Override
+    public String toString() {
+        return "Type: " + soldierType + " __ Count: " + count + " __ Group " + group;
     }
 
     public static final int GROUP_MULTIPLIER = 10000;
