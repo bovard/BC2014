@@ -3,6 +3,7 @@ package team009.bt.behaviors;
 import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
+import team009.MapUtils;
 import team009.bt.decisions.SoldierSelector;
 import team009.communication.Communicator;
 import team009.robot.TeamRobot;
@@ -40,8 +41,7 @@ public class HQBalanced extends Behavior {
             int tries = 0;
             while(!done && tries < 8) {
                 tries++;
-                Direction [] allDirs = Direction.values();
-                dir = allDirs[((int)(Math.random()*8))];
+                dir = MapUtils.getRandomDir();
                 if (robot.rc.canMove(dir)) {
                     done = true;
                 }
