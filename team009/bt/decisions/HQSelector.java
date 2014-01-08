@@ -10,10 +10,10 @@ import team009.robot.HQ;
 
 public class HQSelector extends Decision {
     public static int DEFENSIVE_PASTURE = 0;
-    public static int PASTURE_HUNTERING = 1;
+    public static int PASTURE_HUNTING = 1;
     public static int BALANCED = 2;
 
-    public int strat = BALANCED;
+    public int strat = PASTURE_HUNTING;
     protected TeamMemoryManager memoryManager;
 
     public HQSelector(HQ robot) {
@@ -22,7 +22,7 @@ public class HQSelector extends Decision {
         strat = memoryManager.getHQStrategy();
         // TODO: Add in the Defensive Pasture and Pasture Hunting behaviors
         children.add(DEFENSIVE_PASTURE, new HQDefensive(robot));
-        children.add(PASTURE_HUNTERING, new HQOffensive(robot));
+        children.add(PASTURE_HUNTING, new HQOffensive(robot));
         children.add(BALANCED, new HQBalanced(robot));
     }
 
@@ -51,8 +51,8 @@ public class HQSelector extends Decision {
             return children.get(BALANCED).run();
         } else if (strat == DEFENSIVE_PASTURE) {
             return children.get(DEFENSIVE_PASTURE).run();
-        } else if (strat == PASTURE_HUNTERING) {
-            return children.get(PASTURE_HUNTERING).run();
+        } else if (strat == PASTURE_HUNTING) {
+            return children.get(PASTURE_HUNTING).run();
         } else {
             System.out.println("No strat selected!");
             return false;

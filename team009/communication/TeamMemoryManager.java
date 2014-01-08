@@ -33,9 +33,10 @@ public class TeamMemoryManager {
         if (memory[PASTURES_KILLED] > 5) {
             return HQSelector.DEFENSIVE_PASTURE;
         } else if (memory[ROUND] != 0 && memory[ROUND] < 1000) {
-            return HQSelector.PASTURE_HUNTERING;
+            return HQSelector.PASTURE_HUNTING;
         } else {
-            return HQSelector.BALANCED;
+            //return HQSelector.BALANCED;
+            return HQSelector.PASTURE_HUNTING;
         }
     }
 

@@ -29,6 +29,8 @@ public class SoldierSelector extends Decision {
                 soldier = new HerderSelector(robot, decoder.loc);
             } else if (type == SOLDIER_TYPE_PASTURE) {
                 soldier = new Pasture(robot);
+            } else if (type == SOLDIER_TYPE_WOLF) {
+                soldier = new WolfSelector(robot);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -65,6 +67,7 @@ public class SoldierSelector extends Decision {
     public static int SOLDIER_TYPE_PASTURE_CAPTURER = 1;
     public static int SOLDIER_TYPE_PASTURE = 2;
     public static int SOLDIER_TYPE_HEADER = 3;
+    public static int SOLDIER_TYPE_WOLF = 4;
     public static int SOLDIER_COUNT = 4;
     public static final int MAX_GROUP_COUNT = 5;
 
