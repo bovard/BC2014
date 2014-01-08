@@ -14,7 +14,6 @@ public abstract class TeamRobot {
     public int round;
 	public RobotController rc;
 	public RobotInformation info;
-    public MapLocation targetLocation;
 
 	public TeamRobot(RobotController rc, RobotInformation info) {
 		this.rc = rc;

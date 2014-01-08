@@ -58,7 +58,7 @@ public class HQBalanced extends Behavior {
                         pasture = new MapLocation(robot.info.width - 2, robot.info.height - 2);
                         pastureCount = 0;
                     }
-                    Communicator.WriteNewSoldier(rc, SoldierSelector.SOLDIER_TYPE_PASTURE, pasture);
+                    Communicator.WriteNewSoldier(rc, SoldierSelector.SOLDIER_TYPE_PASTURE_CAPTURER, pasture);
                     pastureCount++;
                 } else {
                     Communicator.WriteNewSoldier(rc, SoldierSelector.SOLDIER_TYPE_DUMB, new MapLocation(1, 1));
