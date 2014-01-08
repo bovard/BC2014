@@ -64,4 +64,6 @@ public class SoldierSelector extends Decision {
     public static int SOLDIER_TYPE_PASTURE_CAPTURER = 1;
     public static int SOLDIER_TYPE_PASTURE = 2;
     public static int SOLDIER_TYPE_HEADER = 3;
+
+    public static int SOLDIER_COUNT = 4;
 }
