@@ -5,7 +5,6 @@ import team009.bt.behaviors.Pasture;
 import team009.communication.Communicator;
 import team009.communication.SoldierDecoder;
 import team009.robot.GenericSoldier;
-import team009.robot.TeamRobot;
 
 public class SoldierSelector extends Decision {
 
@@ -25,6 +24,8 @@ public class SoldierSelector extends Decision {
                 soldier = new DumbSoldierSelector(robot);
             } else if (type == SOLDIER_TYPE_PASTURE_CAPTURER) {
                 soldier = new PastureSelector(robot, decoder.loc);
+            } else if (type == SOLDIER_TYPE_HEADER) {
+                soldier = new HerderSelector(robot, decoder.loc);
             } else if (type == SOLDIER_TYPE_PASTURE) {
                 soldier = new Pasture(robot);
             }
@@ -62,4 +63,5 @@ public class SoldierSelector extends Decision {
     public static int SOLDIER_TYPE_DUMB = 0;
     public static int SOLDIER_TYPE_PASTURE_CAPTURER = 1;
     public static int SOLDIER_TYPE_PASTURE = 2;
+    public static int SOLDIER_TYPE_HEADER = 3;
 }

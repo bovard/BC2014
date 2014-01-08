@@ -3,7 +3,6 @@ package team009.bt.decisions;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import team009.bt.behaviors.EngageEnemy;
-import team009.bt.behaviors.MoveRandom;
 import team009.bt.behaviors.MoveToLocation;
 import team009.bt.behaviors.PastureCapture;
 import team009.robot.GenericSoldier;
