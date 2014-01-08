@@ -1,11 +1,11 @@
-package team009.robot;
+package team009.robot.soldier;
 
 import battlecode.common.RobotController;
 import team009.RobotInformation;
 import team009.bt.Node;
 import team009.bt.decisions.DumbSoldierSelector;
 
-public class DumbSoldier extends GenericSoldier {
+public class DumbSoldier extends BaseSoldier {
     public DumbSoldier(RobotController rc, RobotInformation info) {
         super(rc, info);
     }

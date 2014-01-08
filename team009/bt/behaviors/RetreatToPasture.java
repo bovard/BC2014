@@ -6,15 +6,15 @@ import team009.bt.decisions.SoldierSelector;
 import team009.communication.Communicator;
 import team009.communication.GroupCommandDecoder;
 import team009.navigation.BasicMove;
-import team009.robot.GenericSoldier;
+import team009.robot.soldier.BaseSoldier;
 
 public class RetreatToPasture extends Behavior {
-    GenericSoldier gs;
+    BaseSoldier gs;
     boolean runningToDestination = false;
     MapLocation location;
     BasicMove move;
 
-    public RetreatToPasture(GenericSoldier robot, MapLocation location) {
+    public RetreatToPasture(BaseSoldier robot, MapLocation location) {
         super(robot);
         gs = robot;
         this.location = location;

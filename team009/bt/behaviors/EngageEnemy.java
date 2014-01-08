@@ -3,11 +3,11 @@ package team009.bt.behaviors;
 import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.RobotInfo;
-import team009.robot.GenericSoldier;
+import team009.robot.soldier.BaseSoldier;
 
 public class EngageEnemy extends Behavior {
-    GenericSoldier gs;
-    public EngageEnemy(GenericSoldier robot) {
+    BaseSoldier gs;
+    public EngageEnemy(BaseSoldier robot) {
         super(robot);
         gs = robot;
     }

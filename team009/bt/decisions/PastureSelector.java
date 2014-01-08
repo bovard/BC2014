@@ -5,7 +5,7 @@ import battlecode.common.MapLocation;
 import team009.bt.behaviors.EngageEnemy;
 import team009.bt.behaviors.MoveToLocation;
 import team009.bt.behaviors.PastureCapture;
-import team009.robot.GenericSoldier;
+import team009.robot.soldier.BaseSoldier;
 import team009.robot.TeamRobot;
 
 public class PastureSelector extends Selector {
@@ -14,7 +14,7 @@ public class PastureSelector extends Selector {
         super(robot);
 
         // The children from most to least important
-        addChild(new EngageEnemy((GenericSoldier)robot));
+        addChild(new EngageEnemy((BaseSoldier)robot));
         addChild(new MoveToLocation(robot, pastureLocation));
         addChild(new PastureCapture(robot));
     }

@@ -2,10 +2,9 @@ package team009;
 
 import battlecode.common.RobotController;
 import battlecode.common.RobotType;
-import team009.robot.GenericSoldier;
 import team009.robot.HQ;
 import team009.robot.Pastr;
-import team009.robot.SoldierSpawner;
+import team009.robot.soldier.SoldierSpawner;
 
 public class RobotPlayer {
 	public static void run(RobotController rc) {

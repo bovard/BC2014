@@ -2,8 +2,7 @@ package team009.communication;
 
 import battlecode.common.*;
 import team009.RobotInformation;
-import team009.bt.decisions.SoldierSelector;
-import team009.robot.SoldierSpawner;
+import team009.robot.soldier.SoldierSpawner;
 
 public class Communicator {
 

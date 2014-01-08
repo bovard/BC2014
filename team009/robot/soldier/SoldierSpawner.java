@@ -1,12 +1,8 @@
-package team009.robot;
+package team009.robot.soldier;
 
 import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
 import team009.RobotInformation;
-import team009.bt.behaviors.Pasture;
-import team009.bt.decisions.DumbSoldierSelector;
-import team009.bt.decisions.HerderSelector;
-import team009.bt.decisions.PastureSelector;
 import team009.communication.Communicator;
 import team009.communication.SoldierDecoder;
 
@@ -18,8 +14,8 @@ public class SoldierSpawner {
     public static int SOLDIER_COUNT = 3;
     public static final int MAX_GROUP_COUNT = 4;
 
-    public static GenericSoldier getSoldier(RobotController rc, RobotInformation info) {
-        GenericSoldier robot = null;
+    public static BaseSoldier getSoldier(RobotController rc, RobotInformation info) {
+        BaseSoldier robot = null;
         try {
             SoldierDecoder decoder = Communicator.ReadNewSoldier(rc);
 

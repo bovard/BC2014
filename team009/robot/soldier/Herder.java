@@ -1,4 +1,4 @@
-package team009.robot;
+package team009.robot.soldier;
 
 import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
@@ -6,7 +6,7 @@ import team009.RobotInformation;
 import team009.bt.Node;
 import team009.bt.decisions.HerderSelector;
 
-public class Herder extends GenericSoldier {
+public class Herder extends BaseSoldier {
     private MapLocation pastrLocation;
 
     public Herder(RobotController rc, RobotInformation info, MapLocation location) {

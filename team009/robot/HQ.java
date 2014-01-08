@@ -5,9 +5,9 @@ import team009.MapUtils;
 import team009.RobotInformation;
 import team009.bt.Node;
 import team009.bt.decisions.HQSelector;
-import team009.bt.decisions.SoldierSelector;
 import team009.communication.Communicator;
 import team009.communication.SoldierCountDecoder;
+import team009.robot.soldier.SoldierSpawner;
 
 public class HQ extends TeamRobot {
 

@@ -1,17 +1,16 @@
 package team009.bt.decisions;
 import battlecode.common.GameActionException;
 import team009.bt.Node;
-import team009.bt.behaviors.Pasture;
 import team009.communication.Communicator;
 import team009.communication.SoldierDecoder;
-import team009.robot.GenericSoldier;
+import team009.robot.soldier.BaseSoldier;
 
 public class SoldierSelector extends Decision {
 
     private Node soldier = null;
     private SoldierDecoder decoder = null;
 
-    public SoldierSelector(GenericSoldier robot) {
+    public SoldierSelector(BaseSoldier robot) {
         super(robot);
 
         try {

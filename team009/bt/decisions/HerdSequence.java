@@ -2,19 +2,16 @@ package team009.bt.decisions;
 
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
-import team009.bt.Node;
 import team009.bt.behaviors.HerdReturn;
 import team009.bt.behaviors.HerdSneak;
-import team009.robot.TeamRobot;
+import team009.robot.soldier.Herder;
 
 public class HerdSequence extends Sequence {
     protected MapLocation pastureLocation;
-    protected Node hSneak;
-    protected Node hReturn;
-    public HerdSequence(TeamRobot robot, MapLocation pastureLocation) {
+
+    public HerdSequence(Herder robot, MapLocation pastureLocation) {
         super(robot);
         this.pastureLocation = pastureLocation;
-        children.add(new HerdSneak(robot, pastureLocation));
         children.add(new HerdSneak(robot, pastureLocation));
         children.add(new HerdReturn(robot, pastureLocation));
         lastRun = 0;

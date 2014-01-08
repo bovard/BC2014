@@ -1,18 +1,19 @@
-package team009.robot;
+package team009.robot.soldier;
 
 import battlecode.common.*;
 import team009.RobotInformation;
 import team009.bt.Node;
 import team009.bt.decisions.SoldierSelector;
 import team009.communication.Communicator;
+import team009.robot.TeamRobot;
 
-public class GenericSoldier extends TeamRobot {
+public class BaseSoldier extends TeamRobot {
     public boolean seesEnemy;
     public Robot[] enemies;
     public int group;
     public int type;
 
-    public GenericSoldier(RobotController rc, RobotInformation info) {
+    public BaseSoldier(RobotController rc, RobotInformation info) {
         super(rc, info);
     }
 

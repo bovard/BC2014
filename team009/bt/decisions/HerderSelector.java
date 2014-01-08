@@ -5,8 +5,9 @@ import battlecode.common.MapLocation;
 import team009.bt.Node;
 import team009.bt.behaviors.EngageEnemy;
 import team009.bt.behaviors.HerdReplace;
-import team009.robot.GenericSoldier;
+import team009.robot.soldier.BaseSoldier;
 import team009.robot.TeamRobot;
+import team009.robot.soldier.Herder;
 
 public class HerderSelector extends Decision {
     protected MapLocation pastureLocation;
@@ -14,10 +15,10 @@ public class HerderSelector extends Decision {
     protected Node heard;
     protected Node replace;
 
-    public HerderSelector(TeamRobot robot, MapLocation pastureLocation) {
+    public HerderSelector(Herder robot, MapLocation pastureLocation) {
         super(robot);
         this.pastureLocation = pastureLocation;
-        engage = new EngageEnemy((GenericSoldier)robot);
+        engage = new EngageEnemy(robot);
         heard = new HerdSequence(robot, pastureLocation);
         replace = new HerdReplace(robot, pastureLocation);
     }

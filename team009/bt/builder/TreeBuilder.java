@@ -1,8 +1,7 @@
 package team009.bt.builder;
 
 import team009.bt.Node;
-import team009.bt.decisions.SoldierSelector;
-import team009.robot.GenericSoldier;
+import team009.robot.soldier.BaseSoldier;
 import team009.robot.TeamRobot;
 
 public class TreeBuilder {
@@ -11,11 +10,11 @@ public class TreeBuilder {
         return null;
     }
 
-    public static Node getSoldierTree(GenericSoldier robot) {
+    public static Node getSoldierTree(BaseSoldier robot) {
         return null;
     }
 
-    private static Node _dumbSoldierSelector(GenericSoldier robot) {
+    private static Node _dumbSoldierSelector(BaseSoldier robot) {
         return null;
     }
 
