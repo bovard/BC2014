@@ -58,7 +58,7 @@ public class HQ extends TeamRobot {
 
     // TODO: $IMPROVEMENT$ We should make the group number have a channel to grab pasture location from
     public void createHerder(int group, MapLocation pasture) throws GameActionException {
-        _spawn(SoldierSelector.SOLDIER_TYPE_HEADER, group, pasture);
+        _spawn(SoldierSelector.SOLDIER_TYPE_HERDER, group, pasture);
     }
 
     public void createPastureCapturer(int group, MapLocation pasture) throws GameActionException {

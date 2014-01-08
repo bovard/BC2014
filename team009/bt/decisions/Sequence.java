@@ -13,7 +13,7 @@ public abstract class Sequence extends Decision {
     public boolean run() throws GameActionException {
         Node toRun = children.get(lastRun);
         int counter = 0;
-        while (toRun.post() && !toRun.pre() && counter < children.size() + 1) {
+        while ((toRun.post() || !toRun.pre()) && counter < children.size() + 1) {
             counter++;
             lastRun = (lastRun + 1) % children.size();
             if (toRun.post()) {
@@ -21,7 +21,7 @@ public abstract class Sequence extends Decision {
             }
             toRun = children.get(lastRun);
         }
-        if (counter < children.size()) {
+        if (counter < children.size() + 1) {
             return toRun.run();
         } else {
             System.out.println("Something is borked!");

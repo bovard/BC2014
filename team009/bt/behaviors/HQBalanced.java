@@ -1,7 +1,9 @@
 package team009.bt.behaviors;
 
 import battlecode.common.GameActionException;
+import battlecode.common.GameConstants;
 import battlecode.common.MapLocation;
+import battlecode.common.RobotType;
 import team009.robot.HQ;
 
 public class HQBalanced extends Behavior {
@@ -34,8 +36,8 @@ public class HQBalanced extends Behavior {
     @Override
     public boolean run() throws GameActionException {
         // Spawn a guy at a random location
-        if (robot.rc.isActive()) {
-            if (Math.random() > 0.75) {
+        if (robot.rc.isActive() && robot.rc.senseRobotCount() < GameConstants.MAX_ROBOTS) {
+            if (pastureCount < 2 || herderCount < 2) {
                 MapLocation pasture = new MapLocation(2, 2);
                 if (pastureCount == 0) {
                     pasture = new MapLocation(2, 2);
@@ -47,15 +49,15 @@ public class HQBalanced extends Behavior {
                     pasture = new MapLocation(robot.info.width - 2, robot.info.height - 2);
                     pastureCount = 0;
                 }
-                if (herderCount < pastureCount) {
+                if (herderCount <= pastureCount) {
                     hq.createHerder(0, pasture);
                     herderCount++;
                 } else {
-                    hq.createPastureCapturer(0, pasture);
+                    hq.createHerder(0, pasture);
                     pastureCount++;
                 }
             } else {
-                hq.createDumbSoldier(0);
+                //hq.createDumbSoldier(0);
             }
         }
         return true;

@@ -12,7 +12,7 @@ public class HerdSneak extends Behavior {
     protected MapLocation pastureLocation;
     protected MapLocation startingLocation;
     protected boolean go;
-    protected static final int MAX_DISTANCE_SQUARED = 144;
+    protected static final int MAX_DISTANCE_SQUARED = 226;
 
     protected BasicMove move;
 
@@ -21,6 +21,7 @@ public class HerdSneak extends Behavior {
         move = new BasicMove(robot);
         this.pastureLocation = pastureLocation;
         heardDirection = getNextDirection();
+        startingLocation = pastureLocation.add(heardDirection);
         go = false;
     }
 
@@ -32,8 +33,8 @@ public class HerdSneak extends Behavior {
 
     @Override
     public boolean post() throws GameActionException {
-        return !go && (!robot.rc.canMove(heardDirection)
-                || robot.currentLoc.distanceSquaredTo(pastureLocation) < MAX_DISTANCE_SQUARED);
+        return go && (!robot.rc.canMove(heardDirection)
+                || robot.currentLoc.distanceSquaredTo(pastureLocation) > MAX_DISTANCE_SQUARED);
     }
 
     @Override

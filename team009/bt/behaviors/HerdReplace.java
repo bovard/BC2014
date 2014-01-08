@@ -20,7 +20,7 @@ public class HerdReplace extends Behavior {
     @Override
     public boolean pre() throws GameActionException {
         // we can sense the square and we see that there isn't a pastr there!
-        return robot.rc.canSenseSquare(pastureLocation) && robot.rc.senseObjectAtLocation(pastureLocation) == null;
+        return robot.rc.canSenseSquare(pastureLocation) && (robot.rc.senseObjectAtLocation(pastureLocation) == null || robot.currentLoc.equals(pastureLocation));
     }
 
     @Override
@@ -35,10 +35,12 @@ public class HerdReplace extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
-        if (robot.currentLoc == pastureLocation) {
-            robot.rc.construct(RobotType.PASTR);
-        } else {
-            move.move();
+        if (robot.rc.isActive()) {
+            if (robot.currentLoc.equals(pastureLocation)) {
+                robot.rc.construct(RobotType.PASTR);
+            } else {
+                move.move();
+            }
         }
         return true;
     }
