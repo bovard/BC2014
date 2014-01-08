@@ -6,34 +6,40 @@ import team009.bt.decisions.SoldierSelector;
 
 public class Communicator {
 
-    /**
-     * Creates a communication for a robot soldier that will
-     */
+    //-----------------------------------------------------
+    // WRITING
+    //-----------------------------------------------------
+
     public static void WriteNewSoldier(RobotController rc, int soldierType, MapLocation location) throws GameActionException {
-        SoldierDecoder soldierDecoder = new SoldierDecoder(soldierType, location);
-        rc.broadcast(NEW_SOLDIER_CHANNEL, soldierDecoder.getData());
+        SoldierDecoder decoder = new SoldierDecoder(soldierType, location);
+        _Broadcast(rc, NEW_SOLDIER_CHANNEL, decoder);
     }
 
-    /**
-     * Reads in the communication for the new soldier
-     */
-    public static SoldierDecoder ReadNewSoldier(RobotController rc) throws GameActionException {
-        return new SoldierDecoder(rc.readBroadcast(NEW_SOLDIER_CHANNEL));
+    public static void WriteToGroup(RobotController rc, int group, int command) throws GameActionException {
+        GroupCommandDecoder decoder = new GroupCommandDecoder(group, command);
+        _Broadcast(rc, GROUP_CHANNEL_BASE + group, decoder);
     }
 
-    /**
-     * Writes out the soldier type to the proper com channel
-     */
+    public static void WriteToGroup(RobotController rc, int group, int command, MapLocation location) throws GameActionException {
+        GroupCommandDecoder decoder = new GroupCommandDecoder(group, command, location);
+        _Broadcast(rc, GROUP_CHANNEL_BASE + group, decoder);
+    }
+
     public static void WriteTypeAndGroup(RobotController rc, int soldierType, int group) throws GameActionException {
         int channel = soldierType * SoldierSelector.MAX_GROUP_COUNT + group;
-        SoldierCountDecoder dec = ReadTypeAndGroup(rc, soldierType, group);
+        SoldierCountDecoder decoder = ReadTypeAndGroup(rc, soldierType, group);
 
         // Incs the channel
-        dec.count++;
-        rc.broadcast(channel, dec.getData());
+        decoder.count++;
+        _Broadcast(rc, channel, decoder);
+    }
 
-        // TODO: $DEBUG$
-        rc.setIndicatorString(1, "Broadcasted: " + dec.getData() + " : " + dec.toString());
+    //-----------------------------------------------------
+    // READING
+    //-----------------------------------------------------
+
+    public static SoldierDecoder ReadNewSoldier(RobotController rc) throws GameActionException {
+        return new SoldierDecoder(rc.readBroadcast(NEW_SOLDIER_CHANNEL));
     }
 
     public static SoldierCountDecoder ReadTypeAndGroup(RobotController rc, int soldierType, int group) throws GameActionException {
@@ -49,6 +55,10 @@ public class Communicator {
         return new SoldierCountDecoder(data);
     }
 
+    //-----------------------------------------------------
+    // UTILS
+    //-----------------------------------------------------
+
     public static void ClearChannel(RobotController rc, int soldierType, int group) throws GameActionException {
         rc.broadcast(soldierType * SoldierSelector.MAX_GROUP_COUNT + group, 0);
     }
@@ -61,6 +71,13 @@ public class Communicator {
         return round % RobotInformation.INFORMATION_ROUND_MOD == 0;
     }
 
+    private static void _Broadcast(RobotController rc, int channel, CommunicationDecoder decoder) throws GameActionException {
+        rc.broadcast(channel, decoder.getData());
+
+        // TODO: $DEBUG$
+        rc.setIndicatorString(1, "Broadcasted: " + decoder.getData() + " : " + decoder.toString());
+    }
+
     /*****************************************************
      * Channel Constants
      *///*************************************************
@@ -68,4 +85,7 @@ public class Communicator {
 
     // Channels 1 through (MAX_GROUP_COUNT * SOLDIER_COUNT) + 1 are reserved for soldier communication
     private static int SOLDIER_TYPE_CHANNEL_BASE = 1;
+
+    // Group channels go for group channel count + 5;
+    private static int GROUP_CHANNEL_BASE = 1 + SoldierSelector.MAX_GROUP_COUNT * SoldierSelector.SOLDIER_COUNT;
 }
