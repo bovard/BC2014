@@ -11,7 +11,7 @@ public class SoldierSelector extends Decision {
     private Node soldier = null;
     private SoldierDecoder decoder = null;
 
-    public SoldierSelector(GenericSoldier robot) {
+    public SoldierSelector(TeamRobot robot) {
         super(robot);
 
         try {
@@ -21,7 +21,7 @@ public class SoldierSelector extends Decision {
                 soldier = new DumbSoldierSelector(robot);
             } else if (type == SOLDIER_TYPE_PASTURE) {
                 soldier = new PastureSelector(robot, decoder.loc);
-            } else if (type == SOLDIER_TYPE_HEADER) {
+            } else if (type == SOLDIER_TYPE_HERDER) {
                 soldier = new HerderSelector(robot, decoder.loc);
             }
         } catch (Exception e) {
@@ -57,5 +57,5 @@ public class SoldierSelector extends Decision {
 
     public static int SOLDIER_TYPE_DUMB = 0;
     public static int SOLDIER_TYPE_PASTURE = 1;
-    public static int SOLDIER_TYPE_HEADER = 2;
+    public static int SOLDIER_TYPE_HERDER = 2;
 }

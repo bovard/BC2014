@@ -6,6 +6,7 @@ import team009.bt.Node;
 import team009.bt.behaviors.EngageEnemy;
 import team009.bt.behaviors.HerdReplace;
 import team009.robot.GenericSoldier;
+import team009.robot.TeamRobot;
 
 public class HerderSelector extends Decision {
     protected MapLocation pastureLocation;
@@ -13,10 +14,10 @@ public class HerderSelector extends Decision {
     protected Node heard;
     protected Node replace;
 
-    public HerderSelector(GenericSoldier robot, MapLocation pastureLocation) {
+    public HerderSelector(TeamRobot robot, MapLocation pastureLocation) {
         super(robot);
         this.pastureLocation = pastureLocation;
-        engage = new EngageEnemy(robot);
+        engage = new EngageEnemy((GenericSoldier)robot);
         heard = new HerdSequence(robot, pastureLocation);
         replace = new HerdReplace(robot, pastureLocation);
     }
