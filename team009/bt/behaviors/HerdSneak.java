@@ -32,13 +32,12 @@ public class HerdSneak extends Behavior {
 
     @Override
     public boolean post() throws GameActionException {
-        return !go || (!robot.rc.canMove(heardDirection)
-                && robot.currentLoc.distanceSquaredTo(pastureLocation) < MAX_DISTANCE_SQUARED);
+        return !go || !robot.rc.canMove(heardDirection)
+                || robot.currentLoc.distanceSquaredTo(pastureLocation) < MAX_DISTANCE_SQUARED;
     }
 
     @Override
     public void reset() throws GameActionException {
-        // TODO: Filter out bad starting directions
         heardDirection = getNextDirection();
         startingLocation = pastureLocation.add(heardDirection);
         go = false;
