@@ -1,10 +1,10 @@
 package team009.bt.behaviors;
 
 import battlecode.common.GameActionException;
-import team009.robot.TeamRobot;
+import team009.robot.HQ;
 
 public class HQDefensive extends Behavior {
-    public HQDefensive(TeamRobot robot) {
+    public HQDefensive(HQ robot) {
         super(robot);
     }
 

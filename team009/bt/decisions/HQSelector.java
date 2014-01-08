@@ -5,7 +5,7 @@ import team009.bt.behaviors.HQBalanced;
 import team009.bt.behaviors.HQDefensive;
 import team009.bt.behaviors.HQOffensive;
 import team009.communication.TeamMemoryManager;
-import team009.robot.TeamRobot;
+import team009.robot.HQ;
 
 
 public class HQSelector extends Decision {
@@ -16,7 +16,7 @@ public class HQSelector extends Decision {
     public int strat = BALANCED;
     protected TeamMemoryManager memoryManager;
 
-    public HQSelector(TeamRobot robot) {
+    public HQSelector(HQ robot) {
         super(robot);
         memoryManager = new TeamMemoryManager(robot);
         strat = memoryManager.getHQStrategy();

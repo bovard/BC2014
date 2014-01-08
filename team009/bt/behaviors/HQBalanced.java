@@ -1,18 +1,16 @@
 package team009.bt.behaviors;
 
-import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
-import team009.MapUtils;
-import team009.bt.decisions.SoldierSelector;
-import team009.communication.Communicator;
-import team009.robot.TeamRobot;
+import team009.robot.HQ;
 
 public class HQBalanced extends Behavior {
     private int pastureCount = 0;
     private int herderCount = 0;
-    public HQBalanced(TeamRobot robot) {
+    private HQ hq;
+    public HQBalanced(HQ robot) {
         super(robot);
+        hq = robot;
     }
 
     @Override
@@ -37,41 +35,27 @@ public class HQBalanced extends Behavior {
     public boolean run() throws GameActionException {
         // Spawn a guy at a random location
         if (robot.rc.isActive()) {
-            Direction dir = Direction.NORTH;
-            boolean done = false;
-            int tries = 0;
-            while(!done && tries < 8) {
-                tries++;
-                dir = MapUtils.getRandomDir();
-                if (robot.rc.canMove(dir)) {
-                    done = true;
+            if (Math.random() > 0.75) {
+                MapLocation pasture = new MapLocation(2, 2);
+                if (pastureCount == 0) {
+                    pasture = new MapLocation(2, 2);
+                } else if (pastureCount == 1) {
+                    pasture = new MapLocation(robot.info.width - 2, 2);
+                } else if (pastureCount == 2) {
+                    pasture = new MapLocation(2, robot.info.height - 2);
+                } else if (pastureCount == 3) {
+                    pasture = new MapLocation(robot.info.width - 2, robot.info.height - 2);
+                    pastureCount = 0;
                 }
-            }
-            if (done) {
-
-                if (Math.random() > 0.75) {
-                    MapLocation pasture = new MapLocation(2, 2);
-                    if (pastureCount == 0) {
-                        pasture = new MapLocation(2, 2);
-                    } else if (pastureCount == 1) {
-                        pasture = new MapLocation(robot.info.width - 2, 2);
-                    } else if (pastureCount == 2) {
-                        pasture = new MapLocation(2, robot.info.height - 2);
-                    } else if (pastureCount == 3) {
-                        pasture = new MapLocation(robot.info.width - 2, robot.info.height - 2);
-                        pastureCount = 0;
-                    }
-                    if (herderCount < pastureCount) {
-                        Communicator.WriteNewSoldier(rc, SoldierSelector.SOLDIER_TYPE_HEADER, pasture);
-                        herderCount++;
-                    } else {
-                        Communicator.WriteNewSoldier(rc, SoldierSelector.SOLDIER_TYPE_PASTURE, pasture);
-                        pastureCount++;
-                    }
+                if (herderCount < pastureCount) {
+                    hq.createHerder(0, pasture);
+                    herderCount++;
                 } else {
-                    Communicator.WriteNewSoldier(rc, SoldierSelector.SOLDIER_TYPE_DUMB, new MapLocation(1, 1));
+                    hq.createPastureCapturer(0, pasture);
+                    pastureCount++;
                 }
-                robot.rc.spawn(dir);
+            } else {
+                hq.createDumbSoldier(0);
             }
         }
         return true;

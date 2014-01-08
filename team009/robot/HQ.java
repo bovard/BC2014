@@ -1,8 +1,7 @@
 package team009.robot;
 
-import battlecode.common.Clock;
-import battlecode.common.GameActionException;
-import battlecode.common.RobotController;
+import battlecode.common.*;
+import team009.MapUtils;
 import team009.RobotInformation;
 import team009.bt.Node;
 import team009.bt.decisions.HQSelector;
@@ -25,9 +24,7 @@ public class HQ extends TeamRobot {
 
     @Override
     protected Node getTreeRoot() {
-        Node root = new HQSelector(this);
-
-        return root;
+        return new HQSelector(this);
     }
 
     @Override
@@ -53,5 +50,45 @@ public class HQ extends TeamRobot {
 
             rc.setIndicatorString(1, soldierString);
         }
+    }
+
+    public void createDumbSoldier(int group) throws GameActionException {
+        _spawn(SoldierSelector.SOLDIER_TYPE_DUMB, group);
+    }
+
+    // TODO: $IMPROVEMENT$ We should make the group number have a channel to grab pasture location from
+    public void createHerder(int group, MapLocation pasture) throws GameActionException {
+        _spawn(SoldierSelector.SOLDIER_TYPE_HEADER, group, pasture);
+    }
+
+    public void createPastureCapturer(int group, MapLocation pasture) throws GameActionException {
+        _spawn(SoldierSelector.SOLDIER_TYPE_PASTURE_CAPTURER, group, pasture);
+    }
+
+    private void _spawn(int soldierType, int group) throws GameActionException {
+        Direction dir = _getSpawnDirection();
+        rc.spawn(dir);
+        Communicator.WriteNewSoldier(rc, soldierType, new MapLocation(1, 1));
+    }
+
+    private void _spawn(int soldierType, int group, MapLocation location) throws GameActionException {
+        Direction dir = _getSpawnDirection();
+        rc.spawn(dir);
+        Communicator.WriteNewSoldier(rc, soldierType, location);
+    }
+
+    private Direction _getSpawnDirection() {
+        Direction dir = null;
+        boolean done = false;
+        int tries = 0;
+        while(!done && tries < 20) {
+            tries++;
+            dir = MapUtils.getRandomDir();
+            if (rc.canMove(dir)) {
+                done = true;
+            }
+        }
+
+        return done ? dir : null;
     }
 }
