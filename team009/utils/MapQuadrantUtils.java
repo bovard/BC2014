@@ -5,7 +5,14 @@ import java.util.ArrayList;
 import battlecode.common.MapLocation;
 
 public class MapQuadrantUtils {
-	
+
+    public static void setLocations(MapLocation nhq, MapLocation nenemyHq, int nwidth, int nheight) {
+        hq = nhq;
+        enemyHq = nenemyHq;
+        width = nwidth;
+        height = nheight;
+    }
+
 	// IMPORTANT: TO USE THIS YOU MUST SET hq, enemyHQ, width, height!
 	
 	public static MapLocation hq;
@@ -107,6 +114,10 @@ public class MapQuadrantUtils {
 		}
 		return null;
 	}
+
+    public static int getMapQuadrant(MapLocation m) {
+        return getMapQuadrant(m.x, m.y);
+    }
 	
 	public static int getMapQuadrant(int x, int y) {
 		//   0,0     0,width
