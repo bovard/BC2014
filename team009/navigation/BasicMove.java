@@ -6,7 +6,7 @@ import battlecode.common.MapLocation;
 import battlecode.common.TerrainTile;
 import team009.robot.TeamRobot;
 
-public class BasicMove {
+public class BasicMove extends Move {
 
 	protected TeamRobot robot;
 	public MapLocation destination;
@@ -15,25 +15,7 @@ public class BasicMove {
 	private Direction bugGoal;
 
 	public BasicMove(TeamRobot robot) {
-		this.robot = robot;
-	}
-
-	public void setDestination(MapLocation destination) {
-		if (destination.x >= robot.info.width) {
-			destination = new MapLocation(robot.info.width - 1, destination.y);
-		} else if (destination.x < 0) {
-			destination = new MapLocation(0, destination.y);
-		}
-		if (destination.y >= robot.info.height) {
-			destination = new MapLocation(destination.x, robot.info.height- 1);
-		} else if (destination.y < 0) {
-			destination = new MapLocation(destination.x, 0);
-		}
-		this.destination = destination;
-	}
-
-	public boolean atDestination() {
-		return robot.currentLoc.equals(destination);
+        super(robot);
 	}
 
 	/**
@@ -67,16 +49,20 @@ public class BasicMove {
 		}
 	}
 
-    public void move() throws GameActionException {
+    @Override
+    public boolean move() throws GameActionException {
         move(false);
-
+        return true;
     }
 
-    public void sneak() throws GameActionException {
+    @Override
+    public boolean sneak() throws GameActionException {
         move(true);
+        return true;
     }
 
-	public void move(boolean sneak) throws GameActionException {
+
+	private void move(boolean sneak) throws GameActionException {
 		if (!robot.rc.isActive())
 			return;
 
