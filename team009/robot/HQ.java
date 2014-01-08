@@ -18,7 +18,7 @@ public class HQ extends TeamRobot {
     public HQ(RobotController rc, RobotInformation info) {
         super(rc, info);
 
-        maxSoldiers = SoldierSelector.SOLDIER_COUNT * SoldierSelector.MAX_GROUP_COUNT;
+        maxSoldiers = SoldierSpawner.SOLDIER_COUNT * SoldierSpawner.MAX_GROUP_COUNT;
         soldierCounts = new SoldierCountDecoder[maxSoldiers];
     }
 
@@ -32,7 +32,7 @@ public class HQ extends TeamRobot {
         super.environmentCheck();
 
         if (Communicator.ReadRound(round)) {
-            int groupCount = SoldierSelector.MAX_GROUP_COUNT;
+            int groupCount = SoldierSpawner.MAX_GROUP_COUNT;
 
             // TODO: $DEBUG$
             String soldierString = "";
@@ -53,16 +53,16 @@ public class HQ extends TeamRobot {
     }
 
     public void createDumbSoldier(int group) throws GameActionException {
-        _spawn(SoldierSelector.SOLDIER_TYPE_DUMB, group);
+        _spawn(SoldierSpawner.SOLDIER_TYPE_DUMB, group);
     }
 
     // TODO: $IMPROVEMENT$ We should make the group number have a channel to grab pasture location from
     public void createHerder(int group, MapLocation pasture) throws GameActionException {
-        _spawn(SoldierSelector.SOLDIER_TYPE_HERDER, group, pasture);
+        _spawn(SoldierSpawner.SOLDIER_TYPE_HERDER, group, pasture);
     }
 
     public void createPastureCapturer(int group, MapLocation pasture) throws GameActionException {
-        _spawn(SoldierSelector.SOLDIER_TYPE_PASTURE_CAPTURER, group, pasture);
+        _spawn(SoldierSpawner.SOLDIER_TYPE_PASTURE_CAPTURER, group, pasture);
     }
 
     private void _spawn(int soldierType, int group) throws GameActionException {

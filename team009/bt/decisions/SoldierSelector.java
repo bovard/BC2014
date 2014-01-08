@@ -16,19 +16,7 @@ public class SoldierSelector extends Decision {
 
         try {
             decoder = Communicator.ReadNewSoldier(rc);
-            int type = decoder.soldierType;
-            robot.group = decoder.group;
-            robot.type = type;
 
-            if (type == SOLDIER_TYPE_DUMB) {
-                soldier = new DumbSoldierSelector(robot);
-            } else if (type == SOLDIER_TYPE_PASTURE_CAPTURER) {
-                soldier = new PastureSelector(robot, decoder.loc);
-            } else if (type == SOLDIER_TYPE_HERDER) {
-                soldier = new HerderSelector(robot, decoder.loc);
-            } else if (type == SOLDIER_TYPE_PASTURE) {
-                soldier = new Pasture(robot);
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -60,16 +48,10 @@ public class SoldierSelector extends Decision {
         return true;
     }
 
-    public static int SOLDIER_TYPE_DUMB = 0;
-    public static int SOLDIER_TYPE_PASTURE_CAPTURER = 1;
-    public static int SOLDIER_TYPE_PASTURE = 2;
-    public static int SOLDIER_TYPE_HERDER = 3;
-    public static int SOLDIER_COUNT = 4;
-    public static final int MAX_GROUP_COUNT = 5;
+
 
     // -----------------------------------------------------
     // Commands
     // -----------------------------------------------------
-    public static final int STALE_COMMAND_ROUNDS = 15;
-    public static final int RETREAT_TO_PASTURE = 42;
+    public static final int RETREAT_TO_PASTURE = 1;
 }

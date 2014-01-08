@@ -3,6 +3,7 @@ package team009.communication;
 import battlecode.common.*;
 import team009.RobotInformation;
 import team009.bt.decisions.SoldierSelector;
+import team009.robot.SoldierSpawner;
 
 public class Communicator {
 
@@ -26,7 +27,7 @@ public class Communicator {
     }
 
     public static void WriteTypeAndGroup(RobotController rc, int soldierType, int group) throws GameActionException {
-        int channel = soldierType * SoldierSelector.MAX_GROUP_COUNT + group;
+        int channel = soldierType * SoldierSpawner.MAX_GROUP_COUNT + group;
         SoldierCountDecoder decoder = ReadTypeAndGroup(rc, soldierType, group);
 
         // Incs the channel
@@ -43,7 +44,7 @@ public class Communicator {
     }
 
     public static SoldierCountDecoder ReadTypeAndGroup(RobotController rc, int soldierType, int group) throws GameActionException {
-        int channel = soldierType * SoldierSelector.MAX_GROUP_COUNT + group;
+        int channel = soldierType * SoldierSpawner.MAX_GROUP_COUNT + group;
         int data = rc.readBroadcast(channel);
 
         // No Coms yet on this channel
@@ -76,7 +77,7 @@ public class Communicator {
     //-----------------------------------------------------
 
     public static void ClearCountChannel(RobotController rc, int soldierType, int group) throws GameActionException {
-        _Broadcast(rc, soldierType * SoldierSelector.MAX_GROUP_COUNT + group, 0);
+        _Broadcast(rc, soldierType * SoldierSpawner.MAX_GROUP_COUNT + group, 0);
     }
 
     public static void ClearCommandChannel(RobotController rc, int group) throws GameActionException {
@@ -118,5 +119,5 @@ public class Communicator {
     private static int SOLDIER_TYPE_CHANNEL_BASE = 1;
 
     // Group channels go for group channel count + 5;
-    private static int GROUP_CHANNEL_BASE = 1 + SoldierSelector.MAX_GROUP_COUNT * SoldierSelector.SOLDIER_COUNT;
+    private static int GROUP_CHANNEL_BASE = 1 + SoldierSpawner.MAX_GROUP_COUNT * SoldierSpawner.SOLDIER_COUNT;
 }

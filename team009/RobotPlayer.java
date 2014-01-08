@@ -4,6 +4,8 @@ import battlecode.common.RobotController;
 import battlecode.common.RobotType;
 import team009.robot.GenericSoldier;
 import team009.robot.HQ;
+import team009.robot.Pastr;
+import team009.robot.SoldierSpawner;
 
 public class RobotPlayer {
 	public static void run(RobotController rc) {
@@ -16,7 +18,11 @@ public class RobotPlayer {
                 }
 
                 if (rc.getType() == RobotType.SOLDIER) {
-                    new GenericSoldier(rc, info).run();
+                    SoldierSpawner.getSoldier(rc, info).run();
+                }
+
+                if (rc.getType() == RobotType.PASTR) {
+                    new Pastr(rc, info).run();
                 }
                 rc.yield();
             }
