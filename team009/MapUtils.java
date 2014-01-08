@@ -25,6 +25,19 @@ public class MapUtils {
         return allDirs[((int)(Math.random()*8))];
     }
 
+    /**
+     * Tells you if given location is on the Map
+     */
+    public static boolean isOnMap(MapLocation location, int width, int height) {
+        if (location.x < 0 || location.x > width) {
+            return false;
+        }
+        if (location.y < 0 || location.y > height) {
+            return false;
+        }
+        return true;
+    }
+
 	/**
 	 * Sorts the map in accending order.
 	 * @param locs

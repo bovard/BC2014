@@ -20,9 +20,6 @@ public class SoldierSpawner {
             SoldierDecoder decoder = Communicator.ReadNewSoldier(rc);
 
             int type = decoder.soldierType;
-            System.out.println("type: " + type);
-            System.out.println("group: " + decoder.group);
-            System.out.println("location: " + decoder.loc);
             if (type == SOLDIER_TYPE_DUMB) {
                 robot = new DumbSoldier(rc, info);
             } else if (type == SOLDIER_TYPE_PASTURE_CAPTURER) {

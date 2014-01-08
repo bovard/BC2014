@@ -1,16 +1,17 @@
 package team009.bt.behaviors;
 
-import battlecode.common.Direction;
-import battlecode.common.GameActionException;
-import battlecode.common.MapLocation;
+import battlecode.common.*;
 import team009.MapUtils;
 import team009.navigation.BasicMove;
 import team009.robot.TeamRobot;
+
+import java.util.ArrayList;
 
 public class HerdSneak extends Behavior {
     protected Direction heardDirection;
     protected MapLocation pastureLocation;
     protected MapLocation startingLocation;
+    protected ArrayList<Direction> possibleDirs = new ArrayList<Direction>();
     protected boolean go;
     protected static final int MAX_DISTANCE_SQUARED = 226;
 
@@ -20,6 +21,7 @@ public class HerdSneak extends Behavior {
         super(robot);
         move = new BasicMove(robot);
         this.pastureLocation = pastureLocation;
+        populatePossibleDirs();
         heardDirection = getNextDirection();
         startingLocation = pastureLocation.add(heardDirection);
         go = false;
@@ -33,8 +35,12 @@ public class HerdSneak extends Behavior {
 
     @Override
     public boolean post() throws GameActionException {
-        return go && (!robot.rc.canMove(heardDirection)
-                || robot.currentLoc.distanceSquaredTo(pastureLocation) > MAX_DISTANCE_SQUARED);
+        int distToPasture = robot.currentLoc.distanceSquaredTo(pastureLocation);
+        return go &&
+                (!robot.rc.canMove(heardDirection)
+                 || distToPasture > MAX_DISTANCE_SQUARED
+                 || robot.currentLoc.distanceSquaredTo(robot.info.enemyHq) < distToPasture
+                );
     }
 
     @Override
@@ -74,7 +80,17 @@ public class HerdSneak extends Behavior {
 
 
     private Direction getNextDirection() {
-        // TODO: make this better
-        return MapUtils.getRandomDir();
+        return possibleDirs.get((int)(Math.random()*possibleDirs.size()));
+    }
+
+    private void populatePossibleDirs() {
+        for (Direction dir: Direction.values()) {
+            if (!dir.equals(Direction.OMNI) && !dir.equals(Direction.NONE)) {
+                if (MapUtils.isOnMap(pastureLocation.add(dir, 5), robot.info.width, robot.info.height)) {
+                    possibleDirs.add(dir);
+                }
+            }
+        }
+
     }
 }
