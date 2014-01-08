@@ -32,8 +32,8 @@ public class HerdSneak extends Behavior {
 
     @Override
     public boolean post() throws GameActionException {
-        return !go || !robot.rc.canMove(heardDirection)
-                || robot.currentLoc.distanceSquaredTo(pastureLocation) < MAX_DISTANCE_SQUARED;
+        return !go && (!robot.rc.canMove(heardDirection)
+                || robot.currentLoc.distanceSquaredTo(pastureLocation) < MAX_DISTANCE_SQUARED);
     }
 
     @Override

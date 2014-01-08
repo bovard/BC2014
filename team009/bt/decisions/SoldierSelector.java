@@ -5,6 +5,7 @@ import team009.bt.behaviors.Pasture;
 import team009.communication.Communicator;
 import team009.communication.SoldierDecoder;
 import team009.robot.GenericSoldier;
+import team009.robot.TeamRobot;
 
 public class SoldierSelector extends Decision {
 

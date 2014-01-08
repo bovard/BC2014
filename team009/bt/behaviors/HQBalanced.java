@@ -10,6 +10,7 @@ import team009.robot.TeamRobot;
 
 public class HQBalanced extends Behavior {
     private int pastureCount = 0;
+    private int herderCount = 0;
     public HQBalanced(TeamRobot robot) {
         super(robot);
     }
@@ -50,7 +51,9 @@ public class HQBalanced extends Behavior {
 
                 if (Math.random() > 0.75) {
                     MapLocation pasture = new MapLocation(2, 2);
-                    if (pastureCount == 1) {
+                    if (pastureCount == 0) {
+                        pasture = new MapLocation(2, 2);
+                    } else if (pastureCount == 1) {
                         pasture = new MapLocation(robot.info.width - 2, 2);
                     } else if (pastureCount == 2) {
                         pasture = new MapLocation(2, robot.info.height - 2);
@@ -58,8 +61,13 @@ public class HQBalanced extends Behavior {
                         pasture = new MapLocation(robot.info.width - 2, robot.info.height - 2);
                         pastureCount = 0;
                     }
-                    Communicator.WriteNewSoldier(rc, SoldierSelector.SOLDIER_TYPE_PASTURE_CAPTURER, pasture);
-                    pastureCount++;
+                    if (herderCount < pastureCount) {
+                        Communicator.WriteNewSoldier(rc, SoldierSelector.SOLDIER_TYPE_HEADER, pasture);
+                        herderCount++;
+                    } else {
+                        Communicator.WriteNewSoldier(rc, SoldierSelector.SOLDIER_TYPE_PASTURE, pasture);
+                        pastureCount++;
+                    }
                 } else {
                     Communicator.WriteNewSoldier(rc, SoldierSelector.SOLDIER_TYPE_DUMB, new MapLocation(1, 1));
                 }
