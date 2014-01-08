@@ -53,12 +53,12 @@ public class Communicator {
         rc.broadcast(soldierType * SoldierSelector.MAX_GROUP_COUNT + group, 0);
     }
 
-    public static boolean ReadRound() {
-        return (Clock.getRoundNum() - 1) % RobotInformation.INFORMATION_ROUND_MOD == 0;
+    public static boolean ReadRound(int round) {
+        return (round - 1) % RobotInformation.INFORMATION_ROUND_MOD == 0;
     }
 
-    public static boolean WriteRound() {
-        return Clock.getRoundNum() % RobotInformation.INFORMATION_ROUND_MOD == 0;
+    public static boolean WriteRound(int round) {
+        return round % RobotInformation.INFORMATION_ROUND_MOD == 0;
     }
 
     /*****************************************************

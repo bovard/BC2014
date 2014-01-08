@@ -34,7 +34,7 @@ public class HQ extends TeamRobot {
     public void environmentCheck() throws GameActionException {
         super.environmentCheck();
 
-        if (Communicator.ReadRound()) {
+        if (Communicator.ReadRound(round)) {
             int groupCount = SoldierSelector.MAX_GROUP_COUNT;
 
             // TODO: $DEBUG$
