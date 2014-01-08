@@ -112,7 +112,7 @@ public class MoveCalculator {
 		if (info.team == robot.info.enemyTeam) {
 			
 			// an active enemy soldier
-			if (info.type == RobotType.SOLDIER && info.roundsUntilMovementIdle < 3) {
+			if (info.type == RobotType.SOLDIER) {
 				int distance = robot.currentLoc.distanceSquaredTo(info.location);
 				// if they have lower health
 				if (info.health <= robot.rc.getHealth()) {
@@ -208,7 +208,7 @@ public class MoveCalculator {
 			int y = info.location.y - loc.y;
 			if (Math.abs(x) < 3 && Math.abs(y) < 3) {
 				if (info.team == robot.info.enemyTeam) {
-					if (info.type == RobotType.SOLDIER && info.roundsUntilMovementIdle < 3){
+					if (info.type == RobotType.SOLDIER){
 						soldierNearby = true;
 						map[MIDDLE + x][MIDDLE + y] = 'e';
 					} else {

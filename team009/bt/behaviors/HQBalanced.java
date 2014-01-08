@@ -7,8 +7,7 @@ import battlecode.common.RobotType;
 import team009.robot.HQ;
 
 public class HQBalanced extends Behavior {
-    private int pastureCount = 0;
-    private int herderCount = 0;
+    private int last = 0;
     private HQ hq;
     public HQBalanced(HQ robot) {
         super(robot);
@@ -37,28 +36,23 @@ public class HQBalanced extends Behavior {
     public boolean run() throws GameActionException {
         // Spawn a guy at a random location
         if (robot.rc.senseRobotCount() < GameConstants.MAX_ROBOTS) {
-            if (pastureCount < 2 || herderCount < 2) {
-                MapLocation pasture = new MapLocation(2, 2);
-                if (pastureCount == 0) {
-                    pasture = new MapLocation(2, 2);
-                } else if (pastureCount == 1) {
-                    pasture = new MapLocation(robot.info.width - 2, 2);
-                } else if (pastureCount == 2) {
-                    pasture = new MapLocation(2, robot.info.height - 2);
-                } else if (pastureCount == 3) {
-                    pasture = new MapLocation(robot.info.width - 2, robot.info.height - 2);
-                    pastureCount = 0;
-                }
-                if (herderCount <= pastureCount) {
-                    hq.createHerder(0, pasture);
-                    herderCount++;
-                } else {
-                    hq.createHerder(0, pasture);
-                    pastureCount++;
-                }
+            int group;
+            MapLocation pasture = new MapLocation(2, 2);
+            if (last % 16 < 4) {
+                pasture = new MapLocation(2, 2);
+                group = 0;
+            } else if (last % 16 < 8 ) {
+                pasture = new MapLocation(robot.info.width - 2, 2);
+                group = 1;
+            } else if (last % 16 < 12) {
+                pasture = new MapLocation(2, robot.info.height - 2);
+                group = 2;
             } else {
-                //hq.createDumbSoldier(0);
+                pasture = new MapLocation(robot.info.width - 2, robot.info.height - 2);
+                group = 3;
             }
+            last++;
+            hq.createHerder(group, pasture);
         }
         return true;
     }
