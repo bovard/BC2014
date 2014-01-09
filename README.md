@@ -4,10 +4,10 @@ Going for 1st place (or at least the finals again)!
 
 # Instructions to install
 
-1. Checkout the battlecode repo
-    * ```git clone git@github.com:Cixelyn/bcode2013-scaffold.git```
-    * this will change once they release the new specs (Jan 6th 2pm MST)
+1. Get the battlecode client from https://www.battlecode.org/contestants/releases/
+    * Install it in a directory like ~ or MyDocuments or something (remember where!)
 2. Remove the teams folder
+    * cd /path/to/Battlecode2014
     * ```rm -rf teams```
 3. Clone this repo in the teams folder:
     * ```git clone git@bitbucket.org:bovard.tiberi/battlecode-2014.git teams```
