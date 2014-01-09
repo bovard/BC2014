@@ -10,7 +10,7 @@ spawnFoe() {
     eval "mkdir ./$folderName"
     eval "cp -r ./team009/* ./$folderName/"
     eval "find ./$folderName -name '*.java' -type f -exec sed -i.bak 's/team009/$folderName/g' {} +"
-    eval "rm -rf ./$folderName/**/*.bak"
+    eval "rm -rf ./*.bak"
 }
 
 spawnFoe "0.1.1"
