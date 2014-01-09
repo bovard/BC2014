@@ -6,6 +6,7 @@ import battlecode.common.MapLocation;
 import battlecode.common.TerrainTile;
 import team009.robot.TeamRobot;
 
+@Deprecated
 public class BasicMove extends Move {
 
 	private Direction bug;
