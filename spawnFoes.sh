@@ -4,8 +4,8 @@
 declare -a versions=("0.1.1", "0.2.0", "0.2.1", "master")
 
 spawnFoe() {
-    local branch = $1
-    local folderName = "_team$1"
+    local branch=$1
+    local folderName="_team$1"
     git checkout $branch
 
     echo "rm -rdf ./$folderName"
