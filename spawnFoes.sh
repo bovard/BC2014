@@ -7,7 +7,7 @@ spawnFoe() {
     git checkout $branch
 
     eval "rm -rdf ./$folderName"
-    eval "$folderName | sed -e 's/\./_/g' | mkdir"
+    eval "mkdir ./$folderName"
     eval "cp -r ./team009/* ./$folderName/"
     # eval "find ./$folderName -name '*.java' -type f -exec sed -i.bak 's/team009/$folderName/g' {} +"
     # eval "rm -rf ./$folderName/**/*.bak"
