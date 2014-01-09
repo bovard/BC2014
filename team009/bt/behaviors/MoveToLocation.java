@@ -2,14 +2,14 @@ package team009.bt.behaviors;
 
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
-import team009.navigation.BasicMove;
+import team009.navigation.BugMove;
 import team009.robot.TeamRobot;
 public class MoveToLocation extends Behavior {
-    protected BasicMove move;
+    protected BugMove move;
 
     public MoveToLocation(TeamRobot robot, MapLocation location) {
         super(robot);
-        move = new BasicMove(robot);
+        move = new BugMove(robot);
         move.setDestination(location);
     }
 

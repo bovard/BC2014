@@ -2,16 +2,16 @@ package team009.bt.behaviors;
 
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
-import team009.navigation.BasicMove;
+import team009.navigation.BugMove;
 import team009.robot.TeamRobot;
 
 public class HerdReturn extends Behavior {
     protected MapLocation pastureLocation;
-    protected BasicMove move;
+    protected BugMove move;
     public HerdReturn(TeamRobot robot, MapLocation pastureLocation) {
         super(robot);
         this.pastureLocation = pastureLocation;
-        move = new BasicMove(robot);
+        move = new BugMove(robot);
         move.setDestination(pastureLocation);
     }
 

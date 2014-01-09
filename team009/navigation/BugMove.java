@@ -7,19 +7,29 @@ import battlecode.common.TerrainTile;
 import team009.robot.TeamRobot;
 
 public class BugMove extends Move {
+    private static final int MAX_BUG_ROUNDS = 100;
     private boolean bug = false;
     private boolean trackRight = Math.random() > .5;
+    private int startRound;
     private MapLocation bugStart;
     private Direction bugStartDirection;
     private MapLocation lastPos;
 
     public BugMove(TeamRobot robot) {
         super(robot);
+        // have to use getLocation here!
+        lastPos = robot.rc.getLocation();
     }
 
     private void reset() {
+        trackRight = !trackRight;
+        if (Math.random() < .1) {
+            trackRight = Math.random() < .5;
+        }
         bug = false;
-        lastPos = robot.currentLoc.add(Direction.EAST);
+        bugStart = null;
+        bugStartDirection = null;
+        startRound = 0;
     }
 
     @Override
@@ -53,9 +63,9 @@ public class BugMove extends Move {
             result = simpleMove(toMove);
             if (result == null) {
                 bug = true;
-                setBugDirection();
                 bugStartDirection = toMove;
                 bugStart = robot.currentLoc;
+                startRound = robot.round;
             }
         }
         if (bug) {
@@ -134,10 +144,6 @@ public class BugMove extends Move {
         return moveDir[0];
     }
 
-    private void setBugDirection() {
-        trackRight = !trackRight;
-    }
-
 
     private Direction bugMove() {
         Direction toMove = lastPos.directionTo(robot.currentLoc);
@@ -165,7 +171,14 @@ public class BugMove extends Move {
         Direction breakDir = breakBug(bugStart, bugStartDirection);
 
         if (breakDir != null) {
+            // we've made it out of bug!
+            reset();
             return breakDir;
+        }
+
+        if (robot.round > startRound + MAX_BUG_ROUNDS) {
+            reset();
+            return null;
         }
 
         return toMove;
@@ -175,7 +188,8 @@ public class BugMove extends Move {
         Direction currDir = start.directionTo(robot.currentLoc);
         Direction left = currDir.rotateLeft();
         Direction right = currDir.rotateRight();
-        if (currDir == startDir || currDir == left || currDir == right) {
+        if (currDir != Direction.OMNI && currDir != Direction.NONE
+                && (currDir == startDir || currDir == left || currDir == right)) {
             if (robot.rc.canMove(startDir)) {
                 return startDir;
             }

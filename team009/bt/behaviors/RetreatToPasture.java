@@ -4,7 +4,7 @@ import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import team009.communication.Communicator;
 import team009.communication.GroupCommandDecoder;
-import team009.navigation.BasicMove;
+import team009.navigation.BugMove;
 import team009.robot.soldier.BaseSoldier;
 import team009.robot.soldier.SoldierSpawner;
 
@@ -12,13 +12,13 @@ public class RetreatToPasture extends Behavior {
     BaseSoldier gs;
     boolean runningToDestination = false;
     MapLocation location;
-    BasicMove move;
+    BugMove move;
 
     public RetreatToPasture(BaseSoldier robot, MapLocation location) {
         super(robot);
         gs = robot;
         this.location = location;
-        move = new BasicMove(robot);
+        move = new BugMove(robot);
     }
 
     @Override

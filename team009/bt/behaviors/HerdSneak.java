@@ -2,7 +2,7 @@ package team009.bt.behaviors;
 
 import battlecode.common.*;
 import team009.MapUtils;
-import team009.navigation.BasicMove;
+import team009.navigation.BugMove;
 import team009.robot.TeamRobot;
 
 import java.util.ArrayList;
@@ -15,11 +15,11 @@ public class HerdSneak extends Behavior {
     protected boolean go;
     protected static final int MAX_DISTANCE_SQUARED = 226;
 
-    protected BasicMove move;
+    protected BugMove move;
 
     public HerdSneak(TeamRobot robot, MapLocation pastureLocation) {
         super(robot);
-        move = new BasicMove(robot);
+        move = new BugMove(robot);
         this.pastureLocation = pastureLocation;
         populatePossibleDirs();
         heardDirection = getNextDirection();

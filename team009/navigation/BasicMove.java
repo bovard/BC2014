@@ -8,8 +8,6 @@ import team009.robot.TeamRobot;
 
 public class BasicMove extends Move {
 
-	protected TeamRobot robot;
-	public MapLocation destination;
 	private Direction bug;
 	private Direction lastBug;
 	private Direction bugGoal;
