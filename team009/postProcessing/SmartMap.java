@@ -5,6 +5,23 @@ import battlecode.common.RobotController;
 
 public class SmartMap extends BasePostProcessor {
 
+    /**
+     * Turns   into
+     *  XXXX   XXXX
+     *  X      XXX
+     *  X      XX
+     *  X      X
+     *
+     * and
+     *  this into
+     *  XXX   XXX
+     *  X     XXX
+     *  XXX   XXX
+     * etc...
+     *
+     * so we can move around correctly
+     * @param rc
+     */
     public SmartMap(RobotController rc) {
         super(rc);
     }
