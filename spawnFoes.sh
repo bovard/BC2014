@@ -14,4 +14,7 @@ spawnFoe() {
 }
 
 spawnFoe "0.1.1"
+spawnFoe "0.2.0"
+spawnFoe "0.2.1"
+spawnFoe "master"
 git checkout master
