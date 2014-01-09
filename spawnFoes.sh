@@ -16,8 +16,8 @@ spawnFoe() {
     # eval "rm -f ./$folderName/*.bak"
 }
 
-for foe in versions
-do
-    spawnFoe $foe
+declare count = 4
+while [ count > 0 ]; do
+    spawnFoes $versions[count-1]
 done
 git checkout master
