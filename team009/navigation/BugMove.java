@@ -8,20 +8,19 @@ import team009.robot.TeamRobot;
 
 public class BugMove extends Move {
     private static final int MAX_BUG_ROUNDS = 100;
-    private boolean bug = false;
+    private boolean bug;
     private boolean trackRight = Math.random() > .5;
     private int startRound;
     private MapLocation bugStart;
     private Direction bugStartDirection;
-    private MapLocation lastPos;
 
     public BugMove(TeamRobot robot) {
         super(robot);
-        // have to use getLocation here!
-        lastPos = robot.rc.getLocation();
+        bug = false;
     }
 
     private void reset() {
+        System.out.println("Resetting!");
         trackRight = !trackRight;
         if (Math.random() < .1) {
             trackRight = Math.random() < .5;
@@ -34,54 +33,72 @@ public class BugMove extends Move {
 
     @Override
     public boolean move() throws GameActionException {
-        return move(false);
+        return moveWrapper(false);
     }
 
     @Override
     public boolean sneak() throws GameActionException {
-        return move(true);
+        return moveWrapper(true);
     }
 
 
-    private boolean move(boolean sneak) throws GameActionException {
+    private boolean moveWrapper(boolean sneak) throws GameActionException {
+        Direction toMove = calcMove();
+
+        if (toMove != null) {
+            if (sneak) {
+                robot.rc.sneak(toMove);
+            } else {
+                robot.rc.move(toMove);
+            }
+            return true;
+        }
+        return false;
+    }
+
+
+    private Direction calcMove() {
         if (!robot.rc.isActive())
-            return false;
+            return null;
 
         Direction toMove = robot.currentLoc.directionTo(destination);
         if (toMove == Direction.NONE || toMove == Direction.OMNI)
-            return false;
-
-        // reset if needed
-        if (!robot.currentLoc.isAdjacentTo(lastPos)) {
-            reset();
-        }
-
+            return null;
 
         Direction result = null;
 
         if (!bug) {
             result = simpleMove(toMove);
+            robot.rc.setIndicatorString(0, "Starting move");
             if (result == null) {
+                robot.rc.setIndicatorString(0, "Starting bug");
                 bug = true;
                 bugStartDirection = toMove;
                 bugStart = robot.currentLoc;
                 startRound = robot.round;
+                int count = 0;
+                while(!robot.rc.canMove(toMove) && count < 9) {
+                    count++;
+                    if (trackRight) {
+                        toMove = toMove.rotateRight();
+                    } else {
+                        toMove = toMove.rotateLeft();
+                    }
+                }
+                if (count == 9) {
+                    robot.rc.setIndicatorString(0, "Starting bug no moves");
+                    return null;
+                }
+                robot.rc.setIndicatorString(0, "Starting bug " + toMove.toString());
+                return toMove;
             }
         }
         if (bug) {
+            robot.rc.setIndicatorString(0, "Running bug");
             result = bugMove();
         }
 
-        lastPos = robot.currentLoc;
-        if (result != null) {
-            if (sneak) {
-                robot.rc.sneak(result);
-            } else {
-                robot.rc.move(result);
-            }
-            return true;
-        }
-        return false;
+        return result;
     }
 
     /**
@@ -146,7 +163,11 @@ public class BugMove extends Move {
 
 
     private Direction bugMove() {
-        Direction toMove = lastPos.directionTo(robot.currentLoc);
+        Direction toMove = robot.lastLoc.directionTo(robot.currentLoc);
+        if (toMove == Direction.OMNI || toMove == Direction.NONE) {
+            System.out.println("Returning null!");
+            return null;
+        }
 
         if (trackRight) {
             toMove = toMove.rotateLeft().rotateLeft();
@@ -172,11 +193,13 @@ public class BugMove extends Move {
 
         if (breakDir != null) {
             // we've made it out of bug!
+            System.out.println("Done with bug! Resetting");
             reset();
             return breakDir;
         }
 
         if (robot.round > startRound + MAX_BUG_ROUNDS) {
+            System.out.println("Rounds timed out, resetting!");
             reset();
             return null;
         }
