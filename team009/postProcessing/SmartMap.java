@@ -38,6 +38,7 @@ public class SmartMap extends BasePostProcessor {
      */
     public int[] getObstacleIndexsForLocation(MapLocation loc) {
         int[] indices = new int[0];
+        // Use utils.ArrayBuilder here to grow the array
 
         return indices;
     }
