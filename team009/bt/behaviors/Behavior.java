@@ -14,8 +14,6 @@ public abstract class Behavior extends Node {
 
 	public Behavior(TeamRobot robot) {
         super(robot);
-		rand = new Random();
-    	rand.setSeed(Clock.getRoundNum());
 	}
 
 }

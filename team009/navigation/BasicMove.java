@@ -119,7 +119,7 @@ public class BasicMove extends Move {
 			// we aren't in bug and can't move, activate bug
 			if (bug == null) {
 				bugGoal = toMove;
-				if (Math.random() < 0.5) {
+				if (robot.rand.nextDouble() < 0.5) {
 					bug = toMove.rotateLeft().rotateLeft();
 				} else {
 					bug = toMove.rotateRight().rotateRight();

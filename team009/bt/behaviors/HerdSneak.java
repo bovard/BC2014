@@ -80,7 +80,7 @@ public class HerdSneak extends Behavior {
 
 
     private Direction getNextDirection() {
-        return possibleDirs.get((int)(Math.random()*possibleDirs.size()));
+        return possibleDirs.get((int)(robot.rand.nextDouble()*possibleDirs.size()));
     }
 
     private void populatePossibleDirs() {

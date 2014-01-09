@@ -22,8 +22,8 @@ public class BugMove extends Move {
     private void reset() {
         System.out.println("Resetting!");
         trackRight = !trackRight;
-        if (Math.random() < .1) {
-            trackRight = Math.random() < .5;
+        if (robot.rand.nextDouble() < .1) {
+            trackRight = robot.rand.nextDouble() < .5;
         }
         bug = false;
         bugStart = null;
@@ -121,7 +121,7 @@ public class BugMove extends Move {
         }
 
         // randomly add left then right or right then left
-        if (Math.random() > .5) {
+        if (robot.rand.nextDouble() > .5) {
             if (robot.rc.canMove(left)) {
                 canMove[items] = robot.rc.senseTerrainTile(robot.currentLoc.add(left));
                 moveDir[items] = left;

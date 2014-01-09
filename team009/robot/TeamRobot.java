@@ -4,6 +4,8 @@ import battlecode.common.*;
 import team009.RobotInformation;
 import team009.bt.Node;
 
+import java.util.Random;
+
 public abstract class TeamRobot {
 
 	protected Node treeRoot;
@@ -12,12 +14,14 @@ public abstract class TeamRobot {
     public int round;
 	public RobotController rc;
 	public RobotInformation info;
+    public Random rand = new Random();
 
 	public TeamRobot(RobotController rc, RobotInformation info) {
 		this.rc = rc;
 		this.info = info;
         currentLoc = rc.getLocation();
         lastLoc = info.hq;
+        rand.setSeed(Clock.getRoundNum());
 	}
 
 	/**
