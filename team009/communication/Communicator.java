@@ -46,9 +46,6 @@ public class Communicator {
         int channel = soldierType * SoldierSpawner.MAX_GROUP_COUNT + group;
         int data = rc.readBroadcast(channel);
 
-        // No Coms yet on this channel
-        // TODO: $DEBUG$
-        rc.setIndicatorString(2, "Read: " + data);
         if (data == 0) {
             return new SoldierCountDecoder(soldierType, group);
         }
@@ -58,6 +55,10 @@ public class Communicator {
     public static GroupCommandDecoder ReadFromGroup(RobotController rc, int group) throws GameActionException {
         GroupCommandDecoder decoder = new GroupCommandDecoder(rc.readBroadcast(GROUP_CHANNEL_BASE + group));
         decoder.ttl--;
+
+        // No Coms yet on this channel
+        // TODO: $DEBUG$
+        rc.setIndicatorString(2, "Group Read(" + (GROUP_CHANNEL_BASE + group) + "): " + decoder.toString());
 
         // Shortcut it, clear the channel
         if (decoder.ttl <= 0) {
@@ -102,7 +103,7 @@ public class Communicator {
         _Broadcast(rc, channel, decoder.getData());
 
         // TODO: $DEBUG$
-        rc.setIndicatorString(1, "Broadcasted: " + decoder.getData() + " : " + decoder.toString());
+        rc.setIndicatorString(1, "Broadcasted(" + channel + "): " + decoder.getData() + " : " + decoder.toString());
     }
 
     private static void _Broadcast(RobotController rc, int channel, int data) throws GameActionException {

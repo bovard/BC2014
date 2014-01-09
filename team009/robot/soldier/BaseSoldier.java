@@ -6,6 +6,9 @@ import team009.communication.Communicator;
 import team009.robot.TeamRobot;
 
 public abstract class BaseSoldier extends TeamRobot {
+    // -----------------------------------------------------
+    // Commands
+    // -----------------------------------------------------
     public boolean seesEnemy = false;
     public Robot[] enemies = new Robot[0];
     public int group;
@@ -19,10 +22,20 @@ public abstract class BaseSoldier extends TeamRobot {
     public void environmentCheck() throws GameActionException {
         super.environmentCheck();
         enemies = rc.senseNearbyGameObjects(Robot.class, 100, info.enemyTeam);
-        seesEnemy = enemies.length > 0;
+
+        if (enemies.length > 0) {
+            seesEnemy = enemies.length > 0;
+            if (enemies.length == 1 && rc.senseRobotInfo(enemies[0]).type == RobotType.HQ) {
+                seesEnemy = false;
+                enemies = new Robot[0];
+            }
+        }
 
         if (Communicator.WriteRound(round)) {
             Communicator.WriteTypeAndGroup(rc, type, group);
         }
     }
+
+    // Somtimes i wish valid identifiers could contain explanation points!
+    public static final int ATTACK = 2;
 }

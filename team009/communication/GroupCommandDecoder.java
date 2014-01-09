@@ -29,13 +29,21 @@ public class GroupCommandDecoder extends CommunicationDecoder {
         }
 
         this.data = true;
-        command = data / COMMAND_MULT;
+        ttl = data / TIME_TO_LIVE;
+        command = (data % TIME_TO_LIVE) / COMMAND_MULT;
         group = (data % COMMAND_MULT) / GROUP_MULT;
         location = MapDecoder.getLocationFromData(data);
     }
 
-    public void resetTTL() {
+    protected void resetTTL() {
         ttl = TTL_MAX;
+    }
+
+    /**
+     * if the ttl should be reset.
+     */
+    public boolean shouldResetTTL() {
+        return ttl < 5;
     }
 
     @Override
@@ -46,7 +54,7 @@ public class GroupCommandDecoder extends CommunicationDecoder {
 
     @Override
     public String toString() {
-        return "Command: " + command + " to group " + group + " with location " + location;
+        return "Command: " + command + " to group " + group + " with location " + location + " With " + ttl + " to live.";
     }
 
     public static final int GROUP_MULT = 1000000;
