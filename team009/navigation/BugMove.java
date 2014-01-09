@@ -21,7 +21,6 @@ public class BugMove extends Move {
     }
 
     private void reset() {
-        System.out.println("Resetting!");
         trackRight = !trackRight;
         if (robot.rand.nextDouble() < .1) {
             trackRight = robot.rand.nextDouble() < .5;
@@ -70,9 +69,7 @@ public class BugMove extends Move {
 
         if (!bug) {
             result = simpleMove(toMove);
-            robot.rc.setIndicatorString(0, "Starting move");
             if (result == null) {
-                robot.rc.setIndicatorString(0, "Starting bug");
                 bug = true;
                 bugStartDirection = toMove;
                 bugStart = robot.currentLoc;
@@ -87,15 +84,12 @@ public class BugMove extends Move {
                     }
                 }
                 if (count == 9) {
-                    robot.rc.setIndicatorString(0, "Starting bug no moves");
                     return null;
                 }
-                robot.rc.setIndicatorString(0, "Starting bug " + toMove.toString());
                 return toMove;
             }
         }
         if (bug) {
-            robot.rc.setIndicatorString(0, "Running bug");
             result = bugMove();
         }
 
@@ -166,7 +160,6 @@ public class BugMove extends Move {
     private Direction bugMove() {
         Direction toMove = robot.lastLoc.directionTo(robot.currentLoc);
         if (toMove == Direction.OMNI || toMove == Direction.NONE) {
-            System.out.println("Returning null!");
             return null;
         }
 
@@ -208,13 +201,11 @@ public class BugMove extends Move {
 
         if (breakDir != null) {
             // we've made it out of bug!
-            System.out.println("Done with bug! Resetting");
             reset();
             return breakDir;
         }
 
         if (robot.round > startRound + MAX_BUG_ROUNDS) {
-            System.out.println("Rounds timed out, resetting!");
             reset();
             return null;
         }

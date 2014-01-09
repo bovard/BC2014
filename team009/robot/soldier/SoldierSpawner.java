@@ -39,8 +39,4 @@ public class SoldierSpawner {
     }
 
 
-    // -----------------------------------------------------
-    // Commands
-    // -----------------------------------------------------
-    public static final int RETREAT_TO_PASTURE = 1;
 }

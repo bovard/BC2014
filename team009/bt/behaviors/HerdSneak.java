@@ -13,7 +13,7 @@ public class HerdSneak extends Behavior {
     protected MapLocation startingLocation;
     protected ArrayList<Direction> possibleDirs = new ArrayList<Direction>();
     protected boolean go;
-    protected static final int MAX_DISTANCE_SQUARED = 226;
+    protected static final int MAX_DISTANCE_SQUARED = 170;
 
     protected BugMove move;
 

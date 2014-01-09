@@ -73,6 +73,9 @@ public class HQ extends TeamRobot {
 
     private void _spawn(int soldierType, int group, MapLocation location) throws GameActionException {
         Direction dir = _getSpawnDirection();
+        if (dir == null) {
+            return;
+        }
         rc.spawn(dir);
         Communicator.WriteNewSoldier(rc, soldierType, location);
     }

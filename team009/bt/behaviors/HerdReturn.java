@@ -22,7 +22,7 @@ public class HerdReturn extends Behavior {
 
     @Override
     public boolean post() throws GameActionException {
-        return robot.currentLoc.isAdjacentTo(pastureLocation);
+        return robot.currentLoc.distanceSquaredTo(pastureLocation) <= 6;
     }
 
     @Override
