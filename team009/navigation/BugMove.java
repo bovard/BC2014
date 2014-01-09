@@ -4,12 +4,13 @@ import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import battlecode.common.TerrainTile;
+import team009.MapUtils;
 import team009.robot.TeamRobot;
 
 public class BugMove extends Move {
     private static final int MAX_BUG_ROUNDS = 100;
     private boolean bug;
-    private boolean trackRight = Math.random() > .5;
+    private boolean trackRight = robot.rand.nextDouble() > .5;
     private int startRound;
     private MapLocation bugStart;
     private Direction bugStartDirection;
@@ -167,6 +168,20 @@ public class BugMove extends Move {
         if (toMove == Direction.OMNI || toMove == Direction.NONE) {
             System.out.println("Returning null!");
             return null;
+        }
+
+        if (!toMove.isDiagonal()) {
+            Direction right = toMove.rotateRight().rotateRight();
+            Direction left = toMove.rotateLeft().rotateLeft();
+
+            if(robot.rc.canMove(toMove) && (robot.rc.canMove(right) || robot.rc.canMove(left))) {
+                if (!MapUtils.isOnMap(robot.currentLoc.add(right), robot.info.width, robot.info.height)
+                        || !MapUtils.isOnMap(robot.currentLoc.add(left), robot.info.width, robot.info.height)) {
+                    // if we're tracking along the side of the wall something is wrong!
+                    trackRight = !trackRight;
+                    return toMove.opposite();
+                }
+            }
         }
 
         if (trackRight) {
