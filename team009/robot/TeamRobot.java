@@ -1,9 +1,6 @@
 package team009.robot;
 
-import battlecode.common.Clock;
-import battlecode.common.GameActionException;
-import battlecode.common.MapLocation;
-import battlecode.common.RobotController;
+import battlecode.common.*;
 import team009.RobotInformation;
 import team009.bt.Node;
 
@@ -11,6 +8,7 @@ public abstract class TeamRobot {
 
 	protected Node treeRoot;
     public MapLocation currentLoc;
+    public MapLocation lastLoc;
     public int round;
 	public RobotController rc;
 	public RobotInformation info;
@@ -18,6 +16,8 @@ public abstract class TeamRobot {
 	public TeamRobot(RobotController rc, RobotInformation info) {
 		this.rc = rc;
 		this.info = info;
+        currentLoc = rc.getLocation();
+        lastLoc = info.hq;
 	}
 
 	/**
@@ -26,9 +26,12 @@ public abstract class TeamRobot {
 	 *
 	 */
 	public void environmentCheck() throws GameActionException {
-        this.currentLoc = rc.getLocation();
+        MapLocation temp = rc.getLocation();
+        if (!temp.equals(currentLoc)) {
+            lastLoc = currentLoc;
+        }
+        currentLoc = temp;
         this.round = Clock.getRoundNum();
-
     }
 
 	/**
@@ -76,7 +79,6 @@ public abstract class TeamRobot {
             // our turn because we went too long
             if (round == Clock.getRoundNum()) {
                 this.rc.yield();
-                this.rc.setIndicatorString(0, "-");
             } else {
                 System.out.println("BYTECODE LIMIT EXCEEDED!");
             }
