@@ -34,13 +34,12 @@ public class SmartMap extends BasePostProcessor {
     /**
      * NOTE: you have to make sure canMove = false before calling this
      * @param loc the location to check
-     * @return the index of the first obstacle that loc is part of
-     * //TODO: what do do if it's part of multiple?
+     * @return the indexes of the obstaclse that loc is part of
      */
-    public int getObstacleIndexForLocation(MapLocation loc) {
-        int index = -1;
+    public int[] getObstacleIndexsForLocation(MapLocation loc) {
+        int[] indices = new int[0];
 
-        return index;
+        return indices;
     }
 
     public boolean canMove(MapLocation loc) {
