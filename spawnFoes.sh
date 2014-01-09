@@ -3,7 +3,7 @@
 
 spawnFoe() {
     local branch=$1
-    local folderName="_team${1//\./_/g}"
+    local folderName="_team${1//\./_}"
     git checkout $branch
 
     echo $folderName
