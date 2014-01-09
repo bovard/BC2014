@@ -3,12 +3,11 @@
 
 spawnFoe() {
     local branch=$1
-    local underscoredName=""
-    local folderName="_team$1"
+    local folderName="_team${1//\./_/g}"
     git checkout $branch
 
     eval "rm -rdf ./$folderName"
-    eval "$folderName | sed -e 's/\./_/g | mkdir"
+    eval "$folderName | sed -e 's/\./_/g' | mkdir"
     eval "cp -r ./team009/* ./$folderName/"
     # eval "find ./$folderName -name '*.java' -type f -exec sed -i.bak 's/team009/$folderName/g' {} +"
     # eval "rm -rf ./$folderName/**/*.bak"
