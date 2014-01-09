@@ -6,8 +6,8 @@ import team009.communication.Communicator;
 import team009.robot.TeamRobot;
 
 public abstract class BaseSoldier extends TeamRobot {
-    public boolean seesEnemy;
-    public Robot[] enemies;
+    public boolean seesEnemy = false;
+    public Robot[] enemies = new Robot[0];
     public int group;
     public int type;
 

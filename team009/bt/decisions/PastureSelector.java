@@ -2,11 +2,13 @@ package team009.bt.decisions;
 
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
+import team009.bt.behaviors.ComRetreatToPasture;
 import team009.bt.behaviors.EngageEnemy;
 import team009.bt.behaviors.MoveToLocation;
 import team009.bt.behaviors.PastureCapture;
 import team009.robot.soldier.BaseSoldier;
 import team009.robot.TeamRobot;
+import team009.robot.soldier.Herder;
 
 public class PastureSelector extends Selector {
 
@@ -15,6 +17,7 @@ public class PastureSelector extends Selector {
 
         // The children from most to least important
         addChild(new EngageEnemy((BaseSoldier)robot));
+        addChild(new ComRetreatToPasture((Herder)robot, pastureLocation));
         addChild(new MoveToLocation(robot, pastureLocation));
         addChild(new PastureCapture(robot));
     }

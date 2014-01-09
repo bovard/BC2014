@@ -14,6 +14,8 @@ public class RetreatToPasture extends Behavior {
     MapLocation location;
     BugMove move;
 
+    public static final int ENEMY_COM_RANGE_RETREAT = 400;
+
     public RetreatToPasture(BaseSoldier robot, MapLocation location) {
         super(robot);
         gs = robot;
