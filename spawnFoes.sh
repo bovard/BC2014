@@ -6,8 +6,6 @@ spawnFoe() {
     local folderName="_team${1//\./_}"
     git checkout $branch
 
-    echo $folderName
-
     # eval "rm -rdf ./$folderName"
     # eval "mkdir ./$folderName"
     # eval "cp -r ./team009/* ./$folderName/"
