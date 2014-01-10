@@ -11,7 +11,7 @@ import team009.robot.HQ;
 
 public class HQSelector extends Decision {
     public static int DEFENSIVE_PASTURE = 0;
-    public static int PASTURE_HUNTERING = 1;
+    public static int PASTURE_HUNTING = 1;
     public static int BALANCED = 2;
     public static int DUMB_PASTR_HUNT = 3;
 
@@ -24,9 +24,10 @@ public class HQSelector extends Decision {
         strat = memoryManager.getHQStrategy();
         // TODO: Add in the Defensive Pasture and Pasture Hunting behaviors
         children.add(DEFENSIVE_PASTURE, new HQDefensive(robot));
-        children.add(PASTURE_HUNTERING, new HQOffensive(robot));
+        children.add(PASTURE_HUNTING, new HQOffensive(robot));
         children.add(BALANCED, new HQBalanced(robot));
         children.add(DUMB_PASTR_HUNT, new DumbPastrHunter(robot));
+        strat = PASTURE_HUNTING;
     }
 
     @Override

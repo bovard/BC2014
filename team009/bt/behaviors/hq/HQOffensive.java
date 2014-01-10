@@ -2,13 +2,17 @@ package team009.bt.behaviors.hq;
 
 import battlecode.common.GameActionException;
 import team009.bt.behaviors.Behavior;
+import battlecode.common.GameConstants;
 import team009.robot.HQ;
 import team009.robot.TeamRobot;
 
 public class HQOffensive extends Behavior {
+    private HQ hq;
+
 
     public HQOffensive(HQ robot) {
         super(robot);
+        hq = robot;
     }
 
     @Override
@@ -30,9 +34,11 @@ public class HQOffensive extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
-        // TODO: Fill me in
         // spawn guys
+        if (robot.rc.isActive() && robot.rc.senseRobotCount() < GameConstants.MAX_ROBOTS) {
+            hq.createWolf(0);
+        }
         // broadcast possible pasture locations?
-        return false;
+        return true;
     }
 }
