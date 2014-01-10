@@ -17,7 +17,7 @@ spawnFoe() {
     eval "find ./$folderName -name '*.bak'* -delete"
 }
 
-spawnFoe 0.2.1
-spawnFoe 0.2.2
 spawnFoe 0.2.3
+spawnFoe 0.2.4
+spawnFoe 0.2.5
 git checkout $myCurrentBranch
