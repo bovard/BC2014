@@ -1,9 +1,9 @@
 package team009.bt.decisions;
 
 import battlecode.common.GameActionException;
-import team009.bt.behaviors.HQBalanced;
-import team009.bt.behaviors.HQDefensive;
-import team009.bt.behaviors.HQOffensive;
+import team009.bt.behaviors.hq.HQBalanced;
+import team009.bt.behaviors.hq.HQDefensive;
+import team009.bt.behaviors.hq.HQOffensive;
 import team009.communication.TeamMemoryManager;
 import team009.robot.HQ;
 
