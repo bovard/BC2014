@@ -27,7 +27,6 @@ public class HQSelector extends Decision {
         children.add(PASTURE_HUNTERING, new HQOffensive(robot));
         children.add(BALANCED, new HQBalanced(robot));
         children.add(DUMB_PASTR_HUNT, new DumbPastrHunter(robot));
-        strat = DUMB_PASTR_HUNT;
     }
 
     @Override
