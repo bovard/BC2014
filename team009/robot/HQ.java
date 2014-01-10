@@ -57,7 +57,7 @@ public class HQ extends TeamRobot {
     }
 
     public void createWolf(int group) throws GameActionException {
-        _spawn(SoldierSelector.SOLDIER_TYPE_WOLF, group);
+        _spawn(SoldierSpawner.SOLDIER_TYPE_WOLF, group);
     }
 
     // TODO: $IMPROVEMENT$ We should make the group number have a channel to grab pasture location from

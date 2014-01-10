@@ -55,10 +55,10 @@ public class HQSelector extends Decision {
             return children.get(BALANCED).run();
         } else if (strat == DEFENSIVE_PASTURE) {
             return children.get(DEFENSIVE_PASTURE).run();
-        } else if (strat == PASTURE_HUNTERING) {
-            return children.get(PASTURE_HUNTERING).run();
         } else if (strat == DUMB_PASTR_HUNT) {
             return children.get(DUMB_PASTR_HUNT).run();
+        } else if (strat == PASTURE_HUNTING) {
+            return children.get(PASTURE_HUNTING).run();
         } else {
             System.out.println("No strat selected!");
             return false;

@@ -13,6 +13,7 @@ public class SoldierSpawner {
     public static int SOLDIER_TYPE_HERDER = 2;
     public static int DUMB_PASTR_HUNTER = 3;
     public static int SOLDIER_COUNT = 4;
+    public static int SOLDIER_TYPE_WOLF = 5;
 
 
     public static final int MAX_GROUP_COUNT = 5;
@@ -31,6 +32,8 @@ public class SoldierSpawner {
                 robot = new Herder(rc, info, decoder.loc);
             } else if (type == DUMB_PASTR_HUNTER) {
                 robot = new DumbPastrHunter(rc, info);
+            } else if (type == SOLDIER_TYPE_WOLF) {
+                robot = new Wolf(rc, info);
             } else {
                 System.out.println("Didn't find a valid robot!");
             }
