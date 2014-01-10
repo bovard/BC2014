@@ -13,6 +13,15 @@ public class MoveToLocation extends Behavior {
         move.setDestination(location);
     }
 
+    public MoveToLocation(TeamRobot robot) {
+        super(robot);
+        move = new BugMove(robot);
+    }
+
+    public void setDestination(MapLocation location) {
+        move.setDestination(location);
+    }
+
     @Override
     public boolean pre() throws GameActionException {
         return !move.atDestination();

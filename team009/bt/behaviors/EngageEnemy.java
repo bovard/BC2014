@@ -3,6 +3,7 @@ package team009.bt.behaviors;
 import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.RobotInfo;
+import team009.combat.DumbCombat;
 import team009.robot.soldier.BaseSoldier;
 
 public class EngageEnemy extends Behavior {
@@ -29,23 +30,8 @@ public class EngageEnemy extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
-
-        // TeamRobot run takes care of "isActive" check.
-        for (int i = 0; i < gs.enemies.length; i++) {
-            RobotInfo info = rc.senseRobotInfo(gs.enemies[i]);
-
-            // TODO: Actual micro!
-            if (rc.canAttackSquare(info.location)) {
-                rc.attackSquare(info.location);
-                break;
-            } else {
-                Direction dir = gs.currentLoc.directionTo(info.location);
-                if (rc.canMove(dir)) {
-                    rc.move(dir);
-                    break;
-                }
-            }
-        }
+        // TODO: Better Micro
+        DumbCombat.Attack(rc, gs.enemies, robot.currentLoc);
 
         return true;
     }

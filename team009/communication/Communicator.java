@@ -1,7 +1,6 @@
 package team009.communication;
 
 import battlecode.common.*;
-import team009.RobotInformation;
 import team009.robot.soldier.SoldierSpawner;
 
 public class Communicator {
@@ -92,11 +91,11 @@ public class Communicator {
     }
 
     public static boolean ReadRound(int round) {
-        return (round - 1) % RobotInformation.INFORMATION_ROUND_MOD == 0;
+        return (round - 1) % INFORMATION_ROUND_MOD == 0;
     }
 
     public static boolean WriteRound(int round) {
-        return round % RobotInformation.INFORMATION_ROUND_MOD == 0;
+        return round % INFORMATION_ROUND_MOD == 0;
     }
 
     private static void _Broadcast(RobotController rc, int channel, CommunicationDecoder decoder) throws GameActionException {
@@ -120,4 +119,6 @@ public class Communicator {
 
     // Group channels go for group channel count + 5;
     private static int GROUP_CHANNEL_BASE = 1 + SoldierSpawner.MAX_GROUP_COUNT * SoldierSpawner.SOLDIER_COUNT;
+
+    protected static final int INFORMATION_ROUND_MOD = 4;
 }

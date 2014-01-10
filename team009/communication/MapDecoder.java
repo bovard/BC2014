@@ -29,6 +29,6 @@ public class MapDecoder extends CommunicationDecoder {
         return location.x * X_LOCATION_MULTIPLIER + location.y;
     }
 
-	public static final int COMMAND_MULTIPLIER = 1000000;
-	public static final int X_LOCATION_MULTIPLIER = 1000;
+	public static final int COMMAND_MULTIPLIER = 10000;
+	public static final int X_LOCATION_MULTIPLIER = 100;
 }

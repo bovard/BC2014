@@ -3,7 +3,6 @@ package team009.bt.decisions;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import team009.bt.Node;
-import team009.bt.behaviors.EngageEnemy;
 import team009.bt.behaviors.HerdReplace;
 import team009.robot.soldier.Herder;
 
@@ -16,7 +15,7 @@ public class HerderSelector extends Decision {
     public HerderSelector(Herder robot, MapLocation pastureLocation) {
         super(robot);
         this.pastureLocation = pastureLocation;
-        engage = new EngageEnemy(robot);
+        engage = new GroupEngageEnemy(robot);
         heard = new HerdSequence(robot, pastureLocation);
         replace = new HerdReplace(robot, pastureLocation);
     }

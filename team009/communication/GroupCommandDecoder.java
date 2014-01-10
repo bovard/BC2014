@@ -7,7 +7,6 @@ public class GroupCommandDecoder extends CommunicationDecoder {
     public int command;
     public int group;
     public int ttl = 0;
-    public boolean data = false;
 
     public GroupCommandDecoder(int group, int command) {
         this.command = command;
@@ -24,19 +23,21 @@ public class GroupCommandDecoder extends CommunicationDecoder {
     }
 
     public GroupCommandDecoder(int data) {
-        if (data == 0) {
-            this.data = false;
-        }
-
-        this.data = true;
         ttl = data / TIME_TO_LIVE;
         command = (data % TIME_TO_LIVE) / COMMAND_MULT;
         group = (data % COMMAND_MULT) / GROUP_MULT;
-        location = MapDecoder.getLocationFromData(data);
+        location = MapDecoder.getLocationFromData(data % GROUP_MULT);
     }
 
     protected void resetTTL() {
         ttl = TTL_MAX;
+    }
+
+    /**
+     * If there is a command or not.
+     */
+    public boolean hasData() {
+        return command != 0;
     }
 
     /**
@@ -57,8 +58,8 @@ public class GroupCommandDecoder extends CommunicationDecoder {
         return "Command: " + command + " to group " + group + " with location " + location + " With " + ttl + " to live.";
     }
 
-    public static final int GROUP_MULT = 1000000;
-    public static final int COMMAND_MULT = 10000000;
-    public static final int TIME_TO_LIVE = 100000000;
-    public static final int TTL_MAX = 15;
+    public static final int GROUP_MULT = MapDecoder.COMMAND_MULTIPLIER;
+    public static final int COMMAND_MULT = GROUP_MULT * 10;
+    public static final int TIME_TO_LIVE = COMMAND_MULT * 10;
+    public static final int TTL_MAX = 25;
 }

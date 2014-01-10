@@ -35,5 +35,4 @@ public class RobotInformation {
         info = rc.senseRobotInfo(robot);
 	}
 
-    public static final int INFORMATION_ROUND_MOD = 5;
 }
