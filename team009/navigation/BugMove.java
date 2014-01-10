@@ -14,10 +14,12 @@ public class BugMove extends Move {
     private int startRound;
     private MapLocation bugStart;
     private Direction bugStartDirection;
+    private MapLocation lastLoc;
 
     public BugMove(TeamRobot robot) {
         super(robot);
         bug = false;
+        lastLoc = robot.currentLoc;
     }
 
     private void reset() {
@@ -64,6 +66,12 @@ public class BugMove extends Move {
         Direction toMove = robot.currentLoc.directionTo(destination);
         if (toMove == Direction.NONE || toMove == Direction.OMNI)
             return null;
+
+        if (!robot.currentLoc.isAdjacentTo(lastLoc)) {
+            reset();
+        } else {
+            lastLoc = robot.currentLoc;
+        }
 
         Direction result = null;
 

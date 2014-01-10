@@ -17,6 +17,7 @@ public class DumbPastrHunter extends BaseSoldier {
 
     public DumbPastrHunter(RobotController rc, RobotInformation info) {
         super(rc, info);
+        treeRoot = getTreeRoot();
     }
 
     @Override

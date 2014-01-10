@@ -38,7 +38,6 @@ public class DumbPastrHunt extends Behavior {
             pasture = ((DumbPastrHunter)robot).pastrLocations[0];
             move.setDestination(pasture);
         }
-
         // we are coming to kill all the pastures!
         robot.rc.broadcast(1234, 1234);
         move.move();
