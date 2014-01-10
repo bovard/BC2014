@@ -5,6 +5,8 @@ import battlecode.common.GameConstants;
 import battlecode.common.MapLocation;
 import team009.bt.behaviors.Behavior;
 import team009.robot.HQ;
+import team009.robot.soldier.BaseSoldier;
+import team009.robot.soldier.SoldierSpawner;
 import team009.utils.MapQuadrantUtils;
 
 import java.util.ArrayList;
@@ -46,18 +48,16 @@ public class HQBalanced extends Behavior {
             MapLocation pasture;
             if (last % (goodPastrLocs.length * MAX_COUNT) < MAX_COUNT) {
                 pasture = goodPastrLocs[0];
-                group = 0;
             } else if (last % (goodPastrLocs.length * MAX_COUNT) < 2 * MAX_COUNT ) {
                 pasture = goodPastrLocs[1];
-                group = 1;
             } else if (last % (goodPastrLocs.length * MAX_COUNT) < 3 * MAX_COUNT) {
                 pasture = goodPastrLocs[2];
-                group = 2;
             } else {
                 pasture = goodPastrLocs[3];
-                group = 3;
             }
+            group = (last / 2) % SoldierSpawner.MAX_GROUP_COUNT;
             last++;
+
             hq.createHerder(group, pasture);
         }
         return true;

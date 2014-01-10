@@ -9,8 +9,8 @@ public class Communicator {
     // WRITING
     //-----------------------------------------------------
 
-    public static void WriteNewSoldier(RobotController rc, int soldierType, MapLocation location) throws GameActionException {
-        SoldierDecoder decoder = new SoldierDecoder(soldierType, location);
+    public static void WriteNewSoldier(RobotController rc, int soldierType, int group, MapLocation location) throws GameActionException {
+        SoldierDecoder decoder = new SoldierDecoder(soldierType, group, location);
         _Broadcast(rc, NEW_SOLDIER_CHANNEL, decoder);
     }
 

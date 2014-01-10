@@ -37,6 +37,7 @@ public class SoldierSpawner {
 
             robot.group = decoder.group;
             robot.type = type;
+            System.out.println("New Soldier: " + decoder.toString());
         } catch (GameActionException e) {
             e.printStackTrace();
         }
