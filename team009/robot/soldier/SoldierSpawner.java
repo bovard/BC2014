@@ -11,8 +11,11 @@ public class SoldierSpawner {
     public static int SOLDIER_TYPE_DUMB = 0;
     public static int SOLDIER_TYPE_PASTURE_CAPTURER = 1;
     public static int SOLDIER_TYPE_HERDER = 2;
-    public static int SOLDIER_COUNT = 3;
-    public static final int MAX_GROUP_COUNT = 4;
+    public static int DUMB_PASTR_HUNTER = 3;
+    public static int SOLDIER_COUNT = 4;
+
+
+    public static final int MAX_GROUP_COUNT = 5;
 
     public static BaseSoldier getSoldier(RobotController rc, RobotInformation info) {
         BaseSoldier robot = null;
@@ -26,6 +29,8 @@ public class SoldierSpawner {
                 robot = new PastureCapture(rc, info, decoder.loc);
             } else if (type == SOLDIER_TYPE_HERDER) {
                 robot = new Herder(rc, info, decoder.loc);
+            } else if (type == DUMB_PASTR_HUNTER) {
+                robot = new DumbPastrHunter(rc, info);
             } else {
                 System.out.println("Didn't find a valid robot!");
             }

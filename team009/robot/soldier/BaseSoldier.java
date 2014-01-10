@@ -27,6 +27,8 @@ public abstract class BaseSoldier extends TeamRobot {
         enemies = rc.senseNearbyGameObjects(Robot.class, 100, info.enemyTeam);
         RobotInfo firstNonHQEnemy = null;
 
+        enemies = rc.senseNearbyGameObjects(Robot.class, 100, info.enemyTeam);
+        seesEnemy = false;
         if (enemies.length > 0) {
             seesEnemy = enemies.length > 0;
             firstNonHQEnemy = getFirstNonHQRobot(enemies);

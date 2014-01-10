@@ -33,14 +33,15 @@ public class MoveRandom extends Behavior {
         // move randomly
         rc.setIndicatorString(0, "I am stuck!!");
 
-        Direction dir = null;
+        Direction dir = MapUtils.getRandomDir();
         boolean done = false;
         int tries = 0;
         while(!done && tries < 8) {
             tries++;
-            dir = MapUtils.getRandomDir();
             if (robot.rc.canMove(dir)) {
                 done = true;
+            } else {
+                dir = dir.rotateLeft();
             }
         }
         if (done) {
