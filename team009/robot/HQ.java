@@ -61,6 +61,10 @@ public class HQ extends TeamRobot {
         _spawn(SoldierSpawner.SOLDIER_TYPE_HERDER, group, pasture);
     }
 
+    public void createDumbPastrHunter() throws GameActionException {
+        _spawn(SoldierSpawner.DUMB_PASTR_HUNTER, 0);
+    }
+
     public void createPastureCapturer(int group, MapLocation pasture) throws GameActionException {
         _spawn(SoldierSpawner.SOLDIER_TYPE_PASTURE_CAPTURER, group, pasture);
     }

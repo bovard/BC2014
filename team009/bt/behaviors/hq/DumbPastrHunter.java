@@ -1,7 +1,9 @@
 package team009.bt.behaviors.hq;
 
 import battlecode.common.GameActionException;
+import battlecode.common.GameConstants;
 import team009.bt.behaviors.Behavior;
+import team009.robot.HQ;
 import team009.robot.TeamRobot;
 
 public class DumbPastrHunter extends Behavior {
@@ -26,6 +28,9 @@ public class DumbPastrHunter extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
-        return false;
+        if (robot.rc.senseRobotCount() < GameConstants.MAX_ROBOTS) {
+            ((HQ)robot).createDumbPastrHunter();
+        }
+        return true;
     }
 }
