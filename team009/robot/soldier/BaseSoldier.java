@@ -21,10 +21,10 @@ public abstract class BaseSoldier extends TeamRobot {
     @Override
     public void environmentCheck() throws GameActionException {
         super.environmentCheck();
-        enemies = rc.senseNearbyGameObjects(Robot.class, 100, info.enemyTeam);
 
+        enemies = rc.senseNearbyGameObjects(Robot.class, 100, info.enemyTeam);
         if (enemies.length > 0) {
-            seesEnemy = enemies.length > 0;
+            seesEnemy = true;
             if (enemies.length == 1 && rc.senseRobotInfo(enemies[0]).type == RobotType.HQ) {
                 seesEnemy = false;
                 enemies = new Robot[0];

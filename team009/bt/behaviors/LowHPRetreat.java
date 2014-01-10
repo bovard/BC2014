@@ -2,7 +2,7 @@ package team009.bt.behaviors;
 
 import battlecode.common.GameActionException;
 import team009.navigation.BugMove;
-import team009.robot.TeamRobot;
+import team009.robot.soldier.BaseSoldier;
 
 public class LowHPRetreat extends Behavior {
     public static final int LOW_HP = 30;
@@ -10,7 +10,7 @@ public class LowHPRetreat extends Behavior {
     private boolean healing = false;
     protected BugMove move;
 
-    public LowHPRetreat(TeamRobot robot) {
+    public LowHPRetreat(BaseSoldier robot) {
         super(robot);
         move = new BugMove(robot);
         move.setDestination(robot.info.hq);
