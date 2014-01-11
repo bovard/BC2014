@@ -1,7 +1,6 @@
 package team009.robot;
 
 import battlecode.common.Direction;
-import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
 import team009.RobotInformation;
 import team009.bt.Node;
@@ -24,6 +23,11 @@ public class SoundTower extends TeamRobot {
         }
 
         currentDirection = 0;
+    }
+
+    public Direction getNextDirection() {
+        currentDirection = ++currentDirection % directions.length;
+        return directions[currentDirection];
     }
 
     @Override

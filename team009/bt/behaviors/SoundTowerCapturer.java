@@ -3,9 +3,10 @@ package team009.bt.behaviors;
 import battlecode.common.GameActionException;
 import battlecode.common.RobotType;
 import team009.robot.TeamRobot;
+import team009.robot.soldier.SoundTowerCapture;
 
-public class SoundTowerCapture extends Behavior {
-    public SoundTowerCapture(TeamRobot robot) {
+public class SoundTowerCapturer extends Behavior {
+    public SoundTowerCapturer(SoundTowerCapture robot) {
         super(robot);
     }
 
