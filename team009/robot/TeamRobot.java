@@ -11,7 +11,6 @@ public abstract class TeamRobot {
 	protected Node treeRoot;
     public MapLocation currentLoc;
     public MapLocation lastLoc;
-    public double health;
     public int round;
 	public RobotController rc;
 	public RobotInformation info;
@@ -37,7 +36,6 @@ public abstract class TeamRobot {
         }
         currentLoc = temp;
         round = Clock.getRoundNum();
-        health = rc.getHealth();
     }
 
 	/**

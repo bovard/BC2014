@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
 import team009.robot.TeamRobot;
+import team009.utils.SmartNodeArray;
 
 /**
  * The base Node.
@@ -12,14 +13,14 @@ import team009.robot.TeamRobot;
  * Every Node can be run and has pre-conditions
  */
 public abstract class Node {
-	public ArrayList<Node> children;
+	public SmartNodeArray children;
     protected TeamRobot robot;
     protected RobotController rc;
 
 	public Node(TeamRobot robot) {
         this.robot = robot;
         this.rc = robot.rc;
-		children = new ArrayList<Node>();
+		children = new SmartNodeArray();
 	}
 
     public void addChild(Node node) {

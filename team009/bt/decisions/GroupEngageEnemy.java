@@ -1,15 +1,8 @@
 package team009.bt.decisions;
 
 import battlecode.common.GameActionException;
-import battlecode.common.Robot;
-import battlecode.common.RobotInfo;
-import battlecode.common.RobotType;
-import team009.bt.Node;
 import team009.bt.behaviors.EngageEnemy;
 import team009.bt.behaviors.MoveToLocation;
-import team009.communication.Communicator;
-import team009.communication.GroupCommandDecoder;
-import team009.navigation.BugMove;
 import team009.robot.soldier.BaseSoldier;
 
 public class GroupEngageEnemy extends Selector {
