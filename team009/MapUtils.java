@@ -38,6 +38,20 @@ public class MapUtils {
         return true;
     }
 
+    /**
+     * Will trim the value of the map loation to be within the map
+     * @param location
+     * @return
+     */
+    public static MapLocation trim(MapLocation location, RobotInformation info) {
+        int x = location.x < 0 ? 0 : location.x;
+        x = x > info.width ? info.width - 1 : x;
+        int y = location.y < 0 ? 0 : location.y;
+        y = y > info.height ? info.height - 1 : y;
+
+        return new MapLocation(x, y);
+    }
+
 	/**
 	 * Sorts the map in accending order.
 	 * @param locs

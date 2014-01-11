@@ -1,5 +1,6 @@
 package team009.bt.behaviors.hq;
 
+import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.GameConstants;
 import battlecode.common.MapLocation;
@@ -43,23 +44,27 @@ public class HQBalanced extends Behavior {
     @Override
     public boolean run() throws GameActionException {
         // Spawn a guy at a random location
-        if (robot.rc.senseRobotCount() < GameConstants.MAX_ROBOTS) {
-            int group;
-            MapLocation pasture;
-            if (last % (goodPastrLocs.length * MAX_COUNT) < MAX_COUNT) {
-                pasture = goodPastrLocs[0];
-            } else if (last % (goodPastrLocs.length * MAX_COUNT) < 2 * MAX_COUNT ) {
-                pasture = goodPastrLocs[1];
-            } else if (last % (goodPastrLocs.length * MAX_COUNT) < 3 * MAX_COUNT) {
-                pasture = goodPastrLocs[2];
-            } else {
-                pasture = goodPastrLocs[3];
-            }
-            group = (last / 2) % SoldierSpawner.MAX_GROUP_COUNT;
-            last++;
-
-            hq.createHerder(group, pasture);
+//        if (robot.rc.senseRobotCount() < GameConstants.MAX_ROBOTS) {
+//            int group;
+//            MapLocation pasture;
+//            if (last % (goodPastrLocs.length * MAX_COUNT) < MAX_COUNT) {
+//                pasture = goodPastrLocs[0];
+//            } else if (last % (goodPastrLocs.length * MAX_COUNT) < 2 * MAX_COUNT ) {
+//                pasture = goodPastrLocs[1];
+//            } else if (last % (goodPastrLocs.length * MAX_COUNT) < 3 * MAX_COUNT) {
+//                pasture = goodPastrLocs[2];
+//            } else {
+//                pasture = goodPastrLocs[3];
+//            }
+//            group = (last / 2) % SoldierSpawner.MAX_GROUP_COUNT;
+//            last++;
+//
+//            hq.createHerder(group, pasture);
+//        }
+        if (last == 0) {
+            hq.createSoundTower(0, robot.info.hq.add(Direction.NORTH));
         }
+        last++;
         return true;
     }
 

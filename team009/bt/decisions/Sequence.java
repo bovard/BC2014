@@ -10,6 +10,11 @@ public abstract class Sequence extends Decision {
     }
 
     @Override
+    public void reset() throws GameActionException {
+        lastRun = 0;
+    }
+
+    @Override
     public boolean run() throws GameActionException {
         Node toRun = children.get(lastRun);
         int counter = 0;
