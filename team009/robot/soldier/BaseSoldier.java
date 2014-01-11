@@ -11,6 +11,7 @@ public abstract class BaseSoldier extends TeamRobot {
     // Commands
     // -----------------------------------------------------
     public boolean seesEnemy = false;
+    public double health;
     public Robot[] enemies = new Robot[0];
     public int group;
     public int type;
@@ -23,6 +24,7 @@ public abstract class BaseSoldier extends TeamRobot {
     @Override
     public void environmentCheck() throws GameActionException {
         super.environmentCheck();
+        health = rc.getHealth();
         seesEnemy = false;
         enemies = rc.senseNearbyGameObjects(Robot.class, 100, info.enemyTeam);
         RobotInfo firstNonHQEnemy = null;

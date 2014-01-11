@@ -8,7 +8,7 @@ import team009.bt.Node;
 import team009.bt.decisions.SoundTowerCaptureSequence;
 
 public class SoundTowerCapture extends BaseSoldier {
-    public 
+    public
     public SoundTowerCapture(RobotController rc, RobotInformation info, MapLocation location) {
         super(rc, info);
         treeRoot = getTreeRoot();

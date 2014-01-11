@@ -12,7 +12,8 @@ public abstract class Selector extends Decision {
 
     @Override
     public boolean run() throws GameActionException {
-        for (Node current : children) {
+        for (int i = 0; i < children.size(); i++) {
+            Node current = children.get(i);
             if (current.pre()) {
                 if (current.post()) {
                     current.reset();

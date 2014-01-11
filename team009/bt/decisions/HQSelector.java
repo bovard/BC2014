@@ -23,10 +23,10 @@ public class HQSelector extends Decision {
         memoryManager = new TeamMemoryManager(robot);
         strat = memoryManager.getHQStrategy();
         // TODO: Add in the Defensive Pasture and Pasture Hunting behaviors
-        children.add(DEFENSIVE_PASTURE, new HQDefensive(robot));
-        children.add(PASTURE_HUNTERING, new HQOffensive(robot));
-        children.add(BALANCED, new HQBalanced(robot));
-        children.add(DUMB_PASTR_HUNT, new DumbPastrHunter(robot));
+        addChild(new HQDefensive(robot));
+        addChild(new HQOffensive(robot));
+        addChild(new HQBalanced(robot));
+        addChild(new DumbPastrHunter(robot));
     }
 
     @Override
