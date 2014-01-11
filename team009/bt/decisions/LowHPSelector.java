@@ -2,7 +2,7 @@ package team009.bt.decisions;
 
 import battlecode.common.GameActionException;
 import team009.bt.behaviors.AvoidEnemies;
-import team009.bt.behaviors.hq.HealNearHQ;
+import team009.bt.behaviors.HealNearHQ;
 import team009.robot.soldier.BaseSoldier;
 
 public class LowHPSelector extends Selector {

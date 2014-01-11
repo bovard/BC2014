@@ -1,4 +1,4 @@
-package team009.bt.behaviors.hq;
+package team009.bt.behaviors;
 
 import battlecode.common.GameActionException;
 import team009.bt.behaviors.Behavior;
