@@ -24,6 +24,8 @@ public class WolfSelector extends Selector {
         MapLocation center = new MapLocation(robot.info.width/2, robot.info.height/2);
         //TODO determine if a robot can actually goto this spot for a pastr or noise tower
         addChild(new MoveToLocation(robot, center));
+        //temp just goto the enemy HQ
+        //addChild(new MoveToLocation(robot, robot.info.enemyHq));
         addChild(new PastureCapture(robot));
         //addChild(new NoiseTowerCapture(robot));
     }

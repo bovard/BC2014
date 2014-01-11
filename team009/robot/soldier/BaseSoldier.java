@@ -25,6 +25,7 @@ public abstract class BaseSoldier extends TeamRobot {
         super.environmentCheck();
         seesEnemy = false;
         enemies = rc.senseNearbyGameObjects(Robot.class, 100, info.enemyTeam);
+        //TODO figure out if the above call is needed ^^ seem like a dup
         RobotInfo firstNonHQEnemy = null;
 
         enemies = rc.senseNearbyGameObjects(Robot.class, 100, info.enemyTeam);

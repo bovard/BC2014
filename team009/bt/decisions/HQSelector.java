@@ -1,12 +1,11 @@
 package team009.bt.decisions;
 
 import battlecode.common.GameActionException;
-import team009.bt.behaviors.hq.DumbPastrHunter;
-import team009.bt.behaviors.hq.HQBalanced;
-import team009.bt.behaviors.hq.HQDefensive;
-import team009.bt.behaviors.hq.HQOffensive;
+import team009.bt.Node;
+import team009.bt.behaviors.hq.*;
 import team009.communication.TeamMemoryManager;
 import team009.robot.HQ;
+import team009.robot.soldier.BaseSoldier;
 
 
 public class HQSelector extends Decision {
@@ -14,6 +13,8 @@ public class HQSelector extends Decision {
     public static int PASTURE_HUNTING = 1;
     public static int BALANCED = 2;
     public static int DUMB_PASTR_HUNT = 3;
+    public static int HQ_ENGAGE_ENEMY = 4;
+    public Node canAttack;
 
     public int strat = BALANCED;
     protected TeamMemoryManager memoryManager;
@@ -23,6 +24,8 @@ public class HQSelector extends Decision {
         memoryManager = new TeamMemoryManager(robot);
         strat = memoryManager.getHQStrategy();
         // TODO: Add in the Defensive Pasture and Pasture Hunting behaviors
+        canAttack = new HQEngageEnemy(robot);
+        //children.add(HQ_ENGAGE_ENEMY, new HQEngageEnemy(robot));
         children.add(DEFENSIVE_PASTURE, new HQDefensive(robot));
         children.add(PASTURE_HUNTING, new HQOffensive(robot));
         children.add(BALANCED, new HQBalanced(robot));
@@ -50,6 +53,15 @@ public class HQSelector extends Decision {
     @Override
     public boolean run() throws GameActionException {
         memoryManager.writeMemeory();
+
+        //first see if the HQ can attack, so manually inject the super.run() bits
+        if (canAttack.pre()) {
+            if (canAttack.post()) {
+                canAttack.reset();
+            }
+            canAttack.run();
+        }
+
         // all of these should have no pres, or posts so don't have to check
         if (strat == BALANCED) {
             return children.get(BALANCED).run();
