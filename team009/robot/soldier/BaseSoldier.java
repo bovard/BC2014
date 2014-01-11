@@ -42,7 +42,6 @@ public abstract class BaseSoldier extends TeamRobot {
 
         // writes out any information about its environment.
         if (Communicator.WriteRound(round)) {
-
             Communicator.WriteTypeAndGroup(rc, type, group);
 
             // If there is no decoder or no data, then write out information about the environment.

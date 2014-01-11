@@ -24,5 +24,10 @@ public class SoundTowerCaptureSequence extends Sequence {
     public boolean post() throws GameActionException {
         return false;
     }
+
+    @Override
+    public boolean run() throws GameActionException {
+        return super.run();
+    }
 }
 

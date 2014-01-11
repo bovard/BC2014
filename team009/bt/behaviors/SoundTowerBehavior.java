@@ -1,8 +1,6 @@
 package team009.bt.behaviors;
 
-import battlecode.common.Direction;
-import battlecode.common.GameActionException;
-import battlecode.common.MapLocation;
+import battlecode.common.*;
 import team009.MapUtils;
 import team009.robot.SoundTower;
 
@@ -32,14 +30,21 @@ public class SoundTowerBehavior extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
-        if (currentDistance == 0) {
+        // null
+        if (currentDirection == null) {
+            currentDirection = tower.getNextDirection();
+            currentDistance = MAX_DISTANCE;
+        }
+
+        MapLocation loc = MapUtils.trim(travel(tower.currentLoc, currentDirection, currentDistance), robot.info);
+        if (robot.currentLoc.distanceSquaredTo(loc) <= GameConstants.ATTACK_SCARE_RANGE + 10) {
             currentDirection = tower.getNextDirection();
             currentDistance = MAX_DISTANCE;
         }
 
         // attacks square.
-        rc.attackSquare(MapUtils.trim(travel(tower.currentLoc, currentDirection, currentDistance), robot.info));
         currentDistance--;
+        rc.attackSquare(loc);
 
         return true;
     }
@@ -49,8 +54,15 @@ public class SoundTowerBehavior extends Behavior {
         for (int i = 0; i < distance; i++) {
             loc = loc.add(dir);
         }
+
+        Direction dir2 = dir.opposite();
+        while (loc.distanceSquaredTo(robot.currentLoc) > RobotType.NOISETOWER.attackRadiusMaxSquared) {
+            loc = loc.add(dir2);
+        }
         return loc;
     }
-    private static final int MAX_DISTANCE = 25;
+
+    private static final int MAX_DISTANCE = 18;
+    private static final int MAX_DISTANCE_SQUARED = 400;
 }
 
