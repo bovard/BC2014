@@ -1,10 +1,9 @@
 package team009.bt.decisions;
 
 import battlecode.common.GameActionException;
+import battlecode.common.MapLocation;
 import sun.net.www.content.text.Generic;
-import team009.bt.behaviors.EngageEnemy;
-import team009.bt.behaviors.MoveRandom;
-import team009.bt.behaviors.MoveToLocation;
+import team009.bt.behaviors.*;
 import team009.robot.TeamRobot;
 import team009.robot.soldier.Wolf;
 
@@ -15,13 +14,16 @@ public class WolfSelector extends Selector {
         super(robot);
         // heal guys
         // engage enemy
+        //addChild(new SuicideBomber(robot));
         addChild(new EngageEnemy(robot));
         // move to pastr location(s)
+        addChild(new WolfPastrHunt(robot));
         // group/swarm to center
-        // broadcast possible pasture locations?
-
-        //test goto enemy HQ location
-        addChild(new MoveToLocation(robot, robot.info.enemyHq));
+        MapLocation center = new MapLocation(robot.info.width/2, robot.info.height/2);
+        //TODO determine if a robot can actually goto this spot for a pastr or noise tower
+        addChild(new MoveToLocation(robot, center));
+        addChild(new PastureCapture(robot));
+        //addChild(new NoiseTowerCapture(robot));
     }
 
     @Override
