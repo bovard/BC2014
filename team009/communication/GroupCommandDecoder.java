@@ -61,5 +61,5 @@ public class GroupCommandDecoder extends CommunicationDecoder {
     public static final int GROUP_MULT = MapDecoder.COMMAND_MULTIPLIER;
     public static final int COMMAND_MULT = GROUP_MULT * 10;
     public static final int TIME_TO_LIVE = COMMAND_MULT * 10;
-    public static final int TTL_MAX = 25;
+    public static final int TTL_MAX = 40;
 }
