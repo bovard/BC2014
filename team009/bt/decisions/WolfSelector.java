@@ -5,6 +5,7 @@ import battlecode.common.MapLocation;
 import sun.net.www.content.text.Generic;
 import team009.bt.behaviors.*;
 import team009.robot.TeamRobot;
+import team009.robot.soldier.BaseSoldier;
 import team009.robot.soldier.Wolf;
 
 
@@ -13,6 +14,7 @@ public class WolfSelector extends Selector {
     public WolfSelector(Wolf robot) {
         super(robot);
         // heal guys
+        addChild(new LowHPRetreat((BaseSoldier)robot));
         // engage enemy
         //addChild(new SuicideBomber(robot));
         addChild(new EngageEnemy(robot));
