@@ -1,17 +1,13 @@
 package team009.bt.behaviors.hq;
 
-import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.RobotInfo;
-import battlecode.common.RobotType;
 import team009.bt.behaviors.Behavior;
-import team009.combat.DumbCombat;
 import team009.robot.HQ;
-import team009.robot.soldier.BaseSoldier;
 
-public class HQEngageEnemy extends Behavior {
+public class HQShoot extends Behavior {
     private HQ hq;
-    public HQEngageEnemy(HQ robot) {
+    public HQShoot(HQ robot) {
         super(robot);
         hq = robot;
     }
@@ -35,15 +31,20 @@ public class HQEngageEnemy extends Behavior {
     public boolean run() throws GameActionException {
         // TODO: Better Micro
         //DumbCombat.Attack(rc, hq.enemies, robot.currentLoc);
+        System.out.println("Shooting");
         for (int i = 0; i < hq.enemies.length; i++) {
             RobotInfo info = rc.senseRobotInfo(hq.enemies[i]);
+            System.out.println(info.location.toString());
 
             // TODO: Actual micro!
             if (hq.rc.canAttackSquare(info.location)) {
+                System.out.println("Shooting " + info.location.toString());
                 hq.rc.attackSquare(info.location);
                 break;
             }
         }
-        return true;
+        System.out.println("Didn't shoot");
+
+        return false;
     }
 }

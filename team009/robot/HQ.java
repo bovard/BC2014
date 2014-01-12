@@ -4,6 +4,7 @@ import battlecode.common.*;
 import team009.MapUtils;
 import team009.RobotInformation;
 import team009.bt.Node;
+import team009.bt.behaviors.hq.HQShoot;
 import team009.bt.decisions.HQSelector;
 import team009.communication.Communicator;
 import team009.communication.SoldierCountDecoder;
@@ -17,6 +18,9 @@ public class HQ extends TeamRobot {
     public boolean seesEnemy = false;
     public Robot[] enemies = new Robot[0];
 
+    // TODO: get rid of this once they patch the bug
+    private Node shoot = new HQShoot(this);
+
     public HQ(RobotController rc, RobotInformation info) {
         super(rc, info);
         maxSoldiers = SoldierSpawner.SOLDIER_COUNT * SoldierSpawner.MAX_GROUP_COUNT;
@@ -29,6 +33,53 @@ public class HQ extends TeamRobot {
         return new HQSelector(this);
     }
 
+
+    // TODO: get rid of this once they patch the but
+    @Override
+    public void run() {
+        while (true) {
+            int round = Clock.getRoundNum();
+
+            try {
+                // at the start of the round, update with an environment check
+
+
+                this.environmentCheck();
+
+                // TODO: Had to add this here since the HQ can shoot while not active!
+                if (shoot.pre()) {
+                    shoot.run();
+                }
+
+                // have the tree choose what to do
+                if (rc.isActive()) {
+                    treeRoot.run();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            // then postProcessing with whatever remains of our byte code
+            try {
+                this.postProcessing();
+            } catch (Exception e) {
+                System.out.println("Load error: " );
+                e.printStackTrace();
+            }
+
+            // only yield if we're still on the same clock turn
+            // if we aren't that means that we ended up skipping
+            // our turn because we went too long
+            if (round == Clock.getRoundNum()) {
+                this.rc.yield();
+            } else {
+                System.out.println("BYTECODE LIMIT EXCEEDED!");
+            }
+        }
+    }
+
     @Override
     public void environmentCheck() throws GameActionException {
         super.environmentCheck();
@@ -36,7 +87,7 @@ public class HQ extends TeamRobot {
         enemies = rc.senseNearbyGameObjects(Robot.class, 100, info.enemyTeam);
         seesEnemy = false;
         if (enemies.length > 0) {
-            seesEnemy = enemies.length > 0;
+            seesEnemy = true;
             firstNonHQEnemy = getFirstNonHQRobot(enemies);
             if (firstNonHQEnemy == null) {
                 seesEnemy = false;

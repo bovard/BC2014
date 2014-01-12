@@ -1,5 +1,5 @@
 #!/bin/bash
-# you must be in team122 for this to work!
+# you must be in teams for this to work!
 local myCurrentBranch="master"
 if [ $# > 0 ]; then
     myCurrentBranch=$1

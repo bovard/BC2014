@@ -5,7 +5,6 @@ import team009.bt.Node;
 import team009.bt.behaviors.hq.*;
 import team009.communication.TeamMemoryManager;
 import team009.robot.HQ;
-import team009.robot.soldier.BaseSoldier;
 
 
 public class HQSelector extends Decision {
@@ -28,7 +27,7 @@ public class HQSelector extends Decision {
         addChild(new HQOffensive(robot));
         addChild(new HQBalanced(robot));
         addChild(new DumbPastrHunter(robot));
-        canAttack = new HQEngageEnemy(robot);
+        canAttack = new HQShoot(robot);
         soundTower = new HQSoundTower(robot);
         strat = PASTURE_HUNTING;
     }
