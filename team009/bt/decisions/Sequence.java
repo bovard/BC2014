@@ -27,7 +27,11 @@ public abstract class Sequence extends Decision {
             toRun = children.get(lastRun);
         }
         if (counter < children.size() + 1) {
-            return toRun.run();
+            boolean run = toRun.run();
+            if (toRun.hasPostCalculation()) {
+                toRun.postCalculations();
+            }
+            return run;
         } else {
             rc.setIndicatorString(3, "OMG!! Something is borked.");
             return false;
