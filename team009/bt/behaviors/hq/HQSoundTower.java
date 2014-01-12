@@ -10,6 +10,7 @@ import team009.robot.HQ;
 public class HQSoundTower extends Behavior {
     private HQ hq;
     private int spawned = 0;
+    private MapLocation pasture;
 
     public HQSoundTower(HQ robot) {
         super(robot);
@@ -35,19 +36,56 @@ public class HQSoundTower extends Behavior {
     @Override
     public boolean run() throws GameActionException {
         if (spawned == 0) {
-        //    hq.createSoundTower(0, hq.info.hq.add(Direction.SOUTH));
-            MapLocation pasture = hq.currentLoc.add(hq.getRandomSpawnDirection());
+            pasture = hq.currentLoc.add(hq.getRandomSpawnDirection());
             hq.createPastureCapturer(0, pasture);
             spawned++;
         }
-        if (spawned == 1) {
-        //    hq.createHerder(0, hq.info.hq.add(Direction.NORTH));
-            MapLocation tower = hq.currentLoc.add(hq.getRandomSpawnDirection());
-            hq.createSoundTower(0, tower);
+        else if (spawned == 1) {
+            hq.createSoundTower(0, getTowerMove());
             spawned++;
         }
-        //spawned++;
         return true;
+    }
+
+    public MapLocation getTowerMove()
+    {
+        //first check the spots next to the hq that are also next to the pasture (optimal spots)
+        int hqx = hq.currentLoc.x;
+        int hqy = hq.currentLoc.y;
+        int px = pasture.x;
+        int py = pasture.y;
+        MapLocation[] optimalLocs = new MapLocation[4];
+
+        if (hqx != px && hqy != py) {
+            //only two optimal neighbors
+            optimalLocs[0] = new MapLocation(hqx, py);
+            optimalLocs[1] = new MapLocation(hqx, py);
+        }
+        else {
+            //4 optimal neighbors
+            if(hqx == px){
+                optimalLocs[0] = new MapLocation(hqx-1, hqy);
+                optimalLocs[1] = new MapLocation(hqx-1, py);
+                optimalLocs[2] = new MapLocation(hqx+1, hqy);
+                optimalLocs[3] = new MapLocation(hqx+1, py);
+            }
+            else {
+                optimalLocs[0] = new MapLocation(hqx, hqy-1);
+                optimalLocs[1] = new MapLocation(px, hqy+1);
+                optimalLocs[2] = new MapLocation(hqx, hqy-1);
+                optimalLocs[3] = new MapLocation(px, hqy-1);
+            }
+        }
+
+        for(int i=0; i<optimalLocs.length; i++) {
+            if(optimalLocs[i] != null && hq.rc.canMove(hq.currentLoc.directionTo(optimalLocs[i]))) {
+                return optimalLocs[i];
+            }
+        }
+
+        //otherwise get random move
+        MapLocation tower = hq.currentLoc.add(hq.getRandomSpawnDirection());
+        return tower;
     }
 }
 
