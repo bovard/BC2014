@@ -17,7 +17,18 @@ spawnFoe() {
     eval "find ./$folderName -name '*.bak'* -delete"
 }
 
+# Tags
 spawnFoe 0.2.3
 spawnFoe 0.2.4
 spawnFoe 0.2.5
+
+# Bovard
+
+# Michael
+
+# Brent
+
+# Devin
+
+
 git checkout $myCurrentBranch
