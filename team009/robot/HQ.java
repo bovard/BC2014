@@ -14,6 +14,8 @@ public class HQ extends TeamRobot {
     // This will adjust to how many soldiers we have.
     private int maxSoldiers;
     SoldierCountDecoder[] soldierCounts;
+    public boolean seesEnemy = false;
+    public Robot[] enemies = new Robot[0];
 
     public HQ(RobotController rc, RobotInformation info) {
         super(rc, info);
@@ -30,6 +32,17 @@ public class HQ extends TeamRobot {
     @Override
     public void environmentCheck() throws GameActionException {
         super.environmentCheck();
+        RobotInfo firstNonHQEnemy = null;
+        enemies = rc.senseNearbyGameObjects(Robot.class, 100, info.enemyTeam);
+        seesEnemy = false;
+        if (enemies.length > 0) {
+            seesEnemy = enemies.length > 0;
+            firstNonHQEnemy = getFirstNonHQRobot(enemies);
+            if (firstNonHQEnemy == null) {
+                seesEnemy = false;
+                enemies = new Robot[0];
+            }
+        }
 
         if (Communicator.ReadRound(round)) {
             int groupCount = SoldierSpawner.MAX_GROUP_COUNT;
@@ -54,6 +67,10 @@ public class HQ extends TeamRobot {
 
     public void createDumbSoldier(int group) throws GameActionException {
         _spawn(SoldierSpawner.SOLDIER_TYPE_DUMB, group);
+    }
+
+    public void createWolf(int group) throws GameActionException {
+        _spawn(SoldierSpawner.SOLDIER_TYPE_WOLF, group);
     }
 
     // TODO: $IMPROVEMENT$ We should make the group number have a channel to grab pasture location from
@@ -101,5 +118,18 @@ public class HQ extends TeamRobot {
         }
 
         return done ? dir : null;
+    }
+
+    //TODO move this method to the base class since its shared by HQ and BaseSolider
+    private RobotInfo getFirstNonHQRobot(Robot[] robots) throws GameActionException {
+        for (Robot r : robots) {
+            RobotInfo info = rc.senseRobotInfo(r);
+
+            if (info.type != RobotType.HQ) {
+                return info;
+            }
+        }
+
+        return null;
     }
 }

@@ -14,6 +14,7 @@ public class SoldierSpawner {
     public static final int SOLDIER_TYPE_SOUND_TOWER = 3;
     public static final int DUMB_PASTR_HUNTER = 4;
     public static final int SOLDIER_COUNT = 5;
+    public static final int SOLDIER_TYPE_WOLF = 6;
 
 
     public static final int MAX_GROUP_COUNT = 5;
@@ -37,6 +38,9 @@ public class SoldierSpawner {
                     break;
                 case SOLDIER_TYPE_PASTURE_CAPTURER:
                     robot = new PastureCapture(rc, info, decoder.loc);
+                    break;
+                case SOLDIER_TYPE_WOLF:
+                    robot = new Wolf(rc, info);
                     break;
                 case SOLDIER_TYPE_DUMB:
                 default:
