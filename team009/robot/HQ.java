@@ -132,4 +132,8 @@ public class HQ extends TeamRobot {
 
         return null;
     }
+
+    public Direction getRandomSpawnDirection() {
+        return _getSpawnDirection();
+    }
 }

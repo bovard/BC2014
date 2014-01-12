@@ -2,6 +2,8 @@ package team009.bt.behaviors.hq;
 
 import battlecode.common.Direction;
 import battlecode.common.GameActionException;
+import battlecode.common.GameConstants;
+import battlecode.common.MapLocation;
 import team009.bt.behaviors.Behavior;
 import team009.robot.HQ;
 
@@ -33,13 +35,19 @@ public class HQSoundTower extends Behavior {
     @Override
     public boolean run() throws GameActionException {
         if (spawned == 0) {
-            hq.createSoundTower(0, hq.info.hq.add(Direction.SOUTH));
+        //    hq.createSoundTower(0, hq.info.hq.add(Direction.SOUTH));
+            MapLocation pasture = hq.currentLoc.add(hq.getRandomSpawnDirection());
+            hq.createPastureCapturer(0, pasture);
+            spawned++;
         }
         if (spawned == 1) {
-            hq.createHerder(0, hq.info.hq.add(Direction.NORTH));
+        //    hq.createHerder(0, hq.info.hq.add(Direction.NORTH));
+            MapLocation tower = hq.currentLoc.add(hq.getRandomSpawnDirection());
+            hq.createSoundTower(0, tower);
+            spawned++;
         }
-        spawned++;
-        return false;
+        //spawned++;
+        return true;
     }
 }
 

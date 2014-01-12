@@ -17,7 +17,7 @@ public class PastureSelector extends Selector {
 
         // The children from most to least important
         addChild(new EngageEnemy((BaseSoldier)robot));
-        addChild(new ComRetreatToPasture((Herder)robot, pastureLocation));
+        //addChild(new ComRetreatToPasture((Herder)robot, pastureLocation));
         addChild(new MoveToLocation(robot, pastureLocation));
         addChild(new PastureCapture(robot));
     }
