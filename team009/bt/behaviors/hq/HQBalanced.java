@@ -63,6 +63,8 @@ public class HQBalanced extends Behavior {
 //        }
         if (last == 0) {
             hq.createSoundTower(0, robot.info.hq.add(Direction.NORTH));
+        } else if (last == 1) {
+            hq.createHerder(0, robot.info.hq.add(Direction.SOUTH));
         }
         last++;
         return true;
