@@ -1,5 +1,6 @@
 package team009.bt.decisions;
 
+import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import sun.net.www.content.text.Generic;
@@ -8,8 +9,12 @@ import team009.robot.TeamRobot;
 import team009.robot.soldier.BaseSoldier;
 import team009.robot.soldier.Wolf;
 
+import java.util.Random;
+
 
 public class WolfSelector extends Selector {
+    Direction[] directions = {Direction.NORTH, Direction.NORTH_EAST, Direction.EAST, Direction.SOUTH_EAST, Direction.SOUTH, Direction.SOUTH_WEST, Direction.WEST, Direction.NORTH_WEST};
+    Random rand = new Random();
 
     public WolfSelector(Wolf robot) {
         super(robot);
@@ -27,7 +32,10 @@ public class WolfSelector extends Selector {
         //temp just goto the enemy HQ
         //addChild(new MoveToLocation(robot, robot.info.enemyHq));
         addChild(new PastureCapture(robot));
-        //addChild(new NoiseTowerCapture(robot));
+
+        //TODO after the first pastr is captured, we need to plant a noisetower to herd
+        addChild(new MoveToLocation(robot, center.add(directions[rand.nextInt(8)], 2)));
+        addChild(new NoiseTowerCapture(robot));
     }
 
     @Override
