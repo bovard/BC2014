@@ -1,13 +1,13 @@
-package team009.robot;
+package flow.robot;
 
 import battlecode.common.*;
-import team009.MapUtils;
-import team009.RobotInformation;
-import team009.bt.Node;
-import team009.bt.decisions.HQSelector;
-import team009.communication.Communicator;
-import team009.communication.SoldierCountDecoder;
-import team009.robot.soldier.SoldierSpawner;
+import flow.MapUtils;
+import flow.RobotInformation;
+import flow.bt.Node;
+import flow.bt.decisions.HQSelector;
+import flow.communication.Communicator;
+import flow.communication.SoldierCountDecoder;
+import flow.robot.soldier.SoldierSpawner;
 
 public class HQ extends TeamRobot {
 
