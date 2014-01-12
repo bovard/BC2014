@@ -1,22 +1,22 @@
 package team009.bt.behaviors.hq;
 
+import battlecode.common.Direction;
 import battlecode.common.GameActionException;
-import battlecode.common.GameConstants;
 import team009.bt.behaviors.Behavior;
 import team009.robot.HQ;
 
-public class HQOffensive extends Behavior {
+public class HQSoundTower extends Behavior {
     private HQ hq;
+    private int spawned = 0;
 
-    public HQOffensive(HQ robot) {
+    public HQSoundTower(HQ robot) {
         super(robot);
         hq = robot;
     }
 
     @Override
     public boolean pre() throws GameActionException {
-        // no preconditions
-        return true;
+        return spawned < 2;
     }
 
     @Override
@@ -32,11 +32,14 @@ public class HQOffensive extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
-        // spawn guys
-        if (robot.rc.isActive() && robot.rc.senseRobotCount() < GameConstants.MAX_ROBOTS) {
-            hq.createWolf(0);
+        if (spawned == 0) {
+            hq.createSoundTower(0, hq.info.hq.add(Direction.SOUTH));
         }
-        // broadcast possible pasture locations?
-        return true;
+        if (spawned == 1) {
+            hq.createHerder(0, hq.info.hq.add(Direction.NORTH));
+        }
+        spawned++;
+        return false;
     }
 }
+

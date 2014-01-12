@@ -14,6 +14,7 @@ public class HQSelector extends Decision {
     public static int BALANCED = 2;
     public static int DUMB_PASTR_HUNT = 3;
     public Node canAttack;
+    public Node soundTower;
 
     public int strat = BALANCED;
     protected TeamMemoryManager memoryManager;
@@ -28,6 +29,7 @@ public class HQSelector extends Decision {
         addChild(new HQBalanced(robot));
         addChild(new DumbPastrHunter(robot));
         canAttack = new HQEngageEnemy(robot);
+        soundTower = new HQSoundTower(robot);
         strat = PASTURE_HUNTING;
     }
 
@@ -52,6 +54,7 @@ public class HQSelector extends Decision {
     public boolean run() throws GameActionException {
         memoryManager.writeMemeory();
 
+        // TODO: After sprint this behavior will have to change.
         //first see if the HQ can attack, so manually inject the super.run() bits
         if (canAttack.pre()) {
             if (canAttack.post()) {
@@ -61,7 +64,9 @@ public class HQSelector extends Decision {
         }
 
         // all of these should have no pres, or posts so don't have to check
-        if (strat == BALANCED) {
+        if (soundTower.pre()) {
+            return soundTower.run();
+        } else if (strat == BALANCED) {
             return children.get(BALANCED).run();
         } else if (strat == DEFENSIVE_PASTURE) {
             return children.get(DEFENSIVE_PASTURE).run();
