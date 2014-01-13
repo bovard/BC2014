@@ -18,6 +18,8 @@ public class SoundTowerBehavior extends Behavior {
     private static final int TOWER_STRAT_PULL_CARDNIAL = 0;
     private static final int TOWER_STRAT_PULL_SPIRAL_SWEEP = 1;
 
+    //MapLocation[] pastrLocs;
+    MapLocation herdFocus;
 
     public SoundTowerBehavior(SoundTower robot) {
         super(robot);
@@ -28,6 +30,18 @@ public class SoundTowerBehavior extends Behavior {
         angle = 0;
         currentDir = 0;
         towerStrat = TOWER_STRAT_PULL_SPIRAL_SWEEP;
+        //spin around in a cirle shooting the gun
+        //TODO is pastrLocs within enviornment check????
+        //pastrLocs = robot.rc.sensePastrLocations(robot.info.myTeam);
+        //if(pastrLocs.length > 0) {
+        //    herdFocus = pastrLocs[0];
+        //}
+        //else
+        //{
+            herdFocus = robot.currentLoc;
+        //}
+
+
     }
 
     @Override
@@ -63,14 +77,13 @@ public class SoundTowerBehavior extends Behavior {
 
     public MapLocation spiralSweep()
     {
-        //spin around in a cirle shooting the gun
-        int x = (int) (radius * java.lang.Math.cos(java.lang.Math.toRadians(angle))) + (robot.currentLoc.x);
-        int y = (int) (radius * java.lang.Math.sin(java.lang.Math.toRadians(angle))) + (robot.currentLoc.y);
-        angle = angle+50;
+        int x = (int) (radius * java.lang.Math.cos(java.lang.Math.toRadians(angle))) + (herdFocus.x);
+        int y = (int) (radius * java.lang.Math.sin(java.lang.Math.toRadians(angle))) + (herdFocus.y);
+        angle = angle+40;
         if(angle >= 360) {
             angle = 0;
             radius = radius-1;
-            if(radius<=6) {
+            if(radius<=7) {
                 radius = MAX_DISTANCE; //range of the noise tower
                 //switch to other strat
                 towerStrat = TOWER_STRAT_PULL_CARDNIAL;
@@ -82,8 +95,8 @@ public class SoundTowerBehavior extends Behavior {
 
     public MapLocation pullInCardinalDirections()
     {
-        radius = radius - 2;
-        if(radius <= 0) {
+        radius = radius - 1;
+        if(radius <= 6) {
             radius = MAX_DISTANCE; //range of the noise tower
             currentDir++;
             if(currentDir == directions.length) {

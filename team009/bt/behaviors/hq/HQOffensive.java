@@ -41,7 +41,7 @@ public class HQOffensive extends Behavior {
 
         if(robotCount > 4 && !proximityTowers) {
             //spawn a proximity tower to gather cows
-            MapLocation proxTower = hq.currentLoc.add(hq.getRandomSpawnDirection(), 10);
+            MapLocation proxTower = hq.currentLoc.add(hq.getRandomSpawnDirection(), 1);
             hq.createSoundTower(0, proxTower);
             proximityTowers = true;
             return true;
