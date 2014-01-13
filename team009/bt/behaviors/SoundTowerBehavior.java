@@ -5,13 +5,19 @@ import team009.MapUtils;
 import team009.robot.SoundTower;
 
 public class SoundTowerBehavior extends Behavior {
-    int currentDistance = 0;
-    Direction currentDirection = null;
     SoundTower tower;
+    private int radius;
+    private int angle;
+    private int x;
+    private int y;
 
     public SoundTowerBehavior(SoundTower robot) {
         super(robot);
         tower = robot;
+        radius = MAX_DISTANCE;
+        x = 0;
+        y = 0;
+        angle = 0;
     }
 
     @Override
@@ -30,36 +36,21 @@ public class SoundTowerBehavior extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
-        // null
-        if (currentDirection == null) {
-            currentDirection = tower.getNextDirection();
-            currentDistance = MAX_DISTANCE;
+        //spin around in a cirle shooting the gun
+        int x = (int) (radius * java.lang.Math.cos(java.lang.Math.toRadians(angle))) + (robot.currentLoc.x);
+        int y = (int) (radius * java.lang.Math.sin(java.lang.Math.toRadians(angle))) + (robot.currentLoc.y);
+        angle = angle+20;
+        if(angle >= 360) {
+            angle = 0;
+            radius--;
+            if(radius<=0) {
+                radius = MAX_DISTANCE; //range of the noise tower
+            }
         }
-
-        MapLocation loc = MapUtils.trim(travel(tower.currentLoc, currentDirection, currentDistance), robot.info);
-        if (robot.currentLoc.distanceSquaredTo(loc) <= GameConstants.ATTACK_SCARE_RANGE + 10) {
-            currentDirection = tower.getNextDirection();
-            currentDistance = MAX_DISTANCE;
-        }
-
-        // attacks square.
-        currentDistance--;
-        rc.attackSquare(loc);
-
+        MapLocation loc = new MapLocation(x,y);
+        robot.rc.attackSquareLight(loc);
+        //robot.rc.attackSquare(loc);
         return true;
-    }
-
-    // TODO: $BYTECODE$ Ez shortcuts could be made here
-    private MapLocation travel(MapLocation loc, Direction dir, int distance) {
-        for (int i = 0; i < distance; i++) {
-            loc = loc.add(dir);
-        }
-
-        Direction dir2 = dir.opposite();
-        while (loc.distanceSquaredTo(robot.currentLoc) > RobotType.NOISETOWER.attackRadiusMaxSquared) {
-            loc = loc.add(dir2);
-        }
-        return loc;
     }
 
     private static final int MAX_DISTANCE = 18;
