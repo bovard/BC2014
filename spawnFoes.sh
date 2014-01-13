@@ -25,10 +25,11 @@ spawnFoe 0.3.0
 # Bovard
 
 # Michael
+spawnFoe superSoundTower
 
 # Brent
 
 # Devin
 
 
-git checkout $myCurrentBranch
+git checkout master
