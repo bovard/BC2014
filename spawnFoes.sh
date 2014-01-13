@@ -18,9 +18,9 @@ spawnFoe() {
 }
 
 # Tags
-spawnFoe 0.2.3
 spawnFoe 0.2.4
 spawnFoe 0.2.5
+spawnFoe 0.3.0
 
 # Bovard
 
