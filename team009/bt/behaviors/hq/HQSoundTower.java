@@ -1,11 +1,9 @@
 package team009.bt.behaviors.hq;
 
-import battlecode.common.Direction;
 import battlecode.common.GameActionException;
-import battlecode.common.GameConstants;
 import battlecode.common.MapLocation;
 import team009.bt.behaviors.Behavior;
-import team009.robot.HQ;
+import team009.robot.hq.HQ;
 
 public class HQSoundTower extends Behavior {
     private HQ hq;

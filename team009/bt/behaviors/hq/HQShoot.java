@@ -5,7 +5,7 @@ import battlecode.common.MapLocation;
 import battlecode.common.RobotInfo;
 import team009.bt.behaviors.Behavior;
 import team009.combat.CombatUtils;
-import team009.robot.HQ;
+import team009.robot.hq.HQ;
 
 public class HQShoot extends Behavior {
     private HQ hq;

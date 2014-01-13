@@ -3,7 +3,7 @@ package team009.bt.behaviors.hq;
 import battlecode.common.GameActionException;
 import battlecode.common.GameConstants;
 import team009.bt.behaviors.Behavior;
-import team009.robot.HQ;
+import team009.robot.hq.HQ;
 
 public class HQOffensive extends Behavior {
     private HQ hq;

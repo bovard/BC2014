@@ -5,9 +5,7 @@ import battlecode.common.GameActionException;
 import battlecode.common.GameConstants;
 import battlecode.common.MapLocation;
 import team009.bt.behaviors.Behavior;
-import team009.robot.HQ;
-import team009.robot.soldier.BaseSoldier;
-import team009.robot.soldier.SoldierSpawner;
+import team009.robot.hq.HQ;
 import team009.utils.MapQuadrantUtils;
 
 import java.util.ArrayList;
