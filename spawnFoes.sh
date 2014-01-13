@@ -34,6 +34,7 @@ spawnFoe PastrHunter
 spawnFoe multiTower
 spawnFoe spiralAndPullInTower
 spawnFoe spiralTower
+spawnFoe multiTowerNoSneak
 
 
 git checkout $myCurrentBranch
