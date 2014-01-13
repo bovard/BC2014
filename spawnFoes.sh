@@ -51,7 +51,8 @@ spawnFoe multiTower
 spawnFoe spiralAndPullInTower
 spawnFoe spiralTower
 spawnFoe multiTowerNoSneak
-
+spawnFoe SpawnTowerFirst
+spawnFoe SpawnTowerFirstWithMultiTower
 
 git checkout master
 rm 0
