@@ -2,11 +2,21 @@
 # you must be in teams for this to work!
 
 # deletes bin and current spawned foes.
-if [ $# > 0 -a "$1" == "delete" ]; then
-    find . -type d -name "_team*" -delete
-    rm -rdf ../bin
+if [ $# > 0 ]; then
+    while [ $# > 0 ]; do
+        if [ "$1" == "delete" ]; then
+            find . -type d -name "_team*" -exec rm -rdf {} \;
+            rm -rdf ../bin
+        else
+            spawnFoe $1
+        fi
+
+        shift
+    done
+    rm 0
     exit
 fi
+
 
 spawnFoe() {
     local branch=$1
@@ -36,3 +46,4 @@ spawnFoe superSoundTower
 
 
 git checkout master
+rm 0
