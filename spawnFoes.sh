@@ -15,14 +15,17 @@ spawnFoe() {
 
 # deletes bin and current spawned foes.
 if [ $# > 0 ]; then
+
     while [ $# > 0 ]; do
-        if [ "$1" == "delete" ]; then
+        local action=$1
+        shift
+        if [ "$action" == "delete" ]; then
             find . -type d -name "_team*" -exec rm -rdf {} \;
             rm -rdf ../bin
         else
-            spawnFoe $1
+            echo "Spawning $action"
+            spawnFoe $action
         fi
-        shift
     done
     rm 0
     git checkout master
