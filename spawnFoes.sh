@@ -1,8 +1,10 @@
 #!/bin/bash
 # you must be in teams for this to work!
-local myCurrentBranch="master"
-if [ $# > 0 ]; then
-    myCurrentBranch=$1
+
+# deletes bin and current spawned foes.
+if [ $# > 0 -a "$1" == "delete" ]; then
+    find . -name _team* -delete
+    rm -rdf ../bin
 fi
 
 spawnFoe() {
