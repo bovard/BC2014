@@ -24,12 +24,16 @@ spawnFoe 0.2.5
 spawnFoe 0.3.0
 
 # Bovard
+spawnFoe PastrHunter
 
 # Michael
 
 # Brent
 
 # Devin
+spawnFoe multiTower
+spawnFoe spiralAndPullInTower
+spawnFoe spiralTower
 
 
 git checkout $myCurrentBranch
