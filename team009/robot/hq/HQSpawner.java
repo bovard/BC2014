@@ -33,7 +33,7 @@ public class HQSpawner {
                 robot = new DumbPastrHunter(rc, info);
                 break;
             default:
-                // robot = something
+                robot = new Offensive(rc, info);
                 break;
         }
         return robot;
