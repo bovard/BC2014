@@ -3,7 +3,7 @@ package team009.robot;
 import battlecode.common.RobotController;
 import team009.RobotInformation;
 import team009.bt.Node;
-import team009.bt.behaviors.noise.NoiseTowerBehavior;
+import team009.bt.decisions.noise.NoiseSelector;
 
 public class NoiseTower extends TeamRobot {
     public NoiseTower(RobotController rc, RobotInformation info) {
@@ -13,6 +13,6 @@ public class NoiseTower extends TeamRobot {
 
     @Override
     protected Node getTreeRoot() {
-        return new NoiseTowerBehavior(this);
+        return new NoiseSelector(this);
     }
 }
