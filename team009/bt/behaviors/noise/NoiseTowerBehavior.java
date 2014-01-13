@@ -6,10 +6,8 @@ import team009.bt.behaviors.Behavior;
 import team009.robot.TeamRobot;
 
 public class NoiseTowerBehavior extends Behavior {
-    TeamRobot nt;
     public NoiseTowerBehavior(TeamRobot robot) {
         super(robot);
-        nt = robot;
     }
 
     @Override
@@ -30,10 +28,10 @@ public class NoiseTowerBehavior extends Behavior {
     @Override
     public boolean run() throws GameActionException {
         //spin around in a cirle shooting the gun
-        int x = ((int)(Math.random()*nt.info.width));
-        int y = ((int)(Math.random()*nt.info.height));
+        int x = ((int)(Math.random()*robot.info.width));
+        int y = ((int)(Math.random()*robot.info.height));
         MapLocation randLoc = new MapLocation(x,y);
-        nt.rc.attackSquareLight(randLoc);
+        robot.rc.attackSquareLight(randLoc);
         return true;
     }
 }
