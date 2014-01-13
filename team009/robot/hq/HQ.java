@@ -75,14 +75,16 @@ public abstract class HQ extends TeamRobot {
 
                 this.environmentCheck();
 
-                // TODO: Had to add this here since the HQ can shoot while not active!
-                if (shoot.pre()) {
-                    shoot.run();
-                }
+
 
                 // have the tree choose what to do
                 if (rc.isActive()) {
                     treeRoot.run();
+                }
+
+                // TODO: Had to add this here since the HQ can shoot while not active!
+                if (shoot.pre()) {
+                    shoot.run();
                 }
 
             } catch (Exception e) {
