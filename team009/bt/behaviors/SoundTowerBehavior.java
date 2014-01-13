@@ -5,13 +5,29 @@ import team009.MapUtils;
 import team009.robot.SoundTower;
 
 public class SoundTowerBehavior extends Behavior {
-    int currentDistance = 0;
-    Direction currentDirection = null;
     SoundTower tower;
+    private int radius;
+    private int angle;
+    private int x;
+    private int y;
+
+    private Direction[] directions = {Direction.NORTH, Direction.NORTH_EAST, Direction.EAST, Direction.SOUTH_EAST, Direction.SOUTH, Direction.SOUTH_WEST, Direction.WEST, Direction.NORTH_WEST};
+    private int currentDir;
+
+    private int towerStrat;
+    private static final int TOWER_STRAT_PULL_CARDNIAL = 0;
+    private static final int TOWER_STRAT_PULL_SPIRAL_SWEEP = 1;
+
 
     public SoundTowerBehavior(SoundTower robot) {
         super(robot);
         tower = robot;
+        radius = MAX_DISTANCE;
+        x = 0;
+        y = 0;
+        angle = 0;
+        currentDir = 0;
+        towerStrat = TOWER_STRAT_PULL_SPIRAL_SWEEP;
     }
 
     @Override
@@ -30,35 +46,54 @@ public class SoundTowerBehavior extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
-        // null
-        if (currentDirection == null) {
-            currentDirection = tower.getNextDirection();
-            currentDistance = MAX_DISTANCE;
+        MapLocation loc;
+        switch(towerStrat)
+        {
+            case TOWER_STRAT_PULL_CARDNIAL:
+                loc = pullInCardinalDirections();
+                break;
+            case TOWER_STRAT_PULL_SPIRAL_SWEEP:
+            default:
+                loc = spiralSweep();
+                break;
         }
-
-        MapLocation loc = MapUtils.trim(travel(tower.currentLoc, currentDirection, currentDistance), robot.info);
-        if (robot.currentLoc.distanceSquaredTo(loc) <= GameConstants.ATTACK_SCARE_RANGE + 10) {
-            currentDirection = tower.getNextDirection();
-            currentDistance = MAX_DISTANCE;
-        }
-
-        // attacks square.
-        currentDistance--;
-        rc.attackSquare(loc);
-
+        robot.rc.attackSquare(loc);
         return true;
     }
 
-    // TODO: $BYTECODE$ Ez shortcuts could be made here
-    private MapLocation travel(MapLocation loc, Direction dir, int distance) {
-        for (int i = 0; i < distance; i++) {
-            loc = loc.add(dir);
+    public MapLocation spiralSweep()
+    {
+        //spin around in a cirle shooting the gun
+        int x = (int) (radius * java.lang.Math.cos(java.lang.Math.toRadians(angle))) + (robot.currentLoc.x);
+        int y = (int) (radius * java.lang.Math.sin(java.lang.Math.toRadians(angle))) + (robot.currentLoc.y);
+        angle = angle+50;
+        if(angle >= 360) {
+            angle = 0;
+            radius = radius-1;
+            if(radius<=6) {
+                radius = MAX_DISTANCE; //range of the noise tower
+                //switch to other strat
+                towerStrat = TOWER_STRAT_PULL_CARDNIAL;
+            }
         }
+        MapLocation loc = new MapLocation(x,y);
+        return loc;
+    }
 
-        Direction dir2 = dir.opposite();
-        while (loc.distanceSquaredTo(robot.currentLoc) > RobotType.NOISETOWER.attackRadiusMaxSquared) {
-            loc = loc.add(dir2);
+    public MapLocation pullInCardinalDirections()
+    {
+        radius = radius - 2;
+        if(radius <= 0) {
+            radius = MAX_DISTANCE; //range of the noise tower
+            currentDir++;
+            if(currentDir == directions.length) {
+                currentDir = 0;
+                //switch to other strat
+                towerStrat = TOWER_STRAT_PULL_SPIRAL_SWEEP;
+            }
         }
+        Direction dir = directions[currentDir];
+        MapLocation loc = robot.currentLoc.add(dir, radius);
         return loc;
     }
 

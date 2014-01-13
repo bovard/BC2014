@@ -30,6 +30,7 @@ spawnFoe 0.3.0
 # Brent
 
 # Devin
+spanFoe spiralTower
 
 
 git checkout $myCurrentBranch
