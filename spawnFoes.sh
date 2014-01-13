@@ -17,7 +17,7 @@ spawnFoe() {
 if [ $# > 0 ]; then
 
     while [ $# > 0 ]; do
-        local action=$1
+        declare action=$1
         shift
         if [ "$action" == "delete" ]; then
             find . -type d -name "_team*" -exec rm -rdf {} \;
