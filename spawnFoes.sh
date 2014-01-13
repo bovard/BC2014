@@ -1,23 +1,6 @@
 #!/bin/bash
 # you must be in teams for this to work!
 
-# deletes bin and current spawned foes.
-if [ $# > 0 ]; then
-    while [ $# > 0 ]; do
-        if [ "$1" == "delete" ]; then
-            find . -type d -name "_team*" -exec rm -rdf {} \;
-            rm -rdf ../bin
-        else
-            spawnFoe $1
-        fi
-
-        shift
-    done
-    rm 0
-    exit
-fi
-
-
 spawnFoe() {
     local branch=$1
     local folderName="_team${1//\./_}"
@@ -29,6 +12,22 @@ spawnFoe() {
     eval "find ./$folderName -name '*.java' -type f -exec sed -i.bak 's/team009/$folderName/g' {} +"
     eval "find ./$folderName -name '*.bak'* -delete"
 }
+
+# deletes bin and current spawned foes.
+if [ $# > 0 ]; then
+    while [ $# > 0 ]; do
+        if [ "$1" == "delete" ]; then
+            find . -type d -name "_team*" -exec rm -rdf {} \;
+            rm -rdf ../bin
+        else
+            spawnFoe $1
+        fi
+        shift
+    done
+    rm 0
+    exit
+fi
+
 
 # Tags
 spawnFoe 0.2.4
