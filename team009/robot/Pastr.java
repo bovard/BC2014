@@ -3,7 +3,7 @@ package team009.robot;
 import battlecode.common.RobotController;
 import team009.RobotInformation;
 import team009.bt.Node;
-import team009.bt.behaviors.Pasture;
+import team009.bt.behaviors.pasture.Pasture;
 
 public class Pastr extends TeamRobot {
     public Pastr(RobotController rc, RobotInformation info) {
