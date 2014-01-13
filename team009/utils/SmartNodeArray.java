@@ -4,8 +4,8 @@ import team009.bt.Node;
 
 public class SmartNodeArray {
 
-    private Node[] arr = new Node[1000];
-    private int length = 0;
+    public Node[] arr = new Node[1000];
+    public int length = 0;
 
     public SmartNodeArray() {
 
@@ -17,10 +17,7 @@ public class SmartNodeArray {
     }
 
     public Node get(int index) {
-        if (index < length) {
-            return arr[index];
-        }
-        return null;
+        return arr[index];
     }
 
     public int size() {

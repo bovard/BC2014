@@ -2,10 +2,10 @@ package team009;
 
 import battlecode.common.RobotController;
 import battlecode.common.RobotType;
-import team009.robot.HQ;
 import team009.robot.NoiseTower;
 import team009.robot.Pastr;
 import team009.robot.SoundTower;
+import team009.robot.hq.HQSpawner;
 import team009.robot.soldier.SoldierSpawner;
 
 public class RobotPlayer {
@@ -15,7 +15,7 @@ public class RobotPlayer {
 
             while (true) {
                 if (rc.getType() == RobotType.HQ) {
-                    new HQ(rc, info).run();
+                    HQSpawner.getHQ(rc, info).run();
                 }
 
                 if (rc.getType() == RobotType.SOLDIER) {
@@ -32,6 +32,7 @@ public class RobotPlayer {
                 if (rc.getType() == RobotType.NOISETOWER) {
                     new NoiseTower(rc, info).run();
                 }
+                System.out.println("Should never be here!");
                 rc.yield();
             }
         } catch (Exception e) {

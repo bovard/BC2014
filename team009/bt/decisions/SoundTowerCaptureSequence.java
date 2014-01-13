@@ -25,9 +25,5 @@ public class SoundTowerCaptureSequence extends Sequence {
         return false;
     }
 
-    @Override
-    public boolean run() throws GameActionException {
-        return super.run();
-    }
 }
 

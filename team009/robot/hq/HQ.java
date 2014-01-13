@@ -1,17 +1,20 @@
-package team009.robot;
+package team009.robot.hq;
 
 import battlecode.common.*;
 import team009.MapUtils;
 import team009.RobotInformation;
 import team009.bt.Node;
-import team009.bt.decisions.HQSelector;
+import team009.bt.behaviors.hq.HQShoot;
 import team009.communication.Communicator;
 import team009.communication.SoldierCountDecoder;
+import team009.robot.TeamRobot;
 import team009.robot.soldier.SoldierSpawner;
 
-public class HQ extends TeamRobot {
+public abstract class HQ extends TeamRobot {
 
-    // This will adjust to how many soldiers we have.
+    // TODO: get rid of this once they patch
+    private Node shoot = new HQShoot(this);
+
     private int maxSoldiers;
     SoldierCountDecoder[] soldierCounts;
     public boolean seesEnemy = false;
@@ -21,12 +24,7 @@ public class HQ extends TeamRobot {
         super(rc, info);
         maxSoldiers = SoldierSpawner.SOLDIER_COUNT * SoldierSpawner.MAX_GROUP_COUNT;
         soldierCounts = new SoldierCountDecoder[maxSoldiers];
-        treeRoot = getTreeRoot();
-    }
-
-    @Override
-    protected Node getTreeRoot() {
-        return new HQSelector(this);
+        // REMEMBER TO CALL treeRoot = getTreeRoot() in your implementations of this!
     }
 
     @Override
@@ -36,7 +34,7 @@ public class HQ extends TeamRobot {
         enemies = rc.senseNearbyGameObjects(Robot.class, 100, info.enemyTeam);
         seesEnemy = false;
         if (enemies.length > 0) {
-            seesEnemy = enemies.length > 0;
+            seesEnemy = true;
             firstNonHQEnemy = getFirstNonHQRobot(enemies);
             if (firstNonHQEnemy == null) {
                 seesEnemy = false;
@@ -65,7 +63,55 @@ public class HQ extends TeamRobot {
         }
     }
 
-    public void createDumbSoldier(int group) throws GameActionException {
+    // TODO: get rid of this once they patch
+    @Override
+    public void run() {
+        while (true) {
+            int round = Clock.getRoundNum();
+
+            try {
+                // at the start of the round, update with an environment check
+
+
+                this.environmentCheck();
+
+
+
+                // have the tree choose what to do
+                if (rc.isActive()) {
+                    treeRoot.run();
+                }
+
+                // TODO: Had to add this here since the HQ can shoot while not active!
+                if (shoot.pre()) {
+                    shoot.run();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            // then postProcessing with whatever remains of our byte code
+            try {
+                this.postProcessing();
+            } catch (Exception e) {
+                System.out.println("Load error: " );
+                e.printStackTrace();
+            }
+
+            // only yield if we're still on the same clock turn
+            // if we aren't that means that we ended up skipping
+            // our turn because we went too long
+            if (round == Clock.getRoundNum()) {
+                this.rc.yield();
+            } else {
+                System.out.println("BYTECODE LIMIT EXCEEDED!");
+            }
+        }
+    }
+
+public void createDumbSoldier(int group) throws GameActionException {
         _spawn(SoldierSpawner.SOLDIER_TYPE_DUMB, group);
     }
 
@@ -88,6 +134,10 @@ public class HQ extends TeamRobot {
 
     public void createPastureCapturer(int group, MapLocation pasture) throws GameActionException {
         _spawn(SoldierSpawner.SOLDIER_TYPE_PASTURE_CAPTURER, group, pasture);
+    }
+
+    public void createBackDoorNoisePlanter(int group) throws GameActionException {
+        _spawn(SoldierSpawner.SOLDIER_TYPE_BACKDOOR_NOISE_PLANTER, group);
     }
 
     private void _spawn(int soldierType, int group) throws GameActionException {
@@ -136,4 +186,6 @@ public class HQ extends TeamRobot {
     public Direction getRandomSpawnDirection() {
         return _getSpawnDirection();
     }
+
+
 }

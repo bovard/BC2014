@@ -1,7 +1,7 @@
 package team009.communication;
 
-import team009.bt.decisions.HQSelector;
 import team009.robot.TeamRobot;
+import team009.robot.hq.HQSpawner;
 
 public class TeamMemoryManager {
     public static int PASTURES_KILLED = 0;
@@ -27,21 +27,21 @@ public class TeamMemoryManager {
         robot.rc.setTeamMemory(PASTURES_KILLED, pasturesKilled);
     }
 
-    public int getHQStrategy() {
+    public static int getHQStrategy() {
         // Memory defaults to 0
         // TODO: Use this
         /*
         long [] memory = robot.rc.getTeamMemory();
         if (memory[PASTURES_KILLED] > 5) {
-            return HQSelector.DEFENSIVE_PASTURE;
+            return HQSpawner.DEFENSIVE_PASTURE;
         } else if (memory[ROUND] != 0 && memory[ROUND] < 1000) {
-            return HQSelector.PASTURE_HUNTING;
+            return HQSpawner.PASTURE_HUNTING;
         } else {
-            //return HQSelector.BALANCED;
-            return HQSelector.PASTURE_HUNTING;
+            //return HQSpawner.BALANCED;
+            return HQSpawner.PASTURE_HUNTING;
         }
         */
-        return HQSelector.BALANCED;
+        return HQSpawner.BALANCED;
     }
 
 }

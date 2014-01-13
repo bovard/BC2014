@@ -5,9 +5,7 @@ import battlecode.common.GameActionException;
 import battlecode.common.GameConstants;
 import battlecode.common.MapLocation;
 import team009.bt.behaviors.Behavior;
-import team009.robot.HQ;
-import team009.robot.soldier.BaseSoldier;
-import team009.robot.soldier.SoldierSpawner;
+import team009.robot.hq.HQ;
 import team009.utils.MapQuadrantUtils;
 
 import java.util.ArrayList;
@@ -61,13 +59,16 @@ public class HQBalanced extends Behavior {
 //
 //            hq.createHerder(group, pasture);
 //        }
-        if (last == 0) {
-            hq.createSoundTower(0, robot.info.hq.add(Direction.NORTH));
-        } else if (last == 1) {
-            hq.createHerder(0, robot.info.hq.add(Direction.SOUTH));
+        if (robot.rc.senseRobotCount() < GameConstants.MAX_ROBOTS) {
+            if (last == 0) {
+                hq.createSoundTower(0, robot.info.hq.add(Direction.NORTH));
+            } else if (last == 1) {
+                hq.createHerder(0, robot.info.hq.add(Direction.SOUTH));
+            }
+            last++;
+            return true;
         }
-        last++;
-        return true;
+        return false;
     }
 
 

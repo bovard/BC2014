@@ -1,18 +1,17 @@
-package team009.robot;
+package team009.robot.hq;
 
 import battlecode.common.RobotController;
 import team009.RobotInformation;
 import team009.bt.Node;
-import team009.bt.behaviors.pasture.Pasture;
 
-public class Pastr extends TeamRobot {
-    public Pastr(RobotController rc, RobotInformation info) {
+public class DumbPastrHunter extends HQ {
+    public DumbPastrHunter(RobotController rc, RobotInformation info) {
         super(rc, info);
         treeRoot = getTreeRoot();
     }
 
     @Override
     protected Node getTreeRoot() {
-        return new Pasture(this);
+        return new team009.bt.behaviors.hq.DumbPastrHunter(this);
     }
 }
