@@ -7,6 +7,7 @@ import team009.bt.Node;
 public class DumbPastrHunter extends HQ {
     public DumbPastrHunter(RobotController rc, RobotInformation info) {
         super(rc, info);
+        treeRoot = getTreeRoot();
     }
 
     @Override
