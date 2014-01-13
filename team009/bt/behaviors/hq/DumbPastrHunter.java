@@ -30,7 +30,8 @@ public class DumbPastrHunter extends Behavior {
     public boolean run() throws GameActionException {
         if (robot.rc.senseRobotCount() < GameConstants.MAX_ROBOTS) {
             ((HQ)robot).createDumbPastrHunter();
+            return true;
         }
-        return true;
+        return false;
     }
 }

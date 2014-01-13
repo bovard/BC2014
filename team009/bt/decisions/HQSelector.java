@@ -53,15 +53,6 @@ public class HQSelector extends Decision {
     public boolean run() throws GameActionException {
         memoryManager.writeMemeory();
 
-        // TODO: After sprint this behavior will have to change.
-        //first see if the HQ can attack, so manually inject the super.run() bits
-        if (canAttack.pre()) {
-            if (canAttack.post()) {
-                canAttack.reset();
-            }
-            canAttack.run();
-        }
-
         // all of these should have no pres, or posts so don't have to check
         if (soundTower.pre()) {
             return soundTower.run();

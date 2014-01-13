@@ -39,12 +39,14 @@ public class HQSoundTower extends Behavior {
             pasture = hq.currentLoc.add(hq.getRandomSpawnDirection());
             hq.createPastureCapturer(0, pasture);
             spawned++;
+            return true;
         }
         else if (spawned == 1) {
             hq.createSoundTower(0, getTowerMove());
             spawned++;
+            return true;
         }
-        return true;
+        return false;
     }
 
     public MapLocation getTowerMove()

@@ -33,7 +33,6 @@ public class LowHPRetreat extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
-        // TODO: add smart retreat so we don't try to run by the enemy!
         healing = true;
         int dist = robot.currentLoc.distanceSquaredTo(robot.info.hq);
         if (dist < 9 && dist > 4) {

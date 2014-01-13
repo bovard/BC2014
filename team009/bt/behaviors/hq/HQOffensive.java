@@ -35,8 +35,9 @@ public class HQOffensive extends Behavior {
         // spawn guys
         if (robot.rc.isActive() && robot.rc.senseRobotCount() < GameConstants.MAX_ROBOTS) {
             hq.createWolf(0);
+            return true;
         }
         // broadcast possible pasture locations?
-        return true;
+        return false;
     }
 }

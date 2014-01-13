@@ -18,15 +18,17 @@ public abstract class Selector extends Decision {
                 if (current.post()) {
                     current.reset();
                 }
-
                 boolean run = current.run();
-                if (current.hasPostCalculation()) {
-                    current.postCalculations();
+                // if the behavior ran correctly:
+                if (run) {
+                    if (current.hasPostCalculation()) {
+                        current.postCalculations();
+                    }
+                    return true;
                 }
-                return run;
             }
         }
 
-        return true;
+        return false;
     }
 }
