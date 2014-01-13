@@ -16,6 +16,7 @@ public class SoldierSpawner {
     public static final int DUMB_PASTR_HUNTER = 4;
     public static final int SOLDIER_COUNT = 5;
     public static final int SOLDIER_TYPE_WOLF = 6;
+    public static final int SOLDIER_TYPE_BACKDOOR_NOISE_PLANTER = 7;
 
 
     public static final int MAX_GROUP_COUNT = 5;
@@ -43,6 +44,8 @@ public class SoldierSpawner {
                 case SOLDIER_TYPE_WOLF:
                     robot = new Wolf(rc, info);
                     break;
+                case SOLDIER_TYPE_BACKDOOR_NOISE_PLANTER:
+                    robot = new BackdoorNoisePlanter(rc, info);
                 case SOLDIER_TYPE_DUMB:
                 default:
                     robot = new DumbSoldier(rc, info);
