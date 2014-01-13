@@ -4,6 +4,7 @@ import battlecode.common.GameActionException;
 import battlecode.common.GameConstants;
 import team009.bt.behaviors.Behavior;
 import team009.robot.TeamRobot;
+import team009.robot.hq.HQ;
 
 public class DumbPastrHunter extends Behavior {
     public DumbPastrHunter(TeamRobot robot) {
