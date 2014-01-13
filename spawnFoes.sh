@@ -1,9 +1,5 @@
 #!/bin/bash
 # you must be in teams for this to work!
-local myCurrentBranch="master"
-if [ $# > 0 ]; then
-    myCurrentBranch=$1
-fi
 
 spawnFoe() {
     local branch=$1
@@ -17,8 +13,27 @@ spawnFoe() {
     eval "find ./$folderName -name '*.bak'* -delete"
 }
 
+# deletes bin and current spawned foes.
+if [ $# > 0 ]; then
+
+    while [ $# -gt 0 ]; do
+        declare action=$1
+        shift
+        if [ "$action" == "delete" ]; then
+            find . -type d -name "_team*" -exec rm -rdf {} \;
+            rm -rdf ../bin
+        else
+            echo "Spawning $action"
+            spawnFoe $action
+        fi
+    done
+    rm 0
+    git checkout master
+    exit
+fi
+
+
 # Tags
-spawnFoe 0.2.3
 spawnFoe 0.2.4
 spawnFoe 0.2.5
 spawnFoe 0.3.0
@@ -27,6 +42,7 @@ spawnFoe 0.3.0
 spawnFoe PastrHunter
 
 # Michael
+spawnFoe superSoundTower
 
 # Brent
 
@@ -37,4 +53,5 @@ spawnFoe spiralTower
 spawnFoe multiTowerNoSneak
 
 
-git checkout $myCurrentBranch
+git checkout master
+rm 0
