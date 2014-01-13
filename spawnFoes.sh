@@ -16,7 +16,7 @@ spawnFoe() {
 # deletes bin and current spawned foes.
 if [ $# > 0 ]; then
 
-    while [ $# > 0 ]; do
+    while [ $# -gt 0 ]; do
         declare action=$1
         shift
         if [ "$action" == "delete" ]; then
