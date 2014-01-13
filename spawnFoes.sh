@@ -25,6 +25,7 @@ if [ $# > 0 ]; then
         shift
     done
     rm 0
+    git checkout master
     exit
 fi
 
