@@ -3,8 +3,9 @@
 
 # deletes bin and current spawned foes.
 if [ $# > 0 -a "$1" == "delete" ]; then
-    find . -name _team* -delete
+    find . -type d -name "_team*" -delete
     rm -rdf ../bin
+    exit
 fi
 
 spawnFoe() {
