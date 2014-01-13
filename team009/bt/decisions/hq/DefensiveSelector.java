@@ -15,6 +15,6 @@ public class DefensiveSelector extends Selector {
 
     @Override
     public boolean pre() throws GameActionException {
-        return false;
+        return true;
     }
 }

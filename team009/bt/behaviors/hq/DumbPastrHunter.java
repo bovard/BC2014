@@ -13,7 +13,7 @@ public class DumbPastrHunter extends Behavior {
 
     @Override
     public boolean pre() throws GameActionException {
-        return false;
+        return true;
     }
 
     @Override
