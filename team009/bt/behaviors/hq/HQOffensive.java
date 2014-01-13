@@ -3,7 +3,7 @@ package team009.bt.behaviors.hq;
 import battlecode.common.GameActionException;
 import battlecode.common.GameConstants;
 import team009.bt.behaviors.Behavior;
-import team009.robot.HQ;
+import team009.robot.hq.HQ;
 
 public class HQOffensive extends Behavior {
     private HQ hq;
@@ -35,8 +35,9 @@ public class HQOffensive extends Behavior {
         // spawn guys
         if (robot.rc.isActive() && robot.rc.senseRobotCount() < GameConstants.MAX_ROBOTS) {
             hq.createWolf(0);
+            return true;
         }
         // broadcast possible pasture locations?
-        return true;
+        return false;
     }
 }
