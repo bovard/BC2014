@@ -89,16 +89,19 @@ public class Combat {
 
                 // We need to back this truck up if this is the case
                 if (diameter > sensorRadius) {
+                    rc.setIndicatorString(2, "_moveOrAttack " + currentLoc + " : " + friendCentroid);
                     _moveOrAttack(rc, nmeLocs, currentLoc, friendCentroid, nearestAttacker);
                 } else {
 
                     // Move toward centroid
                     if (currentLoc.distanceSquaredTo(nmeCentroid) > diameter) {
+                        rc.setIndicatorString(2, "_moveOrAttack " + currentLoc + " : " + nmeCentroid);
                         _moveOrAttack(rc, nmeLocs, currentLoc, nmeCentroid, nearestAttacker);
                     }
 
                     // If nearestAttack
                     else if (nearestAttacker != null) {
+                        rc.setIndicatorString(2, "attackSquare: " + nearestAttacker);
                         rc.attackSquare(nearestAttacker);
                     }
 
@@ -109,8 +112,10 @@ public class Combat {
                             MapLocation friendsNme = _getLowestHPAttackableEnemy(friendLocs[i], nmeLocs);
                             if (friendsNme != null) {
                                 if (_isAttackablePosition(friendsNme, nmeLocs)) {
+                                    rc.setIndicatorString(2, "Friend(attackSquare): " + nearestAttacker);
                                     rc.attackSquare(friendsNme);
                                 } else {
+                                    rc.setIndicatorString(2, "Friend(_moveOrAttack): " + currentLoc + " : " + friendsNme);
                                     _moveOrAttack(rc, nmeLocs, currentLoc, friendsNme, null);
                                 }
                                 action = true;
@@ -120,6 +125,7 @@ public class Combat {
 
                         if (!action) {
                             // TODO: What do we do?
+                            rc.setIndicatorString(2, "OHH NO!?");
                         }
                     }
                 }
