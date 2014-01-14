@@ -60,18 +60,30 @@ public class SoundTowerBehavior extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
-        MapLocation loc;
-        switch(towerStrat)
-        {
-            case TOWER_STRAT_PULL_CARDNIAL:
-                loc = pullInCardinalDirections();
-                break;
-            case TOWER_STRAT_PULL_SPIRAL_SWEEP:
-            default:
-                loc = spiralSweep();
-                break;
+        MapLocation loc = null;
+
+        boolean done = false;
+        int count = 0;
+
+        while(!done && count < 15) {
+            switch(towerStrat)
+            {
+                case TOWER_STRAT_PULL_CARDNIAL:
+                    loc = pullInCardinalDirections();
+                    break;
+                case TOWER_STRAT_PULL_SPIRAL_SWEEP:
+                default:
+                    loc = spiralSweep();
+                    break;
+            }
+
+            done = rc.canAttackSquare(loc) && MapUtils.isOnMap(loc, robot.info.width, robot.info.height);
+            count++;
         }
+
+
         robot.rc.attackSquare(loc);
+
         return true;
     }
 
