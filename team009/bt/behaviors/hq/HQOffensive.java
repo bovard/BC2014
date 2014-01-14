@@ -49,7 +49,7 @@ public class HQOffensive extends Behavior {
 
         // spawn guys
         if (robot.rc.isActive() && robotCount < GameConstants.MAX_ROBOTS) {
-            hq.createWolf(0);
+            hq.createDefender(0);
             return true;
         }
         return true;
