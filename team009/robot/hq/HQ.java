@@ -58,8 +58,9 @@ public abstract class HQ extends TeamRobot {
         }
     }
 
+    // TODO: BUG IN CODE it seems to be missing 1
     public int getCount(int type, int group) {
-        return soldierCounts[type * SoldierSpawner.MAX_GROUP_COUNT + group].count;
+        return soldierCounts[type * SoldierSpawner.MAX_GROUP_COUNT + group].count + 1;
     }
 
     // TODO: get rid of this once they patch
@@ -77,7 +78,7 @@ public abstract class HQ extends TeamRobot {
 
 
                 // have the tree choose what to do
-                if (rc.isActive()) {
+                if (rc.isActive() || runIfNotActive) {
                     treeRoot.run();
                 }
 
@@ -112,7 +113,8 @@ public abstract class HQ extends TeamRobot {
 
     public void comDefend(MapLocation loc, int group) throws GameActionException {
         GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group);
-        System.out.println("ComeDefend: " + loc + " Group: " + group);
+
+        message += " CanWrite " + Communicator.WriteRound(round);
         if (Communicator.WriteRound(round) && GroupCommandDecoder.shouldCommunicate(dec, BaseSoldier.DEFEND)) {
             System.out.println("Defending!: ");
             Communicator.WriteToGroup(rc, group, BaseSoldier.DEFEND, loc);

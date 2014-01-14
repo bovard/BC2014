@@ -17,6 +17,7 @@ public class DefensiveSelector extends Selector {
 
         // Must be ran always
         action = new HQAction(robot);
+        robot.runIfNotActive = true;
     }
 
     @Override
@@ -26,7 +27,10 @@ public class DefensiveSelector extends Selector {
 
     @Override
     public boolean run() throws GameActionException {
-        boolean run = super.run();
+        boolean run = true;
+        if (rc.isActive()) {
+            run = super.run();
+        }
 
         return action.run() || run;
     }

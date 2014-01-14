@@ -17,6 +17,7 @@ public abstract class TeamRobot {
 	public RobotInformation info;
     public Random rand = new Random();
     public String message;
+    public boolean runIfNotActive = false;
 
 	public TeamRobot(RobotController rc, RobotInformation info) {
 		this.rc = rc;
@@ -70,7 +71,7 @@ public abstract class TeamRobot {
                 this.environmentCheck();
 
                 // have the tree choose what to do
-                if (rc.isActive()) {
+                if (rc.isActive() || runIfNotActive) {
                     treeRoot.run();
                 }
 

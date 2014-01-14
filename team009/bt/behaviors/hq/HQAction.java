@@ -40,9 +40,7 @@ public class HQAction extends Behavior {
             MapLocation[] locs = rc.sensePastrLocations(robot.info.enemyTeam);
             int soldierCount = hq.getCount(SoldierSpawner.SOLDIER_TYPE_DEFENDER, BaseSoldier.DEFENDER_GROUP);
 
-            robot.message += " (Count(" + soldierCount + ")";
-            if (locs.length > 0 && soldierCount > 4) {
-                robot.message += " Pasture(" + locs[0] + ")";
+            if (locs.length > 0 && soldierCount > 3) {
                 hq.comDefend(locs[0], BaseSoldier.DEFENDER_GROUP);
             }
         }
