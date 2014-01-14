@@ -1,17 +1,20 @@
 package team009.bt.decisions;
 
 import battlecode.common.GameActionException;
+import team009.bt.behaviors.CongragateInHQCorner;
 import team009.bt.behaviors.EngageEnemy;
+import team009.bt.behaviors.EscapeHQ;
+import team009.bt.behaviors.JackalPastrHunt;
 import team009.robot.soldier.Jackal;
 
 public class JackalSelector extends Selector {
 
     public JackalSelector(Jackal robot) {
         super(robot);
-        addChild(new LowHPSelector(robot));
+        addChild(new EscapeHQ(robot));
         addChild(new EngageEnemy(robot));
-        //addChild(new DefendHQ(robot));
-        //addChild(new GroupHuntPasture());
+        addChild(new JackalPastrHunt(robot));
+        addChild(new CongragateInHQCorner(robot));
 
     }
 

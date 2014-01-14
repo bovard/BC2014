@@ -52,7 +52,7 @@ public class HQSprint extends Behavior {
 
         // spawn guys
         if (robot.rc.isActive() && robotCount < GameConstants.MAX_ROBOTS) {
-            ((HQ)robot).createWolf(0);
+            ((HQ)robot).createJackal(0);
             return true;
         }
         return false;
