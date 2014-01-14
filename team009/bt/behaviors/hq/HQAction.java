@@ -1,14 +1,18 @@
 package team009.bt.behaviors.hq;
 
+import battlecode.common.Clock;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import team009.bt.behaviors.Behavior;
 import team009.communication.Communicator;
 import team009.robot.hq.HQ;
 import team009.robot.soldier.BaseSoldier;
+import team009.robot.soldier.SoldierSpawner;
 
 public class HQAction extends Behavior {
     HQ hq;
+    MapLocation center = null;
+    boolean debugCenter = false;
 
     public HQAction(HQ hq) {
         super(hq);
@@ -22,9 +26,25 @@ public class HQAction extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
-        MapLocation[] locs = rc.sensePastrLocations(robot.info.enemyTeam);
-        if (locs.length > 0) {
-            hq.comDefend(locs[0], BaseSoldier.DEFENDER_GROUP);
+        if (center == null) {
+            center = new MapLocation(robot.info.width / 2, robot.info.height / 2);
+        }
+
+        robot.message += robot.round + " Action ";
+        if (debugCenter) {
+            robot.message += " (Debug) ";
+            if (Clock.getRoundNum() > 400) {
+                hq.comDefend(center, BaseSoldier.DEFENDER_GROUP);
+            }
+        } else {
+            MapLocation[] locs = rc.sensePastrLocations(robot.info.enemyTeam);
+            int soldierCount = hq.getCount(SoldierSpawner.SOLDIER_TYPE_DEFENDER, BaseSoldier.DEFENDER_GROUP);
+
+            robot.message += " (Count(" + soldierCount + ")";
+            if (locs.length > 0 && soldierCount > 4) {
+                robot.message += " Pasture(" + locs[0] + ")";
+                hq.comDefend(locs[0], BaseSoldier.DEFENDER_GROUP);
+            }
         }
 
         return true;

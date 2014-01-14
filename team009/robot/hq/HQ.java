@@ -18,7 +18,7 @@ public abstract class HQ extends TeamRobot {
     private Node shoot = new HQShoot(this);
 
     private int maxSoldiers;
-    SoldierCountDecoder[] soldierCounts;
+    public SoldierCountDecoder[] soldierCounts;
     public boolean seesEnemy = false;
     public Robot[] enemies = new Robot[0];
 
@@ -47,22 +47,19 @@ public abstract class HQ extends TeamRobot {
         if (Communicator.ReadRound(round)) {
             int groupCount = SoldierSpawner.MAX_GROUP_COUNT;
 
-            // TODO: $DEBUG$
-            String soldierString = "";
             for (int i = 0; i < maxSoldiers; i++) {
 
                 int group = i % groupCount;
                 int type = i / groupCount;
                 soldierCounts[i] = Communicator.ReadTypeAndGroup(rc, type, group);
                 Communicator.ClearCountChannel(rc, type, group);
-
-                if (group == 0) {
-                    soldierString += "Type: " + soldierCounts[i].soldierType + " : Count: " + soldierCounts[i].count + " ";
-                }
             }
 
-            rc.setIndicatorString(1, soldierString);
         }
+    }
+
+    public int getCount(int type, int group) {
+        return soldierCounts[type * SoldierSpawner.MAX_GROUP_COUNT + group].count;
     }
 
     // TODO: get rid of this once they patch
@@ -115,8 +112,10 @@ public abstract class HQ extends TeamRobot {
 
     public void comDefend(MapLocation loc, int group) throws GameActionException {
         GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group);
+        System.out.println("ComeDefend: " + loc + " Group: " + group);
         if (Communicator.WriteRound(round) && GroupCommandDecoder.shouldCommunicate(dec, BaseSoldier.DEFEND)) {
-            Communicator.WriteToGroup(rc, group, BaseSoldier.DEFEND);
+            System.out.println("Defending!: ");
+            Communicator.WriteToGroup(rc, group, BaseSoldier.DEFEND, loc);
         }
     }
 

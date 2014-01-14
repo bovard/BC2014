@@ -16,6 +16,7 @@ public abstract class TeamRobot {
 	public RobotController rc;
 	public RobotInformation info;
     public Random rand = new Random();
+    public String message;
 
 	public TeamRobot(RobotController rc, RobotInformation info) {
 		this.rc = rc;
@@ -38,12 +39,18 @@ public abstract class TeamRobot {
         currentLoc = temp;
         round = Clock.getRoundNum();
         health = rc.getHealth();
+        message = "";
     }
 
 	/**
 	 * Called at the end of a robots turn, can load things...
 	 */
-	public void postProcessing() throws GameActionException {}
+	public void postProcessing() throws GameActionException {
+        if (message.length() > 0) {
+            rc.setIndicatorString(0, message);
+            message = "";
+        }
+    }
 
     /**
      * Called during the constructor to load up the right bt

@@ -27,6 +27,7 @@ public class DefensiveSelector extends Selector {
     @Override
     public boolean run() throws GameActionException {
         boolean run = super.run();
+
         return action.run() || run;
     }
 }
