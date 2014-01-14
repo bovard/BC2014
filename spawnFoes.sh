@@ -37,6 +37,8 @@ fi
 spawnFoe 0.2.4
 spawnFoe 0.2.5
 spawnFoe 0.3.0
+spawnFoe 0.4.0
+spawnFoe 0.4.1
 
 # Bovard
 spawnFoe PastrHunter
