@@ -38,7 +38,10 @@ public class Combat {
         RobotInfo[] nmeInfos = new RobotInfo[enemies.length];
         MapLocation[] nmeLocs = new MapLocation[enemies.length];
         int[] nmeHps = new int[enemies.length];
+
         _fillData(rc, enemies, nmeInfos, nmeLocs, nmeHps);
+        _sort(enemies, nmeInfos, nmeLocs, nmeHps);
+        MapLocation nmeCentroid = CombatUtils.findCenterOfMass(nmeLocs);
 
         rc.setIndicatorString(0, "isMoving: " + isMoving(currentLoc) + " : " + move.destination);
         if (isMoving(currentLoc)) {
@@ -78,35 +81,47 @@ public class Combat {
             else if (we == enemies.length) {
 
                 rc.setIndicatorString(1, "We are equal!: ");
+                RobotInfo[] friendInfos = new RobotInfo[friends.length];
+                MapLocation[] friendLocs = new MapLocation[friends.length];
+                _fillData(rc, friends, friendInfos, friendLocs);
+                MapLocation friendCentroid = CombatUtils.findCenterOfMass(friendLocs);
+                int diameter = friendCentroid.distanceSquaredTo(nmeCentroid);
 
-                if (nearestAttacker == null) {
-                    boolean attack = false;
-                    MapLocation loc = null;
-
-                    // Are there any friendlies attackable.
-                    for (int i = 0; i < friends.length; i++) {
-                        RobotInfo friend = rc.senseRobotInfo(friends[i]);
-                        if (_isAttackablePosition(friend.location, nmeLocs)) {
-
-                            // lets attack!
-                            attack = true;
-                            loc = _getLowestHPAttackableEnemy(friend.location, nmeLocs);
-                            break;
-                        }
-                    }
-
-                    if (attack) {
-                        if (nearestAttacker == null) {
-                            Direction dir = _combatMove(rc, currentLoc, loc);
-                            rc.move(dir);
-                            rc.setIndicatorString(2, "Moving at attacker " + dir);
-                        } else {
-                            rc.attackSquare(nearestAttacker);
-                            rc.setIndicatorString(2, "attacking " + nearestAttacker);
-                        }
-                    }
+                // We need to back this truck up if this is the case
+                if (diameter > sensorRadius) {
+                    _moveOrAttack(rc, nmeLocs, currentLoc, friendCentroid, nearestAttacker);
                 } else {
-                    rc.attackSquare(nearestAttacker);
+
+                    // Move toward centroid
+                    if (currentLoc.distanceSquaredTo(nmeCentroid) > diameter) {
+                        _moveOrAttack(rc, nmeLocs, currentLoc, nmeCentroid, nearestAttacker);
+                    }
+
+                    // If nearestAttack
+                    else if (nearestAttacker != null) {
+                        rc.attackSquare(nearestAttacker);
+                    }
+
+                    // Else, we should check our friends?
+                    else {
+                        boolean action = false;
+                        for (int i = 0; i < friends.length; i++) {
+                            MapLocation friendsNme = _getLowestHPAttackableEnemy(friendLocs[i], nmeLocs);
+                            if (friendsNme != null) {
+                                if (_isAttackablePosition(friendsNme, nmeLocs)) {
+                                    rc.attackSquare(friendsNme);
+                                } else {
+                                    _moveOrAttack(rc, nmeLocs, currentLoc, friendsNme, null);
+                                }
+                                action = true;
+                                break;
+                            }
+                        }
+
+                        if (!action) {
+                            // TODO: What do we do?
+                        }
+                    }
                 }
             }
 
@@ -114,7 +129,7 @@ public class Combat {
             else {
                 boolean isAttackable = _isAttackablePosition(currentLoc, nmeLocs);
                 if (isAttackable) {
-                    Direction away = CombatUtils.findCenterOfMass(nmeLocs).directionTo(currentLoc);
+                    Direction away = nmeCentroid.directionTo(currentLoc);
                     Direction moveDir = _combatMove(rc, currentLoc, currentLoc.add(away));
 
                     // Cannot move, must engage.
@@ -141,6 +156,18 @@ public class Combat {
     // If the robot is moving with bug
     public boolean isMoving(MapLocation curr) {
         return move.destination != null ? move.destination.distanceSquaredTo(curr) > attackRadius: false;
+    }
+
+    private void _moveOrAttack(RobotController rc, MapLocation[] enemies, MapLocation from, MapLocation to, MapLocation nearestEnemy) throws GameActionException {
+        Direction dirTo = _combatMove(rc, from, to);
+        boolean isAttackable = _isAttackablePosition(from.add(dirTo), enemies);
+
+        // We got to just fight it out
+        if (isAttackable && nearestEnemy != null) {
+            rc.attackSquare(nearestEnemy);
+        } else if (!isAttackable) {
+            rc.move(dirTo);
+        }
     }
 
     // Validates if there are any nearest attackers.  Always go for the nearest attackers first.
@@ -205,7 +232,16 @@ public class Combat {
             locs[i] = infos[i].location;
             hps[i] = (int)infos[i].health;
         }
-        _sort(enemies, infos, locs, hps);
+    }
+
+    private void _fillData(RobotController rc, Robot[] enemies, RobotInfo[] infos, MapLocation[] locs) throws GameActionException {
+        int len = infos.length;
+
+        for (int i = 0; i < len; i++) {
+            RobotInfo info = rc.senseRobotInfo(enemies[i]);
+            infos[i] = info;
+            locs[i] = infos[i].location;
+        }
     }
 
     private void _sort(Robot[] enemies, RobotInfo[] infos, MapLocation[] enemyLocs, int[] enemyHps) {
