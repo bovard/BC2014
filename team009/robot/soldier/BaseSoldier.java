@@ -71,6 +71,6 @@ public abstract class BaseSoldier extends TeamRobot {
     }
 
     // Somtimes i wish valid identifiers could contain explanation points!
-    public static final int ATTACK = 2;
-    public static final int DEFEND = 3;
+    public static final int DEFEND = 2;
+    public static final int ATTACK = 3;
 }
