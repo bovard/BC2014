@@ -21,6 +21,7 @@ public class HQSpawner {
         // type = TeamMemoryManager.getHQStrategy();
         type = SPRINT;
         //type = BACK_DOOR_TEST;
+        type = DEFENSIVE_PASTURE;
 
         switch(type) {
             case DEFENSIVE_PASTURE:

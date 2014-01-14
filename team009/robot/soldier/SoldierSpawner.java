@@ -63,7 +63,7 @@ public class SoldierSpawner {
                 case SOLDIER_TYPE_DUMB:
                 default:
                     System.out.println("making new dumb soldier");
-                    robot = new DumbSoldier(rc, info);
+                    robot = new Defender(rc, info);
                     break;
             }
 

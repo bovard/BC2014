@@ -57,7 +57,7 @@ public class Communicator {
 
         // No Coms yet on this channel
         // TODO: $DEBUG$
-//        rc.setIndicatorString(2, "Group Read(" + (GROUP_CHANNEL_BASE + group) + "): " + decoder.toString());
+        rc.setIndicatorString(2, "Group Read(" + (GROUP_CHANNEL_BASE + group) + "): " + decoder.toString());
 
         // Shortcut it, clear the channel
         if (decoder.ttl <= 0) {
@@ -83,13 +83,6 @@ public class Communicator {
         _Broadcast(rc, GROUP_CHANNEL_BASE + group, 0);
     }
 
-    public static void ResetTimeToLiveGroupCommand(RobotController rc, int group) throws GameActionException {
-        int channel = GROUP_CHANNEL_BASE + group;
-        GroupCommandDecoder decoder = new GroupCommandDecoder(rc.readBroadcast(channel));
-        decoder.resetTTL();
-        _Broadcast(rc, channel, decoder.getData());
-    }
-
     public static boolean ReadRound(int round) {
         return (round - 1) % INFORMATION_ROUND_MOD == 0;
     }
@@ -102,7 +95,7 @@ public class Communicator {
         _Broadcast(rc, channel, decoder.getData());
 
         // TODO: $DEBUG$
-//        rc.setIndicatorString(1, "Broadcasted(" + channel + "): " + decoder.getData() + " : " + decoder.toString());
+        rc.setIndicatorString(1, "Broadcasted(" + channel + "): " + decoder.getData() + " : " + decoder.toString());
     }
 
     private static void _Broadcast(RobotController rc, int channel, int data) throws GameActionException {

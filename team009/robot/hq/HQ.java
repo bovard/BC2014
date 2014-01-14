@@ -6,8 +6,10 @@ import team009.RobotInformation;
 import team009.bt.Node;
 import team009.bt.behaviors.hq.HQShoot;
 import team009.communication.Communicator;
+import team009.communication.GroupCommandDecoder;
 import team009.communication.SoldierCountDecoder;
 import team009.robot.TeamRobot;
+import team009.robot.soldier.BaseSoldier;
 import team009.robot.soldier.SoldierSpawner;
 
 public abstract class HQ extends TeamRobot {
@@ -16,7 +18,7 @@ public abstract class HQ extends TeamRobot {
     private Node shoot = new HQShoot(this);
 
     private int maxSoldiers;
-    SoldierCountDecoder[] soldierCounts;
+    public SoldierCountDecoder[] soldierCounts;
     public boolean seesEnemy = false;
     public Robot[] enemies = new Robot[0];
 
@@ -45,22 +47,20 @@ public abstract class HQ extends TeamRobot {
         if (Communicator.ReadRound(round)) {
             int groupCount = SoldierSpawner.MAX_GROUP_COUNT;
 
-            // TODO: $DEBUG$
-            String soldierString = "";
             for (int i = 0; i < maxSoldiers; i++) {
 
                 int group = i % groupCount;
                 int type = i / groupCount;
                 soldierCounts[i] = Communicator.ReadTypeAndGroup(rc, type, group);
                 Communicator.ClearCountChannel(rc, type, group);
-
-                if (group == 0) {
-                    soldierString += "Type: " + soldierCounts[i].soldierType + " : Count: " + soldierCounts[i].count + " ";
-                }
             }
 
-            rc.setIndicatorString(1, soldierString);
         }
+    }
+
+    // TODO: BUG IN CODE it seems to be missing 1
+    public int getCount(int type, int group) {
+        return soldierCounts[type * SoldierSpawner.MAX_GROUP_COUNT + group].count + 1;
     }
 
     // TODO: get rid of this once they patch
@@ -78,7 +78,7 @@ public abstract class HQ extends TeamRobot {
 
 
                 // have the tree choose what to do
-                if (rc.isActive()) {
+                if (rc.isActive() || runIfNotActive) {
                     treeRoot.run();
                 }
 
@@ -111,7 +111,17 @@ public abstract class HQ extends TeamRobot {
         }
     }
 
-public void createDumbSoldier(int group) throws GameActionException {
+    public void comDefend(MapLocation loc, int group) throws GameActionException {
+        GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group);
+
+        message += " CanWrite " + Communicator.WriteRound(round);
+        if (Communicator.WriteRound(round) && GroupCommandDecoder.shouldCommunicate(dec, BaseSoldier.DEFEND)) {
+            System.out.println("Defending!: ");
+            Communicator.WriteToGroup(rc, group, BaseSoldier.DEFEND, loc);
+        }
+    }
+
+    public void createDumbSoldier(int group) throws GameActionException {
         _spawn(SoldierSpawner.SOLDIER_TYPE_DUMB, group);
     }
 
