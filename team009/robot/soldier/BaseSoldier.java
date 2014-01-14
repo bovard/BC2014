@@ -7,6 +7,7 @@ import team009.communication.GroupCommandDecoder;
 import team009.robot.TeamRobot;
 
 public abstract class BaseSoldier extends TeamRobot {
+    public static final int DEFENDER_GROUP = 1;
     // -----------------------------------------------------
     // Commands
     // -----------------------------------------------------
