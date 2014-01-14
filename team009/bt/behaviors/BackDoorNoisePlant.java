@@ -2,16 +2,19 @@ package team009.bt.behaviors;
 
 import battlecode.common.GameActionException;
 import battlecode.common.RobotType;
+import battlecode.common.TerrainTile;
 import team009.navigation.BugMove;
 import team009.robot.soldier.BackdoorNoisePlanter;
 
 public class BackDoorNoisePlant extends Behavior {
     private BugMove move;
+    private TerrainTile destTerrain;
 
     public BackDoorNoisePlant(BackdoorNoisePlanter robot) {
         super(robot);
         move = new BugMove(robot);
         move.setDestination(robot.getNextWayPoint());
+        destTerrain = robot.rc.senseTerrainTile(move.destination);
     }
 
     @Override
@@ -25,8 +28,11 @@ public class BackDoorNoisePlant extends Behavior {
         if (enemyHQ < robot.currentLoc.distanceSquaredTo(robot.info.hq) && enemyHQ < 300) {
             rc.construct(RobotType.NOISETOWER);
             return true;
-        } else if (robot.currentLoc.distanceSquaredTo(move.destination) < 26) {
+        } else if (robot.currentLoc.distanceSquaredTo(move.destination) < 26
+                || (robot.currentLoc.distanceSquaredTo(move.destination) < 100
+                    && !destTerrain.equals(TerrainTile.NORMAL))) {
             move.setDestination(((BackdoorNoisePlanter)robot).getNextWayPoint());
+            destTerrain = robot.rc.senseTerrainTile(move.destination);
             move.move();
             return true;
         } else {
