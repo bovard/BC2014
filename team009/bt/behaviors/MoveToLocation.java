@@ -39,6 +39,8 @@ public class MoveToLocation extends Behavior {
     @Override
     public boolean run() throws GameActionException {
         move.move();
+        //TODO determine when to sneak based on if near friendly PASTR
+        //move.sneak();
         return true;
     }
 }
