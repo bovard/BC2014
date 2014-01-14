@@ -19,6 +19,7 @@ public class BackDoorTester extends Behavior {
     @Override
     public boolean run() throws GameActionException {
         if(robot.round/500 > backDoorCount - 1) {
+            backDoorCount++;
             ((HQ)robot).createBackDoorNoisePlanter(0);
         }
         return true;
