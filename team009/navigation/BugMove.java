@@ -23,6 +23,7 @@ public class BugMove extends Move {
     }
 
     private void reset() {
+        lastLoc = robot.currentLoc;
         trackRight = !trackRight;
         if (robot.rand.nextDouble() < .1) {
             trackRight = robot.rand.nextDouble() < .5;
@@ -67,7 +68,8 @@ public class BugMove extends Move {
         if (toMove == Direction.NONE || toMove == Direction.OMNI)
             return null;
 
-        if (!robot.currentLoc.isAdjacentTo(lastLoc)) {
+        if (!robot.currentLoc.isAdjacentTo(lastLoc) && !robot.currentLoc.equals(lastLoc)) {
+            //System.out.println("RESETTING BECAUSE NOT AT SAME LOC");
             reset();
         } else {
             lastLoc = robot.currentLoc;
@@ -78,10 +80,12 @@ public class BugMove extends Move {
         if (!bug) {
             result = simpleMove(toMove);
             if (result == null) {
+                //System.out.println("ENTERING BUG STATE");
                 bug = true;
                 bugStartDirection = toMove;
                 bugStart = robot.currentLoc;
                 startRound = robot.round;
+                lastLoc = robot.currentLoc;
                 int count = 0;
                 while(!robot.rc.canMove(toMove) && count < 9) {
                     count++;
@@ -179,6 +183,7 @@ public class BugMove extends Move {
                 if (!MapUtils.isOnMap(robot.currentLoc.add(right), robot.info.width, robot.info.height)
                         || !MapUtils.isOnMap(robot.currentLoc.add(left), robot.info.width, robot.info.height)) {
                     // if we're tracking along the side of the wall something is wrong!
+                    //System.out.println("REVERSING DUE TO EDGE OF MAP");
                     trackRight = !trackRight;
                     return toMove.opposite();
                 }
@@ -227,13 +232,16 @@ public class BugMove extends Move {
         Direction right = currDir.rotateRight();
         if (currDir != Direction.OMNI && currDir != Direction.NONE
                 && (currDir == startDir || currDir == left || currDir == right)) {
-            if (robot.rc.canMove(startDir)) {
+            if (robot. rc.canMove(startDir)) {
+                //System.out.println("Time to break");
                 return startDir;
             }
             if (robot.rc.canMove(left)) {
+                //System.out.println("Time to break");
                 return left;
             }
             if (robot.rc.canMove(right)) {
+                //System.out.println("Time to break");
                 return right;
             }
         }
