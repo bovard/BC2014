@@ -10,7 +10,6 @@ public class BackDoorSelector extends Selector {
         super(robot);
         children.add(new EngageEnemy(robot));
         children.add(new BackDoorNoisePlant(robot));
-        System.out.println("BD BIATCH");
     }
 
     @Override

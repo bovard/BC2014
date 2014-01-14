@@ -21,9 +21,8 @@ public class BackDoorNoisePlant extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
-        System.out.println("Running biatch!");
         int enemyHQ = robot.currentLoc.distanceSquaredTo(robot.info.enemyHq);
-        if (enemyHQ > robot.currentLoc.distanceSquaredTo(robot.info.hq) && enemyHQ < 360) {
+        if (enemyHQ < robot.currentLoc.distanceSquaredTo(robot.info.hq) && enemyHQ < 360) {
             System.out.println("Building");
             rc.construct(RobotType.NOISETOWER);
             return true;
