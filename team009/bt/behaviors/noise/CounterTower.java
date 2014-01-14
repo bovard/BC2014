@@ -22,7 +22,7 @@ public class CounterTower extends Behavior {
 
     @Override
     public boolean pre() throws GameActionException {
-        return distToEnemyHQ > distToHQ;
+        return distToEnemyHQ < distToHQ;
     }
 
     @Override

@@ -140,6 +140,10 @@ public void createDumbSoldier(int group) throws GameActionException {
         _spawn(SoldierSpawner.SOLDIER_TYPE_BACKDOOR_NOISE_PLANTER, group);
     }
 
+    public void createJackal(int group) throws GameActionException {
+        _spawn(SoldierSpawner.SOLDIER_TYPE_JACKAL, group);
+    }
+
     private void _spawn(int soldierType, int group) throws GameActionException {
         Direction dir = _getSpawnDirection();
         rc.spawn(dir);

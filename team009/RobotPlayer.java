@@ -4,7 +4,6 @@ import battlecode.common.RobotController;
 import battlecode.common.RobotType;
 import team009.robot.NoiseTower;
 import team009.robot.Pastr;
-import team009.robot.SoundTower;
 import team009.robot.hq.HQSpawner;
 import team009.robot.soldier.SoldierSpawner;
 
@@ -17,15 +16,9 @@ public class RobotPlayer {
                 if (rc.getType() == RobotType.HQ) {
                     HQSpawner.getHQ(rc, info).run();
                 }
-
                 if (rc.getType() == RobotType.SOLDIER) {
                     SoldierSpawner.getSoldier(rc, info).run();
                 }
-
-                if (rc.getType() == RobotType.NOISETOWER) {
-                    new SoundTower(rc, info).run();
-                }
-
                 if (rc.getType() == RobotType.PASTR) {
                     new Pastr(rc, info).run();
                 }
