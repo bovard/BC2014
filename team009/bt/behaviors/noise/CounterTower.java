@@ -31,11 +31,13 @@ public class CounterTower extends Behavior {
         SmartMapLocationArray enemyPastrsInRange = new SmartMapLocationArray();
 
         // find enemy pastrs in range
+        System.out.println("finding pastr");
         for (MapLocation e : enemyPastr) {
             if (robot.currentLoc.distanceSquaredTo(e) < RobotType.NOISETOWER.attackRadiusMaxSquared) {
                 enemyPastrsInRange.add(e);
             }
         }
+        System.out.println("found " + enemyPastrsInRange.length);
 
         if (enemyPastrsInRange.length > 0) {
             lastPastr = lastPastr % enemyPastrsInRange.length;

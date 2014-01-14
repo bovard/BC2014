@@ -4,7 +4,7 @@ import battlecode.common.Direction;
 import battlecode.common.RobotController;
 import team009.RobotInformation;
 import team009.bt.Node;
-import team009.bt.behaviors.SoundTowerBehavior;
+import team009.bt.decisions.noise.NoiseSelector;
 
 public class SoundTower extends TeamRobot {
     private Direction[] directions;
@@ -32,7 +32,7 @@ public class SoundTower extends TeamRobot {
 
     @Override
     protected Node getTreeRoot() {
-        return new SoundTowerBehavior(this);
+        return new NoiseSelector(this);
     }
 }
 
