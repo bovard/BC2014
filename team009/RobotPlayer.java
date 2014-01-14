@@ -17,15 +17,9 @@ public class RobotPlayer {
                 if (rc.getType() == RobotType.HQ) {
                     HQSpawner.getHQ(rc, info).run();
                 }
-
                 if (rc.getType() == RobotType.SOLDIER) {
                     SoldierSpawner.getSoldier(rc, info).run();
                 }
-
-                if (rc.getType() == RobotType.NOISETOWER) {
-                    new SoundTower(rc, info).run();
-                }
-
                 if (rc.getType() == RobotType.PASTR) {
                     new Pastr(rc, info).run();
                 }
