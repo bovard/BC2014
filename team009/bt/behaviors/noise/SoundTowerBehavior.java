@@ -1,11 +1,12 @@
-package team009.bt.behaviors;
+package team009.bt.behaviors.noise;
 
 import battlecode.common.*;
 import team009.MapUtils;
-import team009.robot.SoundTower;
+import team009.bt.behaviors.Behavior;
+import team009.robot.NoiseTower;
 
 public class SoundTowerBehavior extends Behavior {
-    SoundTower tower;
+    NoiseTower tower;
     private int radius;
     private int angle;
     private int x;
@@ -21,7 +22,7 @@ public class SoundTowerBehavior extends Behavior {
     //MapLocation[] pastrLocs;
     MapLocation herdFocus;
 
-    public SoundTowerBehavior(SoundTower robot) {
+    public SoundTowerBehavior(NoiseTower robot) {
         super(robot);
         tower = robot;
         radius = MAX_DISTANCE;
