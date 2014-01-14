@@ -35,8 +35,9 @@ fi
 
 # Tags
 spawnFoe 0.2.4
-spawnFoe 0.2.5
 spawnFoe 0.3.0
+spawnFoe 0.4.0
+spawnFoe 0.4.1
 
 # Bovard
 spawnFoe PastrHunter
@@ -53,6 +54,7 @@ spawnFoe spiralTower
 spawnFoe multiTowerNoSneak
 spawnFoe SpawnTowerFirst
 spawnFoe SpawnTowerFirstWithMultiTower
+spawnFoe CornerPastr
 
 git checkout master
 rm 0
