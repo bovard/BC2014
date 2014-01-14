@@ -1,8 +1,6 @@
 package team009.bt.behaviors;
 
-import battlecode.common.Direction;
 import battlecode.common.GameActionException;
-import battlecode.common.RobotInfo;
 import team009.combat.DumbCombat;
 import team009.robot.soldier.BaseSoldier;
 

@@ -19,6 +19,7 @@ public class HQSpawner {
         // TODO: use this
         // type = TeamMemoryManager.getHQStrategy();
         type = PASTURE_HUNTING;
+        //type = BACK_DOOR_TEST;
 
         switch(type) {
             case DEFENSIVE_PASTURE:

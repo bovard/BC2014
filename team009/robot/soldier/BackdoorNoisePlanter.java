@@ -1,9 +1,11 @@
 package team009.robot.soldier;
 
+import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
 import team009.RobotInformation;
 import team009.bt.Node;
+import team009.bt.decisions.BackDoorSelector;
 import team009.utils.MapQuadrantUtils;
 import team009.utils.SmartMapLocationArray;
 
@@ -19,6 +21,7 @@ public class BackdoorNoisePlanter extends BaseSoldier {
         MapQuadrantUtils.width = info.width;
         MapQuadrantUtils.height = info.height;
         _createWayPoints();
+        treeRoot = getTreeRoot();
     }
 
     public MapLocation getNextWayPoint() {
@@ -119,6 +122,12 @@ public class BackdoorNoisePlanter extends BaseSoldier {
 
     @Override
     protected Node getTreeRoot() {
-        return null;
+        return new BackDoorSelector(this);
+    }
+
+    @Override
+    public void run() {
+        System.out.println("Runnnnnning");
+        super.run();
     }
 }
