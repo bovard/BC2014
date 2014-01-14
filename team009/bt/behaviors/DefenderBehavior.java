@@ -1,6 +1,8 @@
 package team009.bt.behaviors;
 
+import battlecode.common.Direction;
 import battlecode.common.GameActionException;
+import battlecode.common.MapLocation;
 import team009.navigation.BugMove;
 import team009.robot.soldier.BaseSoldier;
 
@@ -10,18 +12,24 @@ public class DefenderBehavior extends Behavior {
     public DefenderBehavior(BaseSoldier soldier) {
         super(soldier);
         move = new BugMove(soldier);
-        move.setDestination(soldier.info.hq.add(soldier.info.hq.directionTo(soldier.info.enemyHq)));
+
+        MapLocation hq = soldier.info.hq;
+        Direction toDir = hq.directionTo(soldier.info.enemyHq);
+        MapLocation defendLoc = hq.add(toDir).add(toDir).add(toDir).add(toDir);
+
+        move.setDestination(defendLoc);
     }
 
     @Override
     public boolean pre() throws GameActionException {
-        return !move.atDestination();
+        return true;
     }
 
     @Override
     public boolean run() throws GameActionException {
-        move.move();
-
+        if (!move.atDestination()) {
+            move.move();
+        }
         return false;
     }
 }

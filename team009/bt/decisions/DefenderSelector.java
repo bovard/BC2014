@@ -11,6 +11,9 @@ public class DefenderSelector extends Selector {
         // Adds group engage signals
         addChild(new GroupEngageEnemy(robot));
 
+        // Adds group engage signals
+        addChild(new GroupDefendSelector(robot));
+
         // Adds in Group hq commands
         addChild(new DefenderBehavior(robot));
     }

@@ -1,6 +1,7 @@
 package team009.communication;
 
 import battlecode.common.MapLocation;
+import team009.robot.soldier.BaseSoldier;
 
 public class GroupCommandDecoder extends CommunicationDecoder {
     public MapLocation location;
@@ -51,6 +52,27 @@ public class GroupCommandDecoder extends CommunicationDecoder {
     public int getData() {
         return (location != null ? MapDecoder.getDataFromLocation(location) : 0) +
                 GROUP_MULT * group + COMMAND_MULT * command + TIME_TO_LIVE * ttl;
+    }
+
+    /**
+     * Will see if the current decoder can be overriden.
+     * @param current
+     * @param command
+     * @return
+     */
+    public static boolean shouldCommunicate(GroupCommandDecoder current, int command) {
+
+        // If there is no data, overwrite
+        if (current == null || !current.hasData()) {
+            return true;
+        }
+
+        // If there is a defend command, overwrite
+        if (current.command == BaseSoldier.DEFEND) {
+            return true;
+        }
+
+        return false;
     }
 
     @Override

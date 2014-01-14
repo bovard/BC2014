@@ -30,6 +30,6 @@ public abstract class Move {
     }
 
     public boolean atDestination() {
-        return robot.currentLoc.equals(destination);
+        return destination == null || robot.currentLoc.equals(destination);
     }
 }

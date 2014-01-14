@@ -6,8 +6,10 @@ import team009.RobotInformation;
 import team009.bt.Node;
 import team009.bt.behaviors.hq.HQShoot;
 import team009.communication.Communicator;
+import team009.communication.GroupCommandDecoder;
 import team009.communication.SoldierCountDecoder;
 import team009.robot.TeamRobot;
+import team009.robot.soldier.BaseSoldier;
 import team009.robot.soldier.SoldierSpawner;
 
 public abstract class HQ extends TeamRobot {
@@ -111,7 +113,14 @@ public abstract class HQ extends TeamRobot {
         }
     }
 
-public void createDumbSoldier(int group) throws GameActionException {
+    public void comDefend(MapLocation loc, int group) throws GameActionException {
+        GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group);
+        if (Communicator.WriteRound(round) && GroupCommandDecoder.shouldCommunicate(dec, BaseSoldier.DEFEND)) {
+            Communicator.WriteToGroup(rc, group, BaseSoldier.DEFEND);
+        }
+    }
+
+    public void createDumbSoldier(int group) throws GameActionException {
         _spawn(SoldierSpawner.SOLDIER_TYPE_DUMB, group);
     }
 
