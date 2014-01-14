@@ -23,6 +23,13 @@ public class GroupCommandDecoder extends CommunicationDecoder {
         ttl = TTL_MAX;
     }
 
+    public GroupCommandDecoder(int group, int command, MapLocation location, int ttl) {
+        this.command = command;
+        this.group = group;
+        this.location = location;
+        this.ttl = ttl;
+    }
+
     public GroupCommandDecoder(int data) {
         ttl = data / TIME_TO_LIVE;
         command = (data % TIME_TO_LIVE) / COMMAND_MULT;
