@@ -11,6 +11,7 @@ public class HQSpawner {
     public static final int BALANCED = 2;
     public static final int DUMB_PASTR_HUNT = 3;
     public static final int BACK_DOOR_TEST = 4;
+    public static final int SPRINT = 5;
 
     public static HQ getHQ(RobotController rc, RobotInformation info) {
         HQ robot = null;
@@ -18,7 +19,7 @@ public class HQSpawner {
         int type;
         // TODO: use this
         // type = TeamMemoryManager.getHQStrategy();
-        type = BACK_DOOR_TEST;
+        type = SPRINT;
         //type = BACK_DOOR_TEST;
 
         switch(type) {
@@ -36,6 +37,9 @@ public class HQSpawner {
                 break;
             case BACK_DOOR_TEST:
                 robot = new BackDoorTest(rc, info);
+                break;
+            case SPRINT:
+                robot = new Sprint(rc, info);
                 break;
             default:
                 robot = new Offensive(rc, info);

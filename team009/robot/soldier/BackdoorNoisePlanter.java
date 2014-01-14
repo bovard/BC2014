@@ -125,9 +125,4 @@ public class BackdoorNoisePlanter extends BaseSoldier {
         return new BackDoorSelector(this);
     }
 
-    @Override
-    public void run() {
-        System.out.println("Runnnnnning");
-        super.run();
-    }
 }
