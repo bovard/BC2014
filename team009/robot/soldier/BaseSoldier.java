@@ -54,7 +54,7 @@ public abstract class BaseSoldier extends TeamRobot {
                     str += " At " + firstNonHQEnemy.location;
                 }
             }
-            rc.setIndicatorString(0, str);
+//            rc.setIndicatorString(0, str);
         }
 
         // Updates the decoder with any information.

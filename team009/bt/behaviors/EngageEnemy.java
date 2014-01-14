@@ -3,19 +3,22 @@ package team009.bt.behaviors;
 import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.RobotInfo;
+import team009.combat.Combat;
 import team009.combat.DumbCombat;
 import team009.robot.soldier.BaseSoldier;
 
 public class EngageEnemy extends Behavior {
     BaseSoldier gs;
+    Combat combat;
     public EngageEnemy(BaseSoldier robot) {
         super(robot);
         gs = robot;
+        combat = new Combat(robot);
     }
 
     @Override
     public boolean pre() throws GameActionException {
-        return gs.seesEnemy;
+        return gs.seesEnemy || combat.isMoving(robot.currentLoc);
     }
 
     @Override
@@ -31,7 +34,7 @@ public class EngageEnemy extends Behavior {
     @Override
     public boolean run() throws GameActionException {
         // TODO: Better Micro
-        DumbCombat.Attack(rc, gs.enemies, robot.currentLoc);
+        combat.attack(rc, gs.enemies, gs.currentLoc);
 
         return true;
     }

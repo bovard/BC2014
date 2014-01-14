@@ -19,7 +19,7 @@ public class WolfSelector extends Selector {
     public WolfSelector(Wolf robot) {
         super(robot);
         // heal guys
-        addChild(new LowHPRetreat((BaseSoldier)robot));
+//        addChild(new LowHPRetreat((BaseSoldier)robot));
         // engage enemy
         //addChild(new SuicideBomber(robot));
         addChild(new EngageEnemy(robot));
