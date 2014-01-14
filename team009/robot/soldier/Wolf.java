@@ -29,6 +29,7 @@ public class Wolf extends BaseSoldier {
         seesEnemy = enemies.length > 0;
 
         MapLocation[] locs = rc.sensePastrLocations(info.enemyTeam);
+
         //store if we see an enemy pastr
         pastrsExists = locs.length > 0;
         pastrLocs = locs;

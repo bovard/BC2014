@@ -10,6 +10,7 @@ public class HQSpawner {
     public static final int PASTURE_HUNTING = 1;
     public static final int BALANCED = 2;
     public static final int DUMB_PASTR_HUNT = 3;
+    public static final int BACK_DOOR_TEST = 4;
 
     public static HQ getHQ(RobotController rc, RobotInformation info) {
         HQ robot = null;
@@ -31,6 +32,9 @@ public class HQSpawner {
                 break;
             case DUMB_PASTR_HUNT:
                 robot = new DumbPastrHunter(rc, info);
+                break;
+            case BACK_DOOR_TEST:
+                robot = new BackDoorTest(rc, info);
                 break;
             default:
                 robot = new Offensive(rc, info);

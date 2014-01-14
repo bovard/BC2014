@@ -35,12 +35,12 @@ public class HQSoundTower extends Behavior {
     public boolean run() throws GameActionException {
         if (spawned == 0) {
             pasture = hq.currentLoc.add(hq.getRandomSpawnDirection());
-            hq.createPastureCapturer(0, pasture);
+            hq.createSoundTower(0, getTowerMove());
             spawned++;
             return true;
         }
         else if (spawned == 1) {
-            hq.createSoundTower(0, getTowerMove());
+            hq.createPastureCapturer(0, pasture);
             spawned++;
             return true;
         }

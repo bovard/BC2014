@@ -35,7 +35,7 @@ public class WolfPastrHunt extends Behavior {
     public boolean run() throws GameActionException {
         if(pasture == null ||
                 (robot.rc.canSenseSquare(pasture)) && robot.rc.senseObjectAtLocation(pasture) != null && robot.rc.senseObjectAtLocation(pasture).getTeam() == robot.info.myTeam) {
-            int pastrIndex = ((int)(Math.random()*((Wolf)robot).pastrLocs.length));
+            int pastrIndex = 0;
             pasture = ((Wolf)robot).pastrLocs[pastrIndex];
             move.setDestination(pasture);
         }
