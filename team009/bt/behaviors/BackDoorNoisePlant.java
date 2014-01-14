@@ -25,12 +25,11 @@ public class BackDoorNoisePlant extends Behavior {
     @Override
     public boolean run() throws GameActionException {
         int enemyHQ = robot.currentLoc.distanceSquaredTo(robot.info.enemyHq);
+        int distToDest = robot.currentLoc.distanceSquaredTo(move.destination);
         if (enemyHQ < robot.currentLoc.distanceSquaredTo(robot.info.hq) && enemyHQ < 300) {
             rc.construct(RobotType.NOISETOWER);
             return true;
-        } else if (robot.currentLoc.distanceSquaredTo(move.destination) < 26
-                || (robot.currentLoc.distanceSquaredTo(move.destination) < 100
-                    && !destTerrain.equals(TerrainTile.NORMAL))) {
+        } else if (distToDest < 26 || (distToDest < 100 && !destTerrain.equals(TerrainTile.NORMAL))) {
             move.setDestination(((BackdoorNoisePlanter)robot).getNextWayPoint());
             destTerrain = robot.rc.senseTerrainTile(move.destination);
             move.move();
