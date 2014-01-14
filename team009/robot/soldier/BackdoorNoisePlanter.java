@@ -14,6 +14,10 @@ public class BackdoorNoisePlanter extends BaseSoldier {
 
     public BackdoorNoisePlanter(RobotController rc, RobotInformation info) {
         super(rc, info);
+        MapQuadrantUtils.hq = info.hq;
+        MapQuadrantUtils.enemyHq = info.enemyHq;
+        MapQuadrantUtils.width = info.width;
+        MapQuadrantUtils.height = info.height;
         _createWayPoints();
     }
 
