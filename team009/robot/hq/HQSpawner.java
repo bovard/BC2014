@@ -19,7 +19,7 @@ public class HQSpawner {
         int type;
         // TODO: use this
         // type = TeamMemoryManager.getHQStrategy();
-        type = PASTURE_HUNTING;
+        type = SPRINT;
         //type = BACK_DOOR_TEST;
 
         switch(type) {

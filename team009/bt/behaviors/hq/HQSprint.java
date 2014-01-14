@@ -18,7 +18,7 @@ public class HQSprint extends Behavior {
 
     @Override
     public boolean pre() throws GameActionException {
-        return false;
+        return true;
     }
 
     @Override
