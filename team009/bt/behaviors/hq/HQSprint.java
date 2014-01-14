@@ -9,11 +9,13 @@ import team009.robot.hq.HQ;
 public class HQSprint extends Behavior {
     private boolean proximityTowers;
     private boolean backDoor;
+    private boolean backDoorTwo;
 
     public HQSprint(HQ robot) {
         super(robot);
         proximityTowers = false;
         backDoor = false;
+        backDoorTwo = false;
     }
 
     @Override
@@ -39,6 +41,13 @@ public class HQSprint extends Behavior {
             ((HQ)robot).createSoundTower(0, proxTower);
             proximityTowers = true;
             return true;
+        }
+
+        if (!backDoorTwo && robot.round > 500) {
+            ((HQ)robot).createBackDoorNoisePlanter(0);
+            backDoorTwo = true;
+            return true;
+
         }
 
         // spawn guys
