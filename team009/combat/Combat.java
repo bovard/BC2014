@@ -80,6 +80,14 @@ public class Combat {
             // Lets attack if we are the same.
             else if (we == enemies.length) {
 
+                if (we == 1) {
+                    if (nearestAttacker != null && nmeInfos[0].health < soldier.health) {
+                        rc.attackSquare(nearestAttacker);
+                    } else {
+                        // Do Nothing: Allow for him to attack
+                    }
+                }
+
                 rc.setIndicatorString(1, "We are equal!: ");
                 RobotInfo[] friendInfos = new RobotInfo[friends.length];
                 MapLocation[] friendLocs = new MapLocation[friends.length];
