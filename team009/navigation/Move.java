@@ -16,6 +16,11 @@ public abstract class Move {
     public abstract boolean sneak() throws GameActionException;
 
     public void setDestination(MapLocation destination) {
+        if (destination == null) {
+            this.destination = null;
+            return;
+        }
+
         if (destination.x >= robot.info.width) {
 			destination = new MapLocation(robot.info.width - 1, destination.y);
 		} else if (destination.x < 0) {

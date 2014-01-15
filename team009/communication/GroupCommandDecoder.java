@@ -75,7 +75,7 @@ public class GroupCommandDecoder extends CommunicationDecoder {
         }
 
         // If there is a defend command, overwrite
-        if (current.command == BaseSoldier.DEFEND && command == BaseSoldier.ATTACK) {
+        if (current.command < command) {
             return true;
         }
 

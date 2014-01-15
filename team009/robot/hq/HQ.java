@@ -117,7 +117,7 @@ public abstract class HQ extends TeamRobot {
         message += " CanWrite " + Communicator.WriteRound(round);
         if (Communicator.WriteRound(round) && GroupCommandDecoder.shouldCommunicate(dec, BaseSoldier.DEFEND)) {
             System.out.println("Defending!: ");
-            Communicator.WriteToGroup(rc, group, BaseSoldier.DEFEND, loc);
+            Communicator.WriteToGroup(rc, group, BaseSoldier.DEFEND, loc, 1000);
         }
     }
 
