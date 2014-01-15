@@ -1,25 +1,19 @@
-package team009.bt.behaviors.hq;
+package team009.bt.behaviors.communication;
 
 import battlecode.common.*;
-import team009.bt.behaviors.Behavior;
 import team009.robot.hq.HQ;
 import team009.robot.soldier.BaseSoldier;
 import team009.robot.soldier.SoldierSpawner;
 
-public class HQAction extends Behavior {
+public class HQDefendCom extends WriteBehavior {
     HQ hq;
     MapLocation center = null;
     boolean debugCenter = false;
     MapLocation baseCoverageLocation = null;
 
-    public HQAction(HQ hq) {
-        super(hq);
-        this.hq = hq;
-    }
-
-    @Override
-    public boolean pre() throws GameActionException {
-        return true;
+    public HQDefendCom(HQ robot) {
+        super(robot);
+        hq = robot;
     }
 
     @Override

@@ -17,6 +17,7 @@ public abstract class BaseSoldier extends TeamRobot {
     public int group;
     public int type;
     public GroupCommandDecoder decoder;
+    public RobotInfo firstEnemy;
 
     public BaseSoldier(RobotController rc, RobotInformation info) {
         super(rc, info);
@@ -29,32 +30,16 @@ public abstract class BaseSoldier extends TeamRobot {
         seesEnemy = false;
         enemies = rc.senseNearbyGameObjects(Robot.class, 100, info.enemyTeam);
         //TODO figure out if the above call is needed ^^ seem like a dup
-        RobotInfo firstNonHQEnemy = null;
 
         enemies = rc.senseNearbyGameObjects(Robot.class, 100, info.enemyTeam);
         seesEnemy = false;
         if (enemies.length > 0) {
             seesEnemy = enemies.length > 0;
-            firstNonHQEnemy = getFirstNonHQRobot(enemies);
-            if (firstNonHQEnemy == null) {
+            firstEnemy = getFirstNonHQRobot(enemies);
+            if (firstEnemy == null) {
                 seesEnemy = false;
                 enemies = new Robot[0];
             }
-        }
-
-        // writes out any information about its environment.
-        if (Communicator.WriteRound(round)) {
-            Communicator.WriteTypeAndGroup(rc, type, group);
-
-            // If there is no decoder or no data, then write out information about the environment.
-            if (seesEnemy && (decoder == null || !decoder.hasData() || decoder.command == BaseSoldier.DEFEND)) {
-                Communicator.WriteToGroup(rc, group, BaseSoldier.ATTACK, firstNonHQEnemy.location);
-            }
-        }
-
-        // Updates the decoder with any information.
-        if (Communicator.ReadRound(round)) {
-            decoder = Communicator.ReadFromGroup(rc, group);
         }
     }
 

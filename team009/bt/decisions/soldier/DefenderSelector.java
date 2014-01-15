@@ -1,7 +1,8 @@
-package team009.bt.decisions;
+package team009.bt.decisions.soldier;
 
 import battlecode.common.GameActionException;
 import team009.bt.behaviors.DefenderBehavior;
+import team009.bt.decisions.Selector;
 import team009.robot.soldier.BaseSoldier;
 
 public class DefenderSelector extends Selector {
