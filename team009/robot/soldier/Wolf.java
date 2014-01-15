@@ -5,8 +5,7 @@ import battlecode.common.MapLocation;
 import battlecode.common.Robot;
 import battlecode.common.RobotController;
 import team009.RobotInformation;
-import team009.bt.decisions.WolfSelector;
-import team009.communication.Communicator;
+import team009.bt.decisions.soldier.WolfSelector;
 import team009.bt.Node;
 
 public class Wolf extends BaseSoldier {

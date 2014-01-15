@@ -4,7 +4,7 @@ import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
 import team009.RobotInformation;
 import team009.bt.Node;
-import team009.bt.decisions.SoundTowerCaptureSequence;
+import team009.bt.decisions.soldier.SoundTowerCaptureSequence;
 
 public class SoundTowerCapture extends BaseSoldier {
     public MapLocation captureLocation;

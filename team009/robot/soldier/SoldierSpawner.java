@@ -3,7 +3,6 @@ package team009.robot.soldier;
 import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
 import team009.RobotInformation;
-import team009.bt.behaviors.NoiseTowerCapture;
 import team009.communication.Communicator;
 import team009.communication.SoldierDecoder;
 

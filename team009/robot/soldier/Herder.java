@@ -5,8 +5,8 @@ import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
 import team009.RobotInformation;
 import team009.bt.Node;
-import team009.bt.behaviors.ComRetreatToPasture;
-import team009.bt.decisions.HerderSelector;
+import team009.bt.behaviors.soldier.ComRetreatToPasture;
+import team009.bt.decisions.soldier.HerderSelector;
 
 public class Herder extends BaseSoldier {
     private MapLocation pastrLocation;
