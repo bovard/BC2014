@@ -2,6 +2,7 @@ package team009.robot.soldier;
 
 import battlecode.common.*;
 import team009.RobotInformation;
+import team009.bt.decisions.communication.SoldierCom;
 import team009.communication.Communicator;
 import team009.communication.GroupCommandDecoder;
 import team009.robot.TeamRobot;
@@ -21,6 +22,7 @@ public abstract class BaseSoldier extends TeamRobot {
 
     public BaseSoldier(RobotController rc, RobotInformation info) {
         super(rc, info);
+        comRoot = new SoldierCom(this);
     }
 
     @Override
@@ -56,6 +58,7 @@ public abstract class BaseSoldier extends TeamRobot {
     }
 
     // Somtimes i wish valid identifiers could contain explanation points!
-    public static final int DEFEND = 2;
+    public static final int RETURN_TO_BASE = 1;
+    public static final int ATTACK_PASTURE = 2;
     public static final int ATTACK = 3;
 }

@@ -35,6 +35,7 @@ public class GroupCommandDecoder extends CommunicationDecoder {
         command = (data % TIME_TO_LIVE) / COMMAND_MULT;
         group = (data % COMMAND_MULT) / GROUP_MULT;
         location = MapDecoder.getLocationFromData(data % GROUP_MULT);
+        decoderData = data;
     }
 
     protected void resetTTL() {
@@ -67,15 +68,31 @@ public class GroupCommandDecoder extends CommunicationDecoder {
      * @param command
      * @return
      */
-    public static boolean shouldCommunicate(GroupCommandDecoder current, int command) {
+    public static boolean shouldCommunicate(GroupCommandDecoder current, MapLocation loc, int command) {
+        return shouldCommunicate(current, loc, command, false);
+    }
+
+    /**
+     * Will see if the current decoder can be overriden.
+     * @return
+     */
+    public static boolean shouldCommunicate(GroupCommandDecoder current, MapLocation loc, int command, boolean equals) {
 
         // If there is no data, overwrite
         if (current == null || !current.hasData()) {
             return true;
         }
 
+        int currCom = current.command;
+        if (currCom == command) {
+            if (currCom == BaseSoldier.RETURN_TO_BASE || loc.equals(current.location)) {
+                return false;
+            }
+
+        }
+
         // If there is a defend command, overwrite
-        if (current.command < command) {
+        if (equals && currCom <= command || currCom < command) {
             return true;
         }
 

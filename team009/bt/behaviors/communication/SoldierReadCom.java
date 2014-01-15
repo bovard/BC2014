@@ -4,7 +4,7 @@ import battlecode.common.GameActionException;
 import team009.communication.Communicator;
 import team009.robot.soldier.BaseSoldier;
 
-public class SoldierReadCom extends WriteBehavior {
+public class SoldierReadCom extends ReadBehavior {
     BaseSoldier soldier;
 
     public SoldierReadCom(BaseSoldier soldier) {
@@ -15,9 +15,8 @@ public class SoldierReadCom extends WriteBehavior {
     public boolean run() throws GameActionException {
 
         // Updates the decoder with any information.
-        if (Communicator.ReadRound(soldier.round)) {
-            soldier.decoder = Communicator.ReadFromGroup(rc, soldier.group);
-        }
+        soldier.decoder = Communicator.ReadFromGroup(rc, soldier.group);
+        soldier.message += " Decoder: " + soldier.decoder.toString();
         return true;
     }
 }

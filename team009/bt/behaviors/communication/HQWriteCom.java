@@ -5,13 +5,13 @@ import team009.robot.hq.HQ;
 import team009.robot.soldier.BaseSoldier;
 import team009.robot.soldier.SoldierSpawner;
 
-public class HQDefendCom extends WriteBehavior {
+public class HQWriteCom extends WriteBehavior {
     HQ hq;
     MapLocation center = null;
     boolean debugCenter = false;
     MapLocation baseCoverageLocation = null;
 
-    public HQDefendCom(HQ robot) {
+    public HQWriteCom(HQ robot) {
         super(robot);
         hq = robot;
     }
@@ -26,20 +26,20 @@ public class HQDefendCom extends WriteBehavior {
         if (debugCenter) {
             robot.message += " (Debug) ";
             if (Clock.getRoundNum() > 400) {
-                hq.comDefend(center, BaseSoldier.DEFENDER_GROUP);
+                hq.comAttackPasture(center, BaseSoldier.DEFENDER_GROUP);
             }
         } else {
             MapLocation[] locs = rc.sensePastrLocations(robot.info.enemyTeam);
             int soldierCount = hq.getCount(SoldierSpawner.SOLDIER_TYPE_DEFENDER, BaseSoldier.DEFENDER_GROUP);
 
             if (locs.length > 0 && soldierCount > REQUIRED_SOLDIER_COUNT_FOR_ATTACK) {
-                hq.comDefend(locs[0], BaseSoldier.DEFENDER_GROUP);
+                robot.message += " (Rally Time! (" + locs[0] + ") ";
+                hq.comAttackPasture(locs[0], BaseSoldier.DEFENDER_GROUP);
             } else {
 
                 // This will short circuit on both same location or write round.
-                robot.message += " (Rally Time! (" + baseCoverageLocation + ") ";
                 hq.comClear(BaseSoldier.DEFENDER_GROUP, baseCoverageLocation);
-                hq.comDefend(baseCoverageLocation, BaseSoldier.DEFENDER_GROUP);
+                hq.comReturnHome(baseCoverageLocation, BaseSoldier.DEFENDER_GROUP);
             }
         }
         return true;
@@ -47,10 +47,12 @@ public class HQDefendCom extends WriteBehavior {
 
     private void _calculateRallyPoint() throws GameActionException {
         center = new MapLocation(robot.info.width / 2, robot.info.height / 2);
+        MapLocation hq = robot.info.hq;
         Direction dir = robot.info.enemyDir;
+
         for (int i = 0; i < 8; i++) {
             boolean found = true;
-            MapLocation curr = robot.info.hq;
+            MapLocation curr = hq;
             for (int j = 0; j < 3; j++) {
                 curr = curr.add(dir);
                 TerrainTile tile = rc.senseTerrainTile(curr);

@@ -46,59 +46,21 @@ public abstract class HQ extends TeamRobot {
 
     // TODO: BUG IN CODE it seems to be missing 1
     public int getCount(int type, int group) {
-        return soldierCounts[type * SoldierSpawner.MAX_GROUP_COUNT + group].count + 1;
+        int idx = type * SoldierSpawner.MAX_GROUP_COUNT + group;
+        return soldierCounts[idx] == null ? 0 : soldierCounts[idx].count + 1;
     }
 
-    // TODO: get rid of this once they patch
-    @Override
-    public void run() {
-        while (true) {
-            int round = Clock.getRoundNum();
-
-            try {
-                // at the start of the round, update with an environment check
-                this.environmentCheck();
-
-                // have the tree choose what to do
-                if (rc.isActive()) {
-                    treeRoot.run();
-                }
-
-                // TODO: Had to add this here since the HQ can shoot while not active!
-                if (shoot.pre()) {
-                    shoot.run();
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-
-            // then postProcessing with whatever remains of our byte code
-            try {
-                this.postProcessing();
-            } catch (Exception e) {
-                System.out.println("Load error: " );
-                e.printStackTrace();
-            }
-
-            // only yield if we're still on the same clock turn
-            // if we aren't that means that we ended up skipping
-            // our turn because we went too long
-            if (round == Clock.getRoundNum()) {
-                this.rc.yield();
-            } else {
-                System.out.println("BYTECODE LIMIT EXCEEDED!");
-            }
+    public void comReturnHome(MapLocation loc, int group) throws GameActionException {
+        GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group);
+        if (GroupCommandDecoder.shouldCommunicate(dec, loc, BaseSoldier.RETURN_TO_BASE, true)) {
+            Communicator.WriteToGroup(rc, group, BaseSoldier.RETURN_TO_BASE, loc, 1000);
         }
     }
 
-    public void comDefend(MapLocation loc, int group) throws GameActionException {
-
-        message += " CanWrite " + Communicator.WriteRound(round);
+    public void comAttackPasture(MapLocation loc, int group) throws GameActionException {
         GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group);
-        if (GroupCommandDecoder.shouldCommunicate(dec, BaseSoldier.DEFEND) && !loc.equals(dec.location)) {
-            Communicator.WriteToGroup(rc, group, BaseSoldier.DEFEND, loc, 1000);
+        if (GroupCommandDecoder.shouldCommunicate(dec, loc, BaseSoldier.ATTACK_PASTURE, true) && !loc.equals(dec.location)) {
+            Communicator.WriteToGroup(rc, group, BaseSoldier.ATTACK_PASTURE, loc, 60);
         }
     }
 

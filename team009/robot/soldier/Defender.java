@@ -4,7 +4,6 @@ import battlecode.common.RobotController;
 import team009.RobotInformation;
 import team009.bt.Node;
 import team009.bt.decisions.soldier.DefenderSelector;
-import team009.bt.decisions.DumbSoldierSelector;
 
 public class Defender extends BaseSoldier {
     public Defender(RobotController rc, RobotInformation info) {

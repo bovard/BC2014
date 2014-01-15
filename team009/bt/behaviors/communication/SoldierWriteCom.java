@@ -17,8 +17,8 @@ public class SoldierWriteCom extends WriteBehavior {
         Communicator.WriteTypeAndGroup(rc, soldier.type, soldier.group);
 
         // If there is no decoder or no data, then write out information about the environment.
-        if (soldier.seesEnemy && (soldier.decoder == null || soldier.decoder.hasData() || soldier.decoder.command == BaseSoldier.DEFEND)) {
-            Communicator.WriteToGroup(rc, soldier.group, BaseSoldier.ATTACK, soldier.firstEnemy.location);
+        if (soldier.seesEnemy && (soldier.decoder == null || soldier.decoder.hasData() || soldier.decoder.command == BaseSoldier.RETURN_TO_BASE)) {
+            Communicator.WriteToGroup(rc, soldier.group, BaseSoldier.ATTACK_PASTURE, soldier.firstEnemy.location);
         }
 
         return true;

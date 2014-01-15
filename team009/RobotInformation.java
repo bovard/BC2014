@@ -33,6 +33,7 @@ public class RobotInformation {
         enemyHqDistance = hq.distanceSquaredTo(enemyHq);
         robot = rc.getRobot();
         info = rc.senseRobotInfo(robot);
+        enemyDir = hq.directionTo(enemyHq);
 	}
 
 }
