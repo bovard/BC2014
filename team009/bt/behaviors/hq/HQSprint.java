@@ -5,6 +5,7 @@ import battlecode.common.GameConstants;
 import battlecode.common.MapLocation;
 import team009.bt.behaviors.Behavior;
 import team009.robot.hq.HQ;
+import team009.robot.soldier.BaseSoldier;
 
 public class HQSprint extends Behavior {
     private boolean proximityTowers;
@@ -52,7 +53,7 @@ public class HQSprint extends Behavior {
 
         // spawn guys
         if (robot.rc.isActive() && robotCount < GameConstants.MAX_ROBOTS) {
-            ((HQ)robot).createJackal(0);
+            ((HQ)robot).createDefender(BaseSoldier.DEFENDER_GROUP);
             return true;
         }
         return false;

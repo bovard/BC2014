@@ -3,10 +3,13 @@ package team009.bt.behaviors.hq;
 import battlecode.common.GameActionException;
 import team009.bt.behaviors.Behavior;
 import team009.robot.hq.HQ;
+import team009.robot.soldier.BaseSoldier;
 
 public class HQDefensive extends Behavior {
+    HQ hq;
     public HQDefensive(HQ robot) {
         super(robot);
+        hq = robot;
     }
 
     @Override
@@ -28,9 +31,7 @@ public class HQDefensive extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
-        // TODO: Fill me in
-        // make sure we always have a pasture in sight of the hq
-        // spawn guards and ranchers
+        hq.createDefender(BaseSoldier.DEFENDER_GROUP);
         return false;
     }
 }

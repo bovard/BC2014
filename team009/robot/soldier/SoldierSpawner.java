@@ -16,7 +16,8 @@ public class SoldierSpawner {
     public static final int SOLDIER_TYPE_WOLF = 5;
     public static final int SOLDIER_TYPE_BACKDOOR_NOISE_PLANTER = 6;
     public static final int SOLDIER_TYPE_JACKAL = 7;
-    public static final int SOLDIER_COUNT = 8;
+    public static final int SOLDIER_TYPE_DEFENDER = 8;
+    public static final int SOLDIER_COUNT = 9;
 
 
     public static final int MAX_GROUP_COUNT = 5;
@@ -57,10 +58,11 @@ public class SoldierSpawner {
                     System.out.println("making new jackal");
                     robot = new Jackal(rc, info);
                     break;
+                case SOLDIER_TYPE_DEFENDER:
                 case SOLDIER_TYPE_DUMB:
                 default:
                     System.out.println("making new dumb soldier");
-                    robot = new DumbSoldier(rc, info);
+                    robot = new Defender(rc, info);
                     break;
             }
 

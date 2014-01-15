@@ -1,6 +1,7 @@
 package team009.communication;
 
 import battlecode.common.MapLocation;
+import team009.robot.soldier.BaseSoldier;
 
 public class GroupCommandDecoder extends CommunicationDecoder {
     public MapLocation location;
@@ -20,6 +21,13 @@ public class GroupCommandDecoder extends CommunicationDecoder {
         this.group = group;
         this.location = location;
         ttl = TTL_MAX;
+    }
+
+    public GroupCommandDecoder(int group, int command, MapLocation location, int ttl) {
+        this.command = command;
+        this.group = group;
+        this.location = location;
+        this.ttl = ttl;
     }
 
     public GroupCommandDecoder(int data) {
@@ -53,6 +61,27 @@ public class GroupCommandDecoder extends CommunicationDecoder {
                 GROUP_MULT * group + COMMAND_MULT * command + TIME_TO_LIVE * ttl;
     }
 
+    /**
+     * Will see if the current decoder can be overriden.
+     * @param current
+     * @param command
+     * @return
+     */
+    public static boolean shouldCommunicate(GroupCommandDecoder current, int command) {
+
+        // If there is no data, overwrite
+        if (current == null || !current.hasData()) {
+            return true;
+        }
+
+        // If there is a defend command, overwrite
+        if (current.command == BaseSoldier.DEFEND) {
+            return true;
+        }
+
+        return false;
+    }
+
     @Override
     public String toString() {
         return "Command: " + command + " to group " + group + " with location " + location + " With " + ttl + " to live.";
@@ -61,5 +90,5 @@ public class GroupCommandDecoder extends CommunicationDecoder {
     public static final int GROUP_MULT = MapDecoder.COMMAND_MULTIPLIER;
     public static final int COMMAND_MULT = GROUP_MULT * 10;
     public static final int TIME_TO_LIVE = COMMAND_MULT * 10;
-    public static final int TTL_MAX = 40;
+    public static final int TTL_MAX = 25;
 }

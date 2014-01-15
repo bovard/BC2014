@@ -7,6 +7,7 @@ import team009.communication.GroupCommandDecoder;
 import team009.robot.TeamRobot;
 
 public abstract class BaseSoldier extends TeamRobot {
+    public static final int DEFENDER_GROUP = 1;
     // -----------------------------------------------------
     // Commands
     // -----------------------------------------------------
@@ -46,15 +47,9 @@ public abstract class BaseSoldier extends TeamRobot {
             Communicator.WriteTypeAndGroup(rc, type, group);
 
             // If there is no decoder or no data, then write out information about the environment.
-            String str = "Decoder: " + decoder;
-            if (decoder == null || !decoder.hasData()) {
-
-                if (seesEnemy) {
-                    Communicator.WriteToGroup(rc, group, BaseSoldier.ATTACK, firstNonHQEnemy.location);
-                    str += " At " + firstNonHQEnemy.location;
-                }
+            if (seesEnemy && (decoder == null || !decoder.hasData() || decoder.command == BaseSoldier.DEFEND)) {
+                Communicator.WriteToGroup(rc, group, BaseSoldier.ATTACK, firstNonHQEnemy.location);
             }
-//            rc.setIndicatorString(0, str);
         }
 
         // Updates the decoder with any information.
@@ -77,4 +72,5 @@ public abstract class BaseSoldier extends TeamRobot {
 
     // Somtimes i wish valid identifiers could contain explanation points!
     public static final int ATTACK = 2;
+    public static final int DEFEND = 3;
 }
