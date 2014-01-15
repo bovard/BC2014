@@ -112,13 +112,45 @@ public abstract class HQ extends TeamRobot {
     }
 
     public void comDefend(MapLocation loc, int group) throws GameActionException {
-        GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group);
 
         message += " CanWrite " + Communicator.WriteRound(round);
-        if (Communicator.WriteRound(round) && GroupCommandDecoder.shouldCommunicate(dec, BaseSoldier.DEFEND)) {
-            System.out.println("Defending!: ");
-            Communicator.WriteToGroup(rc, group, BaseSoldier.DEFEND, loc, 1000);
+        if (Communicator.WriteRound(round)) {
+            GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group);
+            if (GroupCommandDecoder.shouldCommunicate(dec, BaseSoldier.DEFEND) && !loc.equals(dec.location)) {
+                Communicator.WriteToGroup(rc, group, BaseSoldier.DEFEND, loc, 1000);
+            }
         }
+    }
+
+    public boolean comClear(int group) throws GameActionException {
+        if (Communicator.WriteRound(round)) {
+            GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group);
+            if (dec == null || !dec.hasData()) {
+                return false;
+            }
+            Communicator.ClearCommandChannel(rc, group);
+            return true;
+        }
+        return true;
+    }
+
+    /**
+     * Clears the coms if the location in the coms are not the same as the location provided.
+     * @throws GameActionException
+     */
+    public boolean comClear(int group, MapLocation hasLocation) throws GameActionException {
+        if (Communicator.WriteRound(round)) {
+            GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group);
+            if (dec == null || !dec.hasData()) {
+                return false;
+            }
+            if (hasLocation.equals(dec.location)) {
+                return false;
+            }
+            Communicator.ClearCommandChannel(rc, group);
+            return true;
+        }
+        return true;
     }
 
     public void createDumbSoldier(int group) throws GameActionException {

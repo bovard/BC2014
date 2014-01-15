@@ -50,7 +50,7 @@ public class HQOffensive extends Behavior {
 
         // spawn guys
         if (robot.rc.isActive() && robotCount < GameConstants.MAX_ROBOTS) {
-            hq.createDefender(BaseSoldier.DEFENDER_GROUP);
+            hq.createWolf(0);
             return true;
         }
 
