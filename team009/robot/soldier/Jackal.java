@@ -5,7 +5,7 @@ import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
 import team009.RobotInformation;
 import team009.bt.Node;
-import team009.bt.decisions.JackalSelector;
+import team009.bt.decisions.soldier.JackalSelector;
 import team009.utils.SmartMapLocationArray;
 
 public class Jackal extends BaseSoldier {

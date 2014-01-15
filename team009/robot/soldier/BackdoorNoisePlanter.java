@@ -1,11 +1,10 @@
 package team009.robot.soldier;
 
-import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
 import team009.RobotInformation;
 import team009.bt.Node;
-import team009.bt.decisions.BackDoorSelector;
+import team009.bt.decisions.soldier.BackDoorSelector;
 import team009.utils.MapQuadrantUtils;
 import team009.utils.SmartMapLocationArray;
 

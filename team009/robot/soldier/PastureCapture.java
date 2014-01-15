@@ -4,7 +4,7 @@ import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
 import team009.RobotInformation;
 import team009.bt.Node;
-import team009.bt.decisions.PastureSelector;
+import team009.bt.decisions.soldier.PastureSelector;
 
 public class PastureCapture extends BaseSoldier {
     private MapLocation pastrLocation;

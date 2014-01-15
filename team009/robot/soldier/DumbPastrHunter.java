@@ -5,7 +5,7 @@ import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
 import team009.RobotInformation;
 import team009.bt.Node;
-import team009.bt.decisions.DumbPastrHunterSelector;
+import team009.bt.decisions.soldier.DumbPastrHunterSelector;
 
 /**
  * A really dumb pastr hunter created for testing
