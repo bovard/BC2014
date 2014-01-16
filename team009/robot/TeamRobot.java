@@ -61,14 +61,14 @@ public abstract class TeamRobot {
                 // at the start of the round, update with an environment check
                 this.environmentCheck();
 
-                // if we're active have the tree choose what to do
-                if (rc.isActive()) {
-                    treeRoot.run();
-                }
-
                 // every turn we run the comRoot
                 if (comRoot != null) {
                     comRoot.run();
+                }
+
+                // if we're active have the tree choose what to do
+                if (rc.isActive()) {
+                    treeRoot.run();
                 }
 
             } catch (Exception e) {

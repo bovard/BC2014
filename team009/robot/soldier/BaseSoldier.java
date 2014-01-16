@@ -2,6 +2,7 @@ package team009.robot.soldier;
 
 import battlecode.common.*;
 import team009.RobotInformation;
+import team009.bt.decisions.communication.SoldierCom;
 import team009.communication.Communicator;
 import team009.communication.GroupCommandDecoder;
 import team009.robot.TeamRobot;
@@ -19,12 +20,14 @@ public abstract class BaseSoldier extends TeamRobot {
     public MapLocation lastLoc;
     public double health;
     public GroupCommandDecoder decoder;
+    public RobotInfo firstEnemy;
 
     public BaseSoldier(RobotController rc, RobotInformation info) {
         super(rc, info);
         currentLoc = rc.getLocation();
         lastLoc = info.hq;
         health = rc.getHealth();
+        comRoot = new SoldierCom(this);
     }
 
     @Override
@@ -43,26 +46,11 @@ public abstract class BaseSoldier extends TeamRobot {
         seesEnemy = false;
         if (enemies.length > 0) {
             seesEnemy = enemies.length > 0;
-            firstNonHQEnemy = getFirstNonHQRobot(enemies);
-            if (firstNonHQEnemy == null) {
+            firstEnemy = getFirstNonHQRobot(enemies);
+            if (firstEnemy == null) {
                 seesEnemy = false;
                 enemies = new Robot[0];
             }
-        }
-
-        // writes out any information about its environment.
-        if (Communicator.WriteRound(round)) {
-            Communicator.WriteTypeAndGroup(rc, type, group);
-
-            // If there is no decoder or no data, then write out information about the environment.
-            if (seesEnemy && (decoder == null || !decoder.hasData() || decoder.command == BaseSoldier.DEFEND)) {
-                Communicator.WriteToGroup(rc, group, BaseSoldier.ATTACK, firstNonHQEnemy.location);
-            }
-        }
-
-        // Updates the decoder with any information.
-        if (Communicator.ReadRound(round)) {
-            decoder = Communicator.ReadFromGroup(rc, group);
         }
     }
 
@@ -79,6 +67,7 @@ public abstract class BaseSoldier extends TeamRobot {
     }
 
     // Somtimes i wish valid identifiers could contain explanation points!
-    public static final int ATTACK = 2;
-    public static final int DEFEND = 3;
+    public static final int RETURN_TO_BASE = 1;
+    public static final int ATTACK_PASTURE = 2;
+    public static final int ATTACK = 3;
 }

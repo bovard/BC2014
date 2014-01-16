@@ -24,6 +24,11 @@ public class Communicator {
         _Broadcast(rc, GROUP_CHANNEL_BASE + group, decoder);
     }
 
+    public static void WriteToGroup(RobotController rc, int group, int command, MapLocation location, int ttl) throws GameActionException {
+        GroupCommandDecoder decoder = new GroupCommandDecoder(group, command, location, ttl);
+        _Broadcast(rc, GROUP_CHANNEL_BASE + group, decoder);
+    }
+
     public static void WriteTypeAndGroup(RobotController rc, int soldierType, int group) throws GameActionException {
         int channel = soldierType * SoldierSpawner.MAX_GROUP_COUNT + group;
         SoldierCountDecoder decoder = ReadTypeAndGroup(rc, soldierType, group);

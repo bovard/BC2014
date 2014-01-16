@@ -3,8 +3,7 @@ package team009.robot.soldier;
 import battlecode.common.RobotController;
 import team009.RobotInformation;
 import team009.bt.Node;
-import team009.bt.decisions.DefenderSelector;
-import team009.bt.decisions.DumbSoldierSelector;
+import team009.bt.decisions.soldier.DefenderSelector;
 
 public class Defender extends BaseSoldier {
     public Defender(RobotController rc, RobotInformation info) {
