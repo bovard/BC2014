@@ -3,6 +3,7 @@ package team009.robot.soldier;
 import battlecode.common.*;
 import team009.RobotInformation;
 import team009.bt.Node;
+import team009.communication.bt.SoldierCom;
 import team009.combat.CombatUtils;
 import team009.communication.GroupCommandDecoder;
 import team009.robot.TeamRobot;
@@ -21,6 +22,8 @@ public class ToySoldier extends TeamRobot {
     public SmartRobotInfoArray enemySoldiers = new SmartRobotInfoArray();
     public SmartRobotInfoArray enemyPastrs = new SmartRobotInfoArray();
     public SmartRobotInfoArray enemyNoise = new SmartRobotInfoArray();
+    public GroupCommandDecoder groupCommand;
+    public GroupCommandDecoder hqCommand;
     public Robot[] enemies = new Robot[0];
     public Robot[] allies = new Robot[0];
     public RobotInfo[] enemyRobotInfo = new RobotInfo[0];
@@ -34,6 +37,7 @@ public class ToySoldier extends TeamRobot {
     public ToySoldier(RobotController rc, RobotInformation info) {
         super(rc, info);
         treeRoot = new ToySelector(this);
+        comRoot = new SoldierCom(this);
     }
 
     @Override
@@ -76,24 +80,5 @@ public class ToySoldier extends TeamRobot {
         seesEnemyNoise = enemyNoise.length > 0;
         seesEnemyTeamNonHQRobot = seesEnemySoldier || seesEnemyNoise || seesEnemyPastr;
         seesEnemyTeamNonHQBuilding = seesEnemyNoise || seesEnemyPastr;
-
-
-        // TODO: Michael remove this when you have put it elsewhere
-        /*
-        // writes out any information about its environment.
-        if (Communicator.WriteRound(round)) {
-            Communicator.WriteTypeAndGroup(rc, type, group);
-
-            // If there is no decoder or no data, then write out information about the environment.
-            if (seesEnemy && (decoder == null || !decoder.hasData() || decoder.command == BaseSoldier.DEFEND)) {
-                Communicator.WriteToGroup(rc, group, BaseSoldier.ATTACK, firstNonHQEnemy.location);
-            }
-        }
-
-        // Updates the decoder with any information.
-        if (Communicator.ReadRound(round)) {
-            decoder = Communicator.ReadFromGroup(rc, group);
-        }
-        */
     }
 }

@@ -1,8 +1,8 @@
-package team009.bt.decisions.communication;
+package team009.communication.bt;
 
 import battlecode.common.GameActionException;
-import team009.bt.behaviors.communication.HQWriteCom;
-import team009.bt.behaviors.communication.HQStateCom;
+import team009.communication.bt.behaviors.HQWriteCom;
+import team009.communication.bt.behaviors.HQStateCom;
 import team009.bt.decisions.Selector;
 import team009.robot.hq.HQ;
 

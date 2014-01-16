@@ -2,7 +2,6 @@ package team009.robot.soldier;
 
 import battlecode.common.*;
 import team009.RobotInformation;
-import team009.bt.decisions.communication.SoldierCom;
 import team009.communication.GroupCommandDecoder;
 import team009.robot.TeamRobot;
 
@@ -16,7 +15,8 @@ public abstract class BaseSoldier extends TeamRobot {
     public int group;
     public int type;
     public double health;
-    public GroupCommandDecoder decoder;
+    public GroupCommandDecoder groupCommand;
+    public GroupCommandDecoder hqCommand;
     public RobotInfo firstEnemy;
 
     public BaseSoldier(RobotController rc, RobotInformation info) {
@@ -24,7 +24,6 @@ public abstract class BaseSoldier extends TeamRobot {
         currentLoc = rc.getLocation();
         lastLoc = info.hq;
         health = rc.getHealth();
-        comRoot = new SoldierCom(this);
     }
 
     @Override

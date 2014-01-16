@@ -1,15 +1,16 @@
-package team009.bt.decisions.communication;
+package team009.communication.bt;
 
 import battlecode.common.GameActionException;
-import team009.bt.behaviors.communication.SoldierReadCom;
-import team009.bt.behaviors.communication.SoldierWriteCom;
+import team009.communication.bt.behaviors.SoldierReadCom;
+import team009.communication.bt.behaviors.SoldierWriteCom;
 import team009.bt.decisions.Selector;
 import team009.robot.soldier.BaseSoldier;
+import team009.robot.soldier.ToySoldier;
 
 public class SoldierCom extends Selector {
 
-    BaseSoldier soldier;
-    public SoldierCom(BaseSoldier soldier) {
+    ToySoldier soldier;
+    public SoldierCom(ToySoldier soldier) {
         super(soldier);
         this.soldier = soldier;
 

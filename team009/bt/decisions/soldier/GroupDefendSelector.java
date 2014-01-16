@@ -11,8 +11,8 @@ public class GroupDefendSelector extends AggressiveMove {
 
     @Override
     public boolean pre() throws GameActionException {
-        if (gs.decoder != null && gs.decoder.command == BaseSoldier.RETURN_TO_BASE) {
-            location.setDestination(gs.decoder.location);
+        if (gs.groupCommand != null && gs.groupCommand.command == BaseSoldier.RETURN_TO_BASE) {
+            location.setDestination(gs.groupCommand.location);
         } else {
             location.setDestination(null);
         }

@@ -20,8 +20,6 @@ public class SoldierSpawner {
     public static final int SOLDIER_COUNT = 9;
 
 
-    public static final int MAX_GROUP_COUNT = 5;
-
     public static BaseSoldier getSoldier(RobotController rc, RobotInformation info) {
         BaseSoldier robot = null;
         try {

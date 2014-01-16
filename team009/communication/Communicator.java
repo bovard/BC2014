@@ -14,23 +14,18 @@ public class Communicator {
         _Broadcast(rc, NEW_SOLDIER_CHANNEL, decoder);
     }
 
-    public static void WriteToGroup(RobotController rc, int group, int command) throws GameActionException {
-        GroupCommandDecoder decoder = new GroupCommandDecoder(group, command);
-        _Broadcast(rc, GROUP_CHANNEL_BASE + group, decoder);
-    }
-
-    public static void WriteToGroup(RobotController rc, int group, int command, MapLocation location) throws GameActionException {
+    public static void WriteToGroup(RobotController rc, int group, int channel, int command, MapLocation location) throws GameActionException {
         GroupCommandDecoder decoder = new GroupCommandDecoder(group, command, location);
-        _Broadcast(rc, GROUP_CHANNEL_BASE + group, decoder);
+        _Broadcast(rc, _GroupChannel(group, channel), decoder);
     }
 
-    public static void WriteToGroup(RobotController rc, int group, int command, MapLocation location, int ttl) throws GameActionException {
+    public static void WriteToGroup(RobotController rc, int group, int channel, int command, MapLocation location, int ttl) throws GameActionException {
         GroupCommandDecoder decoder = new GroupCommandDecoder(group, command, location, ttl);
-        _Broadcast(rc, GROUP_CHANNEL_BASE + group, decoder);
+        _Broadcast(rc, _GroupChannel(group, channel), decoder);
     }
 
     public static void WriteTypeAndGroup(RobotController rc, int soldierType, int group) throws GameActionException {
-        int channel = soldierType * SoldierSpawner.MAX_GROUP_COUNT + group;
+        int channel = soldierType * MAX_GROUP_COUNT + group;
         SoldierCountDecoder decoder = ReadTypeAndGroup(rc, soldierType, group);
 
         // Incs the channel
@@ -47,7 +42,7 @@ public class Communicator {
     }
 
     public static SoldierCountDecoder ReadTypeAndGroup(RobotController rc, int soldierType, int group) throws GameActionException {
-        int channel = soldierType * SoldierSpawner.MAX_GROUP_COUNT + group;
+        int channel = soldierType * MAX_GROUP_COUNT + group;
         int data = rc.readBroadcast(channel);
 
         if (data == 0) {
@@ -56,7 +51,7 @@ public class Communicator {
         return new SoldierCountDecoder(data);
     }
 
-    public static GroupCommandDecoder ReadFromGroup(RobotController rc, int group) throws GameActionException {
+    public static GroupCommandDecoder ReadFromGroup(RobotController rc, int group, int channel) throws GameActionException {
         GroupCommandDecoder decoder = new GroupCommandDecoder(rc.readBroadcast(GROUP_CHANNEL_BASE + group));
         decoder.ttl--;
 
@@ -68,11 +63,11 @@ public class Communicator {
         if (decoder.ttl <= 0) {
 
             // Clears channel
-            ClearCommandChannel(rc, group);
+            ClearCommandChannel(rc, group, channel);
             return new GroupCommandDecoder(0);
         }
 
-        _Broadcast(rc, GROUP_CHANNEL_BASE + group, decoder);
+        _Broadcast(rc, _GroupChannel(group, channel), decoder);
         return decoder;
     }
 
@@ -81,11 +76,11 @@ public class Communicator {
     //-----------------------------------------------------
 
     public static void ClearCountChannel(RobotController rc, int soldierType, int group) throws GameActionException {
-        _Broadcast(rc, soldierType * SoldierSpawner.MAX_GROUP_COUNT + group, 0);
+        _Broadcast(rc, soldierType * MAX_GROUP_COUNT + group, 0);
     }
 
-    public static void ClearCommandChannel(RobotController rc, int group) throws GameActionException {
-        _Broadcast(rc, GROUP_CHANNEL_BASE + group, 0);
+    public static void ClearCommandChannel(RobotController rc, int group, int channel) throws GameActionException {
+        _Broadcast(rc, _GroupChannel(group, channel), 0);
     }
 
     public static boolean ReadRound(int round) {
@@ -107,16 +102,25 @@ public class Communicator {
         rc.broadcast(channel, data);
     }
 
+    private static int _GroupChannel(int group, int channel) {
+        return GROUP_CHANNEL_BASE + group * GROUP_CHANNEL_COUNT + channel;
+    }
+
     /*****************************************************
      * Channel Constants
      *///*************************************************
-    private static int NEW_SOLDIER_CHANNEL = 0;
+    protected static int NEW_SOLDIER_CHANNEL = 0;
 
     // Channels 1 through (MAX_GROUP_COUNT * SOLDIER_COUNT) + 1 are reserved for soldier communication
-    private static int SOLDIER_TYPE_CHANNEL_BASE = 1;
+    protected static int SOLDIER_TYPE_CHANNEL_BASE = 1;
+
+    public static final int MAX_GROUP_COUNT = 5;
+    public static final int GROUP_SOLDIER_CHANEL = 0;
+    public static final int GROUP_HQ_CHANNEL = 1;
+    public static final int GROUP_CENTROID_CHANNEL = 2;
+    protected static final int GROUP_CHANNEL_COUNT = 3;
+    protected static int GROUP_CHANNEL_BASE = SOLDIER_TYPE_CHANNEL_BASE + MAX_GROUP_COUNT * SoldierSpawner.SOLDIER_COUNT;
 
     // Group channels go for group channel count + 5;
-    private static int GROUP_CHANNEL_BASE = 1 + SoldierSpawner.MAX_GROUP_COUNT * SoldierSpawner.SOLDIER_COUNT;
-
     protected static final int INFORMATION_ROUND_MOD = 4;
 }
