@@ -1,8 +1,8 @@
 package team009.communication.bt.behaviors;
 
 import battlecode.common.*;
+import team009.robot.TeamRobot;
 import team009.robot.hq.HQ;
-import team009.robot.soldier.BaseSoldier;
 import team009.robot.soldier.SoldierSpawner;
 
 public class HQWriteCom extends WriteBehavior {
@@ -26,20 +26,20 @@ public class HQWriteCom extends WriteBehavior {
         if (debugCenter) {
             robot.message += " (Debug) ";
             if (Clock.getRoundNum() > 400) {
-                hq.comAttackPasture(center, BaseSoldier.DEFENDER_GROUP);
+                hq.comAttackPasture(center, TeamRobot.DEFENDER_GROUP);
             }
         } else {
             MapLocation[] locs = rc.sensePastrLocations(robot.info.enemyTeam);
-            int soldierCount = hq.getCount(SoldierSpawner.SOLDIER_TYPE_DEFENDER, BaseSoldier.DEFENDER_GROUP);
+            int soldierCount = hq.getCount(SoldierSpawner.SOLDIER_TYPE_DEFENDER, TeamRobot.DEFENDER_GROUP);
 
             if (locs.length > 0 && soldierCount > REQUIRED_SOLDIER_COUNT_FOR_ATTACK) {
                 robot.message += " (Rally Time! (" + locs[0] + ") ";
-                hq.comAttackPasture(locs[0], BaseSoldier.DEFENDER_GROUP);
+                hq.comAttackPasture(locs[0], TeamRobot.DEFENDER_GROUP);
             } else {
 
                 // This will short circuit on both same location or write round.
-                hq.comClear(BaseSoldier.DEFENDER_GROUP, baseCoverageLocation);
-                hq.comReturnHome(baseCoverageLocation, BaseSoldier.DEFENDER_GROUP);
+                hq.comClear(TeamRobot.DEFENDER_GROUP, baseCoverageLocation);
+                hq.comReturnHome(baseCoverageLocation, TeamRobot.DEFENDER_GROUP);
             }
         }
         return true;

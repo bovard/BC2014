@@ -84,8 +84,8 @@ public class ToySoldier extends TeamRobot {
 
     //TODO: $DEBUG$
     public void postProcessing() throws GameActionException {
-        rc.setIndicatorString(0, "Com from group: " + groupCommand + (groupCommand != null ? groupCommand.toString() : ""));
-        rc.setIndicatorString(1, "Com from HQ: " + hqCommand + (hqCommand != null ? hqCommand.toString() : ""));
+//        rc.setIndicatorString(0, "Com from group: " + groupCommand + (groupCommand != null ? groupCommand.toString() : ""));
+//        rc.setIndicatorString(1, "Com from HQ: " + hqCommand + (hqCommand != null ? hqCommand.toString() : ""));
     }
 
     public boolean hasAttackSignal() {

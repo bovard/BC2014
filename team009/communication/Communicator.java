@@ -15,12 +15,15 @@ public class Communicator {
     }
 
     public static void WriteToGroup(RobotController rc, int group, int channel, int command, MapLocation location) throws GameActionException {
-        GroupCommandDecoder decoder = new GroupCommandDecoder(group, command, location);
-        _Broadcast(rc, _GroupChannel(group, channel), decoder);
+        WriteToGroup(rc, group, channel, command, location, -1);
     }
 
     public static void WriteToGroup(RobotController rc, int group, int channel, int command, MapLocation location, int ttl) throws GameActionException {
         GroupCommandDecoder decoder = new GroupCommandDecoder(group, command, location, ttl);
+
+        // TODO: $DEBUG$
+        rc.setIndicatorString(channel, String.format("Group Write(%d,%d,%d): %s", group, channel, _GroupChannel(group, channel), decoder.toString()));
+        rc.setIndicatorString(channel + 1, "ACTUALLY WROTE OUT: " + decoder.toString());
         _Broadcast(rc, _GroupChannel(group, channel), decoder);
     }
 
@@ -57,7 +60,7 @@ public class Communicator {
 
         // No Coms yet on this channel
         // TODO: $DEBUG$
-        rc.setIndicatorString(channel, "Group Read(" + (GROUP_CHANNEL_BASE + group) + "): " + decoder.toString());
+        rc.setIndicatorString(channel, "Group Read(" + (_GroupChannel(group, channel)) + "): " + decoder.toString());
 
         // Shortcut it, clear the channel
         if (decoder.ttl <= 0) {

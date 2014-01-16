@@ -20,7 +20,7 @@ public class GroupCommandDecoder extends CommunicationDecoder {
         this.command = command;
         this.group = group;
         this.location = location;
-        this.ttl = ttl;
+        this.ttl = ttl == -1 ? TTL_MAX : ttl;
     }
 
     public GroupCommandDecoder(int data) {

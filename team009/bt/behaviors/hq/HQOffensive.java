@@ -4,8 +4,8 @@ import battlecode.common.GameActionException;
 import battlecode.common.GameConstants;
 import battlecode.common.MapLocation;
 import team009.bt.behaviors.Behavior;
+import team009.robot.TeamRobot;
 import team009.robot.hq.HQ;
-import team009.robot.soldier.BaseSoldier;
 
 public class HQOffensive extends Behavior {
     private HQ hq;
@@ -50,7 +50,7 @@ public class HQOffensive extends Behavior {
 
         // spawn guys
         if (robot.rc.isActive() && robotCount < GameConstants.MAX_ROBOTS) {
-            hq.createDefender(BaseSoldier.DEFENDER_GROUP);
+            hq.createDefender(TeamRobot.DEFENDER_GROUP);
             return true;
         }
 

@@ -8,6 +8,7 @@ import team009.bt.behaviors.hq.HQShoot;
 import team009.communication.Communicator;
 import team009.communication.GroupCommandDecoder;
 import team009.communication.SoldierCountDecoder;
+import team009.communication.bt.HQCom;
 import team009.robot.TeamRobot;
 import team009.robot.soldier.SoldierSpawner;
 
@@ -25,6 +26,7 @@ public abstract class HQ extends TeamRobot {
         maxSoldiers = SoldierSpawner.SOLDIER_COUNT * Communicator.MAX_GROUP_COUNT;
         soldierCounts = new SoldierCountDecoder[maxSoldiers];
         // REMEMBER TO CALL treeRoot = getTreeRoot() in your implementations of this!
+        comRoot = new HQCom(this);
     }
 
     @Override
@@ -63,11 +65,14 @@ public abstract class HQ extends TeamRobot {
         }
     }
 
-    public void comDefend(MapLocation loc, int group) throws GameActionException {
+    public boolean comDefend(MapLocation loc, int group) throws GameActionException {
         GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group, Communicator.GROUP_HQ_CHANNEL);
         if (GroupCommandDecoder.shouldCommunicate(dec, loc, DEFEND, true) && !loc.equals(dec.location)) {
             Communicator.WriteToGroup(rc, group, DEFEND, Communicator.GROUP_HQ_CHANNEL, loc, 60);
+            return true;
         }
+
+        return false;
     }
 
     /**
