@@ -8,7 +8,13 @@ import java.util.Random;
 
 public abstract class TeamRobot {
 
-	protected Node treeRoot;
+    // Somtimes i wish valid identifiers could contain explanation points!
+    public static final int RETURN_TO_BASE = 1;
+    public static final int ATTACK_PASTURE = 2;
+    public static final int DEFEND = 3;
+    public static final int ATTACK = 4;
+
+    protected Node treeRoot;
     protected Node comRoot = null;
     public MapLocation currentLoc;
     public MapLocation lastLoc;

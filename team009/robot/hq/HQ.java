@@ -9,7 +9,6 @@ import team009.communication.Communicator;
 import team009.communication.GroupCommandDecoder;
 import team009.communication.SoldierCountDecoder;
 import team009.robot.TeamRobot;
-import team009.robot.soldier.BaseSoldier;
 import team009.robot.soldier.SoldierSpawner;
 
 public abstract class HQ extends TeamRobot {
@@ -52,25 +51,23 @@ public abstract class HQ extends TeamRobot {
 
     public void comReturnHome(MapLocation loc, int group) throws GameActionException {
         GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group, Communicator.GROUP_HQ_CHANNEL);
-        if (GroupCommandDecoder.shouldCommunicate(dec, loc, BaseSoldier.RETURN_TO_BASE, true)) {
-            Communicator.WriteToGroup(rc, group, BaseSoldier.RETURN_TO_BASE, Communicator.GROUP_HQ_CHANNEL, loc, 1000);
+        if (GroupCommandDecoder.shouldCommunicate(dec, loc, RETURN_TO_BASE, true)) {
+            Communicator.WriteToGroup(rc, group, RETURN_TO_BASE, Communicator.GROUP_HQ_CHANNEL, loc, 1000);
         }
     }
 
     public void comAttackPasture(MapLocation loc, int group) throws GameActionException {
         GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group, Communicator.GROUP_HQ_CHANNEL);
-        if (GroupCommandDecoder.shouldCommunicate(dec, loc, BaseSoldier.ATTACK_PASTURE, true) && !loc.equals(dec.location)) {
-            Communicator.WriteToGroup(rc, group, BaseSoldier.ATTACK_PASTURE, Communicator.GROUP_HQ_CHANNEL, loc, 60);
+        if (GroupCommandDecoder.shouldCommunicate(dec, loc, ATTACK_PASTURE, true) && !loc.equals(dec.location)) {
+            Communicator.WriteToGroup(rc, group, ATTACK_PASTURE, Communicator.GROUP_HQ_CHANNEL, loc, 60);
         }
     }
 
-    public boolean comClear(int group) throws GameActionException {
+    public void comDefend(MapLocation loc, int group) throws GameActionException {
         GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group, Communicator.GROUP_HQ_CHANNEL);
-        if (dec == null || !dec.hasData()) {
-            return false;
+        if (GroupCommandDecoder.shouldCommunicate(dec, loc, DEFEND, true) && !loc.equals(dec.location)) {
+            Communicator.WriteToGroup(rc, group, DEFEND, Communicator.GROUP_HQ_CHANNEL, loc, 60);
         }
-        Communicator.ClearCommandChannel(rc, group, Communicator.GROUP_HQ_CHANNEL);
-        return true;
     }
 
     /**
@@ -89,12 +86,8 @@ public abstract class HQ extends TeamRobot {
         return true;
     }
 
-    public void createDumbSoldier(int group) throws GameActionException {
-        _spawn(SoldierSpawner.SOLDIER_TYPE_DUMB, group);
-    }
-
-    public void createWolf(int group) throws GameActionException {
-        _spawn(SoldierSpawner.SOLDIER_TYPE_WOLF, group);
+    public void createToySoldier(int group) throws GameActionException {
+        _spawn(SoldierSpawner.SOLDIER_TYPE_TOY_SOLDIER, group);
     }
 
     // TODO: $IMPROVEMENT$ We should make the group number have a channel to grab pasture location from

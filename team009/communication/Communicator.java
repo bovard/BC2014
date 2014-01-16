@@ -57,7 +57,7 @@ public class Communicator {
 
         // No Coms yet on this channel
         // TODO: $DEBUG$
-        rc.setIndicatorString(2, "Group Read(" + (GROUP_CHANNEL_BASE + group) + "): " + decoder.toString());
+        rc.setIndicatorString(channel, "Group Read(" + (GROUP_CHANNEL_BASE + group) + "): " + decoder.toString());
 
         // Shortcut it, clear the channel
         if (decoder.ttl <= 0) {
@@ -93,9 +93,6 @@ public class Communicator {
 
     private static void _Broadcast(RobotController rc, int channel, CommunicationDecoder decoder) throws GameActionException {
         _Broadcast(rc, channel, decoder.getData());
-
-        // TODO: $DEBUG$
-        rc.setIndicatorString(1, "Broadcasted(" + channel + "): " + decoder.getData() + " : " + decoder.toString());
     }
 
     private static void _Broadcast(RobotController rc, int channel, int data) throws GameActionException {

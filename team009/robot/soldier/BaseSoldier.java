@@ -62,8 +62,4 @@ public abstract class BaseSoldier extends TeamRobot {
         return null;
     }
 
-    // Somtimes i wish valid identifiers could contain explanation points!
-    public static final int RETURN_TO_BASE = 1;
-    public static final int ATTACK_PASTURE = 2;
-    public static final int ATTACK = 3;
 }

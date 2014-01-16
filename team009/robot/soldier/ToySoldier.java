@@ -81,4 +81,22 @@ public class ToySoldier extends TeamRobot {
         seesEnemyTeamNonHQRobot = seesEnemySoldier || seesEnemyNoise || seesEnemyPastr;
         seesEnemyTeamNonHQBuilding = seesEnemyNoise || seesEnemyPastr;
     }
+
+    //TODO: $DEBUG$
+    public void postProcessing() throws GameActionException {
+        rc.setIndicatorString(0, "Com from group: " + groupCommand + (groupCommand != null ? groupCommand.toString() : ""));
+        rc.setIndicatorString(1, "Com from HQ: " + hqCommand + (hqCommand != null ? hqCommand.toString() : ""));
+    }
+
+    public boolean hasAttackSignal() {
+        return groupCommand != null && groupCommand.command == ATTACK;
+    }
+
+    public boolean hasPastrAttackSignal() {
+        return hqCommand != null && hqCommand.command == ATTACK_PASTURE;
+    }
+
+    public boolean hasDefendPastrSignal() {
+        return hqCommand != null && hqCommand.command == DEFEND;
+    }
 }

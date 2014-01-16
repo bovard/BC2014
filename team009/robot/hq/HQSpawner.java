@@ -13,6 +13,7 @@ public class HQSpawner {
     public static final int BACK_DOOR_TEST = 4;
     public static final int SPRINT = 5;
     public static final int NOISE_TEST = 6;
+    public static final int COM_TEST = 7;
 
     public static HQ getHQ(RobotController rc, RobotInformation info) {
         HQ robot = null;
@@ -24,6 +25,7 @@ public class HQSpawner {
         //type = BACK_DOOR_TEST;
         //type = DEFENSIVE_PASTURE;
         //type = NOISE_TEST;
+        type = COM_TEST;
 
         switch(type) {
             case DEFENSIVE_PASTURE:
@@ -46,6 +48,9 @@ public class HQSpawner {
                 break;
             case NOISE_TEST:
                 robot = new NoiseTest(rc, info);
+                break;
+            case COM_TEST:
+                robot = new ComTest(rc, info);
                 break;
             default:
                 robot = new Offensive(rc, info);
