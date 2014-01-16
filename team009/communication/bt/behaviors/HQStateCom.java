@@ -1,4 +1,4 @@
-package team009.bt.behaviors.communication;
+package team009.communication.bt.behaviors;
 
 import battlecode.common.GameActionException;
 import team009.communication.Communicator;

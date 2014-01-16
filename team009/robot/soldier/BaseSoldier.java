@@ -2,8 +2,6 @@ package team009.robot.soldier;
 
 import battlecode.common.*;
 import team009.RobotInformation;
-import team009.bt.decisions.communication.SoldierCom;
-import team009.communication.Communicator;
 import team009.communication.GroupCommandDecoder;
 import team009.robot.TeamRobot;
 
@@ -13,26 +11,34 @@ public abstract class BaseSoldier extends TeamRobot {
     // Commands
     // -----------------------------------------------------
     public boolean seesEnemy = false;
-    public double health;
     public Robot[] enemies = new Robot[0];
     public int group;
     public int type;
+    public MapLocation currentLoc;
+    public MapLocation lastLoc;
+    public double health;
     public GroupCommandDecoder groupCommand;
     public GroupCommandDecoder hqCommand;
     public RobotInfo firstEnemy;
 
     public BaseSoldier(RobotController rc, RobotInformation info) {
         super(rc, info);
-        comRoot = new SoldierCom(this);
+        currentLoc = rc.getLocation();
+        lastLoc = info.hq;
+        health = rc.getHealth();
     }
 
     @Override
     public void environmentCheck() throws GameActionException {
         super.environmentCheck();
+        MapLocation temp = rc.getLocation();
+        if (!temp.equals(currentLoc)) {
+            lastLoc = currentLoc;
+        }
+        currentLoc = temp;
         health = rc.getHealth();
         seesEnemy = false;
-        enemies = rc.senseNearbyGameObjects(Robot.class, 100, info.enemyTeam);
-        //TODO figure out if the above call is needed ^^ seem like a dup
+        RobotInfo firstNonHQEnemy = null;
 
         enemies = rc.senseNearbyGameObjects(Robot.class, 100, info.enemyTeam);
         seesEnemy = false;

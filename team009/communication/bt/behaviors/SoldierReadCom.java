@@ -1,13 +1,13 @@
-package team009.bt.behaviors.communication;
+package team009.communication.bt.behaviors;
 
 import battlecode.common.GameActionException;
 import team009.communication.Communicator;
-import team009.robot.soldier.BaseSoldier;
+import team009.robot.soldier.ToySoldier;
 
 public class SoldierReadCom extends ReadBehavior {
-    BaseSoldier soldier;
+    ToySoldier soldier;
 
-    public SoldierReadCom(BaseSoldier soldier) {
+    public SoldierReadCom(ToySoldier soldier) {
         super(soldier);
         this.soldier = soldier;
     }
