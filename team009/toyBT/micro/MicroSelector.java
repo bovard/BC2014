@@ -2,7 +2,6 @@ package team009.toyBT.micro;
 
 import battlecode.common.GameActionException;
 import team009.bt.decisions.Selector;
-import team009.robot.TeamRobot;
 import team009.robot.soldier.ToySoldier;
 
 public class MicroSelector extends Selector {

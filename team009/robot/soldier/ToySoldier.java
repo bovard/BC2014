@@ -53,6 +53,7 @@ public class ToySoldier extends TeamRobot {
 
         // micro stuff
         enemies = rc.senseNearbyGameObjects(Robot.class, 100, info.enemyTeam);
+        // TODO: get a better picture by sensing how many of our allies are soliders?
         allies = rc.senseNearbyGameObjects(Robot.class, 100, info.myTeam);
         enemyRobotInfo = CombatUtils.getRobotInfo(enemies, rc);
         enemySoldiers.length = 0;
