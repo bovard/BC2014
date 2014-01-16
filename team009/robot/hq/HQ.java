@@ -61,14 +61,14 @@ public abstract class HQ extends TeamRobot {
     public void comAttackPasture(MapLocation loc, int group) throws GameActionException {
         GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group, Communicator.GROUP_HQ_CHANNEL);
         if (GroupCommandDecoder.shouldCommunicate(dec, loc, ATTACK_PASTURE, true) && !loc.equals(dec.location)) {
-            Communicator.WriteToGroup(rc, group, ATTACK_PASTURE, Communicator.GROUP_HQ_CHANNEL, loc, 200);
+            Communicator.WriteToGroup(rc, group, ATTACK_PASTURE, Communicator.GROUP_HQ_CHANNEL, loc, 1000);
         }
     }
 
     public boolean comDefend(MapLocation loc, int group) throws GameActionException {
         GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group, Communicator.GROUP_HQ_CHANNEL);
         if (GroupCommandDecoder.shouldCommunicate(dec, loc, DEFEND, true) && !loc.equals(dec.location)) {
-            Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, DEFEND, loc, 200);
+            Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, DEFEND, loc, 1000);
             return true;
         }
 
