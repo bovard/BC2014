@@ -10,23 +10,17 @@ public abstract class TeamRobot {
 
 	protected Node treeRoot;
     protected Node comRoot = null;
-    public MapLocation currentLoc;
-    public MapLocation lastLoc;
-    public double health;
     public int round;
 	public RobotController rc;
 	public RobotInformation info;
     public Random rand = new Random();
     public String message;
-    public boolean runIfNotActive = false;
 
 	public TeamRobot(RobotController rc, RobotInformation info) {
         // MAKE SURE YOU INCLUDE THE FOLLOWING LINE IN YOUR IMPLEMENTATION
         // treeRoot = getTreeRoot();
 		this.rc = rc;
 		this.info = info;
-        currentLoc = rc.getLocation();
-        lastLoc = info.hq;
         rand.setSeed(Clock.getRoundNum());
 	}
 
@@ -36,13 +30,7 @@ public abstract class TeamRobot {
 	 *
 	 */
 	public void environmentCheck() throws GameActionException {
-        MapLocation temp = rc.getLocation();
-        if (!temp.equals(currentLoc)) {
-            lastLoc = currentLoc;
-        }
-        currentLoc = temp;
         round = Clock.getRoundNum();
-        health = rc.getHealth();
         message = "";
     }
 
