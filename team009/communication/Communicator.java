@@ -22,8 +22,6 @@ public class Communicator {
         GroupCommandDecoder decoder = new GroupCommandDecoder(group, command, location, ttl);
 
         // TODO: $DEBUG$
-        rc.setIndicatorString(channel, String.format("Group Write(%d,%d,%d): %s", group, channel, _GroupChannel(group, channel), decoder.toString()));
-        rc.setIndicatorString(channel + 1, "ACTUALLY WROTE OUT: " + decoder.toString());
         _Broadcast(rc, _GroupChannel(group, channel), decoder);
     }
 
@@ -55,22 +53,23 @@ public class Communicator {
     }
 
     public static GroupCommandDecoder ReadFromGroup(RobotController rc, int group, int channel) throws GameActionException {
-        GroupCommandDecoder decoder = new GroupCommandDecoder(rc.readBroadcast(GROUP_CHANNEL_BASE + group));
+        int groupChannel = _GroupChannel(group, channel);
+        GroupCommandDecoder decoder = new GroupCommandDecoder(rc.readBroadcast(groupChannel));
         decoder.ttl--;
 
         // No Coms yet on this channel
         // TODO: $DEBUG$
-        rc.setIndicatorString(channel, "Group Read(" + (_GroupChannel(group, channel)) + "): " + decoder.toString());
+        rc.setIndicatorString(channel, "Group Read(" + (groupChannel) + "): " + decoder.toString());
 
         // Shortcut it, clear the channel
         if (decoder.ttl <= 0) {
 
             // Clears channel
-            ClearCommandChannel(rc, group, channel);
+            ClearGroupChannel(rc, group, channel);
             return new GroupCommandDecoder(0);
         }
 
-        _Broadcast(rc, _GroupChannel(group, channel), decoder);
+        _Broadcast(rc, groupChannel, decoder);
         return decoder;
     }
 
@@ -82,7 +81,7 @@ public class Communicator {
         _Broadcast(rc, soldierType * MAX_GROUP_COUNT + group, 0);
     }
 
-    public static void ClearCommandChannel(RobotController rc, int group, int channel) throws GameActionException {
+    public static void ClearGroupChannel(RobotController rc, int group, int channel) throws GameActionException {
         _Broadcast(rc, _GroupChannel(group, channel), 0);
     }
 

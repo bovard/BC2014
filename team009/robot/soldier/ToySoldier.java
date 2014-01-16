@@ -99,4 +99,8 @@ public class ToySoldier extends TeamRobot {
     public boolean hasDefendPastrSignal() {
         return hqCommand != null && hqCommand.command == DEFEND;
     }
+
+    public MapLocation getHQCommandLocation() {
+        return hqCommand != null ? hqCommand.location : null;
+    }
 }

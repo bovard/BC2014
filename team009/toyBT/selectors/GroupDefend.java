@@ -19,7 +19,7 @@ public class GroupDefend extends PushToLocation {
     public boolean run() throws GameActionException {
 
         // We know that the location has been set and that there is an attack signal.
-        location.setDestination(soldier.groupCommand.location);
+        location.setDestination(soldier.getHQCommandLocation());
 
         return super.run();
     }

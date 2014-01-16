@@ -21,7 +21,7 @@ public class ToyMoveToLocation extends Behavior {
     }
 
     public void setDestination(MapLocation location) {
-        if (move.destination.equals(location)) {
+        if (move.destination != null && move.destination.equals(location)) {
             return;
         }
         move.setDestination(location);

@@ -61,14 +61,14 @@ public abstract class HQ extends TeamRobot {
     public void comAttackPasture(MapLocation loc, int group) throws GameActionException {
         GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group, Communicator.GROUP_HQ_CHANNEL);
         if (GroupCommandDecoder.shouldCommunicate(dec, loc, ATTACK_PASTURE, true) && !loc.equals(dec.location)) {
-            Communicator.WriteToGroup(rc, group, ATTACK_PASTURE, Communicator.GROUP_HQ_CHANNEL, loc, 60);
+            Communicator.WriteToGroup(rc, group, ATTACK_PASTURE, Communicator.GROUP_HQ_CHANNEL, loc, 200);
         }
     }
 
     public boolean comDefend(MapLocation loc, int group) throws GameActionException {
         GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group, Communicator.GROUP_HQ_CHANNEL);
         if (GroupCommandDecoder.shouldCommunicate(dec, loc, DEFEND, true) && !loc.equals(dec.location)) {
-            Communicator.WriteToGroup(rc, group, DEFEND, Communicator.GROUP_HQ_CHANNEL, loc, 60);
+            Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, DEFEND, loc, 200);
             return true;
         }
 
@@ -87,7 +87,7 @@ public abstract class HQ extends TeamRobot {
         if (hasLocation.equals(dec.location)) {
             return false;
         }
-        Communicator.ClearCommandChannel(rc, group, Communicator.GROUP_HQ_CHANNEL);
+        Communicator.ClearGroupChannel(rc, group, Communicator.GROUP_HQ_CHANNEL);
         return true;
     }
 
@@ -126,6 +126,9 @@ public abstract class HQ extends TeamRobot {
 
     private void _spawn(int soldierType, int group) throws GameActionException {
         Direction dir = _getSpawnDirection();
+        if (dir == null) {
+            return;
+        }
         rc.spawn(dir);
         Communicator.WriteNewSoldier(rc, soldierType, group, new MapLocation(1, 1));
     }
