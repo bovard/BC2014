@@ -15,7 +15,7 @@ public abstract class TeamRobot {
     public static final int ATTACK = 4;
 
     // Groups
-    public static final int DEFENDER_GROUP = 0;
+    public static final int TOY_GROUP = 0;
 
     protected Node treeRoot;
     protected Node comRoot = null;

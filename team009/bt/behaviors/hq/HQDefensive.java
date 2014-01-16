@@ -31,7 +31,7 @@ public class HQDefensive extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
-        hq.createDefender(TeamRobot.DEFENDER_GROUP);
+        hq.createDefender(TeamRobot.TOY_GROUP);
         return false;
     }
 }

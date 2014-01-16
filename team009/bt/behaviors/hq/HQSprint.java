@@ -53,7 +53,7 @@ public class HQSprint extends Behavior {
 
         // spawn guys
         if (robot.rc.isActive() && robotCount < GameConstants.MAX_ROBOTS) {
-            ((HQ)robot).createDefender(TeamRobot.DEFENDER_GROUP);
+            ((HQ)robot).createDefender(TeamRobot.TOY_GROUP);
             return true;
         }
         return false;

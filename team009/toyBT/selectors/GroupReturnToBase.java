@@ -3,17 +3,17 @@ package team009.toyBT.selectors;
 import battlecode.common.GameActionException;
 import team009.robot.soldier.ToySoldier;
 
-public class GroupAttackPasture extends PushToLocation {
+public class GroupReturnToBase extends PushToLocation {
     ToySoldier soldier;
 
-    public GroupAttackPasture(ToySoldier soldier) {
+    public GroupReturnToBase(ToySoldier soldier) {
         super(soldier);
         this.soldier = soldier;
     }
 
     @Override
     public boolean pre() throws GameActionException {
-        return soldier.hasPastrAttackSignal();
+        return soldier.hasReturnToBaseSignal();
     }
 
     public boolean run() throws GameActionException {
@@ -24,3 +24,4 @@ public class GroupAttackPasture extends PushToLocation {
         return super.run();
     }
 }
+

@@ -22,6 +22,7 @@ public class Communicator {
         GroupCommandDecoder decoder = new GroupCommandDecoder(group, command, location, ttl);
 
         // TODO: $DEBUG$
+        rc.setIndicatorString(2, "WriteToGoup: " + decoder.toString() + " : " + _GroupChannel(group, channel));
         _Broadcast(rc, _GroupChannel(group, channel), decoder);
     }
 

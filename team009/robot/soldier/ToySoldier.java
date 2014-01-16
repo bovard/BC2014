@@ -88,6 +88,7 @@ public class ToySoldier extends TeamRobot {
 //        rc.setIndicatorString(1, "Com from HQ: " + hqCommand + (hqCommand != null ? hqCommand.toString() : ""));
     }
 
+    // TODO: $Efficiency$ do something different than funcions :)
     public boolean hasAttackSignal() {
         return groupCommand != null && groupCommand.command == ATTACK;
     }
@@ -98,6 +99,10 @@ public class ToySoldier extends TeamRobot {
 
     public boolean hasDefendPastrSignal() {
         return hqCommand != null && hqCommand.command == DEFEND;
+    }
+
+    public boolean hasReturnToBaseSignal() {
+        return hqCommand != null && hqCommand.command == RETURN_TO_BASE;
     }
 
     public MapLocation getHQCommandLocation() {

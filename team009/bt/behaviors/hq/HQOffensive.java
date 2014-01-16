@@ -2,19 +2,16 @@ package team009.bt.behaviors.hq;
 
 import battlecode.common.GameActionException;
 import battlecode.common.GameConstants;
-import battlecode.common.MapLocation;
 import team009.bt.behaviors.Behavior;
 import team009.robot.TeamRobot;
 import team009.robot.hq.HQ;
 
 public class HQOffensive extends Behavior {
     private HQ hq;
-    private boolean proximityTowers;
 
     public HQOffensive(HQ robot) {
         super(robot);
         hq = robot;
-        proximityTowers = false;
     }
 
     @Override
@@ -40,17 +37,9 @@ public class HQOffensive extends Behavior {
         //robot count
         int robotCount = robot.rc.senseRobotCount();
 
-        if(robotCount > 4 && !proximityTowers) {
-            //spawn a proximity tower to gather cows
-            MapLocation proxTower = hq.currentLoc.add(hq.getRandomSpawnDirection(), 1);
-            hq.createSoundTower(0, proxTower);
-            proximityTowers = true;
-            return true;
-        }
-
         // spawn guys
         if (robot.rc.isActive() && robotCount < GameConstants.MAX_ROBOTS) {
-            hq.createDefender(TeamRobot.DEFENDER_GROUP);
+            hq.createToySoldier(TeamRobot.TOY_GROUP);
             return true;
         }
 

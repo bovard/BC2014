@@ -22,24 +22,21 @@ public class HQWriteCom extends WriteBehavior {
             _calculateRallyPoint();;
         }
 
-        robot.message += robot.round + " Action ";
         if (debugCenter) {
-            robot.message += " (Debug) ";
             if (Clock.getRoundNum() > 400) {
-                hq.comAttackPasture(center, TeamRobot.DEFENDER_GROUP);
+                hq.comAttackPasture(center, TeamRobot.TOY_GROUP);
             }
         } else {
             MapLocation[] locs = rc.sensePastrLocations(robot.info.enemyTeam);
-            int soldierCount = hq.getCount(SoldierSpawner.SOLDIER_TYPE_DEFENDER, TeamRobot.DEFENDER_GROUP);
+            int soldierCount = hq.getCount(SoldierSpawner.SOLDIER_TYPE_TOY_SOLDIER, TeamRobot.TOY_GROUP);
 
             if (locs.length > 0 && soldierCount > REQUIRED_SOLDIER_COUNT_FOR_ATTACK) {
-                robot.message += " (Rally Time! (" + locs[0] + ") ";
-                hq.comAttackPasture(locs[0], TeamRobot.DEFENDER_GROUP);
+                hq.comAttackPasture(locs[0], TeamRobot.TOY_GROUP);
             } else {
 
                 // This will short circuit on both same location or write round.
-                hq.comClear(TeamRobot.DEFENDER_GROUP, baseCoverageLocation);
-                hq.comReturnHome(baseCoverageLocation, TeamRobot.DEFENDER_GROUP);
+                hq.comClear(TeamRobot.TOY_GROUP, baseCoverageLocation);
+                hq.comReturnHome(baseCoverageLocation, TeamRobot.TOY_GROUP);
             }
         }
         return true;

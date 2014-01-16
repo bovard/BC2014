@@ -2,12 +2,11 @@ package team009.robot.hq;
 
 import battlecode.common.RobotController;
 import team009.RobotInformation;
-import team009.communication.TeamMemoryManager;
 
 public class HQSpawner {
 
     public static final int DEFENSIVE_PASTURE = 0;
-    public static final int PASTURE_HUNTING = 1;
+    public static final int OFFENSIVE = 1;
     public static final int BALANCED = 2;
     public static final int DUMB_PASTR_HUNT = 3;
     public static final int BACK_DOOR_TEST = 4;
@@ -25,13 +24,13 @@ public class HQSpawner {
         //type = BACK_DOOR_TEST;
         //type = DEFENSIVE_PASTURE;
         //type = NOISE_TEST;
-        type = COM_TEST;
+        type = OFFENSIVE;
 
         switch(type) {
             case DEFENSIVE_PASTURE:
                 robot = new Defensive(rc, info);
                 break;
-            case PASTURE_HUNTING:
+            case OFFENSIVE:
                 robot = new Offensive(rc, info);
                 break;
             case BALANCED:

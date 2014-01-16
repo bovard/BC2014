@@ -9,7 +9,8 @@ import team009.robot.hq.HQ;
 public class OffensiveSelector extends Selector {
     public OffensiveSelector(HQ robot) {
         super(robot);
-        children.add(new HQSoundTower(robot));
+
+        // TODO: We need some more stuff!
         children.add(new HQOffensive(robot));
     }
 
