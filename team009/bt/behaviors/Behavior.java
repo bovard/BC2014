@@ -2,8 +2,6 @@ package team009.bt.behaviors;
 
 import java.util.Random;
 
-import battlecode.common.Clock;
-import battlecode.common.RobotController;
 import team009.bt.Node;
 import team009.robot.TeamRobot;
 

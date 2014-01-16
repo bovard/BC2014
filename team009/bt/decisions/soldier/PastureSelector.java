@@ -6,7 +6,6 @@ import team009.bt.behaviors.soldier.EngageEnemy;
 import team009.bt.behaviors.soldier.MoveToLocation;
 import team009.bt.behaviors.soldier.PastureCapture;
 import team009.bt.decisions.Selector;
-import team009.robot.soldier.BaseSoldier;
 import team009.robot.TeamRobot;
 
 public class PastureSelector extends Selector {
@@ -15,7 +14,7 @@ public class PastureSelector extends Selector {
         super(robot);
 
         // The children from most to least important
-        addChild(new EngageEnemy((BaseSoldier)robot));
+        addChild(new EngageEnemy((team009.robot.soldier.BaseSoldier)robot));
         //addChild(new ComRetreatToPasture((Herder)robot, pastureLocation));
         addChild(new MoveToLocation(robot, pastureLocation));
         addChild(new PastureCapture(robot));

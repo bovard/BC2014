@@ -1,10 +1,6 @@
 package team009.bt.behaviors.pasture;
 
-import battlecode.common.Clock;
 import battlecode.common.GameActionException;
-import battlecode.common.MapLocation;
-import battlecode.common.RobotType;
-import team009.RobotInformation;
 import team009.bt.behaviors.Behavior;
 import team009.robot.TeamRobot;
 

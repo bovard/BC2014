@@ -9,7 +9,6 @@ import team009.communication.Communicator;
 import team009.communication.GroupCommandDecoder;
 import team009.communication.SoldierCountDecoder;
 import team009.robot.TeamRobot;
-import team009.robot.soldier.BaseSoldier;
 import team009.robot.soldier.SoldierSpawner;
 
 public abstract class HQ extends TeamRobot {
@@ -52,15 +51,15 @@ public abstract class HQ extends TeamRobot {
 
     public void comReturnHome(MapLocation loc, int group) throws GameActionException {
         GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group);
-        if (GroupCommandDecoder.shouldCommunicate(dec, loc, BaseSoldier.RETURN_TO_BASE, true)) {
-            Communicator.WriteToGroup(rc, group, BaseSoldier.RETURN_TO_BASE, loc, 1000);
+        if (GroupCommandDecoder.shouldCommunicate(dec, loc, team009.robot.soldier.BaseSoldier.RETURN_TO_BASE, true)) {
+            Communicator.WriteToGroup(rc, group, team009.robot.soldier.BaseSoldier.RETURN_TO_BASE, loc, 1000);
         }
     }
 
     public void comAttackPasture(MapLocation loc, int group) throws GameActionException {
         GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group);
-        if (GroupCommandDecoder.shouldCommunicate(dec, loc, BaseSoldier.ATTACK_PASTURE, true) && !loc.equals(dec.location)) {
-            Communicator.WriteToGroup(rc, group, BaseSoldier.ATTACK_PASTURE, loc, 60);
+        if (GroupCommandDecoder.shouldCommunicate(dec, loc, team009.robot.soldier.BaseSoldier.ATTACK_PASTURE, true) && !loc.equals(dec.location)) {
+            Communicator.WriteToGroup(rc, group, team009.robot.soldier.BaseSoldier.ATTACK_PASTURE, loc, 60);
         }
     }
 

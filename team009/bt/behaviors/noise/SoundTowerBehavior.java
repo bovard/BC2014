@@ -39,7 +39,7 @@ public class SoundTowerBehavior extends Behavior {
         //}
         //else
         //{
-            herdFocus = robot.currentLoc;
+            herdFocus = robot.rc.getLocation();
         //}
 
 

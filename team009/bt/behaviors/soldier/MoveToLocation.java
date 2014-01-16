@@ -5,6 +5,7 @@ import battlecode.common.MapLocation;
 import team009.bt.behaviors.Behavior;
 import team009.navigation.BugMove;
 import team009.robot.TeamRobot;
+
 public class MoveToLocation extends Behavior {
     protected BugMove move;
 

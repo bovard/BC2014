@@ -12,6 +12,7 @@ public class HQSpawner {
     public static final int DUMB_PASTR_HUNT = 3;
     public static final int BACK_DOOR_TEST = 4;
     public static final int SPRINT = 5;
+    public static final int NOISE_TEST = 6;
 
     public static HQ getHQ(RobotController rc, RobotInformation info) {
         HQ robot = null;
@@ -19,9 +20,10 @@ public class HQSpawner {
         int type;
         // TODO: use this
         // type = TeamMemoryManager.getHQStrategy();
-        type = SPRINT;
+        //type = SPRINT;
         //type = BACK_DOOR_TEST;
-//        type = DEFENSIVE_PASTURE;
+        //type = DEFENSIVE_PASTURE;
+        type = NOISE_TEST;
 
         switch(type) {
             case DEFENSIVE_PASTURE:
@@ -41,6 +43,9 @@ public class HQSpawner {
                 break;
             case SPRINT:
                 robot = new Sprint(rc, info);
+                break;
+            case NOISE_TEST:
+                robot = new NoiseTest(rc, info);
                 break;
             default:
                 robot = new Offensive(rc, info);

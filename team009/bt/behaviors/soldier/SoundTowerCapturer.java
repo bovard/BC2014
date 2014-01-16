@@ -3,7 +3,6 @@ package team009.bt.behaviors.soldier;
 import battlecode.common.GameActionException;
 import battlecode.common.RobotType;
 import team009.bt.behaviors.Behavior;
-import team009.robot.TeamRobot;
 import team009.robot.soldier.SoundTowerCapture;
 
 public class SoundTowerCapturer extends Behavior {

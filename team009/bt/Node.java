@@ -1,7 +1,5 @@
 package team009.bt;
 
-import java.util.ArrayList;
-
 import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
 import team009.robot.TeamRobot;

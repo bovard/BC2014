@@ -34,6 +34,7 @@ public class RobotInformation {
         robot = rc.getRobot();
         info = rc.senseRobotInfo(robot);
         enemyDir = hq.directionTo(enemyHq);
+        center = new MapLocation(height/2, width/2);
 	}
 
 }

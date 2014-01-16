@@ -1,7 +1,6 @@
 package team009.postProcessing;
 
 import battlecode.common.RobotController;
-import team009.robot.TeamRobot;
 
 public abstract class BasePostProcessor {
     protected RobotController rc;

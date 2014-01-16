@@ -3,7 +3,6 @@ package team009.robot.soldier;
 import battlecode.common.*;
 import team009.RobotInformation;
 import team009.bt.decisions.communication.SoldierCom;
-import team009.communication.Communicator;
 import team009.communication.GroupCommandDecoder;
 import team009.robot.TeamRobot;
 
@@ -16,8 +15,6 @@ public abstract class BaseSoldier extends TeamRobot {
     public Robot[] enemies = new Robot[0];
     public int group;
     public int type;
-    public MapLocation currentLoc;
-    public MapLocation lastLoc;
     public double health;
     public GroupCommandDecoder decoder;
     public RobotInfo firstEnemy;

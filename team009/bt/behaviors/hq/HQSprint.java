@@ -38,7 +38,7 @@ public class HQSprint extends Behavior {
 
         if(robotCount > 4 && !proximityTowers) {
             //spawn a proximity tower to gather cows
-            MapLocation proxTower = robot.currentLoc.add(((HQ)robot).getRandomSpawnDirection(), 1);
+            MapLocation proxTower = robot.info.hq.add(((HQ)robot).getRandomSpawnDirection(), 1);
             ((HQ)robot).createSoundTower(0, proxTower);
             proximityTowers = true;
             return true;

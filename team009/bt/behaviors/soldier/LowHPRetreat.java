@@ -19,12 +19,12 @@ public class LowHPRetreat extends Behavior {
 
     @Override
     public boolean pre() throws GameActionException {
-        return robot.health < LOW_HP || healing;
+        return ((BaseSoldier)robot).health < LOW_HP || healing;
     }
 
     @Override
     public boolean post() throws GameActionException {
-        return robot.health > HIGH_HP;
+        return ((BaseSoldier)robot).health > HIGH_HP;
     }
 
     @Override

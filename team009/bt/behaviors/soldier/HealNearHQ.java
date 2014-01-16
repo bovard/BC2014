@@ -4,7 +4,6 @@ import battlecode.common.GameActionException;
 import team009.bt.behaviors.Behavior;
 import team009.navigation.BugMove;
 import team009.robot.TeamRobot;
-import team009.robot.soldier.BaseSoldier;
 
 public class HealNearHQ extends Behavior {
     private BugMove move;
@@ -17,7 +16,7 @@ public class HealNearHQ extends Behavior {
 
     @Override
     public boolean pre() throws GameActionException {
-        return !((BaseSoldier)robot).seesEnemy;
+        return !((team009.robot.soldier.BaseSoldier)robot).seesEnemy;
     }
 
     @Override
