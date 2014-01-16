@@ -4,7 +4,6 @@ import battlecode.common.GameActionException;
 import team009.communication.Communicator;
 import team009.communication.SoldierCountDecoder;
 import team009.robot.hq.HQ;
-import team009.robot.soldier.SoldierSpawner;
 
 public class HQStateCom extends ReadBehavior {
     HQ hq;
@@ -17,7 +16,7 @@ public class HQStateCom extends ReadBehavior {
     }
 
     public boolean run() throws GameActionException {
-        int groupCount = SoldierSpawner.MAX_GROUP_COUNT;
+        int groupCount = Communicator.MAX_GROUP_COUNT;
 
         for (int i = 0; i < hq.maxSoldiers; i++) {
             int group = i % groupCount;

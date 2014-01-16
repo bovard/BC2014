@@ -23,7 +23,7 @@ public abstract class HQ extends TeamRobot {
 
     public HQ(RobotController rc, RobotInformation info) {
         super(rc, info);
-        maxSoldiers = SoldierSpawner.SOLDIER_COUNT * SoldierSpawner.MAX_GROUP_COUNT;
+        maxSoldiers = SoldierSpawner.SOLDIER_COUNT * Communicator.MAX_GROUP_COUNT;
         soldierCounts = new SoldierCountDecoder[maxSoldiers];
         // REMEMBER TO CALL treeRoot = getTreeRoot() in your implementations of this!
     }
@@ -46,30 +46,30 @@ public abstract class HQ extends TeamRobot {
 
     // TODO: BUG IN CODE it seems to be missing 1
     public int getCount(int type, int group) {
-        int idx = type * SoldierSpawner.MAX_GROUP_COUNT + group;
+        int idx = type * Communicator.MAX_GROUP_COUNT + group;
         return soldierCounts[idx] == null ? 0 : soldierCounts[idx].count + 1;
     }
 
     public void comReturnHome(MapLocation loc, int group) throws GameActionException {
-        GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group);
+        GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group, Communicator.GROUP_HQ_CHANNEL);
         if (GroupCommandDecoder.shouldCommunicate(dec, loc, BaseSoldier.RETURN_TO_BASE, true)) {
-            Communicator.WriteToGroup(rc, group, BaseSoldier.RETURN_TO_BASE, loc, 1000);
+            Communicator.WriteToGroup(rc, group, BaseSoldier.RETURN_TO_BASE, Communicator.GROUP_HQ_CHANNEL, loc, 1000);
         }
     }
 
     public void comAttackPasture(MapLocation loc, int group) throws GameActionException {
-        GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group);
+        GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group, Communicator.GROUP_HQ_CHANNEL);
         if (GroupCommandDecoder.shouldCommunicate(dec, loc, BaseSoldier.ATTACK_PASTURE, true) && !loc.equals(dec.location)) {
-            Communicator.WriteToGroup(rc, group, BaseSoldier.ATTACK_PASTURE, loc, 60);
+            Communicator.WriteToGroup(rc, group, BaseSoldier.ATTACK_PASTURE, Communicator.GROUP_HQ_CHANNEL, loc, 60);
         }
     }
 
     public boolean comClear(int group) throws GameActionException {
-        GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group);
+        GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group, Communicator.GROUP_HQ_CHANNEL);
         if (dec == null || !dec.hasData()) {
             return false;
         }
-        Communicator.ClearCommandChannel(rc, group);
+        Communicator.ClearCommandChannel(rc, group, Communicator.GROUP_HQ_CHANNEL);
         return true;
     }
 
@@ -78,14 +78,14 @@ public abstract class HQ extends TeamRobot {
      * @throws GameActionException
      */
     public boolean comClear(int group, MapLocation hasLocation) throws GameActionException {
-        GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group);
+        GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group, Communicator.GROUP_HQ_CHANNEL);
         if (dec == null || !dec.hasData()) {
             return false;
         }
         if (hasLocation.equals(dec.location)) {
             return false;
         }
-        Communicator.ClearCommandChannel(rc, group);
+        Communicator.ClearCommandChannel(rc, group, Communicator.GROUP_HQ_CHANNEL);
         return true;
     }
 

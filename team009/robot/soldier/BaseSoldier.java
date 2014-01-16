@@ -17,7 +17,8 @@ public abstract class BaseSoldier extends TeamRobot {
     public Robot[] enemies = new Robot[0];
     public int group;
     public int type;
-    public GroupCommandDecoder decoder;
+    public GroupCommandDecoder groupCommand;
+    public GroupCommandDecoder hqCommand;
     public RobotInfo firstEnemy;
 
     public BaseSoldier(RobotController rc, RobotInformation info) {

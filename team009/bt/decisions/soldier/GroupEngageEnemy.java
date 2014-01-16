@@ -11,8 +11,8 @@ public class GroupEngageEnemy extends AggressiveMove {
 
     @Override
     public boolean pre() throws GameActionException {
-        if (gs.decoder != null && gs.decoder.command == BaseSoldier.ATTACK_PASTURE) {
-            location.setDestination(gs.decoder.location);
+        if (gs.groupCommand != null && gs.groupCommand.command == BaseSoldier.ATTACK_PASTURE) {
+            location.setDestination(gs.groupCommand.location);
             return true;
         }
 
