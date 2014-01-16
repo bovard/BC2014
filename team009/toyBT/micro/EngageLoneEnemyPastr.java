@@ -4,12 +4,17 @@ import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import battlecode.common.RobotInfo;
 import team009.bt.behaviors.Behavior;
-import team009.robot.TeamRobot;
+import team009.combat.CombatUtils;
+import team009.navigation.BugMove;
 import team009.robot.soldier.ToySoldier;
 
 public class EngageLoneEnemyPastr extends Behavior {
-    public EngageLoneEnemyPastr(TeamRobot robot) {
+
+    private BugMove move;
+
+    public EngageLoneEnemyPastr(ToySoldier robot) {
         super(robot);
+        move = new BugMove(robot);
     }
 
     @Override
@@ -19,8 +24,27 @@ public class EngageLoneEnemyPastr extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
+        // assume that they are sorted in closest to furthest
         RobotInfo pastr = ((ToySoldier)robot).enemyPastrs.arr[0];
-        MapLocation pastrLocation = pastr.location;
+
+        // look for cows to shoot
+
+        if (robot.rc.canAttackSquare(pastr.location)) {
+            robot.rc.attackSquare(pastr.location);
+            return true;
+        }
+
+        move.setDestination(pastr.location);
+        if (move.move()) {
+            return true;
+        }
+
+        MapLocation toShoot = CombatUtils.canSeePastrButNotShootItKillCowsInstead(pastr.location, robot);
+        if (toShoot != null && robot.rc.canAttackSquare(toShoot)) {
+            robot.rc.attackSquare(toShoot);
+            return true;
+        }
+
         return false;
     }
 }
