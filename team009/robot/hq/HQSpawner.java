@@ -25,7 +25,7 @@ public class HQSpawner {
         //type = BACK_DOOR_TEST;
         //type = DEFENSIVE_PASTURE;
         //type = NOISE_TEST;
-        type = MICRO_TEST;
+        type = OFFENSIVE;
 
         switch(type) {
             case DEFENSIVE_PASTURE:
