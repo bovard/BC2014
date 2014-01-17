@@ -36,10 +36,16 @@ public class HQOffensive extends Behavior {
 
         //robot count
         int robotCount = robot.rc.senseRobotCount();
+        int toyCount0 = hq.getCount(0);
+        int toyCount1 = hq.getCount(1);
 
         // spawn guys
         if (robot.rc.isActive() && robotCount < GameConstants.MAX_ROBOTS) {
-            hq.createToySoldier(TeamRobot.TOY_GROUP);
+            if (toyCount1 < toyCount0) {
+                hq.createToySoldier(1);
+            } else {
+                hq.createToySoldier(0);
+            }
             return true;
         }
 

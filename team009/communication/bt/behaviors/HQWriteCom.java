@@ -22,14 +22,22 @@ public class HQWriteCom extends WriteBehavior {
         }
 
         MapLocation[] locs = rc.sensePastrLocations(robot.info.enemyTeam);
-        int soldierCount = hq.getCount(TeamRobot.TOY_GROUP);
+        int soldierCount = hq.getCount(0);
 
         if (locs.length > 0 && soldierCount > REQUIRED_SOLDIER_COUNT_FOR_ATTACK) {
-            hq.comAttackPasture(locs[0], TeamRobot.TOY_GROUP);
+            if (locs.length > 1 && hq.getCount(1) > REQUIRED_SOLDIER_COUNT_FOR_ATTACK) {
+                hq.comAttackPasture(locs[1], 1);
+                hq.comAttackPasture(locs[0], 0);
+            } else {
+                hq.comAttackPasture(locs[0], 1);
+                hq.comAttackPasture(locs[0], 0);
+            }
         } else {
 
-            hq.comClear(TeamRobot.TOY_GROUP, baseCoverageLocation);
-            hq.comReturnHome(baseCoverageLocation, TeamRobot.TOY_GROUP);
+            hq.comClear(0, baseCoverageLocation);
+            hq.comClear(1, baseCoverageLocation);
+            hq.comReturnHome(baseCoverageLocation, 0);
+            hq.comReturnHome(baseCoverageLocation, 1);
         }
         return true;
     }

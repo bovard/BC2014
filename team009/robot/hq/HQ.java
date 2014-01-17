@@ -1,16 +1,14 @@
 package team009.robot.hq;
 
+import team009.utils.Timer;
 import battlecode.common.*;
 import team009.MapUtils;
 import team009.RobotInformation;
-import team009.bt.Node;
-import team009.bt.behaviors.hq.HQShoot;
 import team009.communication.Communicator;
 import team009.communication.GroupCommandDecoder;
 import team009.communication.SoldierCountDecoder;
 import team009.communication.bt.HQCom;
 import team009.robot.TeamRobot;
-import team009.robot.soldier.BaseSoldier;
 import team009.robot.soldier.SoldierSpawner;
 
 public abstract class HQ extends TeamRobot {
@@ -19,6 +17,15 @@ public abstract class HQ extends TeamRobot {
     public SoldierCountDecoder[] soldierCounts;
     public boolean seesEnemy = false;
     public Robot[] enemies = new Robot[0];
+    public MapLocation bestLocation;
+    private double[][] cowRegens;
+    private double bestRegen;
+    private MapLocation bestRegenLoc = null;
+    private int regenRow = 1;
+    private int regenColumn = 1;
+    private int rowLen = 0;
+    private int colLen = 0;
+    private boolean foundBest = false;
 
     public HQ(RobotController rc, RobotInformation info) {
         super(rc, info);
@@ -31,7 +38,7 @@ public abstract class HQ extends TeamRobot {
     @Override
     public void environmentCheck() throws GameActionException {
         super.environmentCheck();
-        RobotInfo firstNonHQEnemy = null;
+        RobotInfo firstNonHQEnemy;
         enemies = rc.senseNearbyGameObjects(Robot.class, 100, info.enemyTeam);
         seesEnemy = false;
         if (enemies.length > 0) {
@@ -42,6 +49,60 @@ public abstract class HQ extends TeamRobot {
                 enemies = new Robot[0];
             }
         }
+    }
+
+    /**
+     * Post processes best pasture locations
+     */
+    public void postProcessing() throws GameActionException {
+        if (foundBest) {
+            rc.setIndicatorString(1, "BestLocation: " + bestRegenLoc);
+            return;
+        }
+
+        _calculateBestCowPosition();
+        foundBest = regenRow == rowLen;
+    }
+
+    private void _calculateBestCowPosition() {
+        if (cowRegens == null) {
+            cowRegens = rc.senseCowGrowth();
+            bestRegen = cowRegens[0][0];
+            bestRegenLoc = new MapLocation(0, 0);
+            rowLen = cowRegens.length - 2;
+            colLen = cowRegens[0].length - 2;
+        }
+        double[][] cowRegens = this.cowRegens;
+
+        // TODO: Better would be to check all neighbors, but that is expensive.
+        // TODO: So best regeneration rate is you + your neighbors
+        // TODO: But even that may not be the best.  Then comes distance to travel to, etc etc
+        int roundsToProcess = (GameConstants.BYTECODE_LIMIT - (Clock.getBytecodeNum())) / 55;
+        double bestRegen = this.bestRegen;
+        int regenRow = this.regenRow;
+        int regenColumn = this.regenColumn;
+        int i = 0;
+        while (regenRow < rowLen && i < roundsToProcess) {
+
+            // One row at a time
+            for (; regenColumn < colLen && i < roundsToProcess; regenColumn++, i++) {
+                double[] row = cowRegens[regenRow];
+                double val = row[regenColumn - 1] + row[regenColumn] + row[regenColumn + 1] + cowRegens[regenRow - 1][regenColumn] + cowRegens[regenRow + 1][regenColumn];
+                if (bestRegen < val) {
+                    bestRegen = val;
+                    bestRegenLoc = new MapLocation(regenRow, regenColumn);
+                }
+            }
+
+            if (regenColumn == colLen) {
+                regenColumn = 1;
+                regenRow++;
+            }
+        }
+
+        this.bestRegen = bestRegen;
+        this.regenRow = regenRow;
+        this.regenColumn = regenColumn;
     }
 
     // TODO: BUG IN CODE it seems to be missing 1

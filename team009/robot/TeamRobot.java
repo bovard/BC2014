@@ -19,9 +19,6 @@ public abstract class TeamRobot {
     public static final int ATTACK = 4;
     public static final int DESTRUCT = 9;
 
-    // Groups
-    public static final int TOY_GROUP = 0;
-
     protected Node treeRoot;
     protected Node comRoot = null;
     public MapLocation currentLoc;
@@ -62,12 +59,7 @@ public abstract class TeamRobot {
 	/**
 	 * Called at the end of a robots turn, can load things...
 	 */
-	public void postProcessing() throws GameActionException {
-        if (message.length() > 0) {
-            rc.setIndicatorString(0, message);
-            message = "";
-        }
-    }
+	public void postProcessing() throws GameActionException {}
 
     /**
      * Called during the constructor to load up the right bt
@@ -93,9 +85,7 @@ public abstract class TeamRobot {
 
                 // if we're active have the tree choose what to do
                 if (rc.isActive()) {
-                    Timer.StartTimer();
                     treeRoot.run();
-                    Timer.EndTimer();
                 }
 
             } catch (Exception e) {
@@ -121,6 +111,9 @@ public abstract class TeamRobot {
                 System.out.println("BYTECODE LIMIT EXCEEDED!");
             }
         }
-
 	}
+
+    private void fn() {
+
+    }
 }

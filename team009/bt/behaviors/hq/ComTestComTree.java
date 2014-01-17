@@ -24,14 +24,8 @@ public class ComTestComTree extends WriteBehavior {
     public boolean run() throws GameActionException {
 
         System.out.println("ComTree: " + lastCommand);
-        if (Clock.getRoundNum() - lastCommand > 150 && hq.comDefend(locs[idx], TeamRobot.TOY_GROUP)) {
+        if (Clock.getRoundNum() - lastCommand > 150 && hq.comDefend(locs[idx], 0)) {
             lastCommand = Clock.getRoundNum();
-            System.out.println("Communicated!!");
-            System.out.println("Communicated!!");
-            System.out.println("Communicated!!");
-            System.out.println("Communicated!!");
-            System.out.println("Communicated!!");
-            System.out.println("Communicated!!");
             idx = (idx + 1) % 4;
         }
         return true;
