@@ -21,6 +21,7 @@ public class ToySoldier extends TeamRobot {
     public boolean seesEnemyHQ = false;
     public boolean engagedInCombat = false;
     public SmartRobotInfoArray enemySoldiers = new SmartRobotInfoArray();
+    public SmartRobotInfoArray friendlySoldiers = new SmartRobotInfoArray();
     public SmartRobotInfoArray enemyPastrs = new SmartRobotInfoArray();
     public SmartRobotInfoArray enemyNoise = new SmartRobotInfoArray();
     public GroupCommandDecoder groupCommand;
@@ -57,24 +58,35 @@ public class ToySoldier extends TeamRobot {
         health = rc.getHealth();
 
         // micro stuff
-        enemies = rc.senseNearbyGameObjects(Robot.class, 100, info.enemyTeam);
         // TODO: get a better picture by sensing how many of our allies are soliders?
-        allies = rc.senseNearbyGameObjects(Robot.class, 100, info.myTeam);
+        // TODO: Morph this into one call (thats an extra 100 byte codes for no reason)
+        Robot[] robots = rc.senseNearbyGameObjects(Robot.class, 100);
+        for (Robot r : robots) {
+            RobotInfo info = rc.senseRobotInfo(r);
+
+            if (info.team == this.info.enemyTeam) {
+                if (info.type == RobotType.HQ) {
+                    seesEnemyHQ = true;
+                } else if (info.type == RobotType.SOLDIER) {
+                    enemySoldiers.add(info);
+                } else if (info.type == RobotType.NOISETOWER) {
+                    enemyNoise.add(info);
+                } else if (info.type == RobotType.PASTR) {
+                    enemyPastrs.add(info);
+                }
+            } else {
+                if (info.type == RobotType.SOLDIER) {
+                    friendlySoldiers.add(info);
+                }
+            }
+        }
+
         enemyRobotInfo = CombatUtils.getRobotInfo(enemies, rc);
         enemySoldiers.length = 0;
         enemyNoise.length = 0;
         enemyPastrs.length = 0;
         seesEnemyHQ = false;
-        for ( RobotInfo r : enemyRobotInfo) {
-            if (r.type == RobotType.HQ) {
-                seesEnemyHQ = true;
-            } else if (r.type == RobotType.SOLDIER) {
-                enemySoldiers.add(r);
-            } else if (r.type == RobotType.NOISETOWER) {
-                enemyNoise.add(r);
-            } else if (r.type == RobotType.PASTR) {
-                enemyPastrs.add(r);
-            }
+        for (RobotInfo r : enemyRobotInfo) {
         }
         seesEnemySoldier = enemySoldiers.length > 0;
         seesEnemyPastr = enemyPastrs.length > 0;

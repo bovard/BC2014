@@ -19,14 +19,14 @@ public class CombatUtils {
         return new MapLocation((int)(x/infos.length), (int)(y/infos.length));
     }
 
-    public static MapLocation findCenterOfMass(MapLocation[] infos) {
+    public static MapLocation findCenterOfMass(MapLocation[] locs) {
         double x = 0.0;
         double y = 0.0;
-        for (MapLocation i : infos) {
+        for (MapLocation i : locs) {
             x += i.x;
             y += i.y;
         }
-        return new MapLocation((int)(x/infos.length), (int)(y/infos.length));
+        return new MapLocation((int)(x/locs.length), (int)(y/locs.length));
     }
 
     public static RobotInfo[] getRobotInfo(Robot[] robots, RobotController rc) throws GameActionException {
