@@ -19,6 +19,7 @@ public class ToySoldier extends TeamRobot {
     public boolean seesEnemyNoise = false;
     public boolean seesEnemyPastr = false;
     public boolean seesEnemyHQ = false;
+    public boolean engagedInCombat = false;
     public SmartRobotInfoArray enemySoldiers = new SmartRobotInfoArray();
     public SmartRobotInfoArray enemyPastrs = new SmartRobotInfoArray();
     public SmartRobotInfoArray enemyNoise = new SmartRobotInfoArray();
@@ -80,5 +81,6 @@ public class ToySoldier extends TeamRobot {
         seesEnemyNoise = enemyNoise.length > 0;
         seesEnemyTeamNonHQRobot = seesEnemySoldier || seesEnemyNoise || seesEnemyPastr;
         seesEnemyTeamNonHQBuilding = seesEnemyNoise || seesEnemyPastr;
+        engagedInCombat = enemySoldiers.length > 0 && currentLoc.distanceSquaredTo(enemySoldiers.arr[0].location) < RobotType.SOLDIER.attackRadiusMaxSquared;
     }
 }

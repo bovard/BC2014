@@ -7,6 +7,8 @@ import team009.bt.Node;
 import java.util.Random;
 
 public abstract class TeamRobot {
+    // the distnace at which if you are greater than you are more than one square away from the enemy
+    public final static int ONE_SQUARE_AWAY_MAX = 18;
 
 	protected Node treeRoot;
     protected Node comRoot = null;
