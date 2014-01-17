@@ -18,7 +18,7 @@ public class ToyEngageEnemy extends Behavior {
 
     @Override
     public boolean pre() throws GameActionException {
-        return soldier.seesEnemyTeamNonHQBuilding;
+        return soldier.seesEnemyTeamNonHQRobot;
     }
 
     @Override
