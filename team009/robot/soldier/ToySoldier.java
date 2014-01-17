@@ -56,6 +56,10 @@ public class ToySoldier extends TeamRobot {
         }
         currentLoc = temp;
         health = rc.getHealth();
+        enemySoldiers.length = 0;
+        enemyNoise.length = 0;
+        enemyPastrs.length = 0;
+        friendlySoldiers.length = 0;
 
         // micro stuff
         // TODO: get a better picture by sensing how many of our allies are soliders?
@@ -81,13 +85,7 @@ public class ToySoldier extends TeamRobot {
             }
         }
 
-        enemyRobotInfo = CombatUtils.getRobotInfo(enemies, rc);
-        enemySoldiers.length = 0;
-        enemyNoise.length = 0;
-        enemyPastrs.length = 0;
         seesEnemyHQ = false;
-        for (RobotInfo r : enemyRobotInfo) {
-        }
         seesEnemySoldier = enemySoldiers.length > 0;
         seesEnemyPastr = enemyPastrs.length > 0;
         seesEnemyNoise = enemyNoise.length > 0;

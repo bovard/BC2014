@@ -37,7 +37,6 @@ public class ToyCombat {
         SmartRobotInfoArray nmeInfos = soldier.enemySoldiers;
         MapLocation[] nmeLocs = new MapLocation[soldier.enemySoldiers.length];
         int[] nmeHps = new int[soldier.enemySoldiers.length];
-        MapLocation nmeCentroid = CombatUtils.findCenterOfMass(nmeLocs);
 
         _fillData(nmeInfos, nmeLocs, nmeHps);
         _sort(nmeInfos, nmeLocs, nmeHps);
@@ -56,28 +55,34 @@ public class ToyCombat {
             }
         } else {
 
-            // Out numbered or even.  Wait for them to attack, then attack!
-            // TODO: Review Bovard
-            if (soldier.friendlySoldiers.length <= soldier.enemySoldiers.length) {
-                MapLocation nearestEnemy = _getLowestHPAttackableEnemy(currentLoc, nmeLocs);
-                if (nearestEnemy == null) {
-                    // Do nothing. Let them move first.
-                    // TODO: What if a nearby friend is in attack range, should we proceed into attacking position?
-                } else {
-                    // They are in attack range. defend position!
-                    rc.attackSquare(nearestEnemy);
+            if (soldier.enemySoldiers.length > 0) {
+                // Out numbered or even.  Wait for them to attack, then attack!
+                // TODO: Review Bovard
+                if (soldier.friendlySoldiers.length <= soldier.enemySoldiers.length) {
+                    MapLocation nearestEnemy = _getLowestHPAttackableEnemy(currentLoc, nmeLocs);
+                    if (nearestEnemy == null) {
+                        // Do nothing. Let them move first.
+                        // TODO: What if a nearby friend is in attack range, should we proceed into attacking position?
+                    } else {
+                        // They are in attack range. defend position!
+                        rc.attackSquare(nearestEnemy);
+                    }
                 }
-            }
 
-            // We outnumber them
-            // TODO: Review Bovard
-            else {
-                MapLocation nearestEnemy = _getLowestHPAttackableEnemy(currentLoc, nmeLocs);
-                if (nearestEnemy == null) {
-                    _combatMove(rc, currentLoc, nmeCentroid);
-                } else {
-                    // They are in attack range. defend position!
-                    rc.attackSquare(nearestEnemy);
+                // We outnumber them
+                // TODO: Review Bovard
+                else {
+                    MapLocation nearestEnemy = _getLowestHPAttackableEnemy(currentLoc, nmeLocs);
+                    if (nearestEnemy == null) {
+                        _combatMove(rc, currentLoc, nmeLocs[0]);
+                    } else {
+                        // They are in attack range. defend position!
+                        rc.attackSquare(nearestEnemy);
+                    }
+                }
+            } else {
+                if (soldier.enemyPastrs.length > 0) {
+                    _moveOrAttack(rc, currentLoc, soldier.enemyPastrs.arr[0].location);
                 }
             }
         }
@@ -88,15 +93,12 @@ public class ToyCombat {
         return move.destination != null ? move.destination.distanceSquaredTo(curr) > attackRadius: false;
     }
 
-    private void _moveOrAttack(RobotController rc, MapLocation[] enemies, MapLocation from, MapLocation to, MapLocation nearestEnemy) throws GameActionException {
-        Direction dirTo = _combatMove(rc, from, to);
-        boolean isAttackable = _isAttackablePosition(from.add(dirTo), enemies);
-
+    private void _moveOrAttack(RobotController rc, MapLocation from, MapLocation to) throws GameActionException {
         // We got to just fight it out
-        if (isAttackable && nearestEnemy != null) {
-            rc.attackSquare(nearestEnemy);
-        } else if (!isAttackable) {
-            rc.move(dirTo);
+        if (rc.canAttackSquare(to)) {
+            rc.attackSquare(to);
+        } else {
+            rc.move(from.directionTo(to));
         }
     }
 
