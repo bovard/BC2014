@@ -13,6 +13,7 @@ public abstract class TeamRobot {
     public static final int ATTACK_PASTURE = 2;
     public static final int DEFEND = 3;
     public static final int ATTACK = 4;
+    public static final int DESTRUCT = 9;
 
     // Groups
     public static final int TOY_GROUP = 0;
