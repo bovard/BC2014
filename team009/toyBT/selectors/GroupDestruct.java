@@ -3,8 +3,9 @@ package team009.toyBT.selectors;
 import battlecode.common.GameActionException;
 import team009.robot.TeamRobot;
 import team009.robot.soldier.ToySoldier;
+import team009.toyBT.behaviors.ToyMoveToLocation;
 
-public class GroupDestruct extends PushToLocation {
+public class GroupDestruct extends ToyMoveToLocation {
     ToySoldier soldier;
 
     public GroupDestruct(ToySoldier soldier) {

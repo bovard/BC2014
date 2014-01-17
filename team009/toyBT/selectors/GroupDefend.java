@@ -2,8 +2,9 @@ package team009.toyBT.selectors;
 
 import battlecode.common.GameActionException;
 import team009.robot.soldier.ToySoldier;
+import team009.toyBT.behaviors.ToyMoveToLocation;
 
-public class GroupDefend extends PushToLocation {
+public class GroupDefend extends ToyMoveToLocation {
     ToySoldier soldier;
 
     public GroupDefend(ToySoldier soldier) {
@@ -19,7 +20,7 @@ public class GroupDefend extends PushToLocation {
     public boolean run() throws GameActionException {
 
         // We know that the location has been set and that there is an attack signal.
-        location.setDestination(soldier.getHQCommandLocation());
+        setDestination(soldier.getHQCommandLocation());
 
         return super.run();
     }
