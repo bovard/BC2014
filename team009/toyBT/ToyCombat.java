@@ -42,18 +42,18 @@ public class ToyCombat {
         _sort(nmeInfos, nmeLocs, nmeHps);
 
         rc.setIndicatorString(0, "isMoving: " + isMoving(currentLoc) + " : " + move.destination);
-        if (isMoving(currentLoc)) {
-
-            // have i moved into any enemies
-            MapLocation nearestAttacker = _getLowestHPAttackableEnemy(currentLoc, nmeLocs);
-            if (nearestAttacker == null) {
-                rc.setIndicatorString(1, "Moving: " + move.destination);
-                move.move();
-            } else {
-                rc.setIndicatorString(1, "nearestAttacker: " + nearestAttacker);
-                rc.attackSquare(nearestAttacker);
-            }
-        } else {
+//        if (isMoving(currentLoc)) {
+//
+//            // have i moved into any enemies
+//            MapLocation nearestAttacker = _getLowestHPAttackableEnemy(currentLoc, nmeLocs);
+//            if (nearestAttacker == null) {
+//                rc.setIndicatorString(1, "Moving: " + move.destination);
+//                move.move();
+//            } else {
+//                rc.setIndicatorString(1, "nearestAttacker: " + nearestAttacker);
+//                rc.attackSquare(nearestAttacker);
+//            }
+//        } else {
 
             if (soldier.enemySoldiers.length > 0) {
                 // Out numbered or even.  Wait for them to attack, then attack!
@@ -61,8 +61,11 @@ public class ToyCombat {
                 if (soldier.friendlySoldiers.length <= soldier.enemySoldiers.length) {
                     MapLocation nearestEnemy = _getLowestHPAttackableEnemy(currentLoc, nmeLocs);
                     if (nearestEnemy == null) {
-                        // Do nothing. Let them move first.
-                        // TODO: What if a nearby friend is in attack range, should we proceed into attacking position?
+                        // Can we move closer?
+                        Direction to = _combatMove(rc, currentLoc, nmeLocs[0]);
+                        if (to != null) {
+                            rc.move(to);
+                        }
                     } else {
                         // They are in attack range. defend position!
                         rc.attackSquare(nearestEnemy);
@@ -74,7 +77,10 @@ public class ToyCombat {
                 else {
                     MapLocation nearestEnemy = _getLowestHPAttackableEnemy(currentLoc, nmeLocs);
                     if (nearestEnemy == null) {
-                        _combatMove(rc, currentLoc, nmeLocs[0]);
+                        Direction move = _combatMove(rc, currentLoc, nmeLocs[0]);
+                        if (move != null) {
+                            rc.move(move);
+                        }
                     } else {
                         // They are in attack range. defend position!
                         rc.attackSquare(nearestEnemy);
@@ -85,7 +91,7 @@ public class ToyCombat {
                     _moveOrAttack(rc, currentLoc, soldier.enemyPastrs.arr[0].location);
                 }
             }
-        }
+//        }
     }
 
     // If the robot is moving with bug

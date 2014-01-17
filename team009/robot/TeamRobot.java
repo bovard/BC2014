@@ -100,7 +100,6 @@ public abstract class TeamRobot {
                 System.out.println("Load error: " );
                 e.printStackTrace();
             }
-            rc.setIndicatorString(0, Communicator.WriteRound(round) ? "WriteRound" : (Communicator.ReadRound(round) ? "ReadRound" : ""));
 
             // only yield if we're still on the same clock turn
             // if we aren't that means that we ended up skipping
