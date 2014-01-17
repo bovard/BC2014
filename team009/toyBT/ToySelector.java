@@ -1,32 +1,56 @@
 package team009.toyBT;
 
 import battlecode.common.GameActionException;
+import team009.bt.decisions.Decision;
 import team009.bt.decisions.Selector;
 import team009.robot.soldier.ToySoldier;
 import team009.toyBT.selectors.*;
 
-public class ToySelector extends Selector {
+public class ToySelector extends Decision {
+    GroupDestruct destruct;
+    GroupAttack attack;
+    GroupDefend defend;
+    GroupAttackPasture attackPasture;
+    GroupReturnToBase returnToBase;
     public ToySelector(ToySoldier robot) {
         super(robot);
 
         // Attack as a group
-        addChild(new GroupDestruct(robot));
+        destruct = new GroupDestruct(robot);
 
         // Attack as a group
-        addChild(new GroupAttack(robot));
+        attack = new GroupAttack(robot);
 
         // Defends pasture as group
-        addChild(new GroupDefend(robot));
+        defend = new GroupDefend(robot);
 
         // Defends pasture as group
-        addChild(new GroupAttackPasture(robot));
+        attackPasture = new GroupAttackPasture(robot);
 
         // Defends pasture as group
-        addChild(new GroupReturnToBase(robot));
+        returnToBase = new GroupReturnToBase(robot);
     }
 
     @Override
     public boolean pre() throws GameActionException {
+        return true;
+    }
+
+    public boolean run() throws GameActionException {
+
+        // NOTE:  This is obviously brittle, but its really efficient.
+        // Byte code critical code
+        if (destruct.pre()) {
+            destruct.run();
+        } else if (attack.pre()) {
+            attack.run();
+        } else if (defend.pre()) {
+            defend.run();
+        } else if (attackPasture.pre()) {
+            attackPasture.run();
+        } else if (returnToBase.pre()) {
+            returnToBase.run();
+        }
         return true;
     }
 }

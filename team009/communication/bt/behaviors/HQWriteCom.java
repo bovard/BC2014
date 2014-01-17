@@ -8,7 +8,6 @@ import team009.robot.soldier.SoldierSpawner;
 public class HQWriteCom extends WriteBehavior {
     HQ hq;
     MapLocation center = null;
-    boolean debugCenter = false;
     MapLocation baseCoverageLocation = null;
 
     public HQWriteCom(HQ robot) {
@@ -22,21 +21,15 @@ public class HQWriteCom extends WriteBehavior {
             _calculateRallyPoint();;
         }
 
-        if (debugCenter) {
-            if (Clock.getRoundNum() > 400) {
-                hq.comAttackPasture(center, TeamRobot.TOY_GROUP);
-            }
+        MapLocation[] locs = rc.sensePastrLocations(robot.info.enemyTeam);
+        int soldierCount = hq.getCount(TeamRobot.TOY_GROUP);
+
+        if (locs.length > 0 && soldierCount > REQUIRED_SOLDIER_COUNT_FOR_ATTACK) {
+            hq.comAttackPasture(locs[0], TeamRobot.TOY_GROUP);
         } else {
-            MapLocation[] locs = rc.sensePastrLocations(robot.info.enemyTeam);
-            int soldierCount = hq.getCount(SoldierSpawner.SOLDIER_TYPE_TOY_SOLDIER, TeamRobot.TOY_GROUP);
 
-            if (locs.length > 0 && soldierCount > REQUIRED_SOLDIER_COUNT_FOR_ATTACK) {
-                hq.comAttackPasture(locs[0], TeamRobot.TOY_GROUP);
-            } else {
-
-                hq.comClear(TeamRobot.TOY_GROUP, baseCoverageLocation);
-                hq.comReturnHome(baseCoverageLocation, TeamRobot.TOY_GROUP);
-            }
+            hq.comClear(TeamRobot.TOY_GROUP, baseCoverageLocation);
+            hq.comReturnHome(baseCoverageLocation, TeamRobot.TOY_GROUP);
         }
         return true;
     }

@@ -3,6 +3,8 @@ package team009.robot;
 import battlecode.common.*;
 import team009.RobotInformation;
 import team009.bt.Node;
+import team009.communication.Communicator;
+import team009.utils.Timer;
 
 import java.util.Random;
 
@@ -91,7 +93,9 @@ public abstract class TeamRobot {
 
                 // if we're active have the tree choose what to do
                 if (rc.isActive()) {
+                    Timer.StartTimer();
                     treeRoot.run();
+                    Timer.EndTimer();
                 }
 
             } catch (Exception e) {
@@ -106,6 +110,7 @@ public abstract class TeamRobot {
                 System.out.println("Load error: " );
                 e.printStackTrace();
             }
+            rc.setIndicatorString(0, Communicator.WriteRound(round) ? "WriteRound" : (Communicator.ReadRound(round) ? "ReadRound" : ""));
 
             // only yield if we're still on the same clock turn
             // if we aren't that means that we ended up skipping

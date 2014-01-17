@@ -15,8 +15,6 @@ import team009.robot.soldier.SoldierSpawner;
 
 public abstract class HQ extends TeamRobot {
 
-    // TODO: get rid of this once they patch
-    private Node shoot = new HQShoot(this);
     public int maxSoldiers;
     public SoldierCountDecoder[] soldierCounts;
     public boolean seesEnemy = false;
@@ -24,7 +22,7 @@ public abstract class HQ extends TeamRobot {
 
     public HQ(RobotController rc, RobotInformation info) {
         super(rc, info);
-        maxSoldiers = SoldierSpawner.SOLDIER_COUNT * Communicator.MAX_GROUP_COUNT;
+        maxSoldiers = Communicator.MAX_GROUP_COUNT;
         soldierCounts = new SoldierCountDecoder[maxSoldiers];
         // REMEMBER TO CALL treeRoot = getTreeRoot() in your implementations of this!
         comRoot = new HQCom(this);
@@ -47,9 +45,8 @@ public abstract class HQ extends TeamRobot {
     }
 
     // TODO: BUG IN CODE it seems to be missing 1
-    public int getCount(int type, int group) {
-        int idx = type * Communicator.MAX_GROUP_COUNT + group;
-        return soldierCounts[idx] == null ? 0 : soldierCounts[idx].count + 1;
+    public int getCount(int group) {
+        return soldierCounts[group] == null ? 0 : soldierCounts[group].count + 1;
     }
 
     public void comReturnHome(MapLocation loc, int group) throws GameActionException {
@@ -77,7 +74,7 @@ public abstract class HQ extends TeamRobot {
     }
 
     public boolean comDestruct(int group) throws GameActionException {
-        Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, DESTRUCT, new MapLocation(0, 0), getCount(SoldierSpawner.SOLDIER_TYPE_TOY_SOLDIER, group));
+        Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, DESTRUCT, new MapLocation(0, 0), getCount(group));
         return true ;
     }
 
