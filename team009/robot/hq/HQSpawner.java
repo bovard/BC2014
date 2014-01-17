@@ -13,6 +13,7 @@ public class HQSpawner {
     public static final int SPRINT = 5;
     public static final int NOISE_TEST = 6;
     public static final int COM_TEST = 7;
+    public static final int MICRO_TEST = 8;
 
     public static HQ getHQ(RobotController rc, RobotInformation info) {
         HQ robot = null;
@@ -50,6 +51,9 @@ public class HQSpawner {
                 break;
             case COM_TEST:
                 robot = new ComTest(rc, info);
+                break;
+            case MICRO_TEST:
+                robot = new MicroTest(rc, info);
                 break;
             default:
                 robot = new Offensive(rc, info);
