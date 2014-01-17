@@ -4,7 +4,7 @@ import battlecode.common.GameActionException;
 import team009.robot.soldier.ToySoldier;
 import team009.toyBT.behaviors.ToyMoveToLocation;
 
-public class GroupAttackPasture extends ToyMoveToLocation {
+public class GroupAttackPasture extends PushToLocation {
     ToySoldier soldier;
 
     public GroupAttackPasture(ToySoldier soldier) {
@@ -20,7 +20,7 @@ public class GroupAttackPasture extends ToyMoveToLocation {
     public boolean run() throws GameActionException {
 
         // We know that the location has been set and that there is an attack signal.
-        setDestination(soldier.getHQCommandLocation());
+        location.setDestination(soldier.getHQCommandLocation());
 
         return super.run();
     }

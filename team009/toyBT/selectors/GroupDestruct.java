@@ -5,7 +5,7 @@ import team009.robot.TeamRobot;
 import team009.robot.soldier.ToySoldier;
 import team009.toyBT.behaviors.ToyMoveToLocation;
 
-public class GroupDestruct extends ToyMoveToLocation {
+public class GroupDestruct extends PushToLocation {
     ToySoldier soldier;
 
     public GroupDestruct(ToySoldier soldier) {
