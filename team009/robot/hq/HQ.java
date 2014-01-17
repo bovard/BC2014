@@ -8,6 +8,7 @@ import team009.bt.behaviors.hq.HQShoot;
 import team009.communication.Communicator;
 import team009.communication.GroupCommandDecoder;
 import team009.communication.SoldierCountDecoder;
+import team009.communication.bt.HQCom;
 import team009.robot.TeamRobot;
 import team009.robot.soldier.BaseSoldier;
 import team009.robot.soldier.SoldierSpawner;
@@ -26,6 +27,7 @@ public abstract class HQ extends TeamRobot {
         maxSoldiers = SoldierSpawner.SOLDIER_COUNT * Communicator.MAX_GROUP_COUNT;
         soldierCounts = new SoldierCountDecoder[maxSoldiers];
         // REMEMBER TO CALL treeRoot = getTreeRoot() in your implementations of this!
+        comRoot = new HQCom(this);
     }
 
     @Override
@@ -52,25 +54,41 @@ public abstract class HQ extends TeamRobot {
 
     public void comReturnHome(MapLocation loc, int group) throws GameActionException {
         GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group, Communicator.GROUP_HQ_CHANNEL);
-        if (GroupCommandDecoder.shouldCommunicate(dec, loc, BaseSoldier.RETURN_TO_BASE, true)) {
-            Communicator.WriteToGroup(rc, group, BaseSoldier.RETURN_TO_BASE, Communicator.GROUP_HQ_CHANNEL, loc, 1000);
+        if (GroupCommandDecoder.shouldCommunicate(dec, loc, RETURN_TO_BASE, true)) {
+            Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, RETURN_TO_BASE, loc, 200);
         }
     }
 
     public void comAttackPasture(MapLocation loc, int group) throws GameActionException {
         GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group, Communicator.GROUP_HQ_CHANNEL);
-        if (GroupCommandDecoder.shouldCommunicate(dec, loc, BaseSoldier.ATTACK_PASTURE, true) && !loc.equals(dec.location)) {
-            Communicator.WriteToGroup(rc, group, BaseSoldier.ATTACK_PASTURE, Communicator.GROUP_HQ_CHANNEL, loc, 60);
+        if (GroupCommandDecoder.shouldCommunicate(dec, loc, ATTACK_PASTURE, true) && !loc.equals(dec.location)) {
+            Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, ATTACK_PASTURE, loc, 200);
         }
     }
 
-    public boolean comClear(int group) throws GameActionException {
+    public boolean comDefend(MapLocation loc, int group) throws GameActionException {
         GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group, Communicator.GROUP_HQ_CHANNEL);
-        if (dec == null || !dec.hasData()) {
-            return false;
+        if (GroupCommandDecoder.shouldCommunicate(dec, loc, DEFEND, true) && !loc.equals(dec.location)) {
+            Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, DEFEND, loc, 200);
+            return true;
         }
-        Communicator.ClearCommandChannel(rc, group, Communicator.GROUP_HQ_CHANNEL);
-        return true;
+
+        return false;
+    }
+
+    public boolean comDestruct(int group) throws GameActionException {
+        Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, DESTRUCT, new MapLocation(0, 0), getCount(SoldierSpawner.SOLDIER_TYPE_TOY_SOLDIER, group));
+        return true ;
+    }
+
+    public boolean comDefend(MapLocation loc, int group, int ttl) throws GameActionException {
+        GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group, Communicator.GROUP_HQ_CHANNEL);
+        if (GroupCommandDecoder.shouldCommunicate(dec, loc, DEFEND, true) && !loc.equals(dec.location)) {
+            Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, DEFEND, loc, ttl);
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -85,16 +103,13 @@ public abstract class HQ extends TeamRobot {
         if (hasLocation.equals(dec.location)) {
             return false;
         }
-        Communicator.ClearCommandChannel(rc, group, Communicator.GROUP_HQ_CHANNEL);
+
+        Communicator.ClearGroupChannel(rc, group, Communicator.GROUP_HQ_CHANNEL);
         return true;
     }
 
-    public void createDumbSoldier(int group) throws GameActionException {
-        _spawn(SoldierSpawner.SOLDIER_TYPE_DUMB, group);
-    }
-
-    public void createWolf(int group) throws GameActionException {
-        _spawn(SoldierSpawner.SOLDIER_TYPE_WOLF, group);
+    public void createToySoldier(int group) throws GameActionException {
+        _spawn(SoldierSpawner.SOLDIER_TYPE_TOY_SOLDIER, group);
     }
 
     // TODO: $IMPROVEMENT$ We should make the group number have a channel to grab pasture location from
@@ -128,6 +143,9 @@ public abstract class HQ extends TeamRobot {
 
     private void _spawn(int soldierType, int group) throws GameActionException {
         Direction dir = _getSpawnDirection();
+        if (dir == null) {
+            return;
+        }
         rc.spawn(dir);
         Communicator.WriteNewSoldier(rc, soldierType, group, new MapLocation(1, 1));
     }

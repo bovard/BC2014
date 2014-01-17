@@ -17,7 +17,6 @@ public class SoldierReadCom extends ReadBehavior {
         // Updates the decoder with any information.
         soldier.groupCommand = Communicator.ReadFromGroup(rc, soldier.group, Communicator.GROUP_SOLDIER_CHANEL);
         soldier.hqCommand = Communicator.ReadFromGroup(rc, soldier.group, Communicator.GROUP_HQ_CHANNEL);
-        soldier.message += " Decoder: " + soldier.groupCommand.toString();
         return true;
     }
 }

@@ -15,12 +15,12 @@ public class Communicator {
     }
 
     public static void WriteToGroup(RobotController rc, int group, int channel, int command, MapLocation location) throws GameActionException {
-        GroupCommandDecoder decoder = new GroupCommandDecoder(group, command, location);
-        _Broadcast(rc, _GroupChannel(group, channel), decoder);
+        WriteToGroup(rc, group, channel, command, location, -1);
     }
 
     public static void WriteToGroup(RobotController rc, int group, int channel, int command, MapLocation location, int ttl) throws GameActionException {
         GroupCommandDecoder decoder = new GroupCommandDecoder(group, command, location, ttl);
+
         _Broadcast(rc, _GroupChannel(group, channel), decoder);
     }
 
@@ -52,22 +52,19 @@ public class Communicator {
     }
 
     public static GroupCommandDecoder ReadFromGroup(RobotController rc, int group, int channel) throws GameActionException {
-        GroupCommandDecoder decoder = new GroupCommandDecoder(rc.readBroadcast(GROUP_CHANNEL_BASE + group));
+        int groupChannel = _GroupChannel(group, channel);
+        // TODO: $DEBUG$
+        GroupCommandDecoder decoder = new GroupCommandDecoder(rc.readBroadcast(groupChannel));
         decoder.ttl--;
 
         // No Coms yet on this channel
-        // TODO: $DEBUG$
-        rc.setIndicatorString(2, "Group Read(" + (GROUP_CHANNEL_BASE + group) + "): " + decoder.toString());
 
         // Shortcut it, clear the channel
         if (decoder.ttl <= 0) {
-
-            // Clears channel
-            ClearCommandChannel(rc, group, channel);
             return new GroupCommandDecoder(0);
         }
 
-        _Broadcast(rc, _GroupChannel(group, channel), decoder);
+        _Broadcast(rc, groupChannel, decoder);
         return decoder;
     }
 
@@ -79,7 +76,7 @@ public class Communicator {
         _Broadcast(rc, soldierType * MAX_GROUP_COUNT + group, 0);
     }
 
-    public static void ClearCommandChannel(RobotController rc, int group, int channel) throws GameActionException {
+    public static void ClearGroupChannel(RobotController rc, int group, int channel) throws GameActionException {
         _Broadcast(rc, _GroupChannel(group, channel), 0);
     }
 
@@ -93,9 +90,6 @@ public class Communicator {
 
     private static void _Broadcast(RobotController rc, int channel, CommunicationDecoder decoder) throws GameActionException {
         _Broadcast(rc, channel, decoder.getData());
-
-        // TODO: $DEBUG$
-        rc.setIndicatorString(1, "Broadcasted(" + channel + "): " + decoder.getData() + " : " + decoder.toString());
     }
 
     private static void _Broadcast(RobotController rc, int channel, int data) throws GameActionException {

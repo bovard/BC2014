@@ -1,20 +1,13 @@
 package team009.communication;
 
 import battlecode.common.MapLocation;
-import team009.robot.soldier.BaseSoldier;
+import team009.robot.TeamRobot;
 
 public class GroupCommandDecoder extends CommunicationDecoder {
     public MapLocation location;
     public int command;
     public int group;
     public int ttl = 0;
-
-    public GroupCommandDecoder(int group, int command) {
-        this.command = command;
-        this.group = group;
-        location = null;
-        ttl = TTL_MAX;
-    }
 
     public GroupCommandDecoder(int group, int command, MapLocation location) {
         this.command = command;
@@ -27,7 +20,7 @@ public class GroupCommandDecoder extends CommunicationDecoder {
         this.command = command;
         this.group = group;
         this.location = location;
-        this.ttl = ttl;
+        this.ttl = ttl == -1 ? TTL_MAX : ttl;
     }
 
     public GroupCommandDecoder(int data) {
@@ -85,7 +78,7 @@ public class GroupCommandDecoder extends CommunicationDecoder {
 
         int currCom = current.command;
         if (currCom == command) {
-            if (currCom == BaseSoldier.RETURN_TO_BASE || loc.equals(current.location)) {
+            if (currCom == TeamRobot.RETURN_TO_BASE || loc.equals(current.location)) {
                 return false;
             }
 
@@ -101,7 +94,7 @@ public class GroupCommandDecoder extends CommunicationDecoder {
 
     @Override
     public String toString() {
-        return "Command: " + command + " to group " + group + " with location " + location + " With " + ttl + " to live.";
+        return "Command: " + command + " to group " + group + " with location " + location + " With " + ttl + " to live." + " Data: " + decoderData;
     }
 
     public static final int GROUP_MULT = MapDecoder.COMMAND_MULTIPLIER;

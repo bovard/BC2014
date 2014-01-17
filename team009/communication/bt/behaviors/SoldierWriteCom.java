@@ -4,7 +4,7 @@ import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import team009.communication.Communicator;
 import team009.communication.GroupCommandDecoder;
-import team009.robot.soldier.BaseSoldier;
+import team009.robot.TeamRobot;
 import team009.robot.soldier.ToySoldier;
 
 public class SoldierWriteCom extends WriteBehavior {
@@ -20,10 +20,10 @@ public class SoldierWriteCom extends WriteBehavior {
         Communicator.WriteTypeAndGroup(rc, soldier.type, soldier.group);
 
         // If there is no decoder or no data, then write out information about the environment.
-        if (soldier.seesEnemySoldier || soldier.seesEnemyNoise || soldier.seesEnemyPastr) {
+        if (soldier.seesEnemyTeamNonHQRobot) {
             MapLocation priorityLoc = _getPriorityLocation();
-            if (GroupCommandDecoder.shouldCommunicate(soldier.groupCommand, priorityLoc, BaseSoldier.ATTACK)) {
-                Communicator.WriteToGroup(rc, soldier.group, Communicator.GROUP_SOLDIER_CHANEL, BaseSoldier.ATTACK_PASTURE, priorityLoc);
+            if (GroupCommandDecoder.shouldCommunicate(soldier.groupCommand, priorityLoc, TeamRobot.ATTACK, true)) {
+                Communicator.WriteToGroup(rc, soldier.group, Communicator.GROUP_SOLDIER_CHANEL, TeamRobot.ATTACK, priorityLoc);
             }
         }
 

@@ -83,4 +83,31 @@ public class ToySoldier extends TeamRobot {
         seesEnemyTeamNonHQBuilding = seesEnemyNoise || seesEnemyPastr;
         engagedInCombat = enemySoldiers.length > 0 && currentLoc.distanceSquaredTo(enemySoldiers.arr[0].location) < RobotType.SOLDIER.attackRadiusMaxSquared;
     }
+
+    //TODO: $DEBUG$
+    public void postProcessing() throws GameActionException {
+//        rc.setIndicatorString(0, "Com from group: " + groupCommand + (groupCommand != null ? groupCommand.toString() : ""));
+//        rc.setIndicatorString(1, "Com from HQ: " + hqCommand + (hqCommand != null ? hqCommand.toString() : ""));
+    }
+
+    // TODO: $Efficiency$ do something different than funcions :)
+    public boolean hasAttackSignal() {
+        return groupCommand != null && groupCommand.command == ATTACK;
+    }
+
+    public boolean hasPastrAttackSignal() {
+        return hqCommand != null && hqCommand.command == ATTACK_PASTURE;
+    }
+
+    public boolean hasDefendPastrSignal() {
+        return hqCommand != null && hqCommand.command == DEFEND;
+    }
+
+    public boolean hasReturnToBaseSignal() {
+        return hqCommand != null && hqCommand.command == RETURN_TO_BASE;
+    }
+
+    public MapLocation getHQCommandLocation() {
+        return hqCommand != null ? hqCommand.location : null;
+    }
 }

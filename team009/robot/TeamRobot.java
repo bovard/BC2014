@@ -10,7 +10,17 @@ public abstract class TeamRobot {
     // the distnace at which if you are greater than you are more than one square away from the enemy
     public final static int ONE_SQUARE_AWAY_MAX = 18;
 
-	protected Node treeRoot;
+    // Somtimes i wish valid identifiers could contain explanation points!
+    public static final int RETURN_TO_BASE = 1;
+    public static final int ATTACK_PASTURE = 2;
+    public static final int DEFEND = 3;
+    public static final int ATTACK = 4;
+    public static final int DESTRUCT = 9;
+
+    // Groups
+    public static final int TOY_GROUP = 0;
+
+    protected Node treeRoot;
     protected Node comRoot = null;
     public MapLocation currentLoc;
     public MapLocation lastLoc;
