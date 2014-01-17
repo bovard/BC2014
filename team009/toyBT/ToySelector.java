@@ -3,11 +3,15 @@ package team009.toyBT;
 import battlecode.common.GameActionException;
 import team009.bt.decisions.Selector;
 import team009.robot.soldier.ToySoldier;
+import team009.toyBT.micro.MicroSelector;
 import team009.toyBT.selectors.*;
 
 public class ToySelector extends Selector {
     public ToySelector(ToySoldier robot) {
         super(robot);
+
+        // micro
+        addChild(new MicroSelector(robot));
 
         // Attack as a group
         addChild(new GroupDestruct(robot));
