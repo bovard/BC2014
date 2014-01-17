@@ -115,5 +115,5 @@ public class Communicator {
     protected static int GROUP_CHANNEL_BASE = SOLDIER_TYPE_CHANNEL_BASE + MAX_GROUP_COUNT * SoldierSpawner.SOLDIER_COUNT;
 
     // Group channels go for group channel count + 5;
-    protected static final int INFORMATION_ROUND_MOD = 4;
+    public static final int INFORMATION_ROUND_MOD = 4;
 }
