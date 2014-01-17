@@ -94,7 +94,7 @@ public class GroupCommandDecoder extends CommunicationDecoder {
 
     @Override
     public String toString() {
-        return "Command: " + command + " to group " + group + " with location " + location + " With " + ttl + " to live.";
+        return "Command: " + command + " to group " + group + " with location " + location + " With " + ttl + " to live." + " Data: " + decoderData;
     }
 
     public static final int GROUP_MULT = MapDecoder.COMMAND_MULTIPLIER;

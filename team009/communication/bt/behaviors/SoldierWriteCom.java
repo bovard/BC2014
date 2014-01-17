@@ -20,10 +20,10 @@ public class SoldierWriteCom extends WriteBehavior {
         Communicator.WriteTypeAndGroup(rc, soldier.type, soldier.group);
 
         // If there is no decoder or no data, then write out information about the environment.
-        if (soldier.seesEnemyTeamNonHQBuilding) {
+        if (soldier.seesEnemyTeamNonHQRobot) {
             MapLocation priorityLoc = _getPriorityLocation();
-            if (GroupCommandDecoder.shouldCommunicate(soldier.groupCommand, priorityLoc, TeamRobot.ATTACK)) {
-                Communicator.WriteToGroup(rc, soldier.group, Communicator.GROUP_SOLDIER_CHANEL, TeamRobot.ATTACK_PASTURE, priorityLoc);
+            if (GroupCommandDecoder.shouldCommunicate(soldier.groupCommand, priorityLoc, TeamRobot.ATTACK, true)) {
+                Communicator.WriteToGroup(rc, soldier.group, Communicator.GROUP_SOLDIER_CHANEL, TeamRobot.ATTACK, priorityLoc);
             }
         }
 

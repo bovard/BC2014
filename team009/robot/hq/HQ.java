@@ -54,7 +54,7 @@ public abstract class HQ extends TeamRobot {
     public void comReturnHome(MapLocation loc, int group) throws GameActionException {
         GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group, Communicator.GROUP_HQ_CHANNEL);
         if (GroupCommandDecoder.shouldCommunicate(dec, loc, RETURN_TO_BASE, true)) {
-            Communicator.WriteToGroup(rc, group, RETURN_TO_BASE, Communicator.GROUP_HQ_CHANNEL, loc, 1000);
+            Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, RETURN_TO_BASE, loc, 1000);
         }
     }
 
@@ -87,6 +87,7 @@ public abstract class HQ extends TeamRobot {
         if (hasLocation.equals(dec.location)) {
             return false;
         }
+
         Communicator.ClearGroupChannel(rc, group, Communicator.GROUP_HQ_CHANNEL);
         return true;
     }

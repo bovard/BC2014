@@ -34,7 +34,6 @@ public class HQWriteCom extends WriteBehavior {
                 hq.comAttackPasture(locs[0], TeamRobot.TOY_GROUP);
             } else {
 
-                // This will short circuit on both same location or write round.
                 hq.comClear(TeamRobot.TOY_GROUP, baseCoverageLocation);
                 hq.comReturnHome(baseCoverageLocation, TeamRobot.TOY_GROUP);
             }
