@@ -14,6 +14,7 @@ public class GroupCommandDecoder extends CommunicationDecoder {
         this.group = group;
         this.location = location;
         ttl = TTL_MAX;
+        decoderData = -1;
     }
 
     public GroupCommandDecoder(int group, int command, MapLocation location, int ttl) {
@@ -21,14 +22,19 @@ public class GroupCommandDecoder extends CommunicationDecoder {
         this.group = group;
         this.location = location;
         this.ttl = ttl == -1 ? TTL_MAX : ttl;
+        decoderData = -1;
     }
 
     public GroupCommandDecoder(int data) {
-        ttl = data / TIME_TO_LIVE;
-        command = (data % TIME_TO_LIVE) / COMMAND_MULT;
-        group = (data % COMMAND_MULT) / GROUP_MULT;
-        location = MapDecoder.getLocationFromData(data % GROUP_MULT);
-        decoderData = data;
+
+        ttl = (data / TIME_TO_LIVE) - 1;
+
+        if (ttl > 0) {
+            command = (data % TIME_TO_LIVE) / COMMAND_MULT;
+            group = (data % COMMAND_MULT) / GROUP_MULT;
+            location = MapDecoder.getLocationFromData(data % GROUP_MULT);
+            decoderData = data - TIME_TO_LIVE;
+        }
     }
 
     protected void resetTTL() {
@@ -51,8 +57,8 @@ public class GroupCommandDecoder extends CommunicationDecoder {
 
     @Override
     public int getData() {
-        return (location != null ? MapDecoder.getDataFromLocation(location) : 0) +
-                GROUP_MULT * group + COMMAND_MULT * command + TIME_TO_LIVE * ttl;
+        return decoderData == -1 ? (location != null ? MapDecoder.getDataFromLocation(location) : 0) +
+                GROUP_MULT * group + COMMAND_MULT * command + TIME_TO_LIVE * ttl : decoderData;
     }
 
     /**

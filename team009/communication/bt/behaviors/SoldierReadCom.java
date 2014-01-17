@@ -16,10 +16,8 @@ public class SoldierReadCom extends ReadBehavior {
     public boolean run() throws GameActionException {
 
         // Updates the decoder with any information.
-        Timer.StartTimer();
         soldier.groupCommand = Communicator.ReadFromGroup(rc, soldier.group, Communicator.GROUP_SOLDIER_CHANEL);
         soldier.hqCommand = Communicator.ReadFromGroup(rc, soldier.group, Communicator.GROUP_HQ_CHANNEL);
-        Timer.EndTimer();
         return true;
     }
 }

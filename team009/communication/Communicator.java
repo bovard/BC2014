@@ -55,16 +55,15 @@ public class Communicator {
         int groupChannel = _GroupChannel(group, channel);
         // TODO: $DEBUG$
         GroupCommandDecoder decoder = new GroupCommandDecoder(rc.readBroadcast(groupChannel));
-        decoder.ttl--;
 
         // No Coms yet on this channel
 
         // Shortcut it, clear the channel
-        if (decoder.ttl <= 0) {
+        if (decoder.command == 0) {
             return new GroupCommandDecoder(0);
         }
 
-        _Broadcast(rc, groupChannel, decoder);
+        _Broadcast(rc, groupChannel, decoder.getData());
         return decoder;
     }
 
