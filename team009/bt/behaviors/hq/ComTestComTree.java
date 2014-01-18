@@ -1,10 +1,8 @@
 package team009.bt.behaviors.hq;
 
-import battlecode.common.Clock;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import team009.communication.bt.behaviors.WriteBehavior;
-import team009.robot.TeamRobot;
 import team009.robot.hq.HQ;
 
 public class ComTestComTree extends WriteBehavior {

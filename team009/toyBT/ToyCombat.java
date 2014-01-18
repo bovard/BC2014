@@ -89,6 +89,8 @@ public class ToyCombat {
             } else {
                 if (soldier.enemyPastrs.length > 0) {
                     _moveOrAttack(rc, currentLoc, soldier.enemyPastrs.arr[0].location);
+                } else if (soldier.enemyNoise.length > 0) {
+                    _moveOrAttack(rc, currentLoc, soldier.enemyNoise.arr[0].location);
                 }
             }
 //        }
