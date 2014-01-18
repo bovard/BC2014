@@ -23,10 +23,10 @@ public class ComTestComTree extends WriteBehavior {
 
     public boolean run() throws GameActionException {
 
-        if (Clock.getRoundNum() - lastCommand > 150 && hq.comDefend(locs[idx], 0)) {
-            lastCommand = Clock.getRoundNum();
-            idx = (idx + 1) % 4;
-        }
+//        if (Clock.getRoundNum() - lastCommand > 150 && hq.comDefend(locs[idx], 0)) {
+//            lastCommand = Clock.getRoundNum();
+//            idx = (idx + 1) % 4;
+//        }
         return true;
     }
 }

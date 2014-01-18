@@ -1,6 +1,5 @@
 package team009.robot.hq;
 
-import team009.utils.Timer;
 import battlecode.common.*;
 import team009.MapUtils;
 import team009.RobotInformation;
@@ -73,7 +72,6 @@ public abstract class HQ extends TeamRobot {
      */
     public void postProcessing() throws GameActionException {
         if (foundBest) {
-            rc.setIndicatorString(1, "BestLocation: " + bestRegenLoc);
             return;
         }
 
@@ -122,9 +120,8 @@ public abstract class HQ extends TeamRobot {
         this.regenColumn = regenColumn;
     }
 
-    // TODO: BUG IN CODE it seems to be missing 1
     public int getCount(int group) {
-        return soldierCounts[group] == null ? 0 : soldierCounts[group].count + 1;
+        return soldierCounts[group] == null ? 0 : soldierCounts[group].count;
     }
 
     // make this a more optimal spot
@@ -136,20 +133,11 @@ public abstract class HQ extends TeamRobot {
     }
 
     public void comAttackPasture(MapLocation loc, int group) throws GameActionException {
-        GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group, Communicator.GROUP_HQ_CHANNEL);
-        if (GroupCommandDecoder.shouldCommunicate(dec, loc, ATTACK_PASTURE, true) && !loc.equals(dec.location)) {
-            Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, ATTACK_PASTURE, loc, 200);
-        }
+        Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, ATTACK_PASTURE, loc, 200);
     }
 
-    public boolean comDefend(MapLocation loc, int group) throws GameActionException {
-        GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group, Communicator.GROUP_HQ_CHANNEL);
-        if (GroupCommandDecoder.shouldCommunicate(dec, loc, DEFEND, true) && !loc.equals(dec.location)) {
-            Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, DEFEND, loc, 200);
-            return true;
-        }
-
-        return false;
+    public void comDefend(MapLocation loc, int group) throws GameActionException {
+        Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, DEFEND, loc, 200);
     }
 
     public boolean comCapture(MapLocation loc, int group) throws GameActionException {

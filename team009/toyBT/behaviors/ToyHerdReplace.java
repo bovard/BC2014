@@ -41,6 +41,10 @@ public class ToyHerdReplace extends Behavior {
         if (robot.currentLoc.equals(soldier.comLocation)) {
             robot.rc.construct(RobotType.PASTR);
         } else {
+            if (!pastureLocation.equals(soldier.comLocation)) {
+                pastureLocation = soldier.comLocation;
+                move.setDestination(pastureLocation);
+            }
             move.move();
         }
         return true;
