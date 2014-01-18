@@ -5,25 +5,17 @@ import battlecode.common.MapLocation;
 import team009.bt.behaviors.Behavior;
 import team009.navigation.BugMove;
 import team009.robot.TeamRobot;
+import team009.robot.soldier.ToySoldier;
 
 public class ToyMoveToLocation extends Behavior {
     protected BugMove move;
-    public MapLocation currentLocation;
+    public MapLocation currentLocation = new MapLocation(0, 0);
+    ToySoldier soldier;
 
-    public ToyMoveToLocation(TeamRobot robot, MapLocation location) {
+    public ToyMoveToLocation(ToySoldier robot) {
         super(robot);
+        soldier = robot;
         move = new BugMove(robot);
-        move.setDestination(location);
-    }
-
-    public ToyMoveToLocation(TeamRobot robot) {
-        super(robot);
-        move = new BugMove(robot);
-    }
-
-    public void setDestination(MapLocation location) {
-        move.setDestination(location);
-        currentLocation = location;
     }
 
     @Override
@@ -32,18 +24,13 @@ public class ToyMoveToLocation extends Behavior {
     }
 
     @Override
-    public boolean post() throws GameActionException {
-        return false;
-    }
-
-    @Override
-    public void reset() throws GameActionException {
-    }
-
-    @Override
     public boolean run() throws GameActionException {
-        move.move();
+        if (!currentLocation.equals(soldier.comLocation)) {
+            move.setDestination(soldier.comLocation);
+            currentLocation = soldier.comLocation;
+        }
         //TODO determine when to sneak based on if near friendly PASTR
+        move.move();
         //move.sneak();
         return true;
     }

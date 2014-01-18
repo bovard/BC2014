@@ -17,7 +17,8 @@ public abstract class TeamRobot {
     public static final int ATTACK_PASTURE = 2;
     public static final int CAPTURE_PASTURE = 3;
     public static final int DEFEND = 4;
-    public static final int ATTACK = 5;
+    public static final int HERD = 5;
+    public static final int ATTACK = 6;
     public static final int DESTRUCT = 9;
 
     protected Node treeRoot;

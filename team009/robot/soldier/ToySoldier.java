@@ -4,7 +4,6 @@ import battlecode.common.*;
 import team009.RobotInformation;
 import team009.bt.Node;
 import team009.communication.bt.SoldierCom;
-import team009.combat.CombatUtils;
 import team009.communication.GroupCommandDecoder;
 import team009.robot.TeamRobot;
 import team009.toyBT.ToySelector;
@@ -28,7 +27,6 @@ public class ToySoldier extends TeamRobot {
     public GroupCommandDecoder hqCommand;
     public Robot[] enemies = new Robot[0];
     public Robot[] allies = new Robot[0];
-    public RobotInfo[] enemyRobotInfo = new RobotInfo[0];
     public int group;
     public int type;
     public MapLocation currentLoc;
@@ -100,6 +98,11 @@ public class ToySoldier extends TeamRobot {
         seesEnemyTeamNonHQRobot = seesEnemySoldier || seesEnemyNoise || seesEnemyPastr;
         seesEnemyTeamNonHQBuilding = seesEnemyNoise || seesEnemyPastr;
         engagedInCombat = enemySoldiers.length > 0 && currentLoc.distanceSquaredTo(enemySoldiers.arr[0].location) < RobotType.SOLDIER.attackRadiusMaxSquared;
+
+        // What type of toy soldier is this.
+        // TODO: Bovard what to do?
+        isHerder = comCommand == CAPTURE_PASTURE;
+        isHunter = !isHerder;
     }
 
     // TODO: WayPointing?

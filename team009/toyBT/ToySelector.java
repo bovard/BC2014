@@ -2,9 +2,9 @@ package team009.toyBT;
 
 import battlecode.common.GameActionException;
 import team009.bt.decisions.Decision;
-import team009.bt.decisions.Selector;
 import team009.robot.soldier.ToySoldier;
-import team009.toyBT.selectors.*;
+import team009.toyBT.behaviors.*;
+import team009.toyBT.selectors.ToyHerderSelector;
 
 public class ToySelector extends Decision {
     GroupDestruct destruct;
@@ -13,8 +13,15 @@ public class ToySelector extends Decision {
     GroupAttackPasture attackPasture;
     GroupCapture capturePasture;
     GroupReturnToBase returnToBase;
+    ToyEngageEnemy engageEnemy;
+    ToyHerderSelector herder;
+    ToySoldier soldier;
     public ToySelector(ToySoldier robot) {
         super(robot);
+        soldier = robot;
+
+        // Kill dem enemies
+        engageEnemy = new ToyEngageEnemy(robot);
 
         // Attack as a group
         destruct = new GroupDestruct(robot);
@@ -33,6 +40,9 @@ public class ToySelector extends Decision {
 
         // returns to base as group
         returnToBase = new GroupReturnToBase(robot);
+
+        // Becomes the herder.
+        herder = new ToyHerderSelector(robot);
     }
 
     @Override
@@ -44,18 +54,28 @@ public class ToySelector extends Decision {
 
         // NOTE:  This is obviously brittle, but its really efficient.
         // Byte code critical code
+        if (engageEnemy.pre()) {
+            return engageEnemy.run();
+        }
         if (destruct.pre()) {
             destruct.run();
         } else if (attack.pre()) {
             attack.run();
-        } else if (defend.pre()) {
-            defend.run();
-        } else if (capturePasture.pre()) {
-            capturePasture.run();
-        } else if (attackPasture.pre()) {
-            attackPasture.run();
-        } else if (returnToBase.pre()) {
-            returnToBase.run();
+        }
+
+        if (soldier.isHerder) {
+            herder.run();
+        } else if (soldier.isHunter) {
+            if (defend.pre()) {
+                defend.run();
+            } else if (capturePasture.pre()) {
+                capturePasture.run();
+            } else if (attackPasture.pre()) {
+                attackPasture.run();
+            } else if (returnToBase.pre()) {
+                returnToBase.run();
+            }
+
         }
         return true;
     }

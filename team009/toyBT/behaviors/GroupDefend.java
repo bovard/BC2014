@@ -1,20 +1,19 @@
-package team009.toyBT.selectors;
+package team009.toyBT.behaviors;
 
+import _team0_2_4.bt.behaviors.MoveToLocation;
 import battlecode.common.GameActionException;
+import team009.robot.TeamRobot;
 import team009.robot.soldier.ToySoldier;
 import team009.toyBT.behaviors.ToyMoveToLocation;
 
-public class GroupDefend extends PushToLocation {
-    ToySoldier soldier;
-
+public class GroupDefend extends ToyMoveToLocation {
     public GroupDefend(ToySoldier soldier) {
         super(soldier);
-        this.soldier = soldier;
     }
 
     @Override
     public boolean pre() throws GameActionException {
-        return soldier.comCommand == soldier.DEFEND;
+        return soldier.comCommand == TeamRobot.DEFEND;
     }
 }
 

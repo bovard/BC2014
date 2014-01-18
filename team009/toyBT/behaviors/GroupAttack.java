@@ -1,20 +1,18 @@
-package team009.toyBT.selectors;
+package team009.toyBT.behaviors;
 
 import battlecode.common.GameActionException;
 import com.apple.laf.AquaToolTipUI;
+import team009.robot.TeamRobot;
 import team009.robot.soldier.ToySoldier;
 import team009.toyBT.behaviors.ToyMoveToLocation;
 
-public class GroupAttack extends PushToLocation {
-    ToySoldier soldier;
-
+public class GroupAttack extends ToyMoveToLocation {
     public GroupAttack(ToySoldier soldier) {
         super(soldier);
-        this.soldier = soldier;
     }
 
     @Override
     public boolean pre() throws GameActionException {
-        return soldier.comCommand == soldier.ATTACK;
+        return soldier.comCommand == TeamRobot.ATTACK;
     }
 }
