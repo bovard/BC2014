@@ -21,23 +21,30 @@ public class HQWriteCom extends WriteBehavior {
             _calculateRallyPoint();;
         }
 
-        MapLocation[] locs = rc.sensePastrLocations(robot.info.enemyTeam);
-        int soldierCount = hq.getCount(0);
+        int toyCount0 = hq.getCount(0);
+        int toyCount1 = hq.getCount(1);
+        boolean enough = toyCount0 + toyCount1 > REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
 
-        if (locs.length > 0 && soldierCount > REQUIRED_SOLDIER_COUNT_FOR_ATTACK) {
-            if (locs.length > 1 && hq.getCount(1) > REQUIRED_SOLDIER_COUNT_FOR_ATTACK) {
-                hq.comAttackPasture(locs[1], 1);
-                hq.comAttackPasture(locs[0], 0);
+        if (hq.hasPastures && enough) {
+            if (hq.pastures.length > 1 && toyCount0 > REQUIRED_SOLDIER_COUNT_FOR_ATTACK && toyCount1 > REQUIRED_SOLDIER_COUNT_FOR_ATTACK) {
+                hq.comAttackPasture(hq.pastures[1], 1);
+                hq.comAttackPasture(hq.pastures[0], 0);
             } else {
-                hq.comAttackPasture(locs[0], 1);
-                hq.comAttackPasture(locs[0], 0);
+                hq.comAttackPasture(hq.pastures[0], 1);
+                hq.comAttackPasture(hq.pastures[0], 0);
             }
         } else {
-
-            hq.comClear(0, baseCoverageLocation);
-            hq.comClear(1, baseCoverageLocation);
-            hq.comReturnHome(baseCoverageLocation, 0);
-            hq.comReturnHome(baseCoverageLocation, 1);
+            rc.setIndicatorString(0, "Found: " + hq.foundBest + " : " + enough);
+            if (hq.foundBest && enough) {
+                hq.comCapture(hq.bestRegenLoc, 0);
+                hq.comCapture(hq.bestRegenLoc, 1);
+                rc.setIndicatorString(2, "Capturing best regen location");
+            } else {
+                hq.comClear(0, baseCoverageLocation);
+                hq.comClear(1, baseCoverageLocation);
+                hq.comReturnHome(baseCoverageLocation, 0);
+                hq.comReturnHome(baseCoverageLocation, 1);
+            }
         }
         return true;
     }

@@ -33,13 +33,21 @@ public class ToySoldier extends TeamRobot {
     public int type;
     public MapLocation currentLoc;
     public MapLocation lastLoc;
+    public MapLocation comLocation;
+    public int comCommand = 0;
     public double health;
     public GroupCommandDecoder decoder;
+
+
+    // Permanent behaviors from coms.
+    public boolean isHunter = true;
+    public boolean isHerder = false;
 
     public ToySoldier(RobotController rc, RobotInformation info) {
         super(rc, info);
         treeRoot = new ToySelector(this);
         comRoot = new SoldierCom(this);
+        comLocation = new MapLocation(0, 0);
     }
 
     @Override
@@ -94,30 +102,6 @@ public class ToySoldier extends TeamRobot {
         engagedInCombat = enemySoldiers.length > 0 && currentLoc.distanceSquaredTo(enemySoldiers.arr[0].location) < RobotType.SOLDIER.attackRadiusMaxSquared;
     }
 
-    //TODO: $DEBUG$
-    public void postProcessing() throws GameActionException {
-//        rc.setIndicatorString(0, "Com from group: " + groupCommand + (groupCommand != null ? groupCommand.toString() : ""));
-//        rc.setIndicatorString(1, "Com from HQ: " + hqCommand + (hqCommand != null ? hqCommand.toString() : ""));
-    }
-
-    // TODO: $Efficiency$ do something different than funcions :)
-    public boolean hasAttackSignal() {
-        return groupCommand != null && groupCommand.command == ATTACK;
-    }
-
-    public boolean hasPastrAttackSignal() {
-        return hqCommand != null && hqCommand.command == ATTACK_PASTURE;
-    }
-
-    public boolean hasDefendPastrSignal() {
-        return hqCommand != null && hqCommand.command == DEFEND;
-    }
-
-    public boolean hasReturnToBaseSignal() {
-        return hqCommand != null && hqCommand.command == RETURN_TO_BASE;
-    }
-
-    public MapLocation getHQCommandLocation() {
-        return hqCommand != null ? hqCommand.location : null;
-    }
+    // TODO: WayPointing?
+    public void postProcessing() throws GameActionException {}
 }

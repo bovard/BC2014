@@ -8,21 +8,27 @@ import team009.toyBT.behaviors.ToyEngageEnemy;
 import team009.toyBT.behaviors.ToyMoveToLocation;
 
 public class PushToLocation extends Selector {
-    ToySoldier gs;
+    ToySoldier soldier;
     ToyMoveToLocation location;
+    ToyEngageEnemy engage;
 
     public PushToLocation(ToySoldier robot) {
         super(robot);
-        gs = robot;
+        soldier = robot;
         location = new ToyMoveToLocation(robot);
-
-        children.add(new ToyEngageEnemy(robot));
-        children.add(location);
+        engage = new ToyEngageEnemy(robot);
     }
 
     @Override
     public boolean pre() throws GameActionException {
         return location.pre();
+    }
+
+    public boolean run() throws GameActionException {
+        if (!soldier.comLocation.equals(location.currentLocation)) {
+            location.setDestination(soldier.comLocation);
+        }
+        return engage.pre() ? engage.run() : location.run();
     }
 }
 

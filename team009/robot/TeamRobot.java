@@ -15,8 +15,9 @@ public abstract class TeamRobot {
     // Somtimes i wish valid identifiers could contain explanation points!
     public static final int RETURN_TO_BASE = 1;
     public static final int ATTACK_PASTURE = 2;
-    public static final int DEFEND = 3;
-    public static final int ATTACK = 4;
+    public static final int CAPTURE_PASTURE = 3;
+    public static final int DEFEND = 4;
+    public static final int ATTACK = 5;
     public static final int DESTRUCT = 9;
 
     protected Node treeRoot;
@@ -111,8 +112,4 @@ public abstract class TeamRobot {
             }
         }
 	}
-
-    private void fn() {
-
-    }
 }

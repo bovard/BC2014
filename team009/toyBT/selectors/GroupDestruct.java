@@ -15,12 +15,7 @@ public class GroupDestruct extends PushToLocation {
 
     @Override
     public boolean pre() throws GameActionException {
-        return soldier.hqCommand != null && soldier.hqCommand.command == TeamRobot.DESTRUCT;
-    }
-
-    public boolean run() throws GameActionException {
-        rc.selfDestruct();
-        return false;
+        return soldier.comCommand == soldier.DESTRUCT;
     }
 }
 

@@ -11,6 +11,7 @@ public class ToySelector extends Decision {
     GroupAttack attack;
     GroupDefend defend;
     GroupAttackPasture attackPasture;
+    GroupCapture capturePasture;
     GroupReturnToBase returnToBase;
     public ToySelector(ToySoldier robot) {
         super(robot);
@@ -24,10 +25,13 @@ public class ToySelector extends Decision {
         // Defends pasture as group
         defend = new GroupDefend(robot);
 
-        // Defends pasture as group
+        // Attacks pasture as group
+        capturePasture = new GroupCapture(robot);
+
+        // Attacks pasture as group
         attackPasture = new GroupAttackPasture(robot);
 
-        // Defends pasture as group
+        // returns to base as group
         returnToBase = new GroupReturnToBase(robot);
     }
 
@@ -46,6 +50,8 @@ public class ToySelector extends Decision {
             attack.run();
         } else if (defend.pre()) {
             defend.run();
+        } else if (capturePasture.pre()) {
+            capturePasture.run();
         } else if (attackPasture.pre()) {
             attackPasture.run();
         } else if (returnToBase.pre()) {

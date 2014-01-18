@@ -14,15 +14,7 @@ public class GroupDefend extends PushToLocation {
 
     @Override
     public boolean pre() throws GameActionException {
-        return soldier.hasDefendPastrSignal();
-    }
-
-    public boolean run() throws GameActionException {
-
-        // We know that the location has been set and that there is an attack signal.
-        location.setDestination(soldier.getHQCommandLocation());
-
-        return super.run();
+        return soldier.comCommand == soldier.DEFEND;
     }
 }
 

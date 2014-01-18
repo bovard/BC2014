@@ -18,14 +18,17 @@ public abstract class HQ extends TeamRobot {
     public boolean seesEnemy = false;
     public Robot[] enemies = new Robot[0];
     public MapLocation bestLocation;
+    public boolean hasPastures = false;
+    public MapLocation[] pastures = new MapLocation[0];
+
+    public MapLocation bestRegenLoc = null;
+    public boolean foundBest = false;
     private double[][] cowRegens;
     private double bestRegen;
-    private MapLocation bestRegenLoc = null;
     private int regenRow = 1;
     private int regenColumn = 1;
     private int rowLen = 0;
     private int colLen = 0;
-    private boolean foundBest = false;
 
     public HQ(RobotController rc, RobotInformation info) {
         super(rc, info);
@@ -48,6 +51,20 @@ public abstract class HQ extends TeamRobot {
                 seesEnemy = false;
                 enemies = new Robot[0];
             }
+        }
+
+        MapLocation[] pastrs = rc.sensePastrLocations(info.enemyTeam);
+        if (pastrs.length > 1) {
+            pastures = new MapLocation[2];
+            pastures[0] = pastrs[0];
+            pastures[1] = pastrs[1];
+            hasPastures = true;
+        } else if (pastrs.length == 1) {
+            pastures = new MapLocation[1];
+            pastures[0] = pastrs[0];
+            hasPastures = true;
+        } else {
+            hasPastures = false;
         }
     }
 
@@ -110,6 +127,7 @@ public abstract class HQ extends TeamRobot {
         return soldierCounts[group] == null ? 0 : soldierCounts[group].count + 1;
     }
 
+    // make this a more optimal spot
     public void comReturnHome(MapLocation loc, int group) throws GameActionException {
         GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group, Communicator.GROUP_HQ_CHANNEL);
         if (GroupCommandDecoder.shouldCommunicate(dec, loc, RETURN_TO_BASE, true)) {
@@ -128,6 +146,16 @@ public abstract class HQ extends TeamRobot {
         GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group, Communicator.GROUP_HQ_CHANNEL);
         if (GroupCommandDecoder.shouldCommunicate(dec, loc, DEFEND, true) && !loc.equals(dec.location)) {
             Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, DEFEND, loc, 200);
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean comCapture(MapLocation loc, int group) throws GameActionException {
+        GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group, Communicator.GROUP_HQ_CHANNEL);
+        if (GroupCommandDecoder.shouldCommunicate(dec, loc, CAPTURE_PASTURE, true) && !loc.equals(dec.location)) {
+            Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, CAPTURE_PASTURE, loc, 200);
             return true;
         }
 

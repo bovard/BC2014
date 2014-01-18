@@ -8,6 +8,7 @@ import team009.robot.TeamRobot;
 
 public class ToyMoveToLocation extends Behavior {
     protected BugMove move;
+    public MapLocation currentLocation;
 
     public ToyMoveToLocation(TeamRobot robot, MapLocation location) {
         super(robot);
@@ -21,10 +22,8 @@ public class ToyMoveToLocation extends Behavior {
     }
 
     public void setDestination(MapLocation location) {
-        if (move.destination != null && move.destination.equals(location)) {
-            return;
-        }
         move.setDestination(location);
+        currentLocation = location;
     }
 
     @Override

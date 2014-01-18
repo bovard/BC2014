@@ -1,20 +1,20 @@
 package team009.toyBT.selectors;
 
 import battlecode.common.GameActionException;
+import team009.robot.TeamRobot;
 import team009.robot.soldier.ToySoldier;
-import team009.toyBT.behaviors.ToyMoveToLocation;
 
-public class GroupReturnToBase extends PushToLocation {
+public class GroupCapture extends PushToLocation {
     ToySoldier soldier;
 
-    public GroupReturnToBase(ToySoldier soldier) {
+    public GroupCapture(ToySoldier soldier) {
         super(soldier);
         this.soldier = soldier;
     }
 
     @Override
     public boolean pre() throws GameActionException {
-        return soldier.comCommand == soldier.RETURN_TO_BASE;
+        return soldier.comCommand == soldier.CAPTURE_PASTURE;
     }
 }
 
