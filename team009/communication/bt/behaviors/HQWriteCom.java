@@ -9,6 +9,7 @@ public class HQWriteCom extends WriteBehavior {
     HQ hq;
     MapLocation center = null;
     MapLocation baseCoverageLocation = null;
+    MapLocation bestRegenDefendLoc = null;
     boolean capturing = false;
 
     public HQWriteCom(HQ robot) {
@@ -26,6 +27,7 @@ public class HQWriteCom extends WriteBehavior {
         int toyCount1 = hq.getCount(1);
         boolean enough0 = toyCount0 >= REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
         boolean enough1 = toyCount1 >= REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
+        rc.setIndicatorString(0, "Capture: " + (capturing ? "I am capturing" : "i am not"));
 
         if (capturing) {
             // refresh capturing command
@@ -36,7 +38,10 @@ public class HQWriteCom extends WriteBehavior {
             if (enough1 && hq.hasPastures) {
                 hq.comAttackPasture(hq.pastures[0], 1);
             } else {
-                hq.comDefend(hq.bestRegenLoc, 1);
+                if (bestRegenDefendLoc == null) {
+                    bestRegenDefendLoc = getDefendingLocation(hq.bestRegenLoc);
+                }
+                hq.comDefend(bestRegenDefendLoc, 1);
             }
         } else if (hq.hasPastures) {
             if (hq.pastures.length > 1) {
@@ -96,6 +101,18 @@ public class HQWriteCom extends WriteBehavior {
             }
             dir = dir.rotateRight();
         }
+    }
+
+    private MapLocation getDefendingLocation(MapLocation loc) {
+        Direction dir = robot.info.enemyDir;
+        for (int i = 0; i < 8; i++) {
+            MapLocation newLoc = loc.add(dir, 2);
+            TerrainTile tile = rc.senseTerrainTile(newLoc);
+            if (tile != TerrainTile.OFF_MAP || tile != TerrainTile.VOID) {
+                return newLoc;
+            }
+        }
+        return loc;
     }
 
     private static final int REQUIRED_SOLDIER_COUNT_FOR_ATTACK = 3;

@@ -146,14 +146,8 @@ public abstract class HQ extends TeamRobot {
         Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, DEFEND, loc, 200);
     }
 
-    public boolean comCapture(MapLocation loc, int group) throws GameActionException {
-        GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group, Communicator.GROUP_HQ_CHANNEL);
-        if (GroupCommandDecoder.shouldCommunicate(dec, loc, CAPTURE_PASTURE, true) && !loc.equals(dec.location)) {
-            Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, CAPTURE_PASTURE, loc, 200);
-            return true;
-        }
-
-        return false;
+    public void comCapture(MapLocation loc, int group) throws GameActionException {
+        Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, CAPTURE_PASTURE, loc, 200);
     }
 
     public boolean comDestruct(int group) throws GameActionException {
