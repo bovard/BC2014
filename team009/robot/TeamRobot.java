@@ -4,6 +4,7 @@ import battlecode.common.*;
 import team009.RobotInformation;
 import team009.bt.Node;
 import team009.communication.Communicator;
+import team009.robot.soldier.ToySoldier;
 import team009.utils.Timer;
 
 import java.util.Random;
@@ -92,6 +93,13 @@ public abstract class TeamRobot {
 
             } catch (Exception e) {
                 e.printStackTrace();
+                String str = "Error: " + e.getMessage();
+                if (this instanceof ToySoldier) {
+                    str += " : " + ((ToySoldier)this).group;
+                    str += " : " + ((ToySoldier)this).comLocation;
+                    str += " : " + ((ToySoldier)this).comCommand;
+                }
+                rc.setIndicatorString(2, str);
             }
 
 

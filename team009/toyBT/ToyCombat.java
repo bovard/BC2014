@@ -1,6 +1,7 @@
 package team009.toyBT;
 
 import battlecode.common.*;
+import team009.combat.CombatUtils;
 import team009.navigation.BugMove;
 import team009.robot.soldier.ToySoldier;
 import team009.utils.SmartMapLocationArray;
@@ -47,6 +48,7 @@ public class ToyCombat {
         _sort(nmeInfos, nmeLocs, nmeHps);
         SmartMapLocationArray currentAttackableEnemies = this.currentAttackableEnemies = _getAttackableEnemies(currentLoc, nmeLocs);
         MapLocation nearestEnemy = currentAttackableEnemies.arr[0];
+        MapLocation nmeCentroid = CombatUtils.findCenterOfMass(nmeLocs);
 
         if (move.destination != null && !_canAttackPastrOrNoise(rc)) {
 
@@ -65,11 +67,11 @@ public class ToyCombat {
         if (soldier.enemySoldiers.length > 0) {
             // Out numbered or even.  Wait for them to attack, then attack!
             // TODO: Make a real decision on what is best.
-            if (soldier.friendlySoldiers.length <= soldier.enemySoldiers.length) {
+            if (soldier.friendlySoldiers.length < soldier.enemySoldiers.length) {
                 MapLocation target = nearestEnemy == null ? nmeLocs[0] : nearestEnemy;
                 // Move closer without getting into attackable range.
                 if (nearestEnemy == null) {
-                    Direction dir = _combatAvoid(rc, currentLoc, nmeLocs);
+                    Direction dir = _combatAvoid(rc, currentLoc, nmeCentroid, nmeLocs);
                     if (dir != null) {
                         rc.move(dir);
                     }
@@ -78,7 +80,7 @@ public class ToyCombat {
                 }
             }
 
-            // We outnumber them
+            // We outnumber or equal
             // TODO: Make a real decision on what is best.
             else {
                 MapLocation target = nearestEnemy == null ? nmeLocs[0] : nearestEnemy;
@@ -109,10 +111,6 @@ public class ToyCombat {
         }
     }
 
-    private void _safeMove(RobotController rc, MapLocation from, MapLocation[] enemies) {
-
-    }
-
     // Validates if there are any nearest attackers.  Always go for the nearest attackers first.
     private SmartMapLocationArray _getAttackableEnemies(MapLocation loc, MapLocation[] enemies) {
         SmartMapLocationArray arr = new SmartMapLocationArray();
@@ -138,6 +136,10 @@ public class ToyCombat {
 
     private Direction _combatMove(RobotController rc, MapLocation from, MapLocation to, MapLocation[] enemies) throws GameActionException {
         Direction dirTo = move.calcMove();
+
+        if (dirTo == null) {
+            return null;
+        }
 
         if (rc.canMove(dirTo) && !_tooDangerous(from.add(dirTo), enemies)) {
             return dirTo;
@@ -172,16 +174,14 @@ public class ToyCombat {
         return null;
     }
 
-    private Direction _combatAvoid(RobotController rc, MapLocation from, MapLocation[] enemies) throws GameActionException {
-        Direction dirTo = move.calcMove();
-
+    private Direction _combatAvoid(RobotController rc, MapLocation from, MapLocation nmeCentroid, MapLocation[] enemies) throws GameActionException {
+        Direction dirTo = from.directionTo(nmeCentroid);
         if (rc.canMove(dirTo) && !_isAttackablePosition(from.add(dirTo), enemies)) {
             return dirTo;
         }
 
-
-        Direction leftTo = dirTo;
         Direction rightTo = dirTo;
+        Direction leftTo = dirTo;
 
         // Will search the entire space.
         for (int i = 0; i < 4; i++) {
