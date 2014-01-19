@@ -134,10 +134,7 @@ public abstract class HQ extends TeamRobot {
 
     // make this a more optimal spot
     public void comReturnHome(MapLocation loc, int group) throws GameActionException {
-        GroupCommandDecoder dec = Communicator.ReadFromGroup(rc, group, Communicator.GROUP_HQ_CHANNEL);
-        if (GroupCommandDecoder.shouldCommunicate(dec, loc, RETURN_TO_BASE, true)) {
-            Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, RETURN_TO_BASE, loc, 200);
-        }
+        Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, RETURN_TO_BASE, loc, 200);
     }
 
     public void comAttackPasture(MapLocation loc, int group) throws GameActionException {

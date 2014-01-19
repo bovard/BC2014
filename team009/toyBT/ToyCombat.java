@@ -70,6 +70,7 @@ public class ToyCombat {
                 MapLocation target = nearestEnemy == null ? nmeLocs[0] : nearestEnemy;
                 // Move closer without getting into attackable range.
                 // TODO: Add if a friend is in firing range, move toward the enemy
+                // TODO: Group Centroid channel?  It may come in handy here.
                 if (nearestEnemy == null) {
                     Direction dir = _combatAvoid(rc, currentLoc, nmeCentroid, nmeLocs);
                     if (dir != null) {
