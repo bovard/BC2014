@@ -21,11 +21,12 @@ public class HQSpawner {
         int type;
         // TODO: use this
         // type = TeamMemoryManager.getHQStrategy();
-        type = SPRINT;
+//        type = SPRINT;
+        type = MICRO_TEST;
         //type = BACK_DOOR_TEST;
         //type = DEFENSIVE_PASTURE;
         //type = NOISE_TEST;
-        type = OFFENSIVE;
+//        type = OFFENSIVE;
 
         switch(type) {
             case DEFENSIVE_PASTURE:

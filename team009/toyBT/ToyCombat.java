@@ -8,7 +8,7 @@ import team009.utils.SmartRobotInfoArray;
 
 public class ToyCombat {
     private ToySoldier soldier;
-    private int sensorRadius, attackRadius, halfRange, range;
+    private int sensorRadius, attackRadius, oneAwayAttackRadius, halfRange, range;
     private BugMove move;
     private int hqMaxDistance = (int)Math.sqrt(RobotType.HQ.attackRadiusMaxSquared) + 1;
     private SmartMapLocationArray currentAttackableEnemies;
@@ -23,6 +23,8 @@ public class ToyCombat {
         move = new BugMove(soldier);
         sensorRadius = RobotType.SOLDIER.sensorRadiusSquared;
         attackRadius = RobotType.SOLDIER.attackRadiusMaxSquared;
+        oneAwayAttackRadius = (int)Math.sqrt(attackRadius) + 1;
+        oneAwayAttackRadius *= oneAwayAttackRadius;
         halfRange = (int)Math.sqrt(attackRadius);
         range = halfRange * 2;
     }
@@ -65,7 +67,15 @@ public class ToyCombat {
             // TODO: Make a real decision on what is best.
             if (soldier.friendlySoldiers.length <= soldier.enemySoldiers.length) {
                 MapLocation target = nearestEnemy == null ? nmeLocs[0] : nearestEnemy;
-                _moveOrAttack(rc, currentLoc, target, nmeLocs);
+                // Move closer without getting into attackable range.
+                if (nearestEnemy == null) {
+                    Direction dir = _combatAvoid(rc, currentLoc, nmeLocs);
+                    if (dir != null) {
+                        rc.move(dir);
+                    }
+                } else {
+                    _moveOrAttack(rc, currentLoc, target, nmeLocs);
+                }
             }
 
             // We outnumber them
@@ -87,7 +97,6 @@ public class ToyCombat {
 
     private void _moveOrAttack(RobotController rc, MapLocation from, MapLocation to, MapLocation[] enemies) throws GameActionException {
 
-
         // We got to just fight it out
         if (rc.canAttackSquare(to)) {
             rc.attackSquare(to);
@@ -98,6 +107,10 @@ public class ToyCombat {
                 rc.move(dir);
             }
         }
+    }
+
+    private void _safeMove(RobotController rc, MapLocation from, MapLocation[] enemies) {
+
     }
 
     // Validates if there are any nearest attackers.  Always go for the nearest attackers first.
@@ -112,6 +125,17 @@ public class ToyCombat {
         return arr;
     }
 
+    // If the current location is attackable by any enemy
+    private boolean _isAttackablePosition(MapLocation myLoc, MapLocation[] enemies) {
+        for (int i = 0; i < enemies.length; i++) {
+            if (enemies[i].distanceSquaredTo(myLoc) <= attackRadius) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private Direction _combatMove(RobotController rc, MapLocation from, MapLocation to, MapLocation[] enemies) throws GameActionException {
         Direction dirTo = move.calcMove();
 
@@ -119,12 +143,56 @@ public class ToyCombat {
             return dirTo;
         }
 
-        boolean right = from.x > to.x;
+
+//        boolean right = from.x > to.x;
+//        // Will search the entire space.
+//        for (int i = 0; i < 4; i++) {
+//            dirTo = right ? dirTo.rotateRight() : dirTo.rotateLeft();
+//            if (rc.canMove(dirTo) && !_tooDangerous(from.add(dirTo), enemies)) {
+//                return dirTo;
+//            }
+//        }
+        Direction leftTo = dirTo;
+        Direction rightTo = dirTo;
+
         // Will search the entire space.
         for (int i = 0; i < 4; i++) {
-            dirTo = right ? dirTo.rotateRight() : dirTo.rotateLeft();
-            if (rc.canMove(dirTo) && !_tooDangerous(from.add(dirTo), enemies)) {
-                return dirTo;
+            leftTo = leftTo.rotateLeft();
+            if (rc.canMove(leftTo) && !_tooDangerous(from.add(leftTo), enemies)) {
+                return leftTo;
+            }
+
+            rightTo = rightTo.rotateRight();
+            if (rc.canMove(rightTo) && !_tooDangerous(from.add(rightTo), enemies)) {
+                return rightTo;
+            }
+        }
+
+        // Cannot move
+        return null;
+    }
+
+    private Direction _combatAvoid(RobotController rc, MapLocation from, MapLocation[] enemies) throws GameActionException {
+        Direction dirTo = move.calcMove();
+
+        if (rc.canMove(dirTo) && !_isAttackablePosition(from.add(dirTo), enemies)) {
+            return dirTo;
+        }
+
+
+        Direction leftTo = dirTo;
+        Direction rightTo = dirTo;
+
+        // Will search the entire space.
+        for (int i = 0; i < 4; i++) {
+            leftTo = leftTo.rotateLeft();
+            if (rc.canMove(leftTo) && !_isAttackablePosition(from.add(leftTo), enemies)) {
+                return leftTo;
+            }
+
+            rightTo = rightTo.rotateRight();
+            if (rc.canMove(rightTo) && !_isAttackablePosition(from.add(rightTo), enemies)) {
+                return rightTo;
             }
         }
 
@@ -150,7 +218,7 @@ public class ToyCombat {
         // Our move is worse
         // TODO: This may be a bad decision
         SmartMapLocationArray arr = _getAttackableEnemies(loc, enemies);
-        if (arr.length > currentAttackableEnemies.length) {
+        if (arr.length > currentAttackableEnemies.length + 1) {
             return true;
         }
 
