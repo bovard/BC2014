@@ -72,13 +72,15 @@ public abstract class HQ extends TeamRobot {
      */
     public void postProcessing() throws GameActionException {
         if (foundBest) {
+            rc.setIndicatorString(2, "BestLocation: " + bestRegenLoc);
             return;
         }
 
         _calculateBestCowPosition();
         foundBest = regenRow == rowLen;
         if (foundBest) {
-            MapLocation mirror = new MapLocation(bestRegenLoc.y, bestRegenLoc.x);
+            // -y mirror
+            MapLocation mirror = new MapLocation((info.width - 1) - bestRegenLoc.x, (info.height - 1) - bestRegenLoc.y);
             if (mirror.distanceSquaredTo(info.hq) < bestRegenLoc.distanceSquaredTo(info.hq)) {
                 bestRegenLoc = mirror;
             }
