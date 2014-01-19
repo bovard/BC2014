@@ -9,6 +9,7 @@ import team009.communication.SoldierCountDecoder;
 import team009.communication.bt.HQCom;
 import team009.robot.TeamRobot;
 import team009.robot.soldier.SoldierSpawner;
+import team009.utils.SmartMapLocationArray;
 
 public abstract class HQ extends TeamRobot {
 
@@ -18,7 +19,8 @@ public abstract class HQ extends TeamRobot {
     public Robot[] enemies = new Robot[0];
     public MapLocation bestLocation;
     public boolean hasPastures = false;
-    public MapLocation[] pastures = new MapLocation[0];
+    public boolean hasHQPastures = false;
+    public SmartMapLocationArray pastures;
 
     public MapLocation bestRegenLoc = null;
     public boolean foundBest = false;
@@ -53,18 +55,16 @@ public abstract class HQ extends TeamRobot {
         }
 
         MapLocation[] pastrs = rc.sensePastrLocations(info.enemyTeam);
-        if (pastrs.length > 1) {
-            pastures = new MapLocation[2];
-            pastures[0] = pastrs[0];
-            pastures[1] = pastrs[1];
-            hasPastures = true;
-        } else if (pastrs.length == 1) {
-            pastures = new MapLocation[1];
-            pastures[0] = pastrs[0];
-            hasPastures = true;
-        } else {
-            hasPastures = false;
+        pastures = new SmartMapLocationArray();
+        for (int i = 0, j = 0; i < 2 && j < pastrs.length; j++) {
+            if (pastrs[i].isAdjacentTo(info.enemyHq)) {
+                hasHQPastures = true;
+            } else {
+                pastures.add(pastrs[i]);
+            }
         }
+
+        hasPastures = pastures.length > 0;
     }
 
     /**

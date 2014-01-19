@@ -65,11 +65,11 @@ public class ToyCombat {
         }
 
         if (soldier.enemySoldiers.length > 0) {
-            // Out numbered or even.  Wait for them to attack, then attack!
-            // TODO: Make a real decision on what is best.
+            // We are outnumbered.
             if (soldier.friendlySoldiers.length < soldier.enemySoldiers.length) {
                 MapLocation target = nearestEnemy == null ? nmeLocs[0] : nearestEnemy;
                 // Move closer without getting into attackable range.
+                // TODO: Add if a friend is in firing range, move toward the enemy
                 if (nearestEnemy == null) {
                     Direction dir = _combatAvoid(rc, currentLoc, nmeCentroid, nmeLocs);
                     if (dir != null) {
@@ -81,7 +81,6 @@ public class ToyCombat {
             }
 
             // We outnumber or equal
-            // TODO: Make a real decision on what is best.
             else {
                 MapLocation target = nearestEnemy == null ? nmeLocs[0] : nearestEnemy;
                 _moveOrAttack(rc, currentLoc, target, nmeLocs);

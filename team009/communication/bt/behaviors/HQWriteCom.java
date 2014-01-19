@@ -38,12 +38,12 @@ public class HQWriteCom extends WriteBehavior {
 
             if (hq.hasPastures) {
                 if (allIn) {
-                    hq.comAttackPasture(hq.pastures[0], 0);
-                    hq.comAttackPasture(hq.pastures[0], 1);
+                    hq.comAttackPasture(hq.pastures.arr[0], 0);
+                    hq.comAttackPasture(hq.pastures.arr[0], 1);
                 } else if (defendingGroup == 0 && enough0) {
-                    hq.comAttackPasture(hq.pastures[0], 0);
+                    hq.comAttackPasture(hq.pastures.arr[0], 0);
                 } else if (defendingGroup == 1 && enough1) {
-                    hq.comAttackPasture(hq.pastures[0], 1);
+                    hq.comAttackPasture(hq.pastures.arr[0], 1);
                 }
             }
             if (!hunting) {
@@ -51,13 +51,13 @@ public class HQWriteCom extends WriteBehavior {
             }
         } else if (hq.hasPastures && combinedEnough) {
             if (enough0 && enough1) {
-                hq.comAttackPasture(hq.pastures[0], 0);
+                hq.comAttackPasture(hq.pastures.arr[0], 0);
                 if (hq.pastures.length > 1) {
-                    hq.comAttackPasture(hq.pastures[1], 1);
+                    hq.comAttackPasture(hq.pastures.arr[1], 1);
                 }
             } else {
-                hq.comAttackPasture(hq.pastures[0], 0);
-                hq.comAttackPasture(hq.pastures[0], 1);
+                hq.comAttackPasture(hq.pastures.arr[0], 0);
+                hq.comAttackPasture(hq.pastures.arr[0], 1);
             }
         } else {
             if (enough0 || enough1) {
