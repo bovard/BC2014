@@ -35,6 +35,7 @@ public class ToySoldier extends TeamRobot {
     public int comCommand = 0;
     public double health;
     public GroupCommandDecoder decoder;
+    public int sensorRadiusSquared = RobotType.SOLDIER.sensorRadiusSquared;
 
 
     // Permanent behaviors from coms.
@@ -70,7 +71,7 @@ public class ToySoldier extends TeamRobot {
         // micro stuff
         // TODO: get a better picture by sensing how many of our allies are soliders?
         // TODO: Morph this into one call (thats an extra 100 byte codes for no reason)
-        Robot[] robots = rc.senseNearbyGameObjects(Robot.class, 100);
+        Robot[] robots = rc.senseNearbyGameObjects(Robot.class, sensorRadiusSquared);
         for (Robot r : robots) {
             RobotInfo info = rc.senseRobotInfo(r);
 

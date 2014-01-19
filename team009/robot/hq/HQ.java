@@ -77,6 +77,12 @@ public abstract class HQ extends TeamRobot {
 
         _calculateBestCowPosition();
         foundBest = regenRow == rowLen;
+        if (foundBest) {
+            MapLocation mirror = new MapLocation(bestRegenLoc.y, bestRegenLoc.x);
+            if (mirror.distanceSquaredTo(info.hq) < bestRegenLoc.distanceSquaredTo(info.hq)) {
+                bestRegenLoc = mirror;
+            }
+        }
     }
 
     private void _calculateBestCowPosition() {

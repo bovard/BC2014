@@ -23,7 +23,7 @@ public class SoldierWriteCom extends WriteBehavior {
         if (soldier.seesEnemyTeamNonHQRobot) {
             MapLocation priorityLoc = _getPriorityLocation();
             if (GroupCommandDecoder.shouldCommunicate(soldier.groupCommand, priorityLoc, TeamRobot.ATTACK, true)) {
-                Communicator.WriteToGroup(rc, soldier.group, Communicator.GROUP_SOLDIER_CHANEL, TeamRobot.ATTACK, priorityLoc);
+                Communicator.WriteToGroup(rc, soldier.group, Communicator.GROUP_SOLDIER_CHANEL, TeamRobot.ATTACK, priorityLoc, 12);
             }
         }
 
@@ -32,13 +32,13 @@ public class SoldierWriteCom extends WriteBehavior {
 
     private MapLocation _getPriorityLocation() {
         if (soldier.seesEnemySoldier) {
-            return soldier.enemySoldiers.get(0).location;
+            return soldier.enemySoldiers.arr[0].location;
         }
         if (soldier.seesEnemyPastr) {
-            return soldier.enemyPastrs.get(0).location;
+            return soldier.enemyPastrs.arr[0].location;
         }
         if (soldier.seesEnemyNoise) {
-            return soldier.enemyNoise.get(0).location;
+            return soldier.enemyNoise.arr[0].location;
         }
         return null;
     }

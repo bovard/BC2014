@@ -27,6 +27,7 @@ public class HQWriteCom extends WriteBehavior {
         boolean enough0 = toyCount0 >= REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
         boolean enough1 = toyCount1 >= REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
 
+        rc.setIndicatorString(0, "Capturing: " + capturing + " hasPastures: " + hq.hasPastures);
         if (capturing) {
             // refresh capturing command
             // TODO: We don't want 1 at a time what do we do?
@@ -34,36 +35,45 @@ public class HQWriteCom extends WriteBehavior {
 
             // Can we send group 1 out?
             if (enough1 && hq.hasPastures) {
+                rc.setIndicatorString(1, "Group1 attacking: " + hq.pastures[0]);
                 hq.comAttackPasture(hq.pastures[0], 1);
             } else {
+                rc.setIndicatorString(1, "Group1 Defending: " + hq.pastures[0]);
                 hq.comDefend(hq.bestRegenLoc, 1);
             }
         } else if (hq.hasPastures) {
             if (hq.pastures.length > 1) {
                 if (enough0) {
+                    rc.setIndicatorString(1, "Group0 attacking: " + hq.pastures[0]);
                     hq.comAttackPasture(hq.pastures[0], 0);
                     if (!enough1) {
-                        hq.comAttackPasture(hq.pastures[0], 0);
-                    }
-                }
-                if (enough1) {
-                    hq.comAttackPasture(hq.pastures[1], 1);
-                    if (!enough0) {
+                        rc.setIndicatorString(2, "Group0 attacking: " + hq.pastures[0]);
                         hq.comAttackPasture(hq.pastures[0], 1);
                     }
                 }
+                if (enough1) {
+                    rc.setIndicatorString(1, "Group1 attacking: " + hq.pastures[0]);
+                    hq.comAttackPasture(hq.pastures[1], 1);
+                    if (!enough0) {
+                        rc.setIndicatorString(2, "Group0 attacking: " + hq.pastures[0]);
+                        hq.comAttackPasture(hq.pastures[0], 0);
+                    }
+                }
             } else if (hq.pastures.length == 1) {
+                rc.setIndicatorString(1, "Group0And1 attacking: " + hq.pastures[0] + " And " + hq.pastures[1]);
                 hq.comAttackPasture(hq.pastures[0], 1);
                 hq.comAttackPasture(hq.pastures[0], 0);
             }
         } else {
             if (enough0) {
+                rc.setIndicatorString(1, "Capturing encampment: " + hq.bestRegenLoc);
                 hq.comCapture(hq.bestRegenLoc, 0);
 
                 // send 1 to defend no matter what.
                 hq.comDefend(hq.bestRegenLoc, 1);
                 capturing = true;
             } else {
+                rc.setIndicatorString(1, "ClearingCom: ");
                 hq.comClear(0, baseCoverageLocation);
                 hq.comClear(1, baseCoverageLocation);
                 hq.comReturnHome(baseCoverageLocation, 0);
