@@ -79,7 +79,6 @@ public class BasicMove extends Move {
                 bugGoal = null;
 
 			} else {
-				robot.rc.setIndicatorString(0, "In bug moving " + bug.toString());
 				result = moveBug(bug);
 			}
 		}
