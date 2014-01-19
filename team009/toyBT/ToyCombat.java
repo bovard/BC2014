@@ -42,18 +42,18 @@ public class ToyCombat {
         _sort(nmeInfos, nmeLocs, nmeHps);
 
         rc.setIndicatorString(0, "isMoving: " + isMoving(currentLoc) + " : " + move.destination);
-//        if (isMoving(currentLoc)) {
-//
-//            // have i moved into any enemies
-//            MapLocation nearestAttacker = _getLowestHPAttackableEnemy(currentLoc, nmeLocs);
-//            if (nearestAttacker == null) {
-//                rc.setIndicatorString(1, "Moving: " + move.destination);
-//                move.move();
-//            } else {
-//                rc.setIndicatorString(1, "nearestAttacker: " + nearestAttacker);
-//                rc.attackSquare(nearestAttacker);
-//            }
-//        } else {
+        if (isMoving(currentLoc)) {
+
+            // have i moved into any enemies
+            MapLocation nearestAttacker = _getLowestHPAttackableEnemy(currentLoc, nmeLocs);
+            if (nearestAttacker == null) {
+                rc.setIndicatorString(1, "Moving: " + move.destination);
+                move.move();
+            } else {
+                rc.setIndicatorString(1, "nearestAttacker: " + nearestAttacker);
+                rc.attackSquare(nearestAttacker);
+            }
+        } else {
 
             if (soldier.enemySoldiers.length > 0) {
                 // Out numbered or even.  Wait for them to attack, then attack!
@@ -93,7 +93,7 @@ public class ToyCombat {
                     _moveOrAttack(rc, currentLoc, soldier.enemyNoise.arr[0].location);
                 }
             }
-//        }
+        }
     }
 
     // If the robot is moving with bug
@@ -106,7 +106,7 @@ public class ToyCombat {
         if (rc.canAttackSquare(to)) {
             rc.attackSquare(to);
         } else {
-            rc.move(from.directionTo(to));
+            rc.move(_combatMove(rc, from, to));
         }
     }
 
@@ -154,7 +154,6 @@ public class ToyCombat {
 
             rightTo = rightTo.rotateRight();
             if (rc.canMove(rightTo)) {
-                rc.move(rightTo);
                 return rightTo;
             }
         }

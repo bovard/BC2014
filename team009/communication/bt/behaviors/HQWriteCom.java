@@ -63,11 +63,12 @@ public class HQWriteCom extends WriteBehavior {
                 // send 1 to defend no matter what.
                 hq.comDefend(hq.bestRegenLoc, 1);
                 capturing = true;
+            } else {
+                hq.comClear(0, baseCoverageLocation);
+                hq.comClear(1, baseCoverageLocation);
+                hq.comReturnHome(baseCoverageLocation, 0);
+                hq.comReturnHome(baseCoverageLocation, 1);
             }
-            hq.comClear(0, baseCoverageLocation);
-            hq.comClear(1, baseCoverageLocation);
-            hq.comReturnHome(baseCoverageLocation, 0);
-            hq.comReturnHome(baseCoverageLocation, 1);
         }
         return true;
     }
