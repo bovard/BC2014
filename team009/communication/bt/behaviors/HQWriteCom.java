@@ -38,7 +38,7 @@ public class HQWriteCom extends WriteBehavior {
                 rc.setIndicatorString(1, "Group1 attacking: " + hq.pastures[0]);
                 hq.comAttackPasture(hq.pastures[0], 1);
             } else {
-                rc.setIndicatorString(1, "Group1 Defending: " + hq.pastures[0]);
+                rc.setIndicatorString(1, "Group1 Defending: " + hq.bestRegenLoc);
                 hq.comDefend(hq.bestRegenLoc, 1);
             }
         } else if (hq.hasPastures) {
