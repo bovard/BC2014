@@ -48,10 +48,10 @@ public class ToyCombat {
         SmartMapLocationArray currentAttackableEnemies = this.currentAttackableEnemies = _getAttackableEnemies(currentLoc, nmeLocs);
         MapLocation nearestEnemy = currentAttackableEnemies.arr[0];
 
-        if (move.destination != null) {
+        if (move.destination != null && !_canAttackPastrOrNoise(rc)) {
 
             // have i moved into any enemies
-            if (nearestEnemy == null) {
+            if (nearestEnemy == null ) {
                 Direction dir = _combatMove(rc, currentLoc, move.destination, nmeLocs);
                 if (dir != null) {
                     rc.move(dir);
@@ -222,6 +222,20 @@ public class ToyCombat {
             return true;
         }
 
+        return false;
+    }
+
+    private boolean _canAttackPastrOrNoise(RobotController rc) {
+        for (int i = 0; i < soldier.enemyPastrs.length; i++) {
+            if (rc.canAttackSquare(soldier.enemyPastrs.arr[i].location)) {
+                return true;
+            }
+        }
+        for (int i = 0; i < soldier.enemyNoise.length; i++) {
+            if (rc.canAttackSquare(soldier.enemyNoise.arr[i].location)) {
+                return true;
+            }
+        }
         return false;
     }
 

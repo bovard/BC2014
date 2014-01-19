@@ -1,15 +1,14 @@
 package team009.communication.bt.behaviors;
 
 import battlecode.common.*;
-import team009.robot.TeamRobot;
 import team009.robot.hq.HQ;
-import team009.robot.soldier.SoldierSpawner;
 
 public class HQWriteCom extends WriteBehavior {
     HQ hq;
     MapLocation center = null;
-    MapLocation baseCoverageLocation = null;
+    MapLocation bestCoverageLocation = null;
     boolean capturing = false;
+    int defendingGroup = -1;
 
     public HQWriteCom(HQ robot) {
         super(robot);
@@ -26,47 +25,59 @@ public class HQWriteCom extends WriteBehavior {
         int toyCount1 = hq.getCount(1);
         boolean enough0 = toyCount0 >= REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
         boolean enough1 = toyCount1 >= REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
+        boolean combinedEnough = toyCount0 + toyCount1 >= REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
+
         rc.setIndicatorString(0, "Capture: " + (capturing ? "I am capturing" : "i am not"));
 
         if (capturing) {
             hq.comCapture(hq.bestRegenLoc, 0);
 
             // Can we send group 1 out?
-            if (enough1 && hq.hasPastures) {
-                hq.comAttackPasture(hq.pastures[0], 1);
-            } else {
+            boolean hunting = false;
+            boolean allIn = rc.senseTeamMilkQuantity(robot.info.enemyTeam) > rc.senseTeamMilkQuantity(robot.info.myTeam);
+
+            if (hq.hasPastures) {
+                if (allIn) {
+                    hq.comAttackPasture(hq.pastures[0], 0);
+                    hq.comAttackPasture(hq.pastures[0], 1);
+                } else if (defendingGroup == 0 && enough0) {
+                    hq.comAttackPasture(hq.pastures[0], 0);
+                } else if (defendingGroup == 1 && enough1) {
+                    hq.comAttackPasture(hq.pastures[0], 1);
+                }
+            }
+            if (!hunting) {
                 hq.comDefend(getDefendingLocation(hq.bestRegenLoc), 1);
             }
-        } else if (hq.hasPastures) {
-            if (hq.pastures.length > 1) {
-                if (enough0) {
-                    hq.comAttackPasture(hq.pastures[0], 0);
-                    if (!enough1) {
-                        hq.comAttackPasture(hq.pastures[0], 1);
-                    }
-                }
-                if (enough1) {
-                    hq.comAttackPasture(hq.pastures[1], 1);
-                    if (!enough0) {
-                        hq.comAttackPasture(hq.pastures[0], 0);
-                    }
-                }
-            } else if (hq.pastures.length == 1) {
-                hq.comAttackPasture(hq.pastures[0], 1);
+        } else if (hq.hasPastures && combinedEnough) {
+            if (enough0 && enough1) {
                 hq.comAttackPasture(hq.pastures[0], 0);
+                if (hq.pastures.length > 1) {
+                    hq.comAttackPasture(hq.pastures[1], 1);
+                }
+            } else {
+                hq.comAttackPasture(hq.pastures[0], 0);
+                hq.comAttackPasture(hq.pastures[0], 1);
             }
         } else {
-            if (enough0) {
-                hq.comCapture(hq.bestRegenLoc, 0);
+            if (enough0 || enough1) {
+                if (enough0) {
+                    hq.comCapture(hq.bestRegenLoc, 0);
+                    hq.comDefend(hq.bestRegenLoc, 1);
+                    defendingGroup = 1;
+                } else {
+                    hq.comDefend(hq.bestRegenLoc, 0);
+                    hq.comCapture(hq.bestRegenLoc, 1);
+                    defendingGroup = 0;
+                }
 
                 // send 1 to defend no matter what.
-                hq.comDefend(hq.bestRegenLoc, 1);
                 capturing = true;
             } else {
-                hq.comClear(0, baseCoverageLocation);
-                hq.comClear(1, baseCoverageLocation);
-                hq.comReturnHome(baseCoverageLocation, 0);
-                hq.comReturnHome(baseCoverageLocation, 1);
+                hq.comClear(0, bestCoverageLocation);
+                hq.comClear(1, bestCoverageLocation);
+                hq.comReturnHome(bestCoverageLocation, 0);
+                hq.comReturnHome(bestCoverageLocation, 1);
             }
         }
         return true;
@@ -90,7 +101,7 @@ public class HQWriteCom extends WriteBehavior {
             }
 
             if (found) {
-                baseCoverageLocation = curr;
+                bestCoverageLocation = curr;
                 return;
             }
             dir = dir.rotateRight();
@@ -115,5 +126,5 @@ public class HQWriteCom extends WriteBehavior {
         return loc;
     }
 
-    private static final int REQUIRED_SOLDIER_COUNT_FOR_ATTACK = 7;
+    private static final int REQUIRED_SOLDIER_COUNT_FOR_ATTACK = 5;
 }
