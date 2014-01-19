@@ -33,19 +33,20 @@ public class HQWriteCom extends WriteBehavior {
 
         rc.setIndicatorString(0, "Capture: " + (capturing ? "I am capturing" : "i am not"));
 
+        // TODO: Add in a back and forth (going from best spot 1 to best spot 2) you know, standard starcraft stuff.
         if (capturing) {
-            hq.comCapture(hq.bestRegenLoc, 0);
+            hq.comCapture(hq.milkInformation.targetBoxes[0].bestSpot, 0);
 
             // Can we send group 1 out?
             boolean allIn = rc.senseTeamMilkQuantity(robot.info.enemyTeam) > rc.senseTeamMilkQuantity(robot.info.myTeam);
             if (!combinedEnough) {
                 if (rc.sensePastrLocations(robot.info.myTeam).length > 0) {
                     if (defendingGroup == 0) {
-                        hq.comDefend(hq.bestRegenLoc, 0);
-                        hq.comCapture(hq.bestRegenLoc, 1);
+                        hq.comDefend(hq.milkInformation.targetBoxes[0].bestSpot, 0);
+                        hq.comCapture(hq.milkInformation.targetBoxes[0].bestSpot, 1);
                     } else if (defendingGroup == 1) {
-                        hq.comCapture(hq.bestRegenLoc, 0);
-                        hq.comDefend(hq.bestRegenLoc, 1);
+                        hq.comCapture(hq.milkInformation.targetBoxes[0].bestSpot, 0);
+                        hq.comDefend(hq.milkInformation.targetBoxes[0].bestSpot, 1);
                     } else {
                         hq.comReturnHome(bestCoverageLocation, 0);
                         hq.comReturnHome(bestCoverageLocation, 1);
@@ -67,7 +68,7 @@ public class HQWriteCom extends WriteBehavior {
                         hq.comAttackPasture(hq.pastures.arr[0], 1);
                     }
                 } else {
-                    hq.comDefend(getDefendingLocation(hq.bestRegenLoc), 1);
+                    hq.comDefend(getDefendingLocation(hq.milkInformation.targetBoxes[0].bestSpot), 1);
                 }
             }
 
@@ -83,14 +84,14 @@ public class HQWriteCom extends WriteBehavior {
                 hq.comAttackPasture(hq.pastures.arr[0], 1);
             }
         } else {
-            if (enough0 || enough1) {
+            if (hq.milkInformation.finished && (enough0 || enough1)) {
                 if (enough0) {
-                    hq.comCapture(hq.bestRegenLoc, 0);
-                    hq.comDefend(hq.bestRegenLoc, 1);
+                    hq.comCapture(hq.milkInformation.targetBoxes[0].bestSpot, 0);
+                    hq.comDefend(hq.milkInformation.targetBoxes[0].bestSpot, 1);
                     defendingGroup = 1;
                 } else {
-                    hq.comDefend(hq.bestRegenLoc, 0);
-                    hq.comCapture(hq.bestRegenLoc, 1);
+                    hq.comDefend(hq.milkInformation.targetBoxes[0].bestSpot, 0);
+                    hq.comCapture(hq.milkInformation.targetBoxes[0].bestSpot, 1);
                     defendingGroup = 0;
                 }
 

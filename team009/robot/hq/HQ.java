@@ -9,6 +9,7 @@ import team009.communication.SoldierCountDecoder;
 import team009.communication.bt.HQCom;
 import team009.robot.TeamRobot;
 import team009.robot.soldier.SoldierSpawner;
+import team009.utils.MilkInformation;
 import team009.utils.SmartMapLocationArray;
 
 public abstract class HQ extends TeamRobot {
@@ -22,14 +23,7 @@ public abstract class HQ extends TeamRobot {
     public boolean hasHQPastures = false;
     public SmartMapLocationArray pastures;
 
-    public MapLocation bestRegenLoc = null;
-    public boolean foundBest = false;
-    private double[][] cowRegens;
-    private double bestRegen;
-    private int regenRow = 1;
-    private int regenColumn = 1;
-    private int rowLen = 0;
-    private int colLen = 0;
+    public MilkInformation milkInformation;
 
     public HQ(RobotController rc, RobotInformation info) {
         super(rc, info);
@@ -37,6 +31,7 @@ public abstract class HQ extends TeamRobot {
         soldierCounts = new SoldierCountDecoder[maxSoldiers];
         // REMEMBER TO CALL treeRoot = getTreeRoot() in your implementations of this!
         comRoot = new HQCom(this);
+        milkInformation = new MilkInformation(rc, info);
     }
 
     @Override
@@ -71,61 +66,13 @@ public abstract class HQ extends TeamRobot {
      * Post processes best pasture locations
      */
     public void postProcessing() throws GameActionException {
-        if (foundBest) {
-            rc.setIndicatorString(2, "BestLocation: " + bestRegenLoc);
+        if (milkInformation.finished) {
+            rc.setIndicatorString(2, "BestLocation: " + milkInformation.targetBoxes[0].bestSpot + " : " + milkInformation.targetBoxes[1].bestSpot);
             return;
         }
 
-        _calculateBestCowPosition();
-        foundBest = regenRow == rowLen;
-        if (foundBest) {
-            // -y mirror
-            MapLocation mirror = new MapLocation((info.width - 1) - bestRegenLoc.x, (info.height - 1) - bestRegenLoc.y);
-            if (mirror.distanceSquaredTo(info.hq) < bestRegenLoc.distanceSquaredTo(info.hq)) {
-                bestRegenLoc = mirror;
-            }
-        }
-    }
-
-    private void _calculateBestCowPosition() {
-        if (cowRegens == null) {
-            cowRegens = rc.senseCowGrowth();
-            bestRegen = cowRegens[0][0];
-            bestRegenLoc = new MapLocation(0, 0);
-            rowLen = cowRegens.length - 2;
-            colLen = cowRegens[0].length - 2;
-        }
-        double[][] cowRegens = this.cowRegens;
-
-        // TODO: Better would be to check all neighbors, but that is expensive.
-        // TODO: So best regeneration rate is you + your neighbors
-        // TODO: But even that may not be the best.  Then comes distance to travel to, etc etc
-        int roundsToProcess = (GameConstants.BYTECODE_LIMIT - (Clock.getBytecodeNum())) / 55;
-        double bestRegen = this.bestRegen;
-        int regenRow = this.regenRow;
-        int regenColumn = this.regenColumn;
-        int i = 0;
-        while (regenRow < rowLen && i < roundsToProcess) {
-
-            // One row at a time
-            for (; regenColumn < colLen && i < roundsToProcess; regenColumn++, i++) {
-                double[] row = cowRegens[regenRow];
-                double val = row[regenColumn - 1] + row[regenColumn] + row[regenColumn + 1] + cowRegens[regenRow - 1][regenColumn] + cowRegens[regenRow + 1][regenColumn];
-                if (bestRegen < val) {
-                    bestRegen = val;
-                    bestRegenLoc = new MapLocation(regenRow, regenColumn);
-                }
-            }
-
-            if (regenColumn == colLen) {
-                regenColumn = 1;
-                regenRow++;
-            }
-        }
-
-        this.bestRegen = bestRegen;
-        this.regenRow = regenRow;
-        this.regenColumn = regenColumn;
+        // Will calculate to end of round
+        milkInformation.calc();
     }
 
     public int getCount(int group) {
