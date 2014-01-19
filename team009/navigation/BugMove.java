@@ -44,7 +44,6 @@ public class BugMove extends Move {
         return moveWrapper(true);
     }
 
-
     private boolean moveWrapper(boolean sneak) throws GameActionException {
         Direction toMove = calcMove();
 
@@ -60,7 +59,7 @@ public class BugMove extends Move {
     }
 
 
-    private Direction calcMove() {
+    public Direction calcMove() {
         if (!robot.rc.isActive())
             return null;
 

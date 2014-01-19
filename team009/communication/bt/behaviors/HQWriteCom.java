@@ -9,7 +9,6 @@ public class HQWriteCom extends WriteBehavior {
     HQ hq;
     MapLocation center = null;
     MapLocation baseCoverageLocation = null;
-    MapLocation bestRegenDefendLoc = null;
     boolean capturing = false;
 
     public HQWriteCom(HQ robot) {
@@ -30,18 +29,13 @@ public class HQWriteCom extends WriteBehavior {
         rc.setIndicatorString(0, "Capture: " + (capturing ? "I am capturing" : "i am not"));
 
         if (capturing) {
-            // refresh capturing command
-            // TODO: We don't want 1 at a time what do we do?
             hq.comCapture(hq.bestRegenLoc, 0);
 
             // Can we send group 1 out?
             if (enough1 && hq.hasPastures) {
                 hq.comAttackPasture(hq.pastures[0], 1);
             } else {
-                if (bestRegenDefendLoc == null) {
-                    bestRegenDefendLoc = getDefendingLocation(hq.bestRegenLoc);
-                }
-                hq.comDefend(bestRegenDefendLoc, 1);
+                hq.comDefend(getDefendingLocation(hq.bestRegenLoc), 1);
             }
         } else if (hq.hasPastures) {
             if (hq.pastures.length > 1) {
@@ -105,6 +99,12 @@ public class HQWriteCom extends WriteBehavior {
 
     private MapLocation getDefendingLocation(MapLocation loc) {
         Direction dir = robot.info.enemyDir;
+        int rotates = (int)(Math.random() * 8);
+        boolean right = ((int)(Math.random() * 2) == 1);
+        for (int i = 0; i < rotates; i++) {
+            dir = right ? dir.rotateRight() : dir.rotateLeft();
+        }
+
         for (int i = 0; i < 8; i++) {
             MapLocation newLoc = loc.add(dir, 2);
             TerrainTile tile = rc.senseTerrainTile(newLoc);
@@ -115,5 +115,5 @@ public class HQWriteCom extends WriteBehavior {
         return loc;
     }
 
-    private static final int REQUIRED_SOLDIER_COUNT_FOR_ATTACK = 3;
+    private static final int REQUIRED_SOLDIER_COUNT_FOR_ATTACK = 7;
 }

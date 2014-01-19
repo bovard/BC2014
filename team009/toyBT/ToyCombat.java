@@ -1,19 +1,22 @@
 package team009.toyBT;
 
 import battlecode.common.*;
-import team009.combat.CombatUtils;
 import team009.navigation.BugMove;
 import team009.robot.soldier.ToySoldier;
+import team009.utils.SmartMapLocationArray;
 import team009.utils.SmartRobotInfoArray;
 
 public class ToyCombat {
     private ToySoldier soldier;
     private int sensorRadius, attackRadius, halfRange, range;
     private BugMove move;
+    private int hqMaxDistance = (int)Math.sqrt(RobotType.HQ.attackRadiusMaxSquared) + 1;
+    private SmartMapLocationArray currentAttackableEnemies;
 
     public ToyCombat(ToySoldier robot) {
         soldier = robot;
         _init();
+        hqMaxDistance *= hqMaxDistance;
     }
 
     private void _init() {
@@ -40,130 +43,93 @@ public class ToyCombat {
 
         _fillData(nmeInfos, nmeLocs, nmeHps);
         _sort(nmeInfos, nmeLocs, nmeHps);
+        SmartMapLocationArray currentAttackableEnemies = this.currentAttackableEnemies = _getAttackableEnemies(currentLoc, nmeLocs);
+        MapLocation nearestEnemy = currentAttackableEnemies.arr[0];
 
-        if (isMoving(currentLoc)) {
+        if (move.destination != null) {
 
             // have i moved into any enemies
-            MapLocation nearestAttacker = _getLowestHPAttackableEnemy(currentLoc, nmeLocs);
-            if (nearestAttacker == null) {
-                move.move();
+            if (nearestEnemy == null) {
+                Direction dir = _combatMove(rc, currentLoc, move.destination, nmeLocs);
+                if (dir != null) {
+                    rc.move(dir);
+                }
             } else {
-                rc.attackSquare(nearestAttacker);
+                move.destination = null;
+            }
+            return;
+        }
+
+        if (soldier.enemySoldiers.length > 0) {
+            // Out numbered or even.  Wait for them to attack, then attack!
+            // TODO: Make a real decision on what is best.
+            if (soldier.friendlySoldiers.length <= soldier.enemySoldiers.length) {
+                MapLocation target = nearestEnemy == null ? nmeLocs[0] : nearestEnemy;
+                _moveOrAttack(rc, currentLoc, target, nmeLocs);
+            }
+
+            // We outnumber them
+            // TODO: Make a real decision on what is best.
+            else {
+                MapLocation target = nearestEnemy == null ? nmeLocs[0] : nearestEnemy;
+                _moveOrAttack(rc, currentLoc, target, nmeLocs);
             }
         } else {
-
-            if (soldier.enemySoldiers.length > 0) {
-                // Out numbered or even.  Wait for them to attack, then attack!
-                // TODO: Review Bovard
-                if (soldier.friendlySoldiers.length <= soldier.enemySoldiers.length) {
-                    MapLocation nearestEnemy = _getLowestHPAttackableEnemy(currentLoc, nmeLocs);
-                    if (nearestEnemy == null) {
-                        // Can we move closer?
-                        Direction to = _combatMove(rc, currentLoc, nmeLocs[0]);
-                        if (to != null) {
-                            rc.move(to);
-                        }
-                    } else {
-                        // They are in attack range. defend position!
-                        rc.attackSquare(nearestEnemy);
-                    }
-                }
-
-                // We outnumber them
-                // TODO: Review Bovard
-                else {
-                    MapLocation nearestEnemy = _getLowestHPAttackableEnemy(currentLoc, nmeLocs);
-                    if (nearestEnemy == null) {
-                        Direction move = _combatMove(rc, currentLoc, nmeLocs[0]);
-                        if (move != null) {
-                            rc.move(move);
-                        }
-                    } else {
-                        // They are in attack range. defend position!
-                        rc.attackSquare(nearestEnemy);
-                    }
-                }
-            } else {
-                if (soldier.enemyPastrs.length > 0) {
-                    _moveOrAttack(rc, currentLoc, soldier.enemyPastrs.arr[0].location);
-                } else if (soldier.enemyNoise.length > 0) {
-                    _moveOrAttack(rc, currentLoc, soldier.enemyNoise.arr[0].location);
-                }
+            if (soldier.enemyPastrs.length > 0) {
+                MapLocation target = soldier.enemyPastrs.arr[0].location;
+                _moveOrAttack(rc, currentLoc, target, nmeLocs);
+            } else if (soldier.enemyNoise.length > 0) {
+                MapLocation target = soldier.enemyNoise.arr[0].location;
+                _moveOrAttack(rc, currentLoc, target, nmeLocs);
             }
         }
     }
 
-    // If the robot is moving with bug
-    public boolean isMoving(MapLocation curr) {
-        return move.destination != null && move.destination.distanceSquaredTo(curr) > attackRadius;
-    }
+    private void _moveOrAttack(RobotController rc, MapLocation from, MapLocation to, MapLocation[] enemies) throws GameActionException {
 
-    private void _moveOrAttack(RobotController rc, MapLocation from, MapLocation to) throws GameActionException {
+
         // We got to just fight it out
         if (rc.canAttackSquare(to)) {
             rc.attackSquare(to);
         } else {
-            rc.move(_combatMove(rc, from, to));
+            move.setDestination(to);
+            Direction dir = _combatMove(rc, from, to, enemies);
+            if (dir != null) {
+                rc.move(dir);
+            }
         }
     }
 
     // Validates if there are any nearest attackers.  Always go for the nearest attackers first.
-    private MapLocation _getLowestHPAttackableEnemy(MapLocation loc, MapLocation[] enemies) {
+    private SmartMapLocationArray _getAttackableEnemies(MapLocation loc, MapLocation[] enemies) {
+        SmartMapLocationArray arr = new SmartMapLocationArray();
         for (int i = 0; i < enemies.length; i++) {
             if (loc.distanceSquaredTo(enemies[i]) <= attackRadius) {
-                return enemies[i];
+                arr.add(enemies[i]);
             }
         }
 
-        return null;
+        return arr;
     }
 
-    // If the current location is attackable by any enemy
-    private boolean _isAttackablePosition(MapLocation myLoc, MapLocation[] enemies) {
-        for (int i = 0; i < enemies.length; i++) {
-            if (enemies[i].distanceSquaredTo(myLoc) <= attackRadius) {
-                return true;
-            }
-        }
+    private Direction _combatMove(RobotController rc, MapLocation from, MapLocation to, MapLocation[] enemies) throws GameActionException {
+        Direction dirTo = move.calcMove();
 
-        return false;
-    }
-
-    private Direction _combatMove(RobotController rc, MapLocation from, MapLocation to) throws GameActionException {
-        Direction dirTo = from.directionTo(to);
-        if (dirTo == Direction.OMNI || dirTo == Direction.NONE) {
-            return null;
-        }
-
-        if (rc.canMove(dirTo)) {
+        if (rc.canMove(dirTo) && !_tooDangerous(from.add(dirTo), enemies)) {
             return dirTo;
         }
 
-        Direction leftTo = dirTo;
-        Direction rightTo = dirTo;
-
+        boolean right = from.x > to.x;
         // Will search the entire space.
         for (int i = 0; i < 4; i++) {
-            leftTo = leftTo.rotateLeft();
-            if (rc.canMove(leftTo)) {
-                return leftTo;
-            }
-
-            rightTo = rightTo.rotateRight();
-            if (rc.canMove(rightTo)) {
-                return rightTo;
+            dirTo = right ? dirTo.rotateRight() : dirTo.rotateLeft();
+            if (rc.canMove(dirTo) && !_tooDangerous(from.add(dirTo), enemies)) {
+                return dirTo;
             }
         }
 
         // Cannot move
         return null;
-    }
-
-    /**
-     * Determines if bug is required
-     */
-    private boolean mustUseBug(RobotController rc, MapLocation from, MapLocation to) {
-        return false;
     }
 
     private void _fillData(SmartRobotInfoArray infos, MapLocation[] locs, int[] hps) throws GameActionException {
@@ -173,6 +139,22 @@ public class ToyCombat {
             locs[i] = infos.arr[i].location;
             hps[i] = (int)infos.arr[i].health;
         }
+    }
+
+    // If the location provided is to dangerous
+    private boolean _tooDangerous(MapLocation loc, MapLocation[] enemies) {
+        if (soldier.info.enemyHq.distanceSquaredTo(loc) <= hqMaxDistance) {
+            return true;
+        }
+
+        // Our move is worse
+        // TODO: This may be a bad decision
+        SmartMapLocationArray arr = _getAttackableEnemies(loc, enemies);
+        if (arr.length > currentAttackableEnemies.length) {
+            return true;
+        }
+
+        return false;
     }
 
     private void _sort(SmartRobotInfoArray infos, MapLocation[] enemyLocs, int[] enemyHps) {
