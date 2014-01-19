@@ -41,16 +41,13 @@ public class ToyCombat {
         _fillData(nmeInfos, nmeLocs, nmeHps);
         _sort(nmeInfos, nmeLocs, nmeHps);
 
-        rc.setIndicatorString(0, "isMoving: " + isMoving(currentLoc) + " : " + move.destination);
         if (isMoving(currentLoc)) {
 
             // have i moved into any enemies
             MapLocation nearestAttacker = _getLowestHPAttackableEnemy(currentLoc, nmeLocs);
             if (nearestAttacker == null) {
-                rc.setIndicatorString(1, "Moving: " + move.destination);
                 move.move();
             } else {
-                rc.setIndicatorString(1, "nearestAttacker: " + nearestAttacker);
                 rc.attackSquare(nearestAttacker);
             }
         } else {
@@ -98,7 +95,7 @@ public class ToyCombat {
 
     // If the robot is moving with bug
     public boolean isMoving(MapLocation curr) {
-        return move.destination != null ? move.destination.distanceSquaredTo(curr) > attackRadius: false;
+        return move.destination != null && move.destination.distanceSquaredTo(curr) > attackRadius;
     }
 
     private void _moveOrAttack(RobotController rc, MapLocation from, MapLocation to) throws GameActionException {
