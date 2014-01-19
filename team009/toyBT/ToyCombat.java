@@ -145,15 +145,6 @@ public class ToyCombat {
             return dirTo;
         }
 
-
-//        boolean right = from.x > to.x;
-//        // Will search the entire space.
-//        for (int i = 0; i < 4; i++) {
-//            dirTo = right ? dirTo.rotateRight() : dirTo.rotateLeft();
-//            if (rc.canMove(dirTo) && !_tooDangerous(from.add(dirTo), enemies)) {
-//                return dirTo;
-//            }
-//        }
         Direction leftTo = dirTo;
         Direction rightTo = dirTo;
 
@@ -175,7 +166,7 @@ public class ToyCombat {
     }
 
     private Direction _combatAvoid(RobotController rc, MapLocation from, MapLocation nmeCentroid, MapLocation[] enemies) throws GameActionException {
-        Direction dirTo = from.directionTo(nmeCentroid);
+        Direction dirTo = nmeCentroid.directionTo(from);
         if (rc.canMove(dirTo) && !_isAttackablePosition(from.add(dirTo), enemies)) {
             return dirTo;
         }

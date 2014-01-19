@@ -1,6 +1,7 @@
 package team009.communication.bt.behaviors;
 
 import battlecode.common.*;
+import team009.navigation.BugMove;
 import team009.robot.hq.HQ;
 
 public class HQWriteCom extends WriteBehavior {
@@ -9,10 +10,13 @@ public class HQWriteCom extends WriteBehavior {
     MapLocation bestCoverageLocation = null;
     boolean capturing = false;
     int defendingGroup = -1;
+    BugMove move;
 
     public HQWriteCom(HQ robot) {
         super(robot);
         hq = robot;
+        move = new BugMove(robot);
+
     }
 
     @Override
@@ -123,6 +127,21 @@ public class HQWriteCom extends WriteBehavior {
             }
             dir = dir.rotateRight();
         }
+
+        move.setDestination(robot.info.enemyHq);
+        dir = move.calcMove();
+        MapLocation homeLoc = robot.info.hq.add(dir);
+        for (int i = 0; i < 8; i++) {
+            MapLocation next = homeLoc.add(dir);
+            TerrainTile tile = rc.senseTerrainTile(next);
+            if (tile != TerrainTile.VOID || tile != TerrainTile.OFF_MAP) {
+                bestCoverageLocation = next;
+                return;
+            } else {
+                dir = dir.rotateRight();
+            }
+        }
+
     }
 
     private MapLocation getDefendingLocation(MapLocation loc) {
