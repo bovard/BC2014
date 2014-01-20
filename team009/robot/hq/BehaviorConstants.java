@@ -14,7 +14,7 @@ public class BehaviorConstants {
     public static final int CHASE_REQUIRED_SOLDIER_COUNT = 1;
 
     // Dark Horse // TODO: Currently impossible with this milk requirements
-    public static final boolean DARK_HORSE_ENABLED = false;
+    public static final boolean DARK_HORSE_ENABLED = true;
     public static final int DARK_HORSE_MILK_MINIMUM = 100000;
 
     // Map Sizing
