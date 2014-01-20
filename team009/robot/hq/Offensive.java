@@ -1,6 +1,5 @@
 package team009.robot.hq;
 
-import _team0_2_4.bt.behaviors.Behavior;
 import battlecode.common.*;
 import team009.RobotInformation;
 import team009.bt.Node;
@@ -68,8 +67,8 @@ public class Offensive extends HQ {
         // TODO: Chase strat
         if (BehaviorConstants.CHASE_ENABLED && chaseStrategy.chase && (!BehaviorConstants.CHASE_CAN_CANCEL_FOR_HUNT || !hasPastures) &&
                 Clock.getRoundNum() > BehaviorConstants.CHASE_MINIMUM_ROUND_NUMBER) {
-            chase0 = group0Count > BehaviorConstants.REQUIRED_SOLDIER_COUNT_FOR_CHASE;
-            chase1 = group1Count > BehaviorConstants.REQUIRED_SOLDIER_COUNT_FOR_CHASE;
+            chase0 = group0Count > BehaviorConstants.CHASE_REQUIRED_SOLDIER_COUNT;
+            chase1 = group1Count > BehaviorConstants.CHASE_REQUIRED_SOLDIER_COUNT;
         }
 
 
