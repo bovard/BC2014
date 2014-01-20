@@ -2,6 +2,7 @@ package team009.utils;
 
 import battlecode.common.*;
 import team009.RobotInformation;
+import team009.robot.hq.BehaviorConstants;
 import team009.robot.hq.HQ;
 
 public class DarkHorsePostProcess {
@@ -59,7 +60,6 @@ public class DarkHorsePostProcess {
                 for (darkJ = darkJStart; darkJ < darkJLen; darkJ++, k++) {
                     milkTotal += milkInformation.milks[darkI][darkJ];
                 }
-                System.out.println("This row has " + milkTotal);
             }
             mapDone = darkI == darkILen;
         }
@@ -84,8 +84,7 @@ public class DarkHorsePostProcess {
             finished = currDir == Direction.NORTH;
         }
 
-        darkHorse = finished && milkTotal > DARK_HORSE_MILK_MINIMUM && blockedCount < 3;
+        darkHorse = finished && milkTotal > BehaviorConstants.DARK_HORSE_MILK_MINIMUM && blockedCount < 3;
     }
 
-    public static final int DARK_HORSE_MILK_MINIMUM = 100;
 }

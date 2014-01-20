@@ -26,7 +26,7 @@ public abstract class HQ extends TeamRobot {
         maxSoldiers = Communicator.MAX_GROUP_COUNT;
         soldierCounts = new SoldierCountDecoder[maxSoldiers];
         // REMEMBER TO CALL treeRoot = getTreeRoot() in your implementations of this!
-        // REMEMBER TO CALL comRoot = __YOUR_COM_ROOT__; // See communications.bt.HQOffensiveCom for example (WriteCom and ReadCom)
+        // REMEMBER TO CALL comRoot = __YOUR_COM_ROOT__; // See communications.bt.HQCom for example (WriteCom and ReadCom)
     }
 
     @Override

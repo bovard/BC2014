@@ -1,10 +1,12 @@
 package team009.robot.hq;
 
+import _team0_2_4.bt.behaviors.Behavior;
 import battlecode.common.*;
 import team009.RobotInformation;
 import team009.bt.Node;
 import team009.bt.decisions.hq.OffensiveSelector;
-import team009.communication.bt.HQOffensiveCom;
+import team009.communication.bt.HQCom;
+import team009.navigation.BugMove;
 import team009.utils.ChaseStrategyUtil;
 import team009.utils.DarkHorsePostProcess;
 import team009.utils.MilkInformation;
@@ -23,19 +25,23 @@ public class Offensive extends HQ {
     public int group0Count;
     public int group1Count;
     public boolean finishedPostCalc = false;
-    private boolean largeMap = false;
-    private boolean mediumMap = false;
 
     public MilkInformation milkInformation;
     public DarkHorsePostProcess darkHorse;
     public ChaseStrategyUtil chaseStrategy;
 
+    public MapLocation center;
+    public MapLocation bestCoverageLocation;
+
+    private boolean largeMap = false;
+    private boolean mediumMap = false;
+
     public Offensive(RobotController rc, RobotInformation info) {
         super(rc, info);
         treeRoot = getTreeRoot();
-        comRoot = new HQOffensiveCom(this);
-        largeMap = info.width * info.height > 1200;
-        mediumMap = !largeMap && info.width * info.height > 800;
+        comRoot = new HQCom(this);
+        largeMap = info.width * info.height > BehaviorConstants.LARGE_MAP_MINIMUM_AREA;
+        mediumMap = !largeMap && info.width * info.height > BehaviorConstants.MEDIUM_MAP_MINIMUM_AREA;
         milkInformation = new MilkInformation(rc, info);
         darkHorse = new DarkHorsePostProcess(this, milkInformation);
         chaseStrategy = new ChaseStrategyUtil(this);
@@ -50,18 +56,22 @@ public class Offensive extends HQ {
         group1Count = getCount(1);
 
         // Gets the different groups
-        boolean enough0Attack = group0Count >= REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
-        boolean enough1Attack = group1Count >= REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
-        boolean combinedEnoughAttack = group0Count + group1Count >= REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
+        boolean enough0Attack = group0Count >= BehaviorConstants.REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
+        boolean enough1Attack = group1Count >= BehaviorConstants.REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
+        boolean combinedEnoughAttack = group0Count + group1Count >= BehaviorConstants.REQUIRED_SOLDIER_COUNT_FOR_GROUP_ATTACK;
 
-        if (chaseStrategy.finished && chaseStrategy.chase) {
-            chase0 = group0Count > REQUIRED_SOLDIER_COUNT_FOR_CHASE;
-            chase1 = group1Count > REQUIRED_SOLDIER_COUNT_FOR_CHASE;
+        // TODO: Dark horse
+        if (BehaviorConstants.DARK_HORSE_ENABLED && darkHorse.darkHorse) {
+            dark = true;
         }
 
-        if (darkHorse.finished) {
-            dark = darkHorse.darkHorse;
+        // TODO: Chase strat
+        if (BehaviorConstants.CHASE_ENABLED && chaseStrategy.chase && (!BehaviorConstants.CHASE_CAN_CANCEL_FOR_HUNT || !hasPastures) &&
+                Clock.getRoundNum() > BehaviorConstants.CHASE_MINIMUM_ROUND_NUMBER) {
+            chase0 = group0Count > BehaviorConstants.REQUIRED_SOLDIER_COUNT_FOR_CHASE;
+            chase1 = group1Count > BehaviorConstants.REQUIRED_SOLDIER_COUNT_FOR_CHASE;
         }
+
 
         // TODO: Large Map Strategy?
         else if (largeMap && false) {
@@ -71,19 +81,12 @@ public class Offensive extends HQ {
         // TODO: How do we incorporate dark horse?
         else if (mediumMap || largeMap) {
             // TODO: How do we do hunt0 and oneBase?
-            if (!enough0Attack && !enough1Attack && combinedEnoughAttack) {
-                hunt0 = hasPastures;
-                hunt1 = false;
-                oneBase = !hunt0;
-            }
+            hunt0 = hasPastures && combinedEnoughAttack;
+            hunt1 = hunt0 && enough0Attack && enough1Attack;
 
-            if (hasPastures && combinedEnoughAttack && (enough0Attack || enough1Attack)) {
-                hunt0 = enough0Attack;
-                hunt1 = enough1Attack && enemyPastrs.length > 1;
+            if (combinedEnoughAttack && !hunt0) {
+                oneBase = true;
             }
-
-            // wtf do we do?
-            huddle = !hunt0 && !hunt1 && !oneBase;
         }
 
         else {
@@ -95,8 +98,12 @@ public class Offensive extends HQ {
     @Override
     public void postProcessing() throws GameActionException {
         super.postProcessing();
-        if (chaseStrategy.finished) {
+        if (darkHorse.finished) {
             return;
+        }
+
+        if (bestCoverageLocation == null) {
+            _calculateRallyPoint();
         }
 
         if (!milkInformation.finished) {
@@ -104,17 +111,22 @@ public class Offensive extends HQ {
             return;
         }
 
-        if (!darkHorse.finished) {
-            darkHorse.calc();
+        if (!chaseStrategy.finished) {
+            chaseStrategy.calc();
             return;
         }
 
-        chaseStrategy.calc();
+        darkHorse.calc();
 
-        if (chaseStrategy.finished) {
+        if (darkHorse.finished) {
             rc.setIndicatorString(0, "DarkHorse: " + "Finished: " + darkHorse.darkHorse);
             finishedPostCalc = true;
         }
+    }
+
+    public MapLocation getNextMilkingSpot() {
+        // TODO: Switch this around?
+        return milkInformation.targetBoxes[0].bestSpot;
     }
 
     @Override
@@ -122,7 +134,43 @@ public class Offensive extends HQ {
         return new OffensiveSelector(this);
     }
 
+    private void _calculateRallyPoint() throws GameActionException {
+        center = new MapLocation(info.width / 2, info.height / 2);
+        MapLocation hq = info.hq;
+        Direction dir = info.enemyDir;
 
-    private static final int REQUIRED_SOLDIER_COUNT_FOR_ATTACK = 5;
-    private static final int REQUIRED_SOLDIER_COUNT_FOR_CHASE = 3;
+        for (int i = 0; i < 8; i++) {
+            boolean found = true;
+            MapLocation curr = hq;
+            for (int j = 0; j < 3; j++) {
+                curr = curr.add(dir);
+                TerrainTile tile = rc.senseTerrainTile(curr);
+                if (tile == TerrainTile.OFF_MAP || tile == TerrainTile.VOID) {
+                    found = false;
+                    break;
+                }
+            }
+
+            if (found) {
+                bestCoverageLocation = curr;
+                return;
+            }
+            dir = dir.rotateRight();
+        }
+        BugMove move = new BugMove(this);
+        move.setDestination(info.enemyHq);
+        dir = move.calcMove();
+        MapLocation homeLoc = info.hq.add(dir);
+        for (int i = 0; i < 8; i++) {
+            MapLocation next = homeLoc.add(dir);
+            TerrainTile tile = rc.senseTerrainTile(next);
+            if (tile != TerrainTile.VOID || tile != TerrainTile.OFF_MAP) {
+                bestCoverageLocation = next;
+                return;
+            } else {
+                dir = dir.rotateRight();
+            }
+        }
+
+    }
 }

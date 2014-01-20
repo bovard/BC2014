@@ -2,6 +2,7 @@ package team009.utils;
 
 import battlecode.common.*;
 import team009.RobotInformation;
+import team009.robot.hq.BehaviorConstants;
 import team009.robot.hq.HQ;
 
 public class ChaseStrategyUtil {
@@ -22,7 +23,7 @@ public class ChaseStrategyUtil {
         i = info.width / 3;
         x2 = 2 * info.width / 3;
 
-        add = info.width * info.height - CHASE_STRATEGY_MAP_MINIMUM;
+        add = info.width * info.height - BehaviorConstants.CHASE_STRATEGY_MAP_MINIMUM;
         add = add < 0 ? 0 : (int)Math.sqrt(add);
 
         j = 0;
@@ -33,24 +34,18 @@ public class ChaseStrategyUtil {
         int rounds = (GameConstants.BYTECODE_LIMIT - (Clock.getBytecodeNum() + 75)) / 20;
         int k = 0;
 
-        while (k < rounds) {
+        while (k < rounds && i < x2) {
             for (; i < x2; i++, k++) {
-                for (j = 0 ;j < y2; j++, k++) {
+                for (j = 0; j < y2 && k < rounds; j++, k++) {
                     wallCount += rc.senseTerrainTile(new MapLocation(i, j)) == TerrainTile.VOID ? 1 : 0;
                 }
             }
         }
 
-        System.out.println("Chase Strategy: " + wallCount + " : " + add + " : " + CHASE_STRATEGY_MINIMUM);
         if (i == x2) {
-
-            System.out.println("Chase Strategy: " + wallCount + " : " + add + " : " + CHASE_STRATEGY_MINIMUM);
-            chase = wallCount + add > CHASE_STRATEGY_MINIMUM;
+            chase = wallCount + add > BehaviorConstants.CHASE_STRATEGY_MINIMUM;
             finished = true;
         }
     }
-
-    public static final int CHASE_STRATEGY_MINIMUM = 250;
-    public static final int CHASE_STRATEGY_MAP_MINIMUM = 1200;
 }
 

@@ -1,8 +1,9 @@
-package team009.communication.bt.behaviors;
+package team009.communication.bt.behaviors.hq;
 
 import battlecode.common.GameActionException;
 import team009.communication.Communicator;
 import team009.communication.SoldierCountDecoder;
+import team009.communication.bt.behaviors.ReadBehavior;
 import team009.robot.hq.HQ;
 import team009.robot.soldier.SoldierSpawner;
 

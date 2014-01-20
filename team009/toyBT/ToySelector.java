@@ -54,6 +54,7 @@ public class ToySelector extends Decision {
 
         // NOTE:  This is obviously brittle, but its really efficient.
         // Byte code critical code
+        rc.setIndicatorString(0, "Command: " + soldier.comCommand + " : Location: " + soldier.comLocation);
         if (engageEnemy.pre()) {
             return engageEnemy.run();
         }
