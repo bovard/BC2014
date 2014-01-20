@@ -104,7 +104,6 @@ public class ToySoldier extends TeamRobot {
         // TODO: Bovard what to do?
         isHerder = comCommand == CAPTURE_PASTURE;
         isHunter = !isHerder;
-        rc.setIndicatorString(0, (isHerder ? "I am herding " : "I am hunting ") + comLocation + " : " + comCommand + " : " + group + " : ");
     }
 
     // TODO: WayPointing?

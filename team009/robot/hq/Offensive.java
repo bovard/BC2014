@@ -4,7 +4,8 @@ import battlecode.common.*;
 import team009.RobotInformation;
 import team009.bt.Node;
 import team009.bt.decisions.hq.OffensiveSelector;
-import team009.communication.bt.HQCom;
+import team009.communication.bt.HQOffensiveCom;
+import team009.utils.ChaseStrategyUtil;
 import team009.utils.DarkHorsePostProcess;
 import team009.utils.MilkInformation;
 
@@ -26,15 +27,17 @@ public class Offensive extends HQ {
 
     public MilkInformation milkInformation;
     public DarkHorsePostProcess darkHorse;
+    public ChaseStrategyUtil chaseStrategy;
 
     public Offensive(RobotController rc, RobotInformation info) {
         super(rc, info);
         treeRoot = getTreeRoot();
-        comRoot = new HQCom(this);
+        comRoot = new HQOffensiveCom(this);
         largeMap = info.width * info.height > 1200;
         mediumMap = !largeMap && info.width * info.height > 800;
         milkInformation = new MilkInformation(rc, info);
         darkHorse = new DarkHorsePostProcess(this, milkInformation);
+        chaseStrategy = new ChaseStrategyUtil(this);
     }
 
     @Override
@@ -50,13 +53,17 @@ public class Offensive extends HQ {
         boolean enough1Attack = group1Count >= REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
         boolean combinedEnoughAttack = group0Count + group1Count >= REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
 
-        if (largeMap) {
-            // TODO: Large Map Strategy?
+        if (chaseStrategy.chase) {
             chase0 = group0Count > REQUIRED_SOLDIER_COUNT_FOR_CHASE;
             chase1 = group1Count > REQUIRED_SOLDIER_COUNT_FOR_CHASE;
         }
 
-        else if (mediumMap) {
+        // TODO: Large Map Strategy?
+        else if (largeMap && false) {
+
+        }
+
+        else if (mediumMap || largeMap) {
             // TODO: How do we do hunt0 and oneBase?
             if (!enough0Attack && !enough1Attack && combinedEnoughAttack) {
                 hunt0 = hasPastures;
@@ -74,8 +81,9 @@ public class Offensive extends HQ {
         }
 
         else {
-            hunt0 = combinedEnoughAttack;
+            hunt0 = combinedEnoughAttack && hasPastures;
         }
+        hudle = !hunt0 && !hunt1 && !chase0 && !chase1 && !oneBase;
     }
 
     @Override
@@ -90,7 +98,16 @@ public class Offensive extends HQ {
             return;
         }
 
-        darkHorse.calc();
+        if (!darkHorse.finished) {
+            darkHorse.calc();
+            return;
+        }
+
+        if (largeMap && !chaseStrategy.finished) {
+            chaseStrategy.calc();
+            return;
+        }
+
         rc.setIndicatorString(0, "DarkHorse: " + "Finished: " + darkHorse.darkHorse);
         finishedPostCalc = true;
     }

@@ -82,7 +82,7 @@ public class DarkHorsePostProcess {
             finished = currDir == Direction.NORTH;
         }
 
-        darkHorse = finished && milkTotal > DARK_HORSE_MILK_MINIMUM;
+        darkHorse = finished && milkTotal > DARK_HORSE_MILK_MINIMUM && blockedCount < 3;
     }
 
     public static final int DARK_HORSE_MILK_MINIMUM = 100;

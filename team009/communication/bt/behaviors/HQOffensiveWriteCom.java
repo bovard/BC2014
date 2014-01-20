@@ -4,14 +4,14 @@ import battlecode.common.*;
 import team009.navigation.BugMove;
 import team009.robot.hq.Offensive;
 
-public class HQOffensiveCom extends WriteBehavior {
+public class HQOffensiveWriteCom extends WriteBehavior {
     Offensive hq;
     MapLocation center = null;
     MapLocation bestCoverageLocation = null;
     int defendingGroup = -1;
     BugMove move;
 
-    public HQOffensiveCom(Offensive robot) {
+    public HQOffensiveWriteCom(Offensive robot) {
         super(robot);
         hq = robot;
         move = new BugMove(robot);
@@ -49,6 +49,7 @@ public class HQOffensiveCom extends WriteBehavior {
         if (hq.chase1) {
             hq.comCapture(hq.milkInformation.targetBoxes[1].bestSpot, 1);
         }
+        rc.setIndicatorString(2, "Values: " + hq.oneBase + ", " + hq.hunt0 + ", " + hq.hunt1 + ", " + hq.chase0 + ", " + hq.chase1 + ", " + hq.hudle);
 
 //        int toyCount0 = hq.getCount(0);
 //        int toyCount1 = hq.getCount(1);

@@ -22,6 +22,7 @@ public class HQStateCom extends ReadBehavior {
 
         for (int i = 0; i < groups; i++) {
             soldierCounts[i] = Communicator.ReadTypeAndGroup(rc, type, i);
+            System.out.println(soldierCounts[i].toString());
             Communicator.ClearCountChannel(rc, type, i);
         }
         return true;
