@@ -14,7 +14,8 @@ public class DarkHorsePostProcess {
     private int darkJ = 0;
     private int darkILen = 0;
     private int darkJLen = 0;
-    private int radius = (int)Math.sqrt(RobotType.NOISETOWER.attackRadiusMaxSquared) - 2;
+    private int darkJStart = 0;
+    private int radius = (int)Math.sqrt(RobotType.NOISETOWER.attackRadiusMaxSquared) - 1;
     private double milkTotal = 0;
     private Direction currDir = Direction.NORTH;
     private int blockedCount = 0;
@@ -29,7 +30,7 @@ public class DarkHorsePostProcess {
         this.milkInformation = milkInformation;
 
         darkI = info.hq.x - radius;
-        darkJ = info.hq.y - radius;
+        darkJStart = info.hq.y - radius;
         darkILen = darkI + radius;
         darkJLen = darkJ + radius;
 
@@ -55,7 +56,7 @@ public class DarkHorsePostProcess {
         int k = 0;
         while (!finished && !mapDone && k < rounds) {
             for (; darkI < darkILen; darkI++, k++) {
-                for (; darkJ < darkJLen; darkJ++, k++) {
+                for (darkJ = darkJStart; darkJ < darkJLen; darkJ++, k++) {
                     milkTotal += milkInformation.milks[darkI][darkJ];
                 }
                 System.out.println("This row has " + milkTotal);

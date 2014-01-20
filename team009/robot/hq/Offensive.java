@@ -12,12 +12,13 @@ import team009.utils.MilkInformation;
 public class Offensive extends HQ {
     // Default behavior is one base and both groups defend it
     // If both groups get big, the second can break away and hunt.
-    public boolean hudle = false;
+    public boolean huddle = false;
     public boolean oneBase = false;
     public boolean hunt0 = false;
     public boolean hunt1 = false;
     public boolean chase0 = false;
     public boolean chase1 = false;
+    public boolean dark = false;
 
     public int group0Count;
     public int group1Count;
@@ -53,9 +54,13 @@ public class Offensive extends HQ {
         boolean enough1Attack = group1Count >= REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
         boolean combinedEnoughAttack = group0Count + group1Count >= REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
 
-        if (chaseStrategy.chase) {
+        if (chaseStrategy.finished && chaseStrategy.chase) {
             chase0 = group0Count > REQUIRED_SOLDIER_COUNT_FOR_CHASE;
             chase1 = group1Count > REQUIRED_SOLDIER_COUNT_FOR_CHASE;
+        }
+
+        if (darkHorse.finished) {
+            dark = darkHorse.darkHorse;
         }
 
         // TODO: Large Map Strategy?
@@ -63,6 +68,7 @@ public class Offensive extends HQ {
 
         }
 
+        // TODO: How do we incorporate dark horse?
         else if (mediumMap || largeMap) {
             // TODO: How do we do hunt0 and oneBase?
             if (!enough0Attack && !enough1Attack && combinedEnoughAttack) {
@@ -77,19 +83,19 @@ public class Offensive extends HQ {
             }
 
             // wtf do we do?
-            hudle = !hunt0 && !hunt1 && !oneBase;
+            huddle = !hunt0 && !hunt1 && !oneBase;
         }
 
         else {
             hunt0 = combinedEnoughAttack && hasPastures;
         }
-        hudle = !hunt0 && !hunt1 && !chase0 && !chase1 && !oneBase;
+        huddle = !hunt0 && !hunt1 && !chase0 && !chase1 && !oneBase;
     }
 
     @Override
     public void postProcessing() throws GameActionException {
         super.postProcessing();
-        if (darkHorse.finished) {
+        if (chaseStrategy.finished) {
             return;
         }
 
@@ -103,13 +109,12 @@ public class Offensive extends HQ {
             return;
         }
 
-        if (largeMap && !chaseStrategy.finished) {
-            chaseStrategy.calc();
-            return;
-        }
+        chaseStrategy.calc();
 
-        rc.setIndicatorString(0, "DarkHorse: " + "Finished: " + darkHorse.darkHorse);
-        finishedPostCalc = true;
+        if (chaseStrategy.finished) {
+            rc.setIndicatorString(0, "DarkHorse: " + "Finished: " + darkHorse.darkHorse);
+            finishedPostCalc = true;
+        }
     }
 
     @Override

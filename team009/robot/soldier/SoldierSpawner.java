@@ -25,7 +25,6 @@ public class SoldierSpawner {
         ToySoldier robot = null;
         try {
             SoldierDecoder decoder = Communicator.ReadNewSoldier(rc);
-            System.out.println("New Soldier: " + decoder.toString());
 
             int type = decoder.soldierType;
             switch (type) {

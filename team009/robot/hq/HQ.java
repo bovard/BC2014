@@ -61,7 +61,6 @@ public abstract class HQ extends TeamRobot {
     }
 
     public int getCount(int group) {
-        System.out.println("Getting Count: soldierCounts[" + group + "] = " + (soldierCounts[group] == null ? 0 : soldierCounts[group].count));
         return soldierCounts[group] == null ? 0 : soldierCounts[group].count;
     }
 

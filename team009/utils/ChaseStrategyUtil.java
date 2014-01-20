@@ -9,6 +9,7 @@ public class ChaseStrategyUtil {
     private RobotInformation info;
     private int i = 0;
     private int j = 0;
+    private int add = 0;
     private int x2, y2, wallCount = 0;
 
     public boolean finished = false;
@@ -20,6 +21,9 @@ public class ChaseStrategyUtil {
 
         i = info.width / 3;
         x2 = 2 * info.width / 3;
+
+        add = info.width * info.height - CHASE_STRATEGY_MAP_MINIMUM;
+        add = add < 0 ? 0 : (int)Math.sqrt(add);
 
         j = 0;
         y2 = info.height;
@@ -37,13 +41,16 @@ public class ChaseStrategyUtil {
             }
         }
 
+        System.out.println("Chase Strategy: " + wallCount + " : " + add + " : " + CHASE_STRATEGY_MINIMUM);
         if (i == x2) {
 
-            chase = wallCount > CHASE_STRATEGY_MINIMUM;
+            System.out.println("Chase Strategy: " + wallCount + " : " + add + " : " + CHASE_STRATEGY_MINIMUM);
+            chase = wallCount + add > CHASE_STRATEGY_MINIMUM;
             finished = true;
         }
     }
 
     public static final int CHASE_STRATEGY_MINIMUM = 250;
+    public static final int CHASE_STRATEGY_MAP_MINIMUM = 1200;
 }
 

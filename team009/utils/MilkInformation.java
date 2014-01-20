@@ -3,9 +3,6 @@ package team009.utils;
 import battlecode.common.*;
 import team009.RobotInformation;
 
-/**
- * Created by mpaulson on 1/19/14.
- */
 public class MilkInformation {
 
     // Controls
@@ -32,33 +29,33 @@ public class MilkInformation {
         this.info = info;
 
         // Calculates the bounding boxes.
-        // +--+------+--+
-        // |1 |2     |3 |
-        // +--+------+--+
-        // |4 |5     |6 |
-        // |  |      |  |
-        // |  |      |  |
-        // +--+------+--+
-        // |7 |8     |9 |
-        // +--+------+--+
+        // +---+-----+---+
+        // |1  |2    |3  |
+        // +---+-----+---+
+        // |4  |5    |6  |
+        // |   |     |   |
+        // +---+-----+---+
+        // |7  |8    |9  |
+        // +---+-----+---+
+        // Middle regions represent 40% of map space
         int width = info.width;
         int height = info.height;
-        int width20 = info.width / 5;
-        int height20 = info.height / 5;
-        int width80 = width20 * 4;
-        int height80 = height20 * 4;
+        int width30 = 3 * info.width / 10;
+        int height30 = 3 * info.height / 10;
+        int width70 = 7 * width / 10;
+        int height70 = 7 * height / 10;
 
         // The bounding boxes
         boxes = new Box[] {
-            new Box(0, 0, width20, height20),
-            new Box(width20, 0, width80, height20),
-            new Box(width80, 0, width, height20),
-            new Box(0, height20, width20, height80),
-            new Box(width20, height20, width80, height80),
-            new Box(width80, height20, width, height80),
-            new Box(0, height80, width20, height),
-            new Box(width20, height80, width80, height),
-            new Box(width80, height80, width, height),
+            new Box(0, 0, width30, height30),
+            new Box(width30, 0, width70, height30),
+            new Box(width70, 0, width, height30),
+            new Box(0, height30, width30, height70),
+            new Box(width30, height30, width70, height70),
+            new Box(width70, height30, width, height70),
+            new Box(0, height70, width30, height),
+            new Box(width30, height70, width70, height),
+            new Box(width70, height70, width, height),
         };
         milks = rc.senseCowGrowth();
     }

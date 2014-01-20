@@ -37,7 +37,7 @@ public class HQOffensiveWriteCom extends WriteBehavior {
             hq.comAttackPasture(hq.enemyPastrs.arr[0], 1);
         }
 
-        if (hq.hudle) {
+        if (hq.huddle) {
             hq.comReturnHome(bestCoverageLocation, 0);
             hq.comReturnHome(bestCoverageLocation, 1);
         }
@@ -49,7 +49,7 @@ public class HQOffensiveWriteCom extends WriteBehavior {
         if (hq.chase1) {
             hq.comCapture(hq.milkInformation.targetBoxes[1].bestSpot, 1);
         }
-        rc.setIndicatorString(2, "Values: " + hq.oneBase + ", " + hq.hunt0 + ", " + hq.hunt1 + ", " + hq.chase0 + ", " + hq.chase1 + ", " + hq.hudle);
+        rc.setIndicatorString(2, "Values: " + hq.oneBase + ", " + hq.hunt0 + ", " + hq.hunt1 + ", " + hq.chase0 + ", " + hq.chase1 + ", " + hq.huddle + ", " + hq.darkHorse.darkHorse);
 
 //        int toyCount0 = hq.getCount(0);
 //        int toyCount1 = hq.getCount(1);
