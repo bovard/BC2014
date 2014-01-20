@@ -58,6 +58,7 @@ public class DarkHorsePostProcess {
                 for (; darkJ < darkJLen; darkJ++, k++) {
                     milkTotal += milkInformation.milks[darkI][darkJ];
                 }
+                System.out.println("This row has " + milkTotal);
             }
             mapDone = darkI == darkILen;
         }
