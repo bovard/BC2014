@@ -6,11 +6,11 @@ import team009.communication.SoldierCountDecoder;
 import team009.robot.hq.HQ;
 import team009.robot.soldier.SoldierSpawner;
 
-public class HQReadCom extends ReadBehavior {
+public class HQStateCom extends ReadBehavior {
     HQ hq;
     SoldierCountDecoder[] soldierCounts;
 
-    public HQReadCom(HQ hq) {
+    public HQStateCom(HQ hq) {
         super(hq);
         this.hq = hq;
         soldierCounts = hq.soldierCounts;

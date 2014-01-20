@@ -6,10 +6,8 @@ import team009.RobotInformation;
 import team009.communication.Communicator;
 import team009.communication.GroupCommandDecoder;
 import team009.communication.SoldierCountDecoder;
-import team009.communication.bt.HQCom;
 import team009.robot.TeamRobot;
 import team009.robot.soldier.SoldierSpawner;
-import team009.utils.MilkInformation;
 import team009.utils.SmartMapLocationArray;
 
 public abstract class HQ extends TeamRobot {
@@ -18,20 +16,17 @@ public abstract class HQ extends TeamRobot {
     public SoldierCountDecoder[] soldierCounts;
     public boolean seesEnemy = false;
     public Robot[] enemies = new Robot[0];
-    public MapLocation bestLocation;
     public boolean hasPastures = false;
+    public boolean weHavePastures = false;
     public boolean hasHQPastures = false;
-    public SmartMapLocationArray pastures;
-
-    public MilkInformation milkInformation;
+    public SmartMapLocationArray enemyPastrs;
 
     public HQ(RobotController rc, RobotInformation info) {
         super(rc, info);
         maxSoldiers = Communicator.MAX_GROUP_COUNT;
         soldierCounts = new SoldierCountDecoder[maxSoldiers];
         // REMEMBER TO CALL treeRoot = getTreeRoot() in your implementations of this!
-        comRoot = new HQCom(this);
-        milkInformation = new MilkInformation(rc, info);
+        // REMEMBER TO CALL comRoot = __YOUR_COM_ROOT__; // See communications.bt.HQCom for example (WriteCom and ReadCom)
     }
 
     @Override
@@ -50,29 +45,19 @@ public abstract class HQ extends TeamRobot {
         }
 
         MapLocation[] pastrs = rc.sensePastrLocations(info.enemyTeam);
-        pastures = new SmartMapLocationArray();
+        MapLocation[] homePastrs = rc.sensePastrLocations(info.myTeam);
+        weHavePastures = homePastrs.length > 0;
+
+        enemyPastrs = new SmartMapLocationArray();
         for (int i = 0, j = 0; i < 2 && j < pastrs.length; j++) {
             if (pastrs[i].isAdjacentTo(info.enemyHq)) {
                 hasHQPastures = true;
             } else {
-                pastures.add(pastrs[i]);
+                enemyPastrs.add(pastrs[i]);
             }
         }
 
-        hasPastures = pastures.length > 0;
-    }
-
-    /**
-     * Post processes best pasture locations
-     */
-    public void postProcessing() throws GameActionException {
-        if (milkInformation.finished) {
-            rc.setIndicatorString(2, "BestLocation: " + milkInformation.targetBoxes[0].bestSpot + " : " + milkInformation.targetBoxes[1].bestSpot);
-            return;
-        }
-
-        // Will calculate to end of round
-        milkInformation.calc();
+        hasPastures = enemyPastrs.length > 0;
     }
 
     public int getCount(int group) {

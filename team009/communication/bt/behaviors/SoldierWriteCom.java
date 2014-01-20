@@ -23,7 +23,7 @@ public class SoldierWriteCom extends WriteBehavior {
         if (soldier.seesEnemyTeamNonHQRobot) {
             MapLocation priorityLoc = _getPriorityLocation();
             if (GroupCommandDecoder.shouldCommunicate(soldier.groupCommand, priorityLoc, TeamRobot.ATTACK, true)) {
-                Communicator.WriteToGroup(rc, soldier.group, Communicator.GROUP_SOLDIER_CHANEL, TeamRobot.ATTACK, priorityLoc, (4 * soldier.friendlySoldiers.length / 3) + 1);
+                Communicator.WriteToGroup(rc, soldier.group, Communicator.GROUP_SOLDIER_CHANEL, TeamRobot.ATTACK, priorityLoc, 3 * soldier.friendlySoldiers.length);
             }
         }
 
