@@ -3,9 +3,7 @@ package team009.robot;
 import battlecode.common.*;
 import team009.RobotInformation;
 import team009.bt.Node;
-import team009.communication.Communicator;
 import team009.robot.soldier.ToySoldier;
-import team009.utils.Timer;
 
 import java.util.Random;
 
@@ -13,14 +11,19 @@ public abstract class TeamRobot {
     // the distnace at which if you are greater than you are more than one square away from the enemy
     public final static int ONE_SQUARE_AWAY_MAX = 18;
 
-    // Somtimes i wish valid identifiers could contain explanation points!
+    // These are Group / HQ commands
     public static final int RETURN_TO_BASE = 1;
     public static final int ATTACK_PASTURE = 2;
     public static final int CAPTURE_PASTURE = 3;
-    public static final int DEFEND = 4;
-    public static final int HERD = 5;
-    public static final int ATTACK = 6;
+    public static final int CAPTURE_SOUND = 4;
+    public static final int DEFEND = 5;
+    public static final int HERD = 6;
+    public static final int ATTACK = 7;
     public static final int DESTRUCT = 9;
+
+    // These are HQ -> Soldier commands
+    public static final int NEED_WAY_POINT = 3;
+    public static final int WAY_POINT_RECEIVED = 2;
 
     protected Node treeRoot;
     protected Node comRoot = null;

@@ -10,9 +10,10 @@ public class BehaviorConstants {
     public static final int CHASE_MINIMUM_ROUND_NUMBER = 0;
     public static final int CHASE_REQUIRED_SOLDIER_COUNT = 1;
 
-    // Dark Horse // TODO: Currently impossible with this milk requirements
-    public static final boolean DARK_HORSE_ENABLED = true;
-    public static final int DARK_HORSE_MILK_MINIMUM = 900;
+    // Cheese // TODO: very strict.  Only works on 2 levels. neighbors and rushlane
+    public static final boolean CHEESE_ENABLED = true;
+    public static final int CHEESE_MILK_MINIMUM = 900;
+    public static final int CHEESE_HQ_ENEMY_MINIMUM_DISTANCE = 900;
 
     // Map Sizing
     public static final int LARGE_MAP_MINIMUM_AREA = 2000;
@@ -28,5 +29,5 @@ public class BehaviorConstants {
     public static final int MILK_INFO_STRAT = MILK_INFO_STRAT_CORNERS;
 
     // Soldier Coms
-    public static final double ATTACK_SOLDIER_MULTIPLIER = (4.0 / 3.0);
+    public static final double ATTACK_SOLDIER_MULTIPLIER = (2.0);
 }

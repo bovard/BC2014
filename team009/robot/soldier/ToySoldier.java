@@ -100,7 +100,7 @@ public class ToySoldier extends TeamRobot {
 
         // What type of toy soldier is this.
         // TODO: Bovard what to do?
-        isHerder = comCommand == CAPTURE_PASTURE;
+        isHerder = comCommand == CAPTURE_PASTURE || comCommand == CAPTURE_SOUND;
         isHunter = !isHerder;
     }
 

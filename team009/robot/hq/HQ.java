@@ -81,6 +81,10 @@ public abstract class HQ extends TeamRobot {
         Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, CAPTURE_PASTURE, loc, 200);
     }
 
+    public void comSoundTower(MapLocation loc, int group) throws GameActionException {
+        Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, CAPTURE_SOUND, loc, 200);
+    }
+
     public boolean comDestruct(int group) throws GameActionException {
         Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, DESTRUCT, new MapLocation(0, 0), getCount(group));
         return true ;

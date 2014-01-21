@@ -11,7 +11,6 @@ public class ToySelector extends Decision {
     GroupAttack attack;
     GroupDefend defend;
     GroupAttackPasture attackPasture;
-    GroupCapture capturePasture;
     GroupReturnToBase returnToBase;
     ToyEngageEnemy engageEnemy;
     ToyHerderSelector herder;
@@ -31,9 +30,6 @@ public class ToySelector extends Decision {
 
         // Defends pasture as group
         defend = new GroupDefend(robot);
-
-        // Attacks pasture as group
-        capturePasture = new GroupCapture(robot);
 
         // Attacks pasture as group
         attackPasture = new GroupAttackPasture(robot);
@@ -69,8 +65,6 @@ public class ToySelector extends Decision {
         } else if (soldier.isHunter) {
             if (defend.pre()) {
                 defend.run();
-            } else if (capturePasture.pre()) {
-                capturePasture.run();
             } else if (attackPasture.pre()) {
                 attackPasture.run();
             } else if (returnToBase.pre()) {
