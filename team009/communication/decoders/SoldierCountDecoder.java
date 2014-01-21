@@ -1,4 +1,6 @@
-package team009.communication;
+package team009.communication.decoders;
+
+import team009.communication.decoders.CommunicationDecoder;
 
 public class SoldierCountDecoder extends CommunicationDecoder {
     public int soldierType;

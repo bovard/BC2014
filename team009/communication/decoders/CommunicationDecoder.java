@@ -1,4 +1,4 @@
-package team009.communication;
+package team009.communication.decoders;
 
 public abstract class CommunicationDecoder {
     public int decoderData;

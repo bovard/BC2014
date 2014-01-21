@@ -4,7 +4,7 @@ import battlecode.common.*;
 import team009.RobotInformation;
 import team009.bt.Node;
 import team009.communication.bt.SoldierCom;
-import team009.communication.GroupCommandDecoder;
+import team009.communication.decoders.GroupCommandDecoder;
 import team009.robot.TeamRobot;
 import team009.toyBT.ToySelector;
 import team009.utils.SmartRobotInfoArray;

@@ -1,4 +1,4 @@
-package team009.communication;
+package team009.communication.decoders;
 
 import battlecode.common.MapLocation;
 import team009.robot.TeamRobot;
