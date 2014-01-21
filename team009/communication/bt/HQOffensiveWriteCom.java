@@ -2,16 +2,13 @@ package team009.communication.bt;
 
 import battlecode.common.GameActionException;
 import team009.communication.bt.behaviors.WriteBehavior;
-import team009.communication.bt.behaviors.hq.HQChase;
-import team009.communication.bt.behaviors.hq.HQHunt;
-import team009.communication.bt.behaviors.hq.HQOneBase;
-import team009.communication.bt.behaviors.hq.HQReturnToHome;
+import team009.communication.bt.behaviors.hq.*;
 import team009.robot.hq.Offensive;
 
 public class HQOffensiveWriteCom extends WriteBehavior {
     Offensive hq;
 
-    // Children TODO: No dark horse
+    HQCheeseCom cheese;
     HQOneBase oneBase;
     HQChase chase;
     HQHunt hunt;
@@ -25,21 +22,27 @@ public class HQOffensiveWriteCom extends WriteBehavior {
         chase = new HQChase(off);
         hunt = new HQHunt(off);
         home = new HQReturnToHome(off);
+        cheese = new HQCheeseCom(off);
     }
 
     @Override
     public boolean run() throws GameActionException {
+        if (hq.cheese) {
+            rc.setIndicatorString(0, "Running Cheese");
+            cheese.run();
+        }
+
         if (hq.chase0 || hq.chase1) {
-            rc.setIndicatorString(0, "Running Chase");
+            rc.setIndicatorString(1, "Running Chase");
             chase.run();
         } else if (hq.hunt0 || hq.hunt1) {
-            rc.setIndicatorString(0, "Running Hunt");
+            rc.setIndicatorString(1, "Running Hunt");
             hunt.run();
         } else if (hq.oneBase) {
-            rc.setIndicatorString(0, "Running OneBase");
+            rc.setIndicatorString(1, "Running OneBase");
             oneBase.run();
         } else if (hq.huddle) {
-            rc.setIndicatorString(0, "Running Home");
+            rc.setIndicatorString(1, "Running Home");
             home.run();
         }
 

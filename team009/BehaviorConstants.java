@@ -10,17 +10,19 @@ public class BehaviorConstants {
     public static final int CHASE_MINIMUM_ROUND_NUMBER = 0;
     public static final int CHASE_REQUIRED_SOLDIER_COUNT = 1;
 
-    // Dark Horse // TODO: Currently impossible with this milk requirements
-    public static final boolean DARK_HORSE_ENABLED = true;
-    public static final int DARK_HORSE_MILK_MINIMUM = 900;
+    // Cheese // TODO: very strict.  Only works on 2 levels. neighbors and rushlane
+    public static final boolean CHEESE_ENABLED = true;
+    public static final int CHEESE_MILK_MINIMUM = 900;
+    public static final int CHEESE_HQ_ENEMY_MINIMUM_DISTANCE = 900;
 
     // Map Sizing
-    public static final int LARGE_MAP_MINIMUM_AREA = 2000;
-    public static final int MEDIUM_MAP_MINIMUM_AREA = 1200;
+    public static final int MAP_LARGE_MINIMUM_AREA = 2000;
+    public static final int MAP_MEDIUM_MINIMUM_AREA = 1200;
 
     // HQ Constants
-    public static final int REQUIRED_SOLDIER_COUNT_FOR_ATTACK = 6;
-    public static final int REQUIRED_SOLDIER_COUNT_FOR_GROUP_ATTACK = 8;
+    public static final int HQ_REQUIRED_SOLDIER_COUNT_FOR_ATTACK = 6;
+    public static final int HQ_REQUIRED_SOLDIER_COUNT_FOR_GROUP_ATTACK = 8;
+    public static final int HQ_SOLDIER_COM_MAX = 35;
 
     // Milk Selection picking
     public static final int MILK_INFO_STRAT_CORNERS_AND_SIDES = 0;
@@ -28,5 +30,5 @@ public class BehaviorConstants {
     public static final int MILK_INFO_STRAT = MILK_INFO_STRAT_CORNERS;
 
     // Soldier Coms
-    public static final double ATTACK_SOLDIER_MULTIPLIER = (4.0 / 3.0);
+    public static final double ATTACK_SOLDIER_MULTIPLIER = (2.0);
 }

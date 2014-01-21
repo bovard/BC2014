@@ -1,16 +1,18 @@
 package team009.robot.hq;
 
 import battlecode.common.*;
+import team009.BehaviorConstants;
 import team009.MapUtils;
 import team009.RobotInformation;
 import team009.communication.Communicator;
-import team009.communication.GroupCommandDecoder;
-import team009.communication.SoldierCountDecoder;
+import team009.communication.decoders.GroupCommandDecoder;
+import team009.communication.decoders.SoldierCountDecoder;
 import team009.robot.TeamRobot;
 import team009.robot.soldier.SoldierSpawner;
 import team009.utils.SmartMapLocationArray;
 
 public abstract class HQ extends TeamRobot {
+    private int twoWayComPosition;
 
     public int maxSoldiers;
     public SoldierCountDecoder[] soldierCounts;
@@ -25,6 +27,8 @@ public abstract class HQ extends TeamRobot {
         super(rc, info);
         maxSoldiers = Communicator.MAX_GROUP_COUNT;
         soldierCounts = new SoldierCountDecoder[maxSoldiers];
+        twoWayComPosition = 0;
+
         // REMEMBER TO CALL treeRoot = getTreeRoot() in your implementations of this!
         // REMEMBER TO CALL comRoot = __YOUR_COM_ROOT__; // See communications.bt.HQCom for example (WriteCom and ReadCom)
     }
@@ -81,6 +85,10 @@ public abstract class HQ extends TeamRobot {
         Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, CAPTURE_PASTURE, loc, 200);
     }
 
+    public void comSoundTower(MapLocation loc, int group) throws GameActionException {
+        Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, CAPTURE_SOUND, loc, 200);
+    }
+
     public boolean comDestruct(int group) throws GameActionException {
         Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, DESTRUCT, new MapLocation(0, 0), getCount(group));
         return true ;
@@ -114,7 +122,7 @@ public abstract class HQ extends TeamRobot {
     }
 
     public void createToySoldier(int group) throws GameActionException {
-        _spawn(SoldierSpawner.SOLDIER_TYPE_TOY_SOLDIER, group);
+        _spawn(SoldierSpawner.SOLDIER_TYPE_TOY_SOLDIER, group, null);
     }
 
     // TODO: $IMPROVEMENT$ We should make the group number have a channel to grab pasture location from
@@ -127,7 +135,7 @@ public abstract class HQ extends TeamRobot {
     }
 
     public void createDumbPastrHunter() throws GameActionException {
-        _spawn(SoldierSpawner.DUMB_PASTR_HUNTER, 0);
+        _spawn(SoldierSpawner.DUMB_PASTR_HUNTER, 0, null);
     }
 
     public void createPastureCapturer(int group, MapLocation pasture) throws GameActionException {
@@ -135,24 +143,15 @@ public abstract class HQ extends TeamRobot {
     }
 
     public void createBackDoorNoisePlanter(int group) throws GameActionException {
-        _spawn(SoldierSpawner.SOLDIER_TYPE_BACKDOOR_NOISE_PLANTER, group);
+        _spawn(SoldierSpawner.SOLDIER_TYPE_BACKDOOR_NOISE_PLANTER, group, null);
     }
 
     public void createJackal(int group) throws GameActionException {
-        _spawn(SoldierSpawner.SOLDIER_TYPE_JACKAL, group);
+        _spawn(SoldierSpawner.SOLDIER_TYPE_JACKAL, group, null);
     }
 
     public void createDefender(int group) throws GameActionException {
-        _spawn(SoldierSpawner.SOLDIER_TYPE_DEFENDER, group);
-    }
-
-    private void _spawn(int soldierType, int group) throws GameActionException {
-        Direction dir = _getSpawnDirection();
-        if (dir == null) {
-            return;
-        }
-        rc.spawn(dir);
-        Communicator.WriteNewSoldier(rc, soldierType, group, new MapLocation(1, 1));
+        _spawn(SoldierSpawner.SOLDIER_TYPE_DEFENDER, group, null);
     }
 
     private void _spawn(int soldierType, int group, MapLocation location) throws GameActionException {
@@ -161,7 +160,9 @@ public abstract class HQ extends TeamRobot {
             return;
         }
         rc.spawn(dir);
-        Communicator.WriteNewSoldier(rc, soldierType, group, location);
+
+        Communicator.WriteNewSoldier(rc, soldierType, group, Communicator.TWO_WAY_HQ_COM_BASE + twoWayComPosition, location);
+        twoWayComPosition = (twoWayComPosition + 1) % BehaviorConstants.HQ_SOLDIER_COM_MAX;
     }
 
     private Direction _getSpawnDirection() {

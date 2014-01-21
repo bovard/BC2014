@@ -7,7 +7,7 @@ import team009.bt.Node;
 import team009.bt.decisions.hq.OffensiveSelector;
 import team009.communication.bt.HQCom;
 import team009.utils.ChaseStrategyUtil;
-import team009.utils.DarkHorsePostProcess;
+import team009.utils.CheesePostProcess;
 import team009.utils.MilkInformation;
 
 public class Offensive extends HQ {
@@ -19,14 +19,16 @@ public class Offensive extends HQ {
     public boolean hunt1 = false;
     public boolean chase0 = false;
     public boolean chase1 = false;
-    public boolean dark = false;
+
+    // Cheese variables
+    public boolean cheese = false;
 
     public int group0Count;
     public int group1Count;
     public boolean finishedPostCalc = false;
 
     public MilkInformation milkInformation;
-    public DarkHorsePostProcess darkHorse;
+    public CheesePostProcess cheeseStrat;
     public ChaseStrategyUtil chaseStrategy;
 
     public MapLocation center;
@@ -39,10 +41,10 @@ public class Offensive extends HQ {
         super(rc, info);
         treeRoot = getTreeRoot();
         comRoot = new HQCom(this);
-        largeMap = info.width * info.height > BehaviorConstants.LARGE_MAP_MINIMUM_AREA;
-        mediumMap = !largeMap && info.width * info.height > BehaviorConstants.MEDIUM_MAP_MINIMUM_AREA;
+        largeMap = info.width * info.height > BehaviorConstants.MAP_LARGE_MINIMUM_AREA;
+        mediumMap = !largeMap && info.width * info.height > BehaviorConstants.MAP_MEDIUM_MINIMUM_AREA;
         milkInformation = new MilkInformation(rc, info);
-        darkHorse = new DarkHorsePostProcess(this, milkInformation);
+        cheeseStrat = new CheesePostProcess(this, milkInformation);
         chaseStrategy = new ChaseStrategyUtil(this);
     }
 
@@ -55,13 +57,13 @@ public class Offensive extends HQ {
         group1Count = getCount(1);
 
         // Gets the different groups
-        boolean enough0Attack = group0Count >= BehaviorConstants.REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
-        boolean enough1Attack = group1Count >= BehaviorConstants.REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
-        boolean combinedEnoughAttack = group0Count + group1Count >= BehaviorConstants.REQUIRED_SOLDIER_COUNT_FOR_GROUP_ATTACK;
+        boolean enough0Attack = group0Count >= BehaviorConstants.HQ_REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
+        boolean enough1Attack = group1Count >= BehaviorConstants.HQ_REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
+        boolean combinedEnoughAttack = group0Count + group1Count >= BehaviorConstants.HQ_REQUIRED_SOLDIER_COUNT_FOR_GROUP_ATTACK;
 
-        // TODO: Dark horse
-        if (BehaviorConstants.DARK_HORSE_ENABLED && darkHorse.darkHorse) {
-            dark = true;
+        // TODO: cheese
+        if (BehaviorConstants.CHEESE_ENABLED && cheeseStrat.cheese) {
+            cheese = true;
         }
 
         // TODO: Chase strat
@@ -97,7 +99,7 @@ public class Offensive extends HQ {
     @Override
     public void postProcessing() throws GameActionException {
         super.postProcessing();
-        if (darkHorse.finished) {
+        if (cheeseStrat.finished) {
             return;
         }
 
@@ -115,10 +117,10 @@ public class Offensive extends HQ {
             return;
         }
 
-        darkHorse.calc();
+        cheeseStrat.calc();
 
-        if (darkHorse.finished) {
-            rc.setIndicatorString(0, "DarkHorse: " + "Finished: " + darkHorse.darkHorse);
+        if (cheeseStrat.finished) {
+            rc.setIndicatorString(0, "DarkHorse: " + "Finished: " + cheeseStrat.cheese);
             finishedPostCalc = true;
         }
     }

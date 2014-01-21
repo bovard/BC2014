@@ -1,6 +1,7 @@
-package team009.communication;
+package team009.communication.decoders;
 
 import battlecode.common.MapLocation;
+import team009.communication.decoders.CommunicationDecoder;
 
 public class MapDecoder extends CommunicationDecoder {
 

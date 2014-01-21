@@ -4,7 +4,7 @@ import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
 import team009.RobotInformation;
 import team009.communication.Communicator;
-import team009.communication.SoldierDecoder;
+import team009.communication.decoders.SoldierDecoder;
 import team009.robot.TeamRobot;
 
 public class SoldierSpawner {
@@ -71,6 +71,7 @@ public class SoldierSpawner {
 
             robot.group = decoder.group;
             robot.type = type;
+            robot.twoWayChannel = decoder.comChannel;
         } catch (GameActionException e) {
             e.printStackTrace();
         }

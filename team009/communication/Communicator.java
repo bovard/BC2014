@@ -1,6 +1,7 @@
 package team009.communication;
 
 import battlecode.common.*;
+import team009.communication.decoders.*;
 import team009.robot.soldier.SoldierSpawner;
 
 public class Communicator {
@@ -9,9 +10,11 @@ public class Communicator {
     // WRITING
     //-----------------------------------------------------
 
-    public static void WriteNewSoldier(RobotController rc, int soldierType, int group, MapLocation location) throws GameActionException {
-        SoldierDecoder decoder = new SoldierDecoder(soldierType, group, location);
+    public static void WriteNewSoldier(RobotController rc, int soldierType, int group, int comChannel, MapLocation location) throws GameActionException {
+        SoldierDecoder decoder = new SoldierDecoder(soldierType, group, comChannel, location);
         _Broadcast(rc, NEW_SOLDIER_CHANNEL, decoder);
+
+        System.out.println("Decoder From Communicator: " + decoder.getData() + " : " + decoder.toString());
     }
 
     public static void WriteToGroup(RobotController rc, int group, int channel, int command, MapLocation location) throws GameActionException {
@@ -31,6 +34,11 @@ public class Communicator {
         // Incs the channel
         decoder.count++;
         _Broadcast(rc, channel, decoder);
+    }
+
+    // The two way communication
+    public static void WriteTwoWayCommunicate(RobotController rc, int channel, int command, MapLocation from, MapLocation to) throws GameActionException {
+        _Broadcast(rc, channel, new TwoWayDecoder(from, to, command).getData());
     }
 
     //-----------------------------------------------------
@@ -65,6 +73,11 @@ public class Communicator {
 
         _Broadcast(rc, groupChannel, decoder.getData());
         return decoder;
+    }
+
+    // The two way communication
+    public static TwoWayDecoder ReadTwoWayCommunicate(RobotController rc, int channel) throws GameActionException {
+        return new TwoWayDecoder(rc.readBroadcast(channel));
     }
 
     //-----------------------------------------------------
@@ -112,7 +125,10 @@ public class Communicator {
     public static final int GROUP_HQ_CHANNEL = 1;
     public static final int GROUP_CENTROID_CHANNEL = 2;
     protected static final int GROUP_CHANNEL_COUNT = 3;
-    protected static int GROUP_CHANNEL_BASE = SOLDIER_TYPE_CHANNEL_BASE + MAX_GROUP_COUNT * SoldierSpawner.SOLDIER_COUNT;
+    protected static final int GROUP_CHANNEL_BASE = SOLDIER_TYPE_CHANNEL_BASE + MAX_GROUP_COUNT * SoldierSpawner.SOLDIER_COUNT;
+
+    // The two way communications HQ < - > Soldier
+    public static final int TWO_WAY_HQ_COM_BASE = GROUP_CHANNEL_BASE + MAX_GROUP_COUNT * GROUP_CHANNEL_COUNT;
 
     // Group channels go for group channel count + 5;
     public static final int INFORMATION_ROUND_MOD = 4;

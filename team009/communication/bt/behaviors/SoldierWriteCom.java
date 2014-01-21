@@ -3,7 +3,7 @@ package team009.communication.bt.behaviors;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import team009.communication.Communicator;
-import team009.communication.GroupCommandDecoder;
+import team009.communication.decoders.GroupCommandDecoder;
 import team009.robot.TeamRobot;
 import team009.BehaviorConstants;
 import team009.robot.soldier.ToySoldier;
