@@ -4,18 +4,21 @@ import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import team009.bt.behaviors.Behavior;
 import team009.navigation.BugMove;
+import team009.navigation.SnailMove;
 import team009.robot.TeamRobot;
 import team009.robot.soldier.ToySoldier;
 
 public class ToyMoveToLocation extends Behavior {
-    protected BugMove move;
+    //protected BugMove move;
+    protected SnailMove move;
     public MapLocation currentLocation = new MapLocation(0, 0);
     ToySoldier soldier;
 
     public ToyMoveToLocation(ToySoldier robot) {
         super(robot);
         soldier = robot;
-        move = new BugMove(robot);
+        //move = new BugMove(robot);
+        move = new SnailMove(robot);
     }
 
     @Override
