@@ -43,7 +43,7 @@ public class Offensive extends HQ {
         comRoot = new HQCom(this);
         largeMap = info.width * info.height > BehaviorConstants.MAP_LARGE_MINIMUM_AREA;
         mediumMap = !largeMap && info.width * info.height > BehaviorConstants.MAP_MEDIUM_MINIMUM_AREA;
-        milkInformation = new MilkInformation(rc, info);
+        milkInformation = new MilkInformation(this);
         cheeseStrat = new CheesePostProcess(this, milkInformation);
         chaseStrategy = new ChaseStrategyUtil(this);
     }
@@ -108,19 +108,22 @@ public class Offensive extends HQ {
         }
 
         if (!milkInformation.finished) {
+            System.out.println("Milk");
             milkInformation.calc();
             return;
         }
 
         if (!chaseStrategy.finished) {
+            System.out.println("Chase");
             chaseStrategy.calc();
             return;
         }
 
+        System.out.println("Cheese");
         cheeseStrat.calc();
 
         if (cheeseStrat.finished) {
-            rc.setIndicatorString(0, "DarkHorse: " + "Finished: " + cheeseStrat.cheese);
+            rc.setIndicatorString(0, "Cheese: " + "Finished: " + cheeseStrat.cheese);
             finishedPostCalc = true;
         }
     }
@@ -146,8 +149,7 @@ public class Offensive extends HQ {
             MapLocation curr = hq;
             for (int j = 0; j < 3; j++) {
                 curr = curr.add(dir);
-                TerrainTile tile = rc.senseTerrainTile(curr);
-                if (tile == TerrainTile.OFF_MAP || tile == TerrainTile.VOID) {
+                if (map.map[curr.x][curr.y] == 1) {
                     found = false;
                     break;
                 }
@@ -164,8 +166,7 @@ public class Offensive extends HQ {
         MapLocation curr = center;
         for (int i = 0; i < halfWidth; i++) {
             curr = curr.add(toHome);
-            TerrainTile tile = rc.senseTerrainTile(curr);
-            if (tile != TerrainTile.VOID || tile != TerrainTile.OFF_MAP) {
+            if (map.map[curr.x][curr.y] == 0) {
                 bestCoverageLocation = curr;
                 break;
             }

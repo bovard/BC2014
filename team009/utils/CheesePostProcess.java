@@ -10,6 +10,7 @@ public class CheesePostProcess {
     private RobotInformation info;
     private HQ hq;
     private MilkInformation milkInformation;
+    private int[][] map;
     private boolean mapDone = false;
     private boolean distanceCheck = false;
     private int cheeseI = 0;
@@ -65,6 +66,11 @@ public class CheesePostProcess {
             return;
         }
 
+        if (map == null) {
+            map = hq.map.map;
+        }
+        int[][] map = this.map;
+
         if (!distanceCheck && info.enemyHqDistance < BehaviorConstants.CHEESE_HQ_ENEMY_MINIMUM_DISTANCE) {
             Direction dir = info.enemyDir;
             MapLocation curr = info.hq.add(dir);
@@ -72,9 +78,7 @@ public class CheesePostProcess {
             boolean wall = false;
 
             while (!curr.equals(enemy)) {
-                TerrainTile tile = rc.senseTerrainTile(curr);
-
-                if (tile == TerrainTile.VOID) {
+                if (map[curr.x][curr.y] == 1) {
                     wall = true;
                     break;
                 }
@@ -89,27 +93,35 @@ public class CheesePostProcess {
             }
         }
 
-        int rounds = (GameConstants.BYTECODE_LIMIT - (Clock.getBytecodeNum() + 200)) / 20;
+        int rounds = (GameConstants.BYTECODE_LIMIT - (Clock.getBytecodeNum() + 200)) / (40 + 5 * cheeseJLen - cheeseJStart);
         int k = 0;
-        while (!finished && !mapDone && k < rounds) {
+        int j, jStart = cheeseJStart, jLen = cheeseJLen;
+        int cheeseI = this.cheeseI;
+        while (!mapDone && !mapDone && k < rounds) {
             for (; cheeseI < cheeseILen; cheeseI++, k++) {
-                for (cheeseJ = cheeseJStart; cheeseJ < cheeseJLen; cheeseJ++, k++) {
-                    milkTotal += milkInformation.milks[cheeseI][cheeseJ];
+                for (j = jStart; j < jLen; j++) {
+                    milkTotal += milkInformation.milks[cheeseI][j];
                 }
             }
-            mapDone = cheeseI == cheeseILen;
+            mapDone = this.cheeseI == cheeseILen;
+        }
+        this.cheeseI = cheeseI;
+
+        if (!mapDone) {
+            return;
         }
 
-        rounds = (GameConstants.BYTECODE_LIMIT - (Clock.getBytecodeNum() + 200)) / 20;
+        rounds = (GameConstants.BYTECODE_LIMIT - (Clock.getBytecodeNum() + 200)) / 50;
         k = 0;
 
         MapLocation myLoc = hq.currentLoc;
         MapLocation curr = myLoc;
+        int width = info.width;
+        int height = info.height;
         while (k < rounds && mapDone && !finished) {
             for (int i = 0; i < halfRadius; i++) {
                 curr = curr.add(currDir);
-                TerrainTile tile = rc.senseTerrainTile(curr);
-                if (tile == TerrainTile.OFF_MAP || tile == TerrainTile.VOID) {
+                if (curr.x >= width || curr.y >= height || map[curr.x][curr.y] == 1) {
                     blockedCount++;
                     break;
                 }

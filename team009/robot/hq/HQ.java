@@ -9,10 +9,12 @@ import team009.communication.decoders.GroupCommandDecoder;
 import team009.communication.decoders.SoldierCountDecoder;
 import team009.robot.TeamRobot;
 import team009.robot.soldier.SoldierSpawner;
+import team009.utils.MapPreProcessor;
 import team009.utils.SmartMapLocationArray;
 
 public abstract class HQ extends TeamRobot {
     private int twoWayComPosition;
+    private boolean postProcess = true;
 
     public int maxSoldiers;
     public SoldierCountDecoder[] soldierCounts;
@@ -22,11 +24,13 @@ public abstract class HQ extends TeamRobot {
     public boolean weHavePastures = false;
     public boolean hasHQPastures = false;
     public SmartMapLocationArray enemyPastrs;
+    public MapPreProcessor map;
 
     public HQ(RobotController rc, RobotInformation info) {
         super(rc, info);
         maxSoldiers = Communicator.MAX_GROUP_COUNT;
         soldierCounts = new SoldierCountDecoder[maxSoldiers];
+        map = new MapPreProcessor(this);
         twoWayComPosition = 0;
 
         // REMEMBER TO CALL treeRoot = getTreeRoot() in your implementations of this!
@@ -62,6 +66,17 @@ public abstract class HQ extends TeamRobot {
         }
 
         hasPastures = enemyPastrs.length > 0;
+    }
+
+    @Override
+    public void postProcessing() throws GameActionException {
+        if (!postProcess) {
+            return;
+        }
+
+        // Calculate until all is finsihed.
+        map.calc();
+        postProcess = !map.finished;
     }
 
     public int getCount(int group) {

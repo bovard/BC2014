@@ -3,12 +3,14 @@ package team009.utils;
 import battlecode.common.*;
 import team009.RobotInformation;
 import team009.BehaviorConstants;
+import team009.robot.hq.HQ;
 
 public class MilkInformation {
 
     // Controls
     RobotController rc;
     RobotInformation info;
+    HQ hq;
     Box[] boxes;
     int i = 0;
     int j = 0;
@@ -25,9 +27,10 @@ public class MilkInformation {
      * A milk information will parse out the map and determine the
      * "sweet" spots for milking
      */
-    public MilkInformation(RobotController rc, RobotInformation info) {
-        this.rc = rc;
-        this.info = info;
+    public MilkInformation(HQ hq) {
+        this.rc = hq.rc;
+        this.info = hq.info;
+        this.hq = hq;
 
         // Calculates the bounding boxes.
         // +---+-----+---+
@@ -96,6 +99,7 @@ public class MilkInformation {
 
         // Now its time to sum only the bases we need.
         int k = 0;
+        int[][] map = hq.map.map;
         while (k < roundsToProcess && i < curr.x2 - 1) {
             for (; i < curr.x2 - 1 && k < roundsToProcess; i++, k++) {
                 double[] row = milks[i];
@@ -108,8 +112,7 @@ public class MilkInformation {
 
                     double val = row[j - 1] + row[j] + row[j + 1] + milks[i - 1][j] + milks[i + 1][j];
                     if (val > curr.bestMilk) {
-                        MapLocation newLoc = new MapLocation(i, j);
-                        if (rc.senseTerrainTile(newLoc) != TerrainTile.VOID) {
+                        if (map[i][j] == 0) {
                             curr.bestSpot = new MapLocation(i, j);
                             curr.bestMilk = val;
                         }

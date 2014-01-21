@@ -9,9 +9,9 @@ public class ChaseStrategyUtil {
     private RobotController rc;
     private RobotInformation info;
     private int i = 0;
-    private int j = 0;
     private int add = 0;
     private int x2, y2, wallCount = 0;
+    private HQ hq;
 
     public boolean finished = false;
     public boolean chase = false;
@@ -26,18 +26,20 @@ public class ChaseStrategyUtil {
         add = info.width * info.height - BehaviorConstants.CHASE_STRATEGY_MAP_MINIMUM;
         add = add < 0 ? 0 : (int)Math.sqrt(add);
 
-        j = 0;
         y2 = info.height;
+        this.hq = hq;
     }
 
     public void calc() {
-        int rounds = (GameConstants.BYTECODE_LIMIT - (Clock.getBytecodeNum() + 75)) / 20;
+        int rounds = (GameConstants.BYTECODE_LIMIT - (Clock.getBytecodeNum() + 75)) / 25;
         int k = 0;
+        int[][] map = hq.map.map;
+        int j;
 
         while (k < rounds && i < x2) {
             for (; i < x2; i++, k++) {
                 for (j = 0; j < y2 && k < rounds; j++, k++) {
-                    wallCount += rc.senseTerrainTile(new MapLocation(i, j)) == TerrainTile.VOID ? 1 : 0;
+                    wallCount += map[i][j];
                 }
             }
         }
