@@ -15,7 +15,7 @@ public class BehaviorConstants {
 
     // Dark Horse // TODO: Currently impossible with this milk requirements
     public static final boolean DARK_HORSE_ENABLED = true;
-    public static final int DARK_HORSE_MILK_MINIMUM = 100000;
+    public static final int DARK_HORSE_MILK_MINIMUM = 1000;
 
     // Map Sizing
     public static final int LARGE_MAP_MINIMUM_AREA = 2000;

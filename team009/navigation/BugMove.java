@@ -60,8 +60,8 @@ public class BugMove extends Move {
 
 
     public Direction calcMove() {
-        if (!robot.rc.isActive())
-            return null;
+        if (!robot.rc.isActive()) return null;
+        if (destination == null) return null;
 
         Direction toMove = robot.currentLoc.directionTo(destination);
         if (toMove == Direction.NONE || toMove == Direction.OMNI)

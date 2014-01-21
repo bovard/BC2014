@@ -39,8 +39,8 @@ public class DarkHorsePostProcess {
             darkI = 0;
         }
 
-        if (darkJ < 0) {
-            darkJ = 0;
+        if (darkJStart < 0) {
+            darkJStart = 0;
         }
 
         if (darkILen < info.width) {
@@ -53,6 +53,10 @@ public class DarkHorsePostProcess {
     }
 
     public void calc() {
+        if (finished) {
+            return;
+        }
+
         int rounds = (GameConstants.BYTECODE_LIMIT - (Clock.getBytecodeNum() + 200)) / 20;
         int k = 0;
         while (!finished && !mapDone && k < rounds) {
@@ -70,7 +74,7 @@ public class DarkHorsePostProcess {
         MapLocation myLoc = hq.currentLoc;
         MapLocation curr = myLoc;
         while (k > rounds && mapDone && !finished) {
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < radius; i++) {
                 curr = curr.add(this.currDir);
                 TerrainTile tile = rc.senseTerrainTile(curr);
                 if (tile == TerrainTile.OFF_MAP || tile == TerrainTile.VOID) {
@@ -84,6 +88,7 @@ public class DarkHorsePostProcess {
             finished = currDir == Direction.NORTH;
         }
 
+        System.out.println("Dark Horse Milk: " + blockedCount + " : " + milkTotal);
         darkHorse = finished && milkTotal > BehaviorConstants.DARK_HORSE_MILK_MINIMUM && blockedCount < 3;
     }
 
