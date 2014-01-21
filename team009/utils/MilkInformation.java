@@ -108,8 +108,11 @@ public class MilkInformation {
 
                     double val = row[j - 1] + row[j] + row[j + 1] + milks[i - 1][j] + milks[i + 1][j];
                     if (val > curr.bestMilk) {
-                        curr.bestSpot = new MapLocation(i, j);
-                        curr.bestMilk = val;
+                        MapLocation newLoc = new MapLocation(i, j);
+                        if (rc.senseTerrainTile(newLoc) != TerrainTile.VOID) {
+                            curr.bestSpot = new MapLocation(i, j);
+                            curr.bestMilk = val;
+                        }
                     }
                 }
             }

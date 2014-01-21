@@ -17,6 +17,7 @@ public class DarkHorsePostProcess {
     private int darkJLen = 0;
     private int darkJStart = 0;
     private int radius = (int)Math.sqrt(RobotType.NOISETOWER.attackRadiusMaxSquared) - 1;
+    private int halfRadius = radius / 3;
     private double milkTotal = 0;
     private Direction currDir = Direction.NORTH;
     private int blockedCount = 0;
@@ -73,9 +74,9 @@ public class DarkHorsePostProcess {
 
         MapLocation myLoc = hq.currentLoc;
         MapLocation curr = myLoc;
-        while (k > rounds && mapDone && !finished) {
-            for (int i = 0; i < radius; i++) {
-                curr = curr.add(this.currDir);
+        while (k < rounds && mapDone && !finished) {
+            for (int i = 0; i < halfRadius; i++) {
+                curr = curr.add(currDir);
                 TerrainTile tile = rc.senseTerrainTile(curr);
                 if (tile == TerrainTile.OFF_MAP || tile == TerrainTile.VOID) {
                     blockedCount++;
@@ -88,7 +89,6 @@ public class DarkHorsePostProcess {
             finished = currDir == Direction.NORTH;
         }
 
-        System.out.println("Dark Horse Milk: " + blockedCount + " : " + milkTotal);
         darkHorse = finished && milkTotal > BehaviorConstants.DARK_HORSE_MILK_MINIMUM && blockedCount < 3;
     }
 

@@ -32,6 +32,7 @@ public class OffensiveSelector extends Decision {
 
     @Override
     public boolean run() throws GameActionException {
+        System.out.println("Running: " + hq.dark);
         if (shoot.pre()) {
             shoot.run();
         } else if (hq.dark && sound.pre()) {

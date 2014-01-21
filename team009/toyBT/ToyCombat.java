@@ -65,8 +65,6 @@ public class ToyCombat {
         }
 
         if (soldier.enemySoldiers.length > 0) {
-            rc.setIndicatorString(0, "Are we outnumbered? " + (soldier.friendlySoldiers.length < soldier.enemySoldiers.length));
-
             // We are outnumbered.
             if (soldier.friendlySoldiers.length < soldier.enemySoldiers.length) {
                 MapLocation target = nearestEnemy == null ? nmeLocs[0] : nearestEnemy;
@@ -75,19 +73,16 @@ public class ToyCombat {
                 // TODO: Group Centroid channel?  It may come in handy here.
                 if (nearestEnemy == null) {
                     Direction dir = _combatAvoid(rc, currentLoc, nmeCentroid, nmeLocs);
-                    rc.setIndicatorString(1, "No nearest Enemy");
                     if (dir != null) {
                         rc.move(dir);
                     }
                 } else {
-                    rc.setIndicatorString(1, "nearest Enemy");
                     _moveOrAttack(rc, currentLoc, target, nmeLocs);
                 }
             }
 
             // We outnumber or equal
             else {
-                rc.setIndicatorString(1, "We are overpower.  ");
                 MapLocation target = nearestEnemy == null ? nmeLocs[0] : nearestEnemy;
                 _moveOrAttack(rc, currentLoc, target, nmeLocs);
             }
@@ -256,4 +251,3 @@ public class ToyCombat {
         }
     }
 }
-

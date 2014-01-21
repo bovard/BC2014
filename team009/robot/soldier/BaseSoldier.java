@@ -11,8 +11,6 @@ public abstract class BaseSoldier extends TeamRobot {
     // -----------------------------------------------------
     public boolean seesEnemy = false;
     public Robot[] enemies = new Robot[0];
-    public int group;
-    public int type;
     public double health;
     public GroupCommandDecoder groupCommand;
     public GroupCommandDecoder hqCommand;

@@ -1,8 +1,5 @@
 package team009.robot.hq;
 
-/**
- * Created by mpaulson on 1/20/14.
- */
 public class BehaviorConstants {
 
     // Chase Strategies.
@@ -15,7 +12,7 @@ public class BehaviorConstants {
 
     // Dark Horse // TODO: Currently impossible with this milk requirements
     public static final boolean DARK_HORSE_ENABLED = true;
-    public static final int DARK_HORSE_MILK_MINIMUM = 1000;
+    public static final int DARK_HORSE_MILK_MINIMUM = 900;
 
     // Map Sizing
     public static final int LARGE_MAP_MINIMUM_AREA = 2000;
@@ -29,4 +26,7 @@ public class BehaviorConstants {
     public static final int MILK_INFO_STRAT_CORNERS_AND_SIDES = 0;
     public static final int MILK_INFO_STRAT_CORNERS = 1;
     public static final int MILK_INFO_STRAT = MILK_INFO_STRAT_CORNERS;
+
+    // Soldier Coms
+    public static final double ATTACK_SOLDIER_MULTIPLIER = (4.0 / 3.0);
 }

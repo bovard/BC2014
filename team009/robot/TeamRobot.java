@@ -32,6 +32,8 @@ public abstract class TeamRobot {
 	public RobotInformation info;
     public Random rand = new Random();
     public String message;
+    public int group;
+    public int type;
 
 	public TeamRobot(RobotController rc, RobotInformation info) {
         // MAKE SURE YOU INCLUDE THE FOLLOWING LINE IN YOUR IMPLEMENTATION

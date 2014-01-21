@@ -5,6 +5,7 @@ import battlecode.common.MapLocation;
 import team009.communication.Communicator;
 import team009.communication.GroupCommandDecoder;
 import team009.robot.TeamRobot;
+import team009.robot.hq.BehaviorConstants;
 import team009.robot.soldier.ToySoldier;
 
 public class SoldierWriteCom extends WriteBehavior {
@@ -23,7 +24,7 @@ public class SoldierWriteCom extends WriteBehavior {
         if (soldier.seesEnemyTeamNonHQRobot) {
             MapLocation priorityLoc = _getPriorityLocation();
             if (GroupCommandDecoder.shouldCommunicate(soldier.groupCommand, priorityLoc, TeamRobot.ATTACK, true)) {
-                Communicator.WriteToGroup(rc, soldier.group, Communicator.GROUP_SOLDIER_CHANEL, TeamRobot.ATTACK, priorityLoc, (4 * soldier.friendlySoldiers.length / 3));
+                Communicator.WriteToGroup(rc, soldier.group, Communicator.GROUP_SOLDIER_CHANEL, TeamRobot.ATTACK, priorityLoc, (int)(BehaviorConstants.ATTACK_SOLDIER_MULTIPLIER * (soldier.friendlySoldiers.length + 1)));
             }
         }
 

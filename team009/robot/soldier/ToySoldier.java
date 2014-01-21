@@ -19,16 +19,14 @@ public class ToySoldier extends TeamRobot {
     public boolean seesEnemyPastr = false;
     public boolean seesEnemyHQ = false;
     public boolean engagedInCombat = false;
-    public SmartRobotInfoArray enemySoldiers = new SmartRobotInfoArray();
-    public SmartRobotInfoArray friendlySoldiers = new SmartRobotInfoArray();
-    public SmartRobotInfoArray enemyPastrs = new SmartRobotInfoArray();
-    public SmartRobotInfoArray enemyNoise = new SmartRobotInfoArray();
+    public SmartRobotInfoArray enemySoldiers;
+    public SmartRobotInfoArray friendlySoldiers;
+    public SmartRobotInfoArray enemyPastrs;
+    public SmartRobotInfoArray enemyNoise;
     public GroupCommandDecoder groupCommand;
     public GroupCommandDecoder hqCommand;
     public Robot[] enemies = new Robot[0];
     public Robot[] allies = new Robot[0];
-    public int group;
-    public int type;
     public MapLocation currentLoc;
     public MapLocation lastLoc;
     public MapLocation comLocation;
@@ -63,10 +61,10 @@ public class ToySoldier extends TeamRobot {
         }
         currentLoc = temp;
         health = rc.getHealth();
-        enemySoldiers.length = 0;
-        enemyNoise.length = 0;
-        enemyPastrs.length = 0;
-        friendlySoldiers.length = 0;
+        enemySoldiers = new SmartRobotInfoArray();
+        enemyNoise = new SmartRobotInfoArray();
+        enemyPastrs = new SmartRobotInfoArray();
+        friendlySoldiers = new SmartRobotInfoArray();
 
         // micro stuff
         // TODO: get a better picture by sensing how many of our allies are soliders?

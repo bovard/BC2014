@@ -5,6 +5,7 @@ import battlecode.common.RobotController;
 import team009.RobotInformation;
 import team009.communication.Communicator;
 import team009.communication.SoldierDecoder;
+import team009.robot.TeamRobot;
 
 public class SoldierSpawner {
 
@@ -21,25 +22,26 @@ public class SoldierSpawner {
     public static final int SOLDIER_COUNT = 10;
 
 
-    public static ToySoldier getSoldier(RobotController rc, RobotInformation info) {
-        ToySoldier robot = null;
+    public static TeamRobot getSoldier(RobotController rc, RobotInformation info) {
+        TeamRobot robot = null;
         try {
             SoldierDecoder decoder = Communicator.ReadNewSoldier(rc);
+            System.out.println("Decoder: " + decoder.toString());
 
             int type = decoder.soldierType;
             switch (type) {
-//                case SOLDIER_TYPE_SOUND_TOWER:
-//                    System.out.println("making new sound tower");
-//                    robot = new SoundTowerCapture(rc, info, decoder.loc);
-//                    break;
+                case SOLDIER_TYPE_SOUND_TOWER:
+                    System.out.println("making new sound tower");
+                    robot = new SoundTowerCapture(rc, info, decoder.loc);
+                    break;
 //                case DUMB_PASTR_HUNTER:
 //                    System.out.println("making new dumb herder");
 //                    robot = new DumbPastrHunter(rc, info);
 //                    break;
-//                case SOLDIER_TYPE_HERDER:
-//                    System.out.println("making new herder");
-//                    robot = new Herder(rc, info, decoder.loc);
-//                    break;
+                case SOLDIER_TYPE_HERDER:
+                    System.out.println("making new herder");
+                    robot = new Herder(rc, info, decoder.loc);
+                    break;
 //                case SOLDIER_TYPE_PASTURE_CAPTURER:
 //                    System.out.println("making new pasture capture");
 //                    robot = new PastureCapture(rc, info, decoder.loc);

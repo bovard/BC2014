@@ -5,7 +5,6 @@ import team009.RobotInformation;
 import team009.bt.Node;
 import team009.bt.decisions.hq.OffensiveSelector;
 import team009.communication.bt.HQCom;
-import team009.navigation.BugMove;
 import team009.utils.ChaseStrategyUtil;
 import team009.utils.DarkHorsePostProcess;
 import team009.utils.MilkInformation;
@@ -134,7 +133,8 @@ public class Offensive extends HQ {
     }
 
     private void _calculateRallyPoint() throws GameActionException {
-        center = new MapLocation(info.width / 2, info.height / 2);
+        int halfWidth = info.width / 2;
+        center = new MapLocation(halfWidth, info.height / 2);
         MapLocation hq = info.hq;
         Direction dir = info.enemyDir;
 
@@ -156,20 +156,18 @@ public class Offensive extends HQ {
             }
             dir = dir.rotateRight();
         }
-        BugMove move = new BugMove(this);
-        move.setDestination(info.enemyHq);
-        dir = move.calcMove();
-        MapLocation homeLoc = info.hq.add(dir);
-        for (int i = 0; i < 8; i++) {
-            MapLocation next = homeLoc.add(dir);
-            TerrainTile tile = rc.senseTerrainTile(next);
+
+        Direction toHome = center.directionTo(info.hq);
+        MapLocation curr = center;
+        for (int i = 0; i < halfWidth; i++) {
+            curr = curr.add(toHome);
+            TerrainTile tile = rc.senseTerrainTile(curr);
             if (tile != TerrainTile.VOID || tile != TerrainTile.OFF_MAP) {
-                bestCoverageLocation = next;
-                return;
-            } else {
-                dir = dir.rotateRight();
+                bestCoverageLocation = curr;
+                break;
             }
         }
 
+        // TODO: Can there actual errors?
     }
 }
