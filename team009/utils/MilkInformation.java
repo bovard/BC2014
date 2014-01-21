@@ -2,6 +2,7 @@ package team009.utils;
 
 import battlecode.common.*;
 import team009.RobotInformation;
+import team009.robot.hq.BehaviorConstants;
 
 public class MilkInformation {
 
@@ -30,12 +31,12 @@ public class MilkInformation {
 
         // Calculates the bounding boxes.
         // +---+-----+---+
-        // |1  |2    |3  |
+        // |0  |1    |2  |
         // +---+-----+---+
-        // |4  |5    |6  |
+        // |3  |4    |5  |
         // |   |     |   |
         // +---+-----+---+
-        // |7  |8    |9  |
+        // |6  |7    |8  |
         // +---+-----+---+
         // Middle regions represent 40% of map space
         int width = info.width;
@@ -76,7 +77,16 @@ public class MilkInformation {
                     ourBase = i;
                 }
             }
-            _setTargetBoxes();
+
+            switch (BehaviorConstants.MILK_INFO_STRAT) {
+                case BehaviorConstants.MILK_INFO_STRAT_CORNERS:
+                    _setCornersOnly();
+                    break;
+                case BehaviorConstants.MILK_INFO_STRAT_CORNERS_AND_SIDES:
+                default:
+                    _setTargetBoxes();
+                    break;
+            }
             hasBasesSet = true;
         }
         int roundsToProcess = (GameConstants.BYTECODE_LIMIT - (Clock.getBytecodeNum())) / 55;
@@ -127,6 +137,54 @@ public class MilkInformation {
         this.j = j;
 
         return finished;
+    }
+
+    private void _setCornersOnly() {
+        if (ourBase == 0) {
+            targetBoxes[0] = boxes[6];
+            targetBoxes[1] = boxes[2];
+        } else if (ourBase == 1) {
+            targetBoxes[0] = boxes[0];
+            targetBoxes[1] = boxes[2];
+        } else if (ourBase == 2) {
+            targetBoxes[0] = boxes[0];
+            targetBoxes[1] = boxes[6];
+        } else if (ourBase == 3) {
+            targetBoxes[0] = boxes[0];
+            targetBoxes[1] = boxes[6];
+        } else if (ourBase == 4) {
+            if (info.hq.x > info.width / 2) {
+                targetBoxes[0] = boxes[2];
+                targetBoxes[1] = boxes[8];
+            } else {
+                targetBoxes[0] = boxes[0];
+                targetBoxes[1] = boxes[6];
+            }
+        } else if (ourBase == 5) {
+            targetBoxes[0] = boxes[2];
+            targetBoxes[1] = boxes[8];
+        } else if (ourBase == 6) {
+            targetBoxes[0] = boxes[0];
+            targetBoxes[1] = boxes[8];
+        } else if (ourBase == 7) {
+            targetBoxes[0] = boxes[6];
+            targetBoxes[1] = boxes[8];
+        } else {
+            targetBoxes[0] = boxes[6];
+            targetBoxes[1] = boxes[2];
+        }
+
+        curr = targetBoxes[0];
+        curr.next = targetBoxes[1];
+        i = curr.x;
+        j = curr.y;
+
+        if (j == 0) {
+            j++;
+        }
+        if (i == 0) {
+            i++;
+        }
     }
 
     private void _setTargetBoxes() {
