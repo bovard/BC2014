@@ -33,7 +33,11 @@ public class ToyMoveToLocation extends Behavior {
             currentLocation = soldier.comLocation;
         }
         //TODO determine when to sneak based on if near friendly PASTR
-        move.move();
+        if (soldier.friendlyPastrs.length > 0) {
+            move.sneak();
+        } else {
+            move.move();
+        }
         //move.sneak();
         return true;
     }

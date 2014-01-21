@@ -21,6 +21,7 @@ public class ToySoldier extends TeamRobot {
     public boolean engagedInCombat = false;
     public SmartRobotInfoArray enemySoldiers;
     public SmartRobotInfoArray friendlySoldiers;
+    public SmartRobotInfoArray friendlyPastrs;
     public SmartRobotInfoArray enemyPastrs;
     public SmartRobotInfoArray enemyNoise;
     public GroupCommandDecoder groupCommand;
@@ -65,6 +66,7 @@ public class ToySoldier extends TeamRobot {
         enemyNoise = new SmartRobotInfoArray();
         enemyPastrs = new SmartRobotInfoArray();
         friendlySoldiers = new SmartRobotInfoArray();
+        friendlyPastrs = new SmartRobotInfoArray();
 
         // micro stuff
         // TODO: get a better picture by sensing how many of our allies are soliders?
@@ -86,6 +88,8 @@ public class ToySoldier extends TeamRobot {
             } else {
                 if (info.type == RobotType.SOLDIER) {
                     friendlySoldiers.add(info);
+                } else if (info.type == RobotType.PASTR) {
+                    friendlyPastrs.add(info);
                 }
             }
         }
