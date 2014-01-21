@@ -5,7 +5,7 @@ import battlecode.common.MapLocation;
 import team009.communication.Communicator;
 import team009.communication.GroupCommandDecoder;
 import team009.robot.TeamRobot;
-import team009.robot.hq.BehaviorConstants;
+import team009.BehaviorConstants;
 import team009.robot.soldier.ToySoldier;
 
 public class SoldierWriteCom extends WriteBehavior {

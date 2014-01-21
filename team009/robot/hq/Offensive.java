@@ -1,6 +1,7 @@
 package team009.robot.hq;
 
 import battlecode.common.*;
+import team009.BehaviorConstants;
 import team009.RobotInformation;
 import team009.bt.Node;
 import team009.bt.decisions.hq.OffensiveSelector;

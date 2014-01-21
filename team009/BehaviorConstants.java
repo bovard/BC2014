@@ -1,4 +1,4 @@
-package team009.robot.hq;
+package team009;
 
 public class BehaviorConstants {
 

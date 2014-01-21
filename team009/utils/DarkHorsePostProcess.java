@@ -2,7 +2,7 @@ package team009.utils;
 
 import battlecode.common.*;
 import team009.RobotInformation;
-import team009.robot.hq.BehaviorConstants;
+import team009.BehaviorConstants;
 import team009.robot.hq.HQ;
 
 public class DarkHorsePostProcess {
