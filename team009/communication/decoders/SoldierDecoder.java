@@ -2,7 +2,6 @@ package team009.communication.decoders;
 
 // TODO
 import battlecode.common.MapLocation;
-import team009.communication.decoders.CommunicationDecoder;
 
 public class SoldierDecoder extends CommunicationDecoder {
 	public int soldierType;
