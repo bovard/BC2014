@@ -14,21 +14,11 @@ public class SoldierDecoder extends CommunicationDecoder {
      * Creates a soldier type that is focused around a map location.  This is either a farmer or a pastr.
      * @param loc
      */
-	public SoldierDecoder(int soldierType, MapLocation loc) {
-        this.soldierType = soldierType;
-        this.group = 0;
-        this.comChannel = 0;
-		this.loc = loc;
-	}
-
-    /**
-     * Creates a soldier type that is focused around a map location.  This is either a farmer or a pastr.
-     * @param loc
-     */
-    public SoldierDecoder(int soldierType, int group, MapLocation loc) {
+    public SoldierDecoder(int soldierType, int group, int comChannel, MapLocation loc) {
         this.soldierType = soldierType;
         this.loc = loc;
         this.group = group;
+        this.comChannel = comChannel;
     }
 
     /**
@@ -50,12 +40,12 @@ public class SoldierDecoder extends CommunicationDecoder {
 	 */
 	@Override
 	public String toString() {
-		return "Soldier Decoder: " + loc + " of " + soldierType + " : " + group;
+		return "Soldier Decoder: " + loc + " of " + soldierType + " : " + group + " : " + comChannel;
 	}
 
 	@Override
 	public int getData() {
-		int data = soldierType * SOLDIER_TYPE_MULTIPLIER + group * GROUP_MULTIPLIER +
+		int data = comChannel * SOLDIER_COM_CHANNEL + soldierType * SOLDIER_TYPE_MULTIPLIER + group * GROUP_MULTIPLIER +
                 (loc == null ? 0 : MapDecoder.getDataFromLocation(loc));
 
 		return data;

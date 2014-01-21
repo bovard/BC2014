@@ -37,6 +37,7 @@ public abstract class TeamRobot {
     public String message;
     public int group;
     public int type;
+    public int twoWayChannel;
 
 	public TeamRobot(RobotController rc, RobotInformation info) {
         // MAKE SURE YOU INCLUDE THE FOLLOWING LINE IN YOUR IMPLEMENTATION

@@ -71,6 +71,7 @@ public class SoldierSpawner {
 
             robot.group = decoder.group;
             robot.type = type;
+            robot.twoWayChannel = decoder.comChannel;
         } catch (GameActionException e) {
             e.printStackTrace();
         }

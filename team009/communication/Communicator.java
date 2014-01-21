@@ -10,9 +10,11 @@ public class Communicator {
     // WRITING
     //-----------------------------------------------------
 
-    public static void WriteNewSoldier(RobotController rc, int soldierType, int group, MapLocation location) throws GameActionException {
-        SoldierDecoder decoder = new SoldierDecoder(soldierType, group, location);
+    public static void WriteNewSoldier(RobotController rc, int soldierType, int group, int comChannel, MapLocation location) throws GameActionException {
+        SoldierDecoder decoder = new SoldierDecoder(soldierType, group, comChannel, location);
         _Broadcast(rc, NEW_SOLDIER_CHANNEL, decoder);
+
+        System.out.println("Decoder From Communicator: " + decoder.getData() + " : " + decoder.toString());
     }
 
     public static void WriteToGroup(RobotController rc, int group, int channel, int command, MapLocation location) throws GameActionException {
@@ -126,7 +128,7 @@ public class Communicator {
     protected static final int GROUP_CHANNEL_BASE = SOLDIER_TYPE_CHANNEL_BASE + MAX_GROUP_COUNT * SoldierSpawner.SOLDIER_COUNT;
 
     // The two way communications HQ < - > Soldier
-    protected static final int TWO_WAY_HQ_COM_BASE = GROUP_CHANNEL_BASE + MAX_GROUP_COUNT * GROUP_CHANNEL_COUNT;
+    public static final int TWO_WAY_HQ_COM_BASE = GROUP_CHANNEL_BASE + MAX_GROUP_COUNT * GROUP_CHANNEL_COUNT;
 
     // Group channels go for group channel count + 5;
     public static final int INFORMATION_ROUND_MOD = 4;
