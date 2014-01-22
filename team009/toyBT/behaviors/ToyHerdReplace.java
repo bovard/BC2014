@@ -1,6 +1,7 @@
 package team009.toyBT.behaviors;
 
 import battlecode.common.*;
+import team009.BehaviorConstants;
 import team009.bt.behaviors.Behavior;
 import team009.navigation.BugMove;
 import team009.robot.soldier.ToySoldier;
@@ -38,7 +39,7 @@ public class ToyHerdReplace extends Behavior {
         atSound = senseSound ? rc.senseObjectAtLocation(soundLocation) : null;
 
         return sensePasture && (atPasture == null || robot.currentLoc.equals(pastureLocation)) ||
-               senseSound && (atSound == null || robot.currentLoc.equals(soundLocation));
+               BehaviorConstants.NOISE_TOWER_ENABLE_WITH_PASTURE && senseSound && (atSound == null || robot.currentLoc.equals(soundLocation));
     }
 
     @Override
@@ -55,7 +56,7 @@ public class ToyHerdReplace extends Behavior {
     public boolean run() throws GameActionException {
         if (robot.currentLoc.equals(pastureLocation)) {
             robot.rc.construct(RobotType.PASTR);
-        } else if (robot.currentLoc.equals(soundLocation)) {
+        } else if (robot.currentLoc.equals(soundLocation) && BehaviorConstants.NOISE_TOWER_ENABLE_WITH_PASTURE) {
             robot.rc.construct(RobotType.NOISETOWER);
         } else {
             move.move();
