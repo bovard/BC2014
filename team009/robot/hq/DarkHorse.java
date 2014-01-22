@@ -11,7 +11,7 @@ public class DarkHorse extends HQ {
 
     public DarkHorse(RobotController rc, RobotInformation info) {
         super(rc, info);
-
+        treeRoot = getTreeRoot();
     }
 
     @Override
