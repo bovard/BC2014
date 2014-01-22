@@ -70,7 +70,6 @@ public class ToySelector extends Decision {
             } else if (returnToBase.pre()) {
                 returnToBase.run();
             }
-
         }
         return true;
     }
