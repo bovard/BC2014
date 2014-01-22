@@ -75,6 +75,7 @@ public abstract class HQ extends TeamRobot {
         }
 
         // Calculate until all is finsihed.
+        System.out.println("MapCalc!");
         map.calc();
         postProcess = !map.finished;
     }

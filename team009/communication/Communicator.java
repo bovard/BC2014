@@ -13,8 +13,6 @@ public class Communicator {
     public static void WriteNewSoldier(RobotController rc, int soldierType, int group, int comChannel, MapLocation location) throws GameActionException {
         SoldierDecoder decoder = new SoldierDecoder(soldierType, group, comChannel, location);
         _Broadcast(rc, NEW_SOLDIER_CHANNEL, decoder);
-
-        System.out.println("Decoder From Communicator: " + decoder.getData() + " : " + decoder.toString());
     }
 
     public static void WriteToGroup(RobotController rc, int group, int channel, int command, MapLocation location) throws GameActionException {

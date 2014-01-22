@@ -1,5 +1,6 @@
 package team009.utils;
 
+import battlecode.common.Direction;
 import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
 import battlecode.common.TerrainTile;
@@ -7,6 +8,7 @@ import team009.robot.hq.HQ;
 
 public class MapPreProcessor {
     public int[][] map;
+    public double[][] milks;
     public boolean finished = false;
     public int width;
     public int height;
@@ -41,7 +43,31 @@ public class MapPreProcessor {
         }
 
         finished = i == height;
+        if (finished) {
+            milks = rc.senseCowGrowth();
+        }
 
         this.i = i;
+    }
+
+    public static final int DirectionToInt(Direction dir) {
+        if (dir == Direction.NORTH) {
+            return 0;
+        } else if (dir == Direction.NORTH_EAST) {
+            return 1;
+        } else if (dir == Direction.EAST) {
+            return 2;
+        } else if (dir == Direction.SOUTH_EAST) {
+            return 3;
+        } else if (dir == Direction.SOUTH) {
+            return 4;
+        } else if (dir == Direction.SOUTH_WEST) {
+            return 5;
+        } else if (dir == Direction.WEST) {
+            return 6;
+        } else if (dir == Direction.NORTH_WEST) {
+            return 7;
+        }
+        return -1;
     }
 }

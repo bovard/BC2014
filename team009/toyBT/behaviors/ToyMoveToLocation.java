@@ -2,6 +2,7 @@ package team009.toyBT.behaviors;
 
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
+import battlecode.common.RobotType;
 import team009.bt.behaviors.Behavior;
 import team009.navigation.BugMove;
 import team009.navigation.SnailMove;
@@ -13,12 +14,14 @@ public class ToyMoveToLocation extends Behavior {
     protected SnailMove move;
     public MapLocation currentLocation = new MapLocation(0, 0);
     ToySoldier soldier;
+    private int attackRadius = 0;
 
     public ToyMoveToLocation(ToySoldier robot) {
         super(robot);
         soldier = robot;
         //move = new BugMove(robot);
         move = new SnailMove(robot);
+        attackRadius = RobotType.SOLDIER.attackRadiusMaxSquared;
     }
 
     @Override
@@ -33,7 +36,8 @@ public class ToyMoveToLocation extends Behavior {
             currentLocation = soldier.comLocation;
         }
         //TODO determine when to sneak based on if near friendly PASTR
-        if (soldier.friendlyPastrs.length > 0) {
+        if (soldier.friendlyPastrs.length > 0 &&
+            soldier.friendlyPastrs.arr[0].location.distanceSquaredTo(soldier.currentLoc) < attackRadius) {
             move.sneak();
         } else {
             move.move();

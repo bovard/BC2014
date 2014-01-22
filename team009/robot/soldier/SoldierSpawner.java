@@ -26,7 +26,6 @@ public class SoldierSpawner {
         TeamRobot robot = null;
         try {
             SoldierDecoder decoder = Communicator.ReadNewSoldier(rc);
-            System.out.println("Decoder: " + decoder.toString());
 
             int type = decoder.soldierType;
             switch (type) {
@@ -64,7 +63,6 @@ public class SoldierSpawner {
                     break;
                 case SOLDIER_TYPE_TOY_SOLDIER:
                 default:
-                    System.out.println("Making Toy Soldier");
                     robot = new ToySoldier(rc, info);
                     break;
             }
