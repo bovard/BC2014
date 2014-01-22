@@ -64,6 +64,21 @@ public class CheesePostProcess {
         }
 
         cheese = finished && milkTotal > BehaviorConstants.CHEESE_MILK_MINIMUM;
+        if (finished) {
+            System.out.println("MilkTotal: " + milkTotal + " : " + width + " : " + height);
+        }
     }
 
+    /**
+     * Gathers the best directions from the given map location
+     * @param loc
+     */
+    public static final int[][] getBestDistances(RobotController rc, MapLocation loc) {
+        double[][] milks = rc.senseCowGrowth();
+        int width = milks[0].length;
+        int height = milks.length;
+
+        //TODO: Finish this quick calc
+        return null;
+    }
 }

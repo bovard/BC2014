@@ -67,8 +67,6 @@ public class MilkInformation {
         if (finished) {
             return true;
         }
-        double[][] milks = hq.map.milks;
-
         // Bases have been set
         if (!hasBasesSet) {
             int x = info.hq.x;
@@ -91,6 +89,8 @@ public class MilkInformation {
             }
             hasBasesSet = true;
         }
+
+        double[][] milks = hq.map.milks;
         int roundsToProcess = (GameConstants.BYTECODE_LIMIT - (Clock.getBytecodeNum())) / 55;
         int i = this.i, j = this.j;
         Box curr = this.curr;
