@@ -25,11 +25,13 @@ public class SnailMove extends Move {
 
     @Override
     public boolean move() throws GameActionException {
+        stepsTaken++;
         return moveWrapper(false);
     }
 
     @Override
     public boolean sneak() throws GameActionException {
+        stepsTaken++;
         return moveWrapper(true);
     }
 
