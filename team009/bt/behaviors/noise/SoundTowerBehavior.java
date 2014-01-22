@@ -1,48 +1,23 @@
 package team009.bt.behaviors.noise;
 
 import battlecode.common.*;
-import team009.MapUtils;
 import team009.bt.behaviors.Behavior;
 import team009.robot.NoiseTower;
+import team009.utils.CheesePostProcess;
+import team009.utils.MapPreProcessor;
 
 public class SoundTowerBehavior extends Behavior {
     NoiseTower tower;
     private int radius;
-    private int angle;
-    private int x;
-    private int y;
-
-    private Direction[] directions = {Direction.NORTH, Direction.NORTH_EAST, Direction.EAST, Direction.SOUTH_EAST, Direction.SOUTH, Direction.SOUTH_WEST, Direction.WEST, Direction.NORTH_WEST};
-    private int currentDir;
-
-    private int towerStrat;
-    private static final int TOWER_STRAT_PULL_CARDNIAL = 0;
-    private static final int TOWER_STRAT_PULL_SPIRAL_SWEEP = 1;
-
-    //MapLocation[] pastrLocs;
-    MapLocation herdFocus;
+    private int[] radii;
+    private Direction currentDir;
 
     public SoundTowerBehavior(NoiseTower robot) {
         super(robot);
         tower = robot;
-        radius = MAX_DISTANCE;
-        x = 0;
-        y = 0;
-        angle = 0;
-        currentDir = 0;
-        towerStrat = TOWER_STRAT_PULL_CARDNIAL;
-        //spin around in a cirle shooting the gun
-        //TODO is pastrLocs within enviornment check????
-        //pastrLocs = robot.rc.sensePastrLocations(robot.info.myTeam);
-        //if(pastrLocs.length > 0) {
-        //    herdFocus = pastrLocs[0];
-        //}
-        //else
-        //{
-            herdFocus = robot.rc.getLocation();
-        //}
-
-
+        radii = CheesePostProcess.getBestDistances(robot.rc, robot.currentLoc);
+        currentDir = Direction.NORTH;
+        radius = radii[MapPreProcessor.DirectionToInt(currentDir)];
     }
 
     @Override
@@ -61,65 +36,22 @@ public class SoundTowerBehavior extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
-        MapLocation loc = null;
-
-        boolean done = false;
-        int count = 0;
-
-        while(!done && count < 15) {
-            switch(towerStrat)
-            {
-                case TOWER_STRAT_PULL_CARDNIAL:
-                    loc = pullInCardinalDirections();
-                    break;
-                case TOWER_STRAT_PULL_SPIRAL_SWEEP:
-                default:
-                    loc = spiralSweep();
-                    break;
-            }
-
-            done = rc.canAttackSquare(loc) && MapUtils.isOnMap(loc, robot.info.width, robot.info.height);
-            count++;
-        }
-
-
-        robot.rc.attackSquare(loc);
-
+        robot.rc.attackSquare(pullInCardinalDirections());
         return true;
-    }
-
-    public MapLocation spiralSweep()
-    {
-        int x = (int) (radius * java.lang.Math.cos(java.lang.Math.toRadians(angle))) + (herdFocus.x);
-        int y = (int) (radius * java.lang.Math.sin(java.lang.Math.toRadians(angle))) + (herdFocus.y);
-        angle = angle+40;
-        if(angle >= 360) {
-            angle = 0;
-            radius = radius-1;
-            if(radius<=7) {
-                radius = MAX_DISTANCE; //range of the noise tower
-            }
-        }
-        MapLocation loc = new MapLocation(x,y);
-        return loc;
     }
 
     public MapLocation pullInCardinalDirections()
     {
-        radius = radius - 1;
-        if(radius <= 6) {
-            radius = MAX_DISTANCE; //range of the noise tower
-            currentDir++;
-            if(currentDir == directions.length) {
-                currentDir = 0;
-            }
+        int i = 0;
+        while (radius <= 3 && i < 3) {
+            currentDir = currentDir.rotateRight();
+            radius = radii[MapPreProcessor.DirectionToInt(currentDir)];
+            i++;
         }
-        Direction dir = directions[currentDir];
-        MapLocation loc = robot.currentLoc.add(dir, radius);
+        MapLocation loc = robot.currentLoc.add(currentDir, radius);
+        radius--;
+
         return loc;
     }
-
-    private static final int MAX_DISTANCE = 18;
-    private static final int MAX_DISTANCE_SQUARED = 400;
 }
 

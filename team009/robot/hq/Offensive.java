@@ -36,6 +36,7 @@ public class Offensive extends HQ {
 
     private boolean largeMap = false;
     private boolean mediumMap = false;
+    private int milkingSpot = 0;
 
     public Offensive(RobotController rc, RobotInformation info) {
         super(rc, info);
@@ -125,8 +126,10 @@ public class Offensive extends HQ {
     }
 
     public MapLocation getNextMilkingSpot() {
-        // TODO: Switch this around?
-        return milkInformation.targetBoxes[0].bestSpot;
+        MilkInformation.Box box = milkInformation.targetBoxes[milkingSpot];
+
+        milkingSpot = (milkingSpot + 1) % milkInformation.targetBoxes.length;
+        return box.bestSpot;
     }
 
     @Override

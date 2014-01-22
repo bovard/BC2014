@@ -21,6 +21,8 @@ public class MilkInformation {
     // The public information
     public Box[] targetBoxes = new Box[2];
     public boolean finished = false;
+    public MapLocation oneBaseBestSpot = new MapLocation(0, 0);
+    public double oneBaseBest = -1;
 
     /**
      * A milk information will parse out the map and determine the
@@ -60,6 +62,11 @@ public class MilkInformation {
             new Box(width30, height70, width70, height),
             new Box(width70, height70, width, height),
         };
+
+        curr = boxes[0];
+        for (int i = 0; i < boxes.length - 1; i++) {
+            boxes[i].next = boxes[i + 1];
+        }
     }
 
     public boolean calc() throws GameActionException {
@@ -67,6 +74,8 @@ public class MilkInformation {
         if (finished) {
             return true;
         }
+
+        System.out.println("Milking");
         // Bases have been set
         if (!hasBasesSet) {
             int x = info.hq.x;
@@ -88,48 +97,68 @@ public class MilkInformation {
                     break;
             }
             hasBasesSet = true;
+            i = curr.x;
+            if (i == 0) {
+                i++;
+            }
         }
 
         double[][] milks = hq.map.milks;
-        int roundsToProcess = (GameConstants.BYTECODE_LIMIT - (Clock.getBytecodeNum())) / 55;
+        int roundsToProcess = Timer.GetRounds(2100);
         int i = this.i, j = this.j;
         Box curr = this.curr;
 
         // Now its time to sum only the bases we need.
         int k = 0;
         int[][] map = hq.map.map;
+        int yMax = curr.y2 - 1;
         while (k < roundsToProcess && i < curr.x2 - 1) {
             for (; i < curr.x2 - 1 && k < roundsToProcess; i++, k++) {
+                Timer.StartTimer();
                 double[] row = milks[i];
-                for (j = curr.y == 0 ? 1 : curr.y; j < curr.y2 - 1; j++, k++) {
+                int[] mapRow = map[i];
+                for (j = curr.y == 0 ? 1 : curr.y; j < yMax; j++) {
                     if (curr.bestSpot == null) {
                         curr.bestSpot = new MapLocation(i, j);
                         curr.bestMilk = milks[i][j];
                         continue;
                     }
 
-                    double val = row[j - 1] + row[j] + row[j + 1] + milks[i - 1][j] + milks[i + 1][j];
+                    double val = mapRow[j - 1] == 0 ? row[j - 1] : 0;
+                    val += mapRow[j] == 0 ? row[j] : 0;
+                    val += mapRow[j + 1] == 0 ? row[j + 1] : 0;
+                    val += map[i - 1][j] == 0 ? milks[i - 1][j] : 0;
+                    val += map[i + 1][j] == 0 ? milks[i + 1][j] : 0;
                     if (val > curr.bestMilk) {
                         if (map[i][j] == 0) {
                             curr.bestSpot = new MapLocation(i, j);
                             curr.bestMilk = val;
                         }
                     }
+                    if (val > oneBaseBest) {
+                        oneBaseBestSpot = new MapLocation(i, j);
+                        oneBaseBest = val;
+                    } else if (val == oneBaseBest) {
+
+                        // If its the same but closer, choose it
+                        MapLocation loc = new MapLocation(i, j);
+                        if (loc.distanceSquaredTo(info.hq) < oneBaseBestSpot.distanceSquaredTo(info.hq)) {
+                            oneBaseBestSpot = new MapLocation(i, j);
+                            oneBaseBest = val;
+                        }
+                    }
                 }
+                Timer.EndTimer();
             }
         }
 
         if (i == curr.x2 - 1) {
+            System.out.println("Next: " + curr.id + " : " + curr.next);
             if (curr.next == null) {
                 finished = true;
             } else {
                 curr = curr.next;
                 i = curr.x;
-                j = curr.y;
-
-                if (j == 0) {
-                    j++;
-                }
                 if (i == 0) {
                     i++;
                 }
@@ -176,18 +205,6 @@ public class MilkInformation {
         } else {
             targetBoxes[0] = boxes[6];
             targetBoxes[1] = boxes[2];
-        }
-
-        curr = targetBoxes[0];
-        curr.next = targetBoxes[1];
-        i = curr.x;
-        j = curr.y;
-
-        if (j == 0) {
-            j++;
-        }
-        if (i == 0) {
-            i++;
         }
     }
 
@@ -256,17 +273,6 @@ public class MilkInformation {
             targetBoxes[1] = new Box(boxes[2].x, boxes[2].y, boxes[2].x2, boxes[5].y2);
         }
 
-        curr = targetBoxes[0];
-        curr.next = targetBoxes[1];
-        i = curr.x;
-        j = curr.y;
-
-        if (j == 0) {
-            j++;
-        }
-        if (i == 0) {
-            i++;
-        }
     }
 
     public class Box {
@@ -275,11 +281,14 @@ public class MilkInformation {
             this.y = y;
             this.x2 = x2;
             this.y2 = y2;
+            id = BoxID++;
         }
-        int x, y, x2, y2;
+        int x, y, x2, y2, id;
         double bestMilk = 0;
         Box next;
 
         public MapLocation bestSpot;
     }
+
+    private static int BoxID = 0;
 }

@@ -30,9 +30,11 @@ public class BehaviorConstants {
     public static final int MILK_INFO_STRAT = MILK_INFO_STRAT_CORNERS;
 
     // Soldier Coms
-    public static final double ATTACK_SOLDIER_MULTIPLIER = (2.0);
+    public static final double ATTACK_SOLDIER_MULTIPLIER = (5.0);
+    public static final int ATTACK_SOLDIER_MAX = 15;
 
     // Sound tower
     public static final int NOISE_TOWER_REDUCTION = 2;
     public static final boolean NOISE_TOWER_ENABLE_WITH_PASTURE = false;
+    public static final boolean NOISE_TOWER_FIRST = false;
 }

@@ -14,8 +14,8 @@ public class HQOneBase extends WriteBehavior {
 
     @Override
     public boolean run() throws GameActionException {
-        hq.comCapture(hq.milkInformation.targetBoxes[0].bestSpot, 0);
-        hq.comDefend(hq.milkInformation.targetBoxes[0].bestSpot, 1);
+        hq.comCapture(hq.milkInformation.oneBaseBestSpot, 0);
+        hq.comDefend(hq.milkInformation.oneBaseBestSpot, 1);
         return true;
     }
 }
