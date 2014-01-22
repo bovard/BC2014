@@ -11,13 +11,12 @@ public class ToyCombat {
     private ToySoldier soldier;
     private int sensorRadius, attackRadius, oneAwayAttackRadius, halfRange, range;
     private BugMove move;
-    private int hqMaxDistance = (int)Math.sqrt(RobotType.HQ.attackRadiusMaxSquared) + 1;
+    private int hqMaxDistance = (int)Math.pow(Math.sqrt(RobotType.HQ.attackRadiusMaxSquared + 1) + 1, 2) - 1;
     private SmartMapLocationArray currentAttackableEnemies;
 
     public ToyCombat(ToySoldier robot) {
         soldier = robot;
         _init();
-        hqMaxDistance *= hqMaxDistance;
     }
 
     private void _init() {
