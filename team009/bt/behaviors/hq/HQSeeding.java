@@ -6,10 +6,10 @@ import team009.bt.behaviors.Behavior;
 import team009.robot.TeamRobot;
 import team009.robot.hq.HQ;
 
-public class HQOffensive extends Behavior {
+public class HQSeeding extends Behavior {
     private HQ hq;
 
-    public HQOffensive(HQ robot) {
+    public HQSeeding(HQ robot) {
         super(robot);
         hq = robot;
     }

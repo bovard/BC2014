@@ -4,13 +4,13 @@ import battlecode.common.*;
 import team009.BehaviorConstants;
 import team009.RobotInformation;
 import team009.bt.Node;
-import team009.bt.decisions.hq.OffensiveSelector;
+import team009.bt.decisions.hq.SeedingSelector;
 import team009.communication.bt.HQCom;
 import team009.utils.ChaseStrategyUtil;
 import team009.utils.CheesePostProcess;
 import team009.utils.MilkInformation;
 
-public class Offensive extends HQ {
+public class Seeding extends HQ {
     // Default behavior is one base and both groups defend it
     // If both groups get big, the second can break away and hunt.
     public boolean huddle = false;
@@ -38,7 +38,7 @@ public class Offensive extends HQ {
     private boolean mediumMap = false;
     private int milkingSpot = 0;
 
-    public Offensive(RobotController rc, RobotInformation info) {
+    public Seeding(RobotController rc, RobotInformation info) {
         super(rc, info);
         treeRoot = getTreeRoot();
         comRoot = new HQCom(this);
@@ -135,7 +135,7 @@ public class Offensive extends HQ {
 
     @Override
     protected Node getTreeRoot() {
-        return new OffensiveSelector(this);
+        return new SeedingSelector(this);
     }
 
     private void _calculateRallyPoint() throws GameActionException {

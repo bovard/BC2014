@@ -2,12 +2,12 @@ package team009.communication.bt.behaviors.hq;
 
 import battlecode.common.GameActionException;
 import team009.communication.bt.behaviors.WriteBehavior;
-import team009.robot.hq.Offensive;
+import team009.robot.hq.Seeding;
 
 public class HQReturnToHome extends WriteBehavior {
-    Offensive hq;
+    Seeding hq;
 
-    public HQReturnToHome(Offensive off) {
+    public HQReturnToHome(Seeding off) {
         super(off);
         hq = off;
     }
