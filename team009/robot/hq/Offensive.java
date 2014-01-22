@@ -93,6 +93,7 @@ public class Offensive extends HQ {
 
         else {
             hunt0 = combinedEnoughAttack && hasPastures;
+            oneBase = !hunt0 && Clock.getRoundNum() > BehaviorConstants.HQ_SMALL_MAP_ONE_BASE_ROUND_NUMBER;
         }
         huddle = !hunt0 && !hunt1 && !chase0 && !chase1 && !oneBase;
     }

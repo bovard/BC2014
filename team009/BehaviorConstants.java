@@ -23,6 +23,7 @@ public class BehaviorConstants {
     public static final int HQ_REQUIRED_SOLDIER_COUNT_FOR_ATTACK = 4;
     public static final int HQ_REQUIRED_SOLDIER_COUNT_FOR_GROUP_ATTACK = 6;
     public static final int HQ_SOLDIER_COM_MAX = 35;
+    public static final int HQ_SMALL_MAP_ONE_BASE_ROUND_NUMBER = 500;
 
     // Milk Selection picking
     public static final int MILK_INFO_STRAT_CORNERS_AND_SIDES = 0;
