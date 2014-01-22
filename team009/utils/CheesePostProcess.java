@@ -73,12 +73,26 @@ public class CheesePostProcess {
      * Gathers the best directions from the given map location
      * @param loc
      */
-    public static final int[][] getBestDistances(RobotController rc, MapLocation loc) {
-        double[][] milks = rc.senseCowGrowth();
-        int width = milks[0].length;
-        int height = milks.length;
+    public static final int[] getBestDistances(RobotController rc, MapLocation loc) {
+        Direction dir = Direction.NORTH;
+        MapLocation curr = loc;
+        int radius = (int)Math.sqrt(RobotType.NOISETOWER.attackRadiusMaxSquared) - BehaviorConstants.NOISE_TOWER_REDUCTION;
+        int[] radii = new int[8];
 
-        //TODO: Finish this quick calc
-        return null;
+        int j;
+        for (int i = 0; i < 8; i++) {
+            curr = loc;
+            for (j = 0; j < radius; j++) {
+                curr = curr.add(dir);
+                TerrainTile tile = rc.senseTerrainTile(curr);
+                if (tile == TerrainTile.OFF_MAP || tile == TerrainTile.VOID) {
+                    break;
+                }
+            }
+
+            radii[i] = j;
+        }
+
+        return radii;
     }
 }

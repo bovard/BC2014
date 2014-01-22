@@ -31,4 +31,7 @@ public class BehaviorConstants {
 
     // Soldier Coms
     public static final double ATTACK_SOLDIER_MULTIPLIER = (2.0);
+
+    // Sound tower
+    public static final int NOISE_TOWER_REDUCTION = 2;
 }

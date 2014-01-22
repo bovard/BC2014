@@ -1,8 +1,6 @@
 package team009.toyBT.behaviors;
 
-import battlecode.common.GameActionException;
-import battlecode.common.MapLocation;
-import battlecode.common.RobotType;
+import battlecode.common.*;
 import team009.bt.behaviors.Behavior;
 import team009.navigation.BugMove;
 import team009.robot.soldier.ToySoldier;
@@ -23,18 +21,24 @@ public class ToyHerdReplace extends Behavior {
 
     @Override
     public boolean pre() throws GameActionException {
+        boolean sensePasture, senseSound;
+        Object atPasture, atSound;
+
         // we can sense the square and we see that there isn't a pastr there!
         if (!pastureLocation.equals(soldier.comLocation)) {
             pastureLocation = soldier.comLocation;
-            //set ideal location of sound tower
             soundLocation = getTowerLocation();
-
-
             move.setDestination(pastureLocation);
         }
-        return robot.rc.canSenseSquare(soldier.comLocation)
-                && (robot.rc.senseObjectAtLocation(soldier.comLocation) == null
-                    || robot.currentLoc.equals(soldier.comLocation));
+
+        sensePasture = robot.rc.canSenseSquare(pastureLocation);
+        senseSound = robot.rc.canSenseSquare(soundLocation);
+
+        atPasture = sensePasture ? rc.senseObjectAtLocation(pastureLocation) : null;
+        atSound = senseSound ? rc.senseObjectAtLocation(soundLocation) : null;
+
+        return sensePasture && (atPasture == null || robot.currentLoc.equals(pastureLocation)) ||
+               senseSound && (atSound == null || robot.currentLoc.equals(soundLocation));
     }
 
     @Override
@@ -49,56 +53,35 @@ public class ToyHerdReplace extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
-        if (robot.currentLoc.equals(soldier.comLocation)) {
+        if (robot.currentLoc.equals(pastureLocation)) {
             robot.rc.construct(RobotType.PASTR);
+        } else if (robot.currentLoc.equals(soundLocation)) {
+            robot.rc.construct(RobotType.NOISETOWER);
         } else {
-            if (!pastureLocation.equals(soldier.comLocation)) {
-                pastureLocation = soldier.comLocation;
-                move.setDestination(pastureLocation);
-            }
             move.move();
         }
+
         return true;
     }
 
     public MapLocation getTowerLocation()
     {
         //first check the spots next to the hq that are also next to the pasture (optimal spots)
-        int hqx = hq.currentLoc.x;
-        int hqy = hq.currentLoc.y;
-        int px = pasture.x;
-        int py = pasture.y;
-        MapLocation[] optimalLocs = new MapLocation[4];
+        MapLocation tower = pastureLocation;
+        Direction dir = Direction.NORTH;
 
-        if (hqx != px && hqy != py) {
-            //only two optimal neighbors
-            optimalLocs[0] = new MapLocation(hqx, py);
-            optimalLocs[1] = new MapLocation(hqx, py);
-        }
-        else {
-            //4 optimal neighbors
-            if(hqx == px){
-                optimalLocs[0] = new MapLocation(hqx-1, hqy);
-                optimalLocs[1] = new MapLocation(hqx-1, py);
-                optimalLocs[2] = new MapLocation(hqx+1, hqy);
-                optimalLocs[3] = new MapLocation(hqx+1, py);
+        for (int i = 7; i >= 0; i--) {
+            MapLocation curr = tower.add(dir);
+            TerrainTile tile = rc.senseTerrainTile(curr);
+            if (tile == TerrainTile.OFF_MAP || tile == TerrainTile.VOID) {
+                dir = dir.rotateRight();
+                continue;
             }
-            else {
-                optimalLocs[0] = new MapLocation(hqx, hqy-1);
-                optimalLocs[1] = new MapLocation(px, hqy+1);
-                optimalLocs[2] = new MapLocation(hqx, hqy-1);
-                optimalLocs[3] = new MapLocation(px, hqy-1);
-            }
+
+            return curr;
         }
 
-        for(int i=0; i<optimalLocs.length; i++) {
-            if(optimalLocs[i] != null && hq.rc.canMove(hq.currentLoc.directionTo(optimalLocs[i]))) {
-                return optimalLocs[i];
-            }
-        }
-
-        //otherwise get random move
-        MapLocation tower = hq.currentLoc.add(hq.getRandomSpawnDirection());
-        return tower;
+        // Don't worry about it
+        return null;
     }
 }
