@@ -103,7 +103,7 @@ public class CheesePostProcess {
                     milkTotal += milkInformation.milks[cheeseI][j];
                 }
             }
-            mapDone = this.cheeseI == cheeseILen;
+            mapDone = cheeseI == cheeseILen;
         }
         this.cheeseI = cheeseI;
 
@@ -121,7 +121,7 @@ public class CheesePostProcess {
         while (k < rounds && mapDone && !finished) {
             for (int i = 0; i < halfRadius; i++) {
                 curr = curr.add(currDir);
-                if (curr.x >= width || curr.y >= height || map[curr.x][curr.y] == 1) {
+                if (curr.x < 0 || curr.y < 0 || curr.x >= width || curr.y >= height || map[curr.x][curr.y] == 1) {
                     blockedCount++;
                     break;
                 }
