@@ -27,12 +27,11 @@ public class DarkHorsePlaceStructures extends Behavior{
 
     @Override
     public boolean pre() throws GameActionException {
-        return ((DarkHorse)robot).robotCount > 2;
+        return ((DarkHorse)robot).robotCount < 2;
     }
 
     @Override
     public boolean run() throws GameActionException {
-
         if (toSpawnNoise != null) {
             ((HQ)robot).createNoiseTower(0, robot.info.hq.add(toSpawnNoise));
             toSpawnNoise = null;
