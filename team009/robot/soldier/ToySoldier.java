@@ -4,7 +4,7 @@ import battlecode.common.*;
 import team009.RobotInformation;
 import team009.bt.Node;
 import team009.communication.bt.SoldierCom;
-import team009.communication.GroupCommandDecoder;
+import team009.communication.decoders.GroupCommandDecoder;
 import team009.robot.TeamRobot;
 import team009.toyBT.ToySelector;
 import team009.utils.SmartRobotInfoArray;
@@ -19,16 +19,15 @@ public class ToySoldier extends TeamRobot {
     public boolean seesEnemyPastr = false;
     public boolean seesEnemyHQ = false;
     public boolean engagedInCombat = false;
-    public SmartRobotInfoArray enemySoldiers = new SmartRobotInfoArray();
-    public SmartRobotInfoArray friendlySoldiers = new SmartRobotInfoArray();
-    public SmartRobotInfoArray enemyPastrs = new SmartRobotInfoArray();
-    public SmartRobotInfoArray enemyNoise = new SmartRobotInfoArray();
+    public SmartRobotInfoArray enemySoldiers;
+    public SmartRobotInfoArray friendlySoldiers;
+    public SmartRobotInfoArray friendlyPastrs;
+    public SmartRobotInfoArray enemyPastrs;
+    public SmartRobotInfoArray enemyNoise;
     public GroupCommandDecoder groupCommand;
     public GroupCommandDecoder hqCommand;
     public Robot[] enemies = new Robot[0];
     public Robot[] allies = new Robot[0];
-    public int group;
-    public int type;
     public MapLocation currentLoc;
     public MapLocation lastLoc;
     public MapLocation comLocation;
@@ -63,10 +62,11 @@ public class ToySoldier extends TeamRobot {
         }
         currentLoc = temp;
         health = rc.getHealth();
-        enemySoldiers.length = 0;
-        enemyNoise.length = 0;
-        enemyPastrs.length = 0;
-        friendlySoldiers.length = 0;
+        enemySoldiers = new SmartRobotInfoArray();
+        enemyNoise = new SmartRobotInfoArray();
+        enemyPastrs = new SmartRobotInfoArray();
+        friendlySoldiers = new SmartRobotInfoArray();
+        friendlyPastrs = new SmartRobotInfoArray();
 
         // micro stuff
         // TODO: get a better picture by sensing how many of our allies are soliders?
@@ -88,6 +88,8 @@ public class ToySoldier extends TeamRobot {
             } else {
                 if (info.type == RobotType.SOLDIER) {
                     friendlySoldiers.add(info);
+                } else if (info.type == RobotType.PASTR) {
+                    friendlyPastrs.add(info);
                 }
             }
         }
@@ -102,9 +104,8 @@ public class ToySoldier extends TeamRobot {
 
         // What type of toy soldier is this.
         // TODO: Bovard what to do?
-        isHerder = comCommand == CAPTURE_PASTURE;
+        isHerder = comCommand == CAPTURE_PASTURE || comCommand == CAPTURE_SOUND;
         isHunter = !isHerder;
-        rc.setIndicatorString(0, (isHerder ? "I am herding " : "I am hunting ") + comLocation + " : " + comCommand + " : " + group + " : ");
     }
 
     // TODO: WayPointing?

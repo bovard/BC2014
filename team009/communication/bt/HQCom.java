@@ -1,13 +1,12 @@
 package team009.communication.bt;
 
-import team009.communication.bt.behaviors.HQReadCom;
-import team009.communication.bt.behaviors.HQWriteCom;
-import team009.robot.hq.HQ;
+import team009.communication.bt.behaviors.hq.HQStateCom;
+import team009.robot.hq.Offensive;
 
 public class HQCom extends Com {
-    public HQCom(HQ robot) {
+    public HQCom(Offensive robot) {
         super(robot);
-        write = new HQWriteCom(robot);
-        read = new HQReadCom(robot);
+        write = new HQOffensiveWriteCom(robot);
+        read = new HQStateCom(robot);
     }
 }

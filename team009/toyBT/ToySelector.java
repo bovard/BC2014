@@ -11,7 +11,6 @@ public class ToySelector extends Decision {
     GroupAttack attack;
     GroupDefend defend;
     GroupAttackPasture attackPasture;
-    GroupCapture capturePasture;
     GroupReturnToBase returnToBase;
     ToyEngageEnemy engageEnemy;
     ToyHerderSelector herder;
@@ -33,9 +32,6 @@ public class ToySelector extends Decision {
         defend = new GroupDefend(robot);
 
         // Attacks pasture as group
-        capturePasture = new GroupCapture(robot);
-
-        // Attacks pasture as group
         attackPasture = new GroupAttackPasture(robot);
 
         // returns to base as group
@@ -54,6 +50,7 @@ public class ToySelector extends Decision {
 
         // NOTE:  This is obviously brittle, but its really efficient.
         // Byte code critical code
+        rc.setIndicatorString(0, "Command: " + soldier.comCommand + " : Location: " + soldier.comLocation);
         if (engageEnemy.pre()) {
             return engageEnemy.run();
         }
@@ -68,14 +65,11 @@ public class ToySelector extends Decision {
         } else if (soldier.isHunter) {
             if (defend.pre()) {
                 defend.run();
-            } else if (capturePasture.pre()) {
-                capturePasture.run();
             } else if (attackPasture.pre()) {
                 attackPasture.run();
             } else if (returnToBase.pre()) {
                 returnToBase.run();
             }
-
         }
         return true;
     }

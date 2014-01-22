@@ -5,15 +5,18 @@ import team009.bt.Node;
 import team009.bt.decisions.Decision;
 import team009.robot.soldier.ToySoldier;
 import team009.toyBT.behaviors.ToyHerdReplace;
+import team009.toyBT.behaviors.ToyHerdSoundCapture;
 
 public class ToyHerderSelector extends Decision {
     protected Node heard;
     protected Node replace;
+    protected Node sound;
 
     public ToyHerderSelector(ToySoldier robot) {
         super(robot);
         heard = new ToyHerdSequence(robot);
         replace = new ToyHerdReplace(robot);
+        sound = new ToyHerdSoundCapture(robot);
     }
 
     @Override
@@ -37,7 +40,9 @@ public class ToyHerderSelector extends Decision {
     public boolean run() throws GameActionException {
 
         // if our pastr has been killed, replace it!
-        if (replace.pre()) {
+        if (sound.pre()) {
+            return sound.run();
+        } else if (replace.pre()) {
             return replace.run();
         }
 

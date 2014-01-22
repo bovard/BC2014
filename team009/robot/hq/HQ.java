@@ -1,42 +1,40 @@
 package team009.robot.hq;
 
 import battlecode.common.*;
+import team009.BehaviorConstants;
 import team009.MapUtils;
 import team009.RobotInformation;
 import team009.communication.Communicator;
-import team009.communication.GroupCommandDecoder;
-import team009.communication.SoldierCountDecoder;
-import team009.communication.bt.HQCom;
+import team009.communication.decoders.GroupCommandDecoder;
+import team009.communication.decoders.SoldierCountDecoder;
 import team009.robot.TeamRobot;
 import team009.robot.soldier.SoldierSpawner;
+import team009.utils.MapPreProcessor;
 import team009.utils.SmartMapLocationArray;
 
 public abstract class HQ extends TeamRobot {
+    private int twoWayComPosition;
 
+    public boolean hqPostProcessing = true;
     public int maxSoldiers;
     public SoldierCountDecoder[] soldierCounts;
     public boolean seesEnemy = false;
     public Robot[] enemies = new Robot[0];
-    public MapLocation bestLocation;
     public boolean hasPastures = false;
+    public boolean weHavePastures = false;
     public boolean hasHQPastures = false;
-    public SmartMapLocationArray pastures;
-
-    public MapLocation bestRegenLoc = null;
-    public boolean foundBest = false;
-    private double[][] cowRegens;
-    private double bestRegen;
-    private int regenRow = 1;
-    private int regenColumn = 1;
-    private int rowLen = 0;
-    private int colLen = 0;
+    public SmartMapLocationArray enemyPastrs;
+    public MapPreProcessor map;
 
     public HQ(RobotController rc, RobotInformation info) {
         super(rc, info);
         maxSoldiers = Communicator.MAX_GROUP_COUNT;
         soldierCounts = new SoldierCountDecoder[maxSoldiers];
+        map = new MapPreProcessor(this);
+        twoWayComPosition = 0;
+
         // REMEMBER TO CALL treeRoot = getTreeRoot() in your implementations of this!
-        comRoot = new HQCom(this);
+        // REMEMBER TO CALL comRoot = __YOUR_COM_ROOT__; // See communications.bt.HQCom for example (WriteCom and ReadCom)
     }
 
     @Override
@@ -55,77 +53,30 @@ public abstract class HQ extends TeamRobot {
         }
 
         MapLocation[] pastrs = rc.sensePastrLocations(info.enemyTeam);
-        pastures = new SmartMapLocationArray();
+        MapLocation[] homePastrs = rc.sensePastrLocations(info.myTeam);
+        weHavePastures = homePastrs.length > 0;
+
+        enemyPastrs = new SmartMapLocationArray();
         for (int i = 0, j = 0; i < 2 && j < pastrs.length; j++) {
             if (pastrs[i].isAdjacentTo(info.enemyHq)) {
                 hasHQPastures = true;
             } else {
-                pastures.add(pastrs[i]);
+                enemyPastrs.add(pastrs[i]);
             }
         }
 
-        hasPastures = pastures.length > 0;
+        hasPastures = enemyPastrs.length > 0;
     }
 
-    /**
-     * Post processes best pasture locations
-     */
+    @Override
     public void postProcessing() throws GameActionException {
-        if (foundBest) {
-            rc.setIndicatorString(2, "BestLocation: " + bestRegenLoc);
+        if (!hqPostProcessing) {
             return;
         }
 
-        _calculateBestCowPosition();
-        foundBest = regenRow == rowLen;
-        if (foundBest) {
-            // -y mirror
-            MapLocation mirror = new MapLocation((info.width - 1) - bestRegenLoc.x, (info.height - 1) - bestRegenLoc.y);
-            if (mirror.distanceSquaredTo(info.hq) < bestRegenLoc.distanceSquaredTo(info.hq)) {
-                bestRegenLoc = mirror;
-            }
-        }
-    }
-
-    private void _calculateBestCowPosition() {
-        if (cowRegens == null) {
-            cowRegens = rc.senseCowGrowth();
-            bestRegen = cowRegens[0][0];
-            bestRegenLoc = new MapLocation(0, 0);
-            rowLen = cowRegens.length - 2;
-            colLen = cowRegens[0].length - 2;
-        }
-        double[][] cowRegens = this.cowRegens;
-
-        // TODO: Better would be to check all neighbors, but that is expensive.
-        // TODO: So best regeneration rate is you + your neighbors
-        // TODO: But even that may not be the best.  Then comes distance to travel to, etc etc
-        int roundsToProcess = (GameConstants.BYTECODE_LIMIT - (Clock.getBytecodeNum())) / 55;
-        double bestRegen = this.bestRegen;
-        int regenRow = this.regenRow;
-        int regenColumn = this.regenColumn;
-        int i = 0;
-        while (regenRow < rowLen && i < roundsToProcess) {
-
-            // One row at a time
-            for (; regenColumn < colLen && i < roundsToProcess; regenColumn++, i++) {
-                double[] row = cowRegens[regenRow];
-                double val = row[regenColumn - 1] + row[regenColumn] + row[regenColumn + 1] + cowRegens[regenRow - 1][regenColumn] + cowRegens[regenRow + 1][regenColumn];
-                if (bestRegen < val) {
-                    bestRegen = val;
-                    bestRegenLoc = new MapLocation(regenRow, regenColumn);
-                }
-            }
-
-            if (regenColumn == colLen) {
-                regenColumn = 1;
-                regenRow++;
-            }
-        }
-
-        this.bestRegen = bestRegen;
-        this.regenRow = regenRow;
-        this.regenColumn = regenColumn;
+        // Calculate until all is finsihed.
+        map.calc();
+        hqPostProcessing = !map.finished;
     }
 
     public int getCount(int group) {
@@ -147,6 +98,10 @@ public abstract class HQ extends TeamRobot {
 
     public void comCapture(MapLocation loc, int group) throws GameActionException {
         Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, CAPTURE_PASTURE, loc, 200);
+    }
+
+    public void comSoundTower(MapLocation loc, int group) throws GameActionException {
+        Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, CAPTURE_SOUND, loc, 200);
     }
 
     public boolean comDestruct(int group) throws GameActionException {
@@ -182,7 +137,7 @@ public abstract class HQ extends TeamRobot {
     }
 
     public void createToySoldier(int group) throws GameActionException {
-        _spawn(SoldierSpawner.SOLDIER_TYPE_TOY_SOLDIER, group);
+        _spawn(SoldierSpawner.SOLDIER_TYPE_TOY_SOLDIER, group, null);
     }
 
     // TODO: $IMPROVEMENT$ We should make the group number have a channel to grab pasture location from
@@ -195,7 +150,7 @@ public abstract class HQ extends TeamRobot {
     }
 
     public void createDumbPastrHunter() throws GameActionException {
-        _spawn(SoldierSpawner.DUMB_PASTR_HUNTER, 0);
+        _spawn(SoldierSpawner.DUMB_PASTR_HUNTER, 0, null);
     }
 
     public void createPastureCapturer(int group, MapLocation pasture) throws GameActionException {
@@ -203,24 +158,15 @@ public abstract class HQ extends TeamRobot {
     }
 
     public void createBackDoorNoisePlanter(int group) throws GameActionException {
-        _spawn(SoldierSpawner.SOLDIER_TYPE_BACKDOOR_NOISE_PLANTER, group);
+        _spawn(SoldierSpawner.SOLDIER_TYPE_BACKDOOR_NOISE_PLANTER, group, null);
     }
 
     public void createJackal(int group) throws GameActionException {
-        _spawn(SoldierSpawner.SOLDIER_TYPE_JACKAL, group);
+        _spawn(SoldierSpawner.SOLDIER_TYPE_JACKAL, group, null);
     }
 
     public void createDefender(int group) throws GameActionException {
-        _spawn(SoldierSpawner.SOLDIER_TYPE_DEFENDER, group);
-    }
-
-    private void _spawn(int soldierType, int group) throws GameActionException {
-        Direction dir = _getSpawnDirection();
-        if (dir == null) {
-            return;
-        }
-        rc.spawn(dir);
-        Communicator.WriteNewSoldier(rc, soldierType, group, new MapLocation(1, 1));
+        _spawn(SoldierSpawner.SOLDIER_TYPE_DEFENDER, group, null);
     }
 
     private void _spawn(int soldierType, int group, MapLocation location) throws GameActionException {
@@ -229,7 +175,9 @@ public abstract class HQ extends TeamRobot {
             return;
         }
         rc.spawn(dir);
-        Communicator.WriteNewSoldier(rc, soldierType, group, location);
+
+        Communicator.WriteNewSoldier(rc, soldierType, group, Communicator.TWO_WAY_HQ_COM_BASE + twoWayComPosition, location);
+        twoWayComPosition = (twoWayComPosition + 1) % BehaviorConstants.HQ_SOLDIER_COM_MAX;
     }
 
     private Direction _getSpawnDirection() {

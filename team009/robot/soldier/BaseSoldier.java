@@ -2,7 +2,7 @@ package team009.robot.soldier;
 
 import battlecode.common.*;
 import team009.RobotInformation;
-import team009.communication.GroupCommandDecoder;
+import team009.communication.decoders.GroupCommandDecoder;
 import team009.robot.TeamRobot;
 
 public abstract class BaseSoldier extends TeamRobot {
@@ -11,8 +11,6 @@ public abstract class BaseSoldier extends TeamRobot {
     // -----------------------------------------------------
     public boolean seesEnemy = false;
     public Robot[] enemies = new Robot[0];
-    public int group;
-    public int type;
     public double health;
     public GroupCommandDecoder groupCommand;
     public GroupCommandDecoder hqCommand;

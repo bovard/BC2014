@@ -1,24 +1,16 @@
 package team009.bt.behaviors.hq;
 
-import battlecode.common.Direction;
 import battlecode.common.GameActionException;
-import battlecode.common.MapLocation;
 import team009.bt.behaviors.Behavior;
 import team009.robot.hq.HQ;
 
-public class HQSoundTower extends Behavior {
+public class HQCheese extends Behavior {
     private HQ hq;
     private int spawned = 0;
-    private MapLocation pasture;
-    private MapLocation soundTower;
 
-    public HQSoundTower(HQ robot) {
+    public HQCheese(HQ robot) {
         super(robot);
         hq = robot;
-
-        Direction perp = robot.info.enemyDir.rotateLeft().rotateLeft();
-        pasture = robot.info.hq.add(perp);
-        soundTower = robot.info.hq.add(perp.opposite());
     }
 
     @Override
@@ -40,12 +32,12 @@ public class HQSoundTower extends Behavior {
     @Override
     public boolean run() throws GameActionException {
         if (spawned == 0) {
-            hq.createSoundTower(0, soundTower);
+            hq.createToySoldier(2);
             spawned++;
             return true;
         }
         else if (spawned == 1) {
-            hq.createHerder(0, pasture);
+            hq.createToySoldier(3);
             spawned++;
             return true;
         }
