@@ -12,7 +12,7 @@ public class BehaviorConstants {
 
     // Cheese // TODO: very strict.  Only works on 2 levels. neighbors and rushlane
     public static final boolean CHEESE_ENABLED = true;
-    public static final int CHEESE_MILK_MINIMUM = 900;
+    public static final int CHEESE_MILK_MINIMUM = 600;
     public static final int CHEESE_HQ_ENEMY_MINIMUM_DISTANCE = 900;
 
     // Map Sizing
@@ -20,8 +20,8 @@ public class BehaviorConstants {
     public static final int MAP_MEDIUM_MINIMUM_AREA = 1200;
 
     // HQ Constants
-    public static final int HQ_REQUIRED_SOLDIER_COUNT_FOR_ATTACK = 6;
-    public static final int HQ_REQUIRED_SOLDIER_COUNT_FOR_GROUP_ATTACK = 8;
+    public static final int HQ_REQUIRED_SOLDIER_COUNT_FOR_ATTACK = 4;
+    public static final int HQ_REQUIRED_SOLDIER_COUNT_FOR_GROUP_ATTACK = 6;
     public static final int HQ_SOLDIER_COM_MAX = 35;
 
     // Milk Selection picking
@@ -31,4 +31,8 @@ public class BehaviorConstants {
 
     // Soldier Coms
     public static final double ATTACK_SOLDIER_MULTIPLIER = (2.0);
+
+    // Sound tower
+    public static final int NOISE_TOWER_REDUCTION = 2;
+    public static final boolean NOISE_TOWER_ENABLE_WITH_PASTURE = false;
 }

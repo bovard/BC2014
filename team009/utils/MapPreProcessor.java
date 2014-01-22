@@ -34,15 +34,15 @@ public class MapPreProcessor {
         int i = this.i;
         RobotController rc = this.rc;
 
-        while (k < rounds && i < height) {
-            for (;i < height; i++, k++) {
-                for (int j = 0; j < width; j++) {
+        while (k < rounds && i < width) {
+            for (; i < width; i++, k++) {
+                for (int j = 0; j < height; j++) {
                     map[i][j] = rc.senseTerrainTile(new MapLocation(i, j)) == TerrainTile.VOID ? 1 : 0;
                 }
             }
         }
 
-        finished = i == height;
+        finished = i == width;
         if (finished) {
             milks = rc.senseCowGrowth();
         }

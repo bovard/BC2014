@@ -34,7 +34,11 @@ public class SnailMove extends Move {
     }
 
     private boolean moveWrapper(boolean sneak) throws GameActionException {
-        Direction toMove = calcMove();
+
+        Direction toMove = null;
+        if (destination != null) {
+            toMove = calcMove();
+        }
 
         if (toMove != null) {
             if (sneak) {

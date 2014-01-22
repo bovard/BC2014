@@ -41,10 +41,8 @@ public class ToyHerderSelector extends Decision {
 
         // if our pastr has been killed, replace it!
         if (sound.pre()) {
-            System.out.println("Sound capturing");
             return sound.run();
         } else if (replace.pre()) {
-            System.out.println("Pastr capturing");
             return replace.run();
         }
 

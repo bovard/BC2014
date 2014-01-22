@@ -14,8 +14,8 @@ import team009.utils.SmartMapLocationArray;
 
 public abstract class HQ extends TeamRobot {
     private int twoWayComPosition;
-    private boolean postProcess = true;
 
+    public boolean hqPostProcessing = true;
     public int maxSoldiers;
     public SoldierCountDecoder[] soldierCounts;
     public boolean seesEnemy = false;
@@ -70,14 +70,13 @@ public abstract class HQ extends TeamRobot {
 
     @Override
     public void postProcessing() throws GameActionException {
-        if (!postProcess) {
+        if (!hqPostProcessing) {
             return;
         }
 
         // Calculate until all is finsihed.
-        System.out.println("MapCalc!");
         map.calc();
-        postProcess = !map.finished;
+        hqPostProcessing = !map.finished;
     }
 
     public int getCount(int group) {

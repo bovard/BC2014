@@ -30,7 +30,7 @@ public class SoundTowerBehavior extends Behavior {
         y = 0;
         angle = 0;
         currentDir = 0;
-        towerStrat = TOWER_STRAT_PULL_SPIRAL_SWEEP;
+        towerStrat = TOWER_STRAT_PULL_CARDNIAL;
         //spin around in a cirle shooting the gun
         //TODO is pastrLocs within enviornment check????
         //pastrLocs = robot.rc.sensePastrLocations(robot.info.myTeam);
@@ -98,8 +98,6 @@ public class SoundTowerBehavior extends Behavior {
             radius = radius-1;
             if(radius<=7) {
                 radius = MAX_DISTANCE; //range of the noise tower
-                //switch to other strat
-                towerStrat = TOWER_STRAT_PULL_CARDNIAL;
             }
         }
         MapLocation loc = new MapLocation(x,y);
@@ -114,8 +112,6 @@ public class SoundTowerBehavior extends Behavior {
             currentDir++;
             if(currentDir == directions.length) {
                 currentDir = 0;
-                //switch to other strat
-                towerStrat = TOWER_STRAT_PULL_SPIRAL_SWEEP;
             }
         }
         Direction dir = directions[currentDir];

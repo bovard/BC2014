@@ -99,7 +99,7 @@ public class Offensive extends HQ {
     @Override
     public void postProcessing() throws GameActionException {
         super.postProcessing();
-        if (cheeseStrat.finished) {
+        if (finishedPostCalc || hqPostProcessing) {
             return;
         }
 
@@ -139,13 +139,16 @@ public class Offensive extends HQ {
         center = new MapLocation(halfWidth, info.height / 2);
         MapLocation hq = info.hq;
         Direction dir = info.enemyDir;
+        int[][] map = this.map.map;
+        int width = info.width;
+        int height = info.height;
 
         for (int i = 0; i < 8; i++) {
             boolean found = true;
             MapLocation curr = hq;
             for (int j = 0; j < 3; j++) {
                 curr = curr.add(dir);
-                if (map.map[curr.x][curr.y] == 1) {
+                if (curr.x < 0 || curr.x > width || curr.y < 0 || curr.y > height && map[curr.x][curr.y] == 1) {
                     found = false;
                     break;
                 }
@@ -162,7 +165,7 @@ public class Offensive extends HQ {
         MapLocation curr = center;
         for (int i = 0; i < halfWidth; i++) {
             curr = curr.add(toHome);
-            if (map.map[curr.x][curr.y] == 0) {
+            if (map[curr.x][curr.y] == 0) {
                 bestCoverageLocation = curr;
                 break;
             }
