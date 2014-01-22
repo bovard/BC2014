@@ -19,7 +19,6 @@ public class MilkInformation {
     int nmeBase = -1, ourBase = -1;
 
     // The public information
-    public double[][] milks;
     public Box[] targetBoxes = new Box[2];
     public boolean finished = false;
 
@@ -61,7 +60,6 @@ public class MilkInformation {
             new Box(width30, height70, width70, height),
             new Box(width70, height70, width, height),
         };
-        milks = rc.senseCowGrowth();
     }
 
     public boolean calc() throws GameActionException {
@@ -69,6 +67,7 @@ public class MilkInformation {
         if (finished) {
             return true;
         }
+        double[][] milks = hq.map.milks;
 
         // Bases have been set
         if (!hasBasesSet) {
@@ -93,7 +92,6 @@ public class MilkInformation {
             hasBasesSet = true;
         }
         int roundsToProcess = (GameConstants.BYTECODE_LIMIT - (Clock.getBytecodeNum())) / 55;
-        double[][] milks = this.milks;
         int i = this.i, j = this.j;
         Box curr = this.curr;
 

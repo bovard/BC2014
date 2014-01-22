@@ -44,7 +44,7 @@ public class Offensive extends HQ {
         largeMap = info.width * info.height > BehaviorConstants.MAP_LARGE_MINIMUM_AREA;
         mediumMap = !largeMap && info.width * info.height > BehaviorConstants.MAP_MEDIUM_MINIMUM_AREA;
         milkInformation = new MilkInformation(this);
-        cheeseStrat = new CheesePostProcess(this, milkInformation);
+        cheeseStrat = new CheesePostProcess(this);
         chaseStrategy = new ChaseStrategyUtil(this);
     }
 
@@ -108,22 +108,18 @@ public class Offensive extends HQ {
         }
 
         if (!milkInformation.finished) {
-            System.out.println("Milk");
             milkInformation.calc();
             return;
         }
 
         if (!chaseStrategy.finished) {
-            System.out.println("Chase");
             chaseStrategy.calc();
             return;
         }
 
-        System.out.println("Cheese");
         cheeseStrat.calc();
 
         if (cheeseStrat.finished) {
-            rc.setIndicatorString(0, "Cheese: " + "Finished: " + cheeseStrat.cheese);
             finishedPostCalc = true;
         }
     }

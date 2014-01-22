@@ -26,22 +26,19 @@ public class SoldierSpawner {
         TeamRobot robot = null;
         try {
             SoldierDecoder decoder = Communicator.ReadNewSoldier(rc);
-            System.out.println("Decoder: " + decoder.toString());
 
             int type = decoder.soldierType;
             switch (type) {
-                case SOLDIER_TYPE_SOUND_TOWER:
-                    System.out.println("making new sound tower");
-                    robot = new SoundTowerCapture(rc, info, decoder.loc);
-                    break;
+//                case SOLDIER_TYPE_SOUND_TOWER:
+//                    robot = new SoundTowerCapture(rc, info, decoder.loc);
+//                    break;
 //                case DUMB_PASTR_HUNTER:
 //                    System.out.println("making new dumb herder");
 //                    robot = new DumbPastrHunter(rc, info);
 //                    break;
-                case SOLDIER_TYPE_HERDER:
-                    System.out.println("making new herder");
-                    robot = new Herder(rc, info, decoder.loc);
-                    break;
+//                case SOLDIER_TYPE_HERDER:
+//                    robot = new Herder(rc, info, decoder.loc);
+//                    break;
 //                case SOLDIER_TYPE_PASTURE_CAPTURER:
 //                    System.out.println("making new pasture capture");
 //                    robot = new PastureCapture(rc, info, decoder.loc);
@@ -64,7 +61,6 @@ public class SoldierSpawner {
 //                    break;
                 case SOLDIER_TYPE_TOY_SOLDIER:
                 default:
-                    System.out.println("Making Toy Soldier");
                     robot = new ToySoldier(rc, info);
                     break;
             }
