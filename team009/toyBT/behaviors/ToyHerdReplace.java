@@ -4,6 +4,7 @@ import battlecode.common.*;
 import team009.BehaviorConstants;
 import team009.bt.behaviors.Behavior;
 import team009.navigation.BugMove;
+import team009.robot.TeamRobot;
 import team009.robot.soldier.ToySoldier;
 
 public class ToyHerdReplace extends Behavior {
@@ -11,6 +12,7 @@ public class ToyHerdReplace extends Behavior {
     protected MapLocation pastureLocation;
     protected MapLocation soundLocation;
     protected ToySoldier soldier;
+    protected boolean sound = false;
 
     public ToyHerdReplace(ToySoldier robot) {
         super(robot);
@@ -38,12 +40,14 @@ public class ToyHerdReplace extends Behavior {
         atPasture = sensePasture ? rc.senseObjectAtLocation(pastureLocation) : null;
         atSound = senseSound ? rc.senseObjectAtLocation(soundLocation) : null;
 
+        sound = soldier.comCommand == TeamRobot.CAPTURE_SOUND && BehaviorConstants.NOISE_TOWER_ENABLE_WITH_PASTURE;
+
         if (BehaviorConstants.NOISE_TOWER_FIRST) {
-            return BehaviorConstants.NOISE_TOWER_ENABLE_WITH_PASTURE && senseSound && (atSound == null || robot.currentLoc.equals(soundLocation)) ||
+            return  sound && senseSound && (atSound == null || robot.currentLoc.equals(soundLocation)) ||
                     sensePasture && (atPasture == null || robot.currentLoc.equals(pastureLocation));
         } else {
             return sensePasture && (atPasture == null || robot.currentLoc.equals(pastureLocation)) ||
-                    BehaviorConstants.NOISE_TOWER_ENABLE_WITH_PASTURE && senseSound && (atSound == null || robot.currentLoc.equals(soundLocation));
+                    sound && senseSound && (atSound == null || robot.currentLoc.equals(soundLocation));
         }
     }
 
@@ -60,7 +64,7 @@ public class ToyHerdReplace extends Behavior {
     @Override
     public boolean run() throws GameActionException {
         if (BehaviorConstants.NOISE_TOWER_FIRST) {
-            if (robot.currentLoc.equals(soundLocation) && BehaviorConstants.NOISE_TOWER_ENABLE_WITH_PASTURE) {
+            if (robot.currentLoc.equals(soundLocation) && sound) {
                 robot.rc.construct(RobotType.NOISETOWER);
             } else if (robot.currentLoc.equals(pastureLocation)) {
                 robot.rc.construct(RobotType.PASTR);
@@ -68,7 +72,7 @@ public class ToyHerdReplace extends Behavior {
                 move.move();
             }
         } else {
-            if (robot.currentLoc.equals(soundLocation) && BehaviorConstants.NOISE_TOWER_ENABLE_WITH_PASTURE) {
+            if (robot.currentLoc.equals(soundLocation) && sound) {
                 robot.rc.construct(RobotType.NOISETOWER);
             } else if (robot.currentLoc.equals(pastureLocation)) {
                 robot.rc.construct(RobotType.PASTR);

@@ -19,13 +19,13 @@ public class HQChase extends WriteBehavior {
             MapLocation bestSpot0 = hq.getNextMilkingSpot();
             MapLocation bestSpot1 = hq.getNextMilkingSpot();
 
-            hq.comCapture(bestSpot0, 0);
-            hq.comCapture(bestSpot1, 1);
+            hq.comCapture(bestSpot0, 0, false);
+            hq.comCapture(bestSpot1, 1, false);
         } else if (hq.chase0 || hq.chase1) {
             MapLocation bestSpot = hq.getNextMilkingSpot();
 
-            hq.comCapture(bestSpot, 0);
-            hq.comCapture(bestSpot, 1);
+            hq.comCapture(bestSpot, 0, false);
+            hq.comCapture(bestSpot, 1, false);
         }
         return true;
     }
