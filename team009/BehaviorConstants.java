@@ -30,7 +30,7 @@ public class BehaviorConstants {
     // Milk Selection picking
     public static final int MILK_INFO_STRAT_CORNERS_AND_SIDES = 0;
     public static final int MILK_INFO_STRAT_CORNERS = 1;
-    public static final int MILK_INFO_STRAT = MILK_INFO_STRAT_CORNERS;
+    public static final int MILK_INFO_STRAT = MILK_INFO_STRAT_CORNERS_AND_SIDES;
 
     // Soldier Coms
     public static final double SOLDIER_COM_ATTACK_MULTIPLIER = (1.5);
