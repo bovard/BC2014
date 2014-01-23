@@ -9,6 +9,7 @@ import team009.robot.TeamRobot;
 public class Com extends Decision {
     Behavior write;
     Behavior read;
+    Behavior extraCom = null;
 
     public Com(TeamRobot robot) {
         super(robot);
@@ -24,6 +25,8 @@ public class Com extends Decision {
             write.run();
         } else if (robot.round % Communicator.INFORMATION_ROUND_MOD == 1) {
             read.run();
+        } else if (extraCom != null && robot.round % Communicator.INFORMATION_ROUND_MOD == 2) {
+            extraCom.run();
         }
         return true;
     }

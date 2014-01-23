@@ -14,6 +14,9 @@ public class BehaviorConstants {
     public static final boolean CHEESE_ENABLED = true;
     public static final double CHEESE_MULTIPLIER = 1.5;
 
+    // One base strat
+    public static final boolean ONE_BASE_ENABLED = true;
+
     // Map Sizing
     public static final int MAP_LARGE_MINIMUM_AREA = 2000;
     public static final int MAP_MEDIUM_MINIMUM_AREA = 1200;
@@ -30,7 +33,7 @@ public class BehaviorConstants {
     public static final int MILK_INFO_STRAT = MILK_INFO_STRAT_CORNERS;
 
     // Soldier Coms
-    public static final double ATTACK_SOLDIER_MULTIPLIER = (5.0);
+    public static final double SOLDIER_COM_ATTACK_MULTIPLIER = (1.5);
     public static final int ATTACK_SOLDIER_MAX = 15;
 
     // Sound tower
