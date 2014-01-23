@@ -36,14 +36,15 @@ public class BugMove extends Move {
 
     @Override
     public boolean move() throws GameActionException {
+        stepsTaken++;
         return moveWrapper(false);
     }
 
     @Override
     public boolean sneak() throws GameActionException {
+        stepsTaken++;
         return moveWrapper(true);
     }
-
 
     private boolean moveWrapper(boolean sneak) throws GameActionException {
         Direction toMove = calcMove();
@@ -60,9 +61,9 @@ public class BugMove extends Move {
     }
 
 
-    private Direction calcMove() {
-        if (!robot.rc.isActive())
-            return null;
+    public Direction calcMove() {
+        if (!robot.rc.isActive()) return null;
+        if (destination == null) return null;
 
         Direction toMove = robot.currentLoc.directionTo(destination);
         if (toMove == Direction.NONE || toMove == Direction.OMNI)

@@ -45,6 +45,7 @@ public class EngageLoneEnemyPastr extends Behavior {
             return true;
         }
 
-        return false;
+        System.out.println("Something weird happened in pastr engage");
+        return true;
     }
 }

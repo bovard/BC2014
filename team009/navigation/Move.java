@@ -7,6 +7,7 @@ import team009.robot.TeamRobot;
 public abstract class Move {
     public MapLocation destination;
     protected TeamRobot robot;
+    public int stepsTaken = 0;
 
     public Move(TeamRobot robot) {
         this.robot = robot;
@@ -31,6 +32,7 @@ public abstract class Move {
 		} else if (destination.y < 0) {
 			destination = new MapLocation(destination.x, 0);
 		}
+        stepsTaken = 0;
         this.destination = destination;
     }
 

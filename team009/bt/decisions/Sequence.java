@@ -37,7 +37,6 @@ public abstract class Sequence extends Decision {
                     return true;
                 }
             } else {
-                rc.setIndicatorString(3, "OMG!! Something is borked.");
                 return false;
             }
         }
