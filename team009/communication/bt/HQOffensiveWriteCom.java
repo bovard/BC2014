@@ -3,10 +3,10 @@ package team009.communication.bt;
 import battlecode.common.GameActionException;
 import team009.communication.bt.behaviors.WriteBehavior;
 import team009.communication.bt.behaviors.hq.*;
-import team009.robot.hq.Offensive;
+import team009.robot.hq.Seeding;
 
 public class HQOffensiveWriteCom extends WriteBehavior {
-    Offensive hq;
+    Seeding hq;
 
     HQCheeseCom cheese;
     HQOneBase oneBase;
@@ -14,7 +14,7 @@ public class HQOffensiveWriteCom extends WriteBehavior {
     HQHunt hunt;
     HQReturnToHome home;
 
-    public HQOffensiveWriteCom(Offensive off) {
+    public HQOffensiveWriteCom(Seeding off) {
         super(off);
         hq = off;
 

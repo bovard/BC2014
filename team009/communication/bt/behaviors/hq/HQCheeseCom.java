@@ -2,10 +2,10 @@ package team009.communication.bt.behaviors.hq;
 
 import battlecode.common.GameActionException;
 import team009.communication.bt.behaviors.WriteBehavior;
-import team009.robot.hq.Offensive;
+import team009.robot.hq.Seeding;
 
 public class HQCheeseCom extends WriteBehavior {
-    Offensive hq;
+    Seeding hq;
 
     // TODO: Keep track of what is actually placed so that way we can stop checking the rest of the pres.
     // make efficient!
@@ -13,7 +13,7 @@ public class HQCheeseCom extends WriteBehavior {
     boolean pasture = false;
     boolean done = false;
 
-    public HQCheeseCom(Offensive off) {
+    public HQCheeseCom(Seeding off) {
         super(off);
         hq = off;
     }

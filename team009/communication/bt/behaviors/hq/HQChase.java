@@ -3,12 +3,12 @@ package team009.communication.bt.behaviors.hq;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import team009.communication.bt.behaviors.WriteBehavior;
-import team009.robot.hq.Offensive;
+import team009.robot.hq.Seeding;
 
 public class HQChase extends WriteBehavior {
-    Offensive hq;
+    Seeding hq;
 
-    public HQChase(Offensive off) {
+    public HQChase(Seeding off) {
         super(off);
         hq = off;
     }

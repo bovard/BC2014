@@ -5,11 +5,12 @@ import battlecode.common.GameConstants;
 import team009.bt.behaviors.Behavior;
 import team009.robot.TeamRobot;
 import team009.robot.hq.HQ;
+import team009.robot.hq.Seeding;
 
-public class HQOffensive extends Behavior {
+public class HQSeeding extends Behavior {
     private HQ hq;
 
-    public HQOffensive(HQ robot) {
+    public HQSeeding(HQ robot) {
         super(robot);
         hq = robot;
     }
@@ -41,9 +42,11 @@ public class HQOffensive extends Behavior {
 
         // spawn guys
         if (robot.rc.isActive() && robotCount < GameConstants.MAX_ROBOTS) {
-            if (toyCount1 < toyCount0) {
+            if (toyCount1 < toyCount0 && ((Seeding)hq).spawnTwoGroups) {
+                System.out.println("Creating a group 1");
                 hq.createToySoldier(1);
             } else {
+                System.out.println("Creating a group 0");
                 hq.createToySoldier(0);
             }
             return true;

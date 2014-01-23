@@ -2,23 +2,23 @@ package team009.bt.decisions.hq;
 
 import battlecode.common.GameActionException;
 import team009.bt.behaviors.hq.HQCheese;
-import team009.bt.behaviors.hq.HQOffensive;
+import team009.bt.behaviors.hq.HQSeeding;
 import team009.bt.behaviors.hq.HQShoot;
 import team009.bt.decisions.Decision;
-import team009.robot.hq.Offensive;
+import team009.robot.hq.Seeding;
 
 // TODO: Make this more efficient by hard coding the available states.
-public class OffensiveSelector extends Decision {
+public class SeedingSelector extends Decision {
     HQShoot shoot;
-    HQOffensive spawn;
+    HQSeeding spawn;
     HQCheese sound;
 
-    Offensive hq;
+    Seeding hq;
 
-    public OffensiveSelector(Offensive robot) {
+    public SeedingSelector(Seeding robot) {
         super(robot);
         shoot = new HQShoot(robot);
-        spawn = new HQOffensive(robot);
+        spawn = new HQSeeding(robot);
         sound = new HQCheese(robot);
         hq = robot;
     }
@@ -31,9 +31,16 @@ public class OffensiveSelector extends Decision {
     @Override
     public boolean run() throws GameActionException {
         System.out.println("Running: " + hq.cheese);
+        boolean shot = false;
         if (shoot.pre()) {
-            shoot.run();
-        } else if (hq.cheese && sound.pre()) {
+            shot = shoot.run();
+        }
+
+        if (shot) {
+            return true;
+        }
+
+        if (hq.cheese && sound.pre()) {
             sound.run();
         } else {
             spawn.run();
