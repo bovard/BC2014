@@ -42,7 +42,7 @@ public class HQSeeding extends Behavior {
 
         // spawn guys
         if (robot.rc.isActive() && robotCount < GameConstants.MAX_ROBOTS) {
-            if (toyCount1 < toyCount0 && ((Seeding)hq).spawnTwoGroups) {
+            if (toyCount1 < toyCount0) {
                 System.out.println("Creating a group 1");
                 hq.createToySoldier(1);
             } else {
