@@ -20,6 +20,9 @@ public class Seeding extends HQ {
     public boolean chase0 = false;
     public boolean chase1 = false;
 
+    // tells the hq if it should spawn 2 groups (updated at the end of environ check)
+    public boolean spawnTwoGroups = false;
+
     // Cheese variables
     public boolean cheese = false;
 
@@ -96,6 +99,7 @@ public class Seeding extends HQ {
             oneBase = !hunt0 && Clock.getRoundNum() > BehaviorConstants.HQ_SMALL_MAP_ONE_BASE_ROUND_NUMBER;
         }
         huddle = !hunt0 && !hunt1 && !chase0 && !chase1 && !oneBase;
+        spawnTwoGroups = hunt1 || chase1;
     }
 
     @Override
