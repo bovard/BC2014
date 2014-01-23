@@ -25,7 +25,7 @@ public class HQCheeseCom extends WriteBehavior {
         }
 
         if (hq.getCount(2) > 0) {
-            hq.comCapture(hq.cheeseStrat.pasture, 2);
+            hq.comCapture(hq.cheeseStrat.pasture, 2, false);
         }
 
         if (hq.getCount(3) > 0) {
