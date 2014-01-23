@@ -3,7 +3,7 @@ package team009;
 public class BehaviorConstants {
 
     // Chase Strategies.
-    public static final boolean CHASE_ENABLED = true;
+    public static final boolean CHASE_ENABLED = false;
     public static final int CHASE_STRATEGY_MINIMUM = 100;
     public static final int CHASE_STRATEGY_MAP_MINIMUM = 1200;
     public static final boolean CHASE_CAN_CANCEL_FOR_HUNT = false;
