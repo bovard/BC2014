@@ -12,8 +12,7 @@ public class BehaviorConstants {
 
     // Cheese // TODO: very strict.  Only works on 2 levels. neighbors and rushlane
     public static final boolean CHEESE_ENABLED = true;
-    public static final int CHEESE_MILK_MINIMUM = 600;
-    public static final int CHEESE_HQ_ENEMY_MINIMUM_DISTANCE = 900;
+    public static final double CHEESE_MULTIPLIER = 1.5;
 
     // Map Sizing
     public static final int MAP_LARGE_MINIMUM_AREA = 2000;
