@@ -86,7 +86,7 @@ public class Offensive extends HQ {
             hunt0 = hasPastures && combinedEnoughAttack;
             hunt1 = hunt0 && enough0Attack && enough1Attack;
 
-            if (combinedEnoughAttack && !hunt0) {
+            if (combinedEnoughAttack && !hunt0 && BehaviorConstants.ONE_BASE_ENABLED) {
                 oneBase = true;
             }
         }
