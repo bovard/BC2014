@@ -11,11 +11,11 @@ public class BehaviorConstants {
     public static final int CHASE_REQUIRED_SOLDIER_COUNT = 1;
 
     // Cheese // TODO: very strict.  Only works on 2 levels. neighbors and rushlane
-    public static final boolean CHEESE_ENABLED = false;
+    public static final boolean CHEESE_ENABLED = true;
     public static final double CHEESE_MULTIPLIER = 1.5;
 
     // One base strat
-    public static final boolean ONE_BASE_ENABLED = true;
+    public static final boolean ONE_BASE_ENABLED = false;
 
     // Map Sizing
     public static final int MAP_LARGE_MINIMUM_AREA = 2000;
