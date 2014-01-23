@@ -1,6 +1,7 @@
 package team009.communication;
 
 import battlecode.common.*;
+import team009.communication.decoders.*;
 import team009.robot.soldier.SoldierSpawner;
 
 public class Communicator {
@@ -9,18 +10,18 @@ public class Communicator {
     // WRITING
     //-----------------------------------------------------
 
-    public static void WriteNewSoldier(RobotController rc, int soldierType, int group, MapLocation location) throws GameActionException {
-        SoldierDecoder decoder = new SoldierDecoder(soldierType, group, location);
+    public static void WriteNewSoldier(RobotController rc, int soldierType, int group, int comChannel, MapLocation location) throws GameActionException {
+        SoldierDecoder decoder = new SoldierDecoder(soldierType, group, comChannel, location);
         _Broadcast(rc, NEW_SOLDIER_CHANNEL, decoder);
     }
 
     public static void WriteToGroup(RobotController rc, int group, int channel, int command, MapLocation location) throws GameActionException {
-        GroupCommandDecoder decoder = new GroupCommandDecoder(group, command, location);
-        _Broadcast(rc, _GroupChannel(group, channel), decoder);
+        WriteToGroup(rc, group, channel, command, location, -1);
     }
 
     public static void WriteToGroup(RobotController rc, int group, int channel, int command, MapLocation location, int ttl) throws GameActionException {
         GroupCommandDecoder decoder = new GroupCommandDecoder(group, command, location, ttl);
+
         _Broadcast(rc, _GroupChannel(group, channel), decoder);
     }
 
@@ -31,6 +32,11 @@ public class Communicator {
         // Incs the channel
         decoder.count++;
         _Broadcast(rc, channel, decoder);
+    }
+
+    // The two way communication
+    public static void WriteTwoWayCommunicate(RobotController rc, int channel, int command, MapLocation from, MapLocation to) throws GameActionException {
+        _Broadcast(rc, channel, new TwoWayDecoder(from, to, command).getData());
     }
 
     //-----------------------------------------------------
@@ -52,23 +58,24 @@ public class Communicator {
     }
 
     public static GroupCommandDecoder ReadFromGroup(RobotController rc, int group, int channel) throws GameActionException {
-        GroupCommandDecoder decoder = new GroupCommandDecoder(rc.readBroadcast(GROUP_CHANNEL_BASE + group));
-        decoder.ttl--;
+        int groupChannel = _GroupChannel(group, channel);
+        // TODO: $DEBUG$
+        GroupCommandDecoder decoder = new GroupCommandDecoder(rc.readBroadcast(groupChannel));
 
         // No Coms yet on this channel
-        // TODO: $DEBUG$
-        rc.setIndicatorString(2, "Group Read(" + (GROUP_CHANNEL_BASE + group) + "): " + decoder.toString());
 
         // Shortcut it, clear the channel
-        if (decoder.ttl <= 0) {
-
-            // Clears channel
-            ClearCommandChannel(rc, group, channel);
+        if (decoder.command == 0) {
             return new GroupCommandDecoder(0);
         }
 
-        _Broadcast(rc, _GroupChannel(group, channel), decoder);
+        _Broadcast(rc, groupChannel, decoder.getData());
         return decoder;
+    }
+
+    // The two way communication
+    public static TwoWayDecoder ReadTwoWayCommunicate(RobotController rc, int channel) throws GameActionException {
+        return new TwoWayDecoder(rc.readBroadcast(channel));
     }
 
     //-----------------------------------------------------
@@ -79,7 +86,7 @@ public class Communicator {
         _Broadcast(rc, soldierType * MAX_GROUP_COUNT + group, 0);
     }
 
-    public static void ClearCommandChannel(RobotController rc, int group, int channel) throws GameActionException {
+    public static void ClearGroupChannel(RobotController rc, int group, int channel) throws GameActionException {
         _Broadcast(rc, _GroupChannel(group, channel), 0);
     }
 
@@ -93,9 +100,6 @@ public class Communicator {
 
     private static void _Broadcast(RobotController rc, int channel, CommunicationDecoder decoder) throws GameActionException {
         _Broadcast(rc, channel, decoder.getData());
-
-        // TODO: $DEBUG$
-        rc.setIndicatorString(1, "Broadcasted(" + channel + "): " + decoder.getData() + " : " + decoder.toString());
     }
 
     private static void _Broadcast(RobotController rc, int channel, int data) throws GameActionException {
@@ -119,8 +123,11 @@ public class Communicator {
     public static final int GROUP_HQ_CHANNEL = 1;
     public static final int GROUP_CENTROID_CHANNEL = 2;
     protected static final int GROUP_CHANNEL_COUNT = 3;
-    protected static int GROUP_CHANNEL_BASE = SOLDIER_TYPE_CHANNEL_BASE + MAX_GROUP_COUNT * SoldierSpawner.SOLDIER_COUNT;
+    protected static final int GROUP_CHANNEL_BASE = SOLDIER_TYPE_CHANNEL_BASE + MAX_GROUP_COUNT * SoldierSpawner.SOLDIER_COUNT;
+
+    // The two way communications HQ < - > Soldier
+    public static final int TWO_WAY_HQ_COM_BASE = GROUP_CHANNEL_BASE + MAX_GROUP_COUNT * GROUP_CHANNEL_COUNT;
 
     // Group channels go for group channel count + 5;
-    protected static final int INFORMATION_ROUND_MOD = 4;
+    public static final int INFORMATION_ROUND_MOD = 4;
 }

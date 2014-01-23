@@ -2,8 +2,8 @@ package team009.bt.behaviors.hq;
 
 import battlecode.common.GameActionException;
 import team009.bt.behaviors.Behavior;
+import team009.robot.TeamRobot;
 import team009.robot.hq.HQ;
-import team009.robot.soldier.BaseSoldier;
 
 public class HQDefensive extends Behavior {
     HQ hq;
@@ -31,7 +31,7 @@ public class HQDefensive extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
-        hq.createDefender(BaseSoldier.DEFENDER_GROUP);
+        hq.createDefender(0);
         return false;
     }
 }

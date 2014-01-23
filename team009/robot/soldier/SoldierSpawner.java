@@ -4,7 +4,8 @@ import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
 import team009.RobotInformation;
 import team009.communication.Communicator;
-import team009.communication.SoldierDecoder;
+import team009.communication.decoders.SoldierDecoder;
+import team009.robot.TeamRobot;
 
 public class SoldierSpawner {
 
@@ -17,14 +18,14 @@ public class SoldierSpawner {
     public static final int SOLDIER_TYPE_BACKDOOR_NOISE_PLANTER = 6;
     public static final int SOLDIER_TYPE_JACKAL = 7;
     public static final int SOLDIER_TYPE_DEFENDER = 8;
-    public static final int SOLDIER_COUNT = 9;
+    public static final int SOLDIER_TYPE_TOY_SOLDIER = 9;
+    public static final int SOLDIER_COUNT = 10;
 
 
-    public static BaseSoldier getSoldier(RobotController rc, RobotInformation info) {
-        BaseSoldier robot = null;
+    public static TeamRobot getSoldier(RobotController rc, RobotInformation info) {
+        TeamRobot robot = null;
         try {
             SoldierDecoder decoder = Communicator.ReadNewSoldier(rc);
-            System.out.println("New Soldier: " + decoder.toString());
 
             int type = decoder.soldierType;
             switch (type) {
@@ -58,14 +59,17 @@ public class SoldierSpawner {
                     break;
                 case SOLDIER_TYPE_DEFENDER:
                 case SOLDIER_TYPE_DUMB:
-                default:
-                    System.out.println("making new dumb soldier");
                     robot = new Defender(rc, info);
+                    break;
+                case SOLDIER_TYPE_TOY_SOLDIER:
+                default:
+                    robot = new ToySoldier(rc, info);
                     break;
             }
 
             robot.group = decoder.group;
             robot.type = type;
+            robot.twoWayChannel = decoder.comChannel;
         } catch (GameActionException e) {
             e.printStackTrace();
         }

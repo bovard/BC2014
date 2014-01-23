@@ -2,18 +2,15 @@ package team009.robot.soldier;
 
 import battlecode.common.*;
 import team009.RobotInformation;
-import team009.communication.GroupCommandDecoder;
+import team009.communication.decoders.GroupCommandDecoder;
 import team009.robot.TeamRobot;
 
 public abstract class BaseSoldier extends TeamRobot {
-    public static final int DEFENDER_GROUP = 1;
     // -----------------------------------------------------
     // Commands
     // -----------------------------------------------------
     public boolean seesEnemy = false;
     public Robot[] enemies = new Robot[0];
-    public int group;
-    public int type;
     public double health;
     public GroupCommandDecoder groupCommand;
     public GroupCommandDecoder hqCommand;
@@ -62,8 +59,4 @@ public abstract class BaseSoldier extends TeamRobot {
         return null;
     }
 
-    // Somtimes i wish valid identifiers could contain explanation points!
-    public static final int RETURN_TO_BASE = 1;
-    public static final int ATTACK_PASTURE = 2;
-    public static final int ATTACK = 3;
 }

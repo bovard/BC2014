@@ -4,8 +4,7 @@ import battlecode.common.*;
 import team009.RobotInformation;
 import team009.bt.Node;
 import team009.communication.bt.SoldierCom;
-import team009.combat.CombatUtils;
-import team009.communication.GroupCommandDecoder;
+import team009.communication.decoders.GroupCommandDecoder;
 import team009.robot.TeamRobot;
 import team009.toyBT.ToySelector;
 import team009.utils.SmartRobotInfoArray;
@@ -19,25 +18,34 @@ public class ToySoldier extends TeamRobot {
     public boolean seesEnemyNoise = false;
     public boolean seesEnemyPastr = false;
     public boolean seesEnemyHQ = false;
-    public SmartRobotInfoArray enemySoldiers = new SmartRobotInfoArray();
-    public SmartRobotInfoArray enemyPastrs = new SmartRobotInfoArray();
-    public SmartRobotInfoArray enemyNoise = new SmartRobotInfoArray();
+    public boolean engagedInCombat = false;
+    public SmartRobotInfoArray enemySoldiers;
+    public SmartRobotInfoArray friendlySoldiers;
+    public SmartRobotInfoArray friendlyPastrs;
+    public SmartRobotInfoArray enemyPastrs;
+    public SmartRobotInfoArray enemyNoise;
     public GroupCommandDecoder groupCommand;
     public GroupCommandDecoder hqCommand;
     public Robot[] enemies = new Robot[0];
     public Robot[] allies = new Robot[0];
-    public RobotInfo[] enemyRobotInfo = new RobotInfo[0];
-    public int group;
-    public int type;
     public MapLocation currentLoc;
     public MapLocation lastLoc;
+    public MapLocation comLocation;
+    public int comCommand = 0;
     public double health;
     public GroupCommandDecoder decoder;
+    public int sensorRadiusSquared = RobotType.SOLDIER.sensorRadiusSquared;
+
+
+    // Permanent behaviors from coms.
+    public boolean isHunter = true;
+    public boolean isHerder = false;
 
     public ToySoldier(RobotController rc, RobotInformation info) {
         super(rc, info);
         treeRoot = new ToySelector(this);
         comRoot = new SoldierCom(this);
+        comLocation = new MapLocation(0, 0);
     }
 
     @Override
@@ -54,31 +62,52 @@ public class ToySoldier extends TeamRobot {
         }
         currentLoc = temp;
         health = rc.getHealth();
+        enemySoldiers = new SmartRobotInfoArray();
+        enemyNoise = new SmartRobotInfoArray();
+        enemyPastrs = new SmartRobotInfoArray();
+        friendlySoldiers = new SmartRobotInfoArray();
+        friendlyPastrs = new SmartRobotInfoArray();
 
         // micro stuff
-        enemies = rc.senseNearbyGameObjects(Robot.class, 100, info.enemyTeam);
         // TODO: get a better picture by sensing how many of our allies are soliders?
-        allies = rc.senseNearbyGameObjects(Robot.class, 100, info.myTeam);
-        enemyRobotInfo = CombatUtils.getRobotInfo(enemies, rc);
-        enemySoldiers.length = 0;
-        enemyNoise.length = 0;
-        enemyPastrs.length = 0;
-        seesEnemyHQ = false;
-        for ( RobotInfo r : enemyRobotInfo) {
-            if (r.type == RobotType.HQ) {
-                seesEnemyHQ = true;
-            } else if (r.type == RobotType.SOLDIER) {
-                enemySoldiers.add(r);
-            } else if (r.type == RobotType.NOISETOWER) {
-                enemyNoise.add(r);
-            } else if (r.type == RobotType.PASTR) {
-                enemyPastrs.add(r);
+        // TODO: Morph this into one call (thats an extra 100 byte codes for no reason)
+        Robot[] robots = rc.senseNearbyGameObjects(Robot.class, sensorRadiusSquared);
+        for (Robot r : robots) {
+            RobotInfo info = rc.senseRobotInfo(r);
+
+            if (info.team == this.info.enemyTeam) {
+                if (info.type == RobotType.HQ) {
+                    seesEnemyHQ = true;
+                } else if (info.type == RobotType.SOLDIER) {
+                    enemySoldiers.add(info);
+                } else if (info.type == RobotType.NOISETOWER) {
+                    enemyNoise.add(info);
+                } else if (info.type == RobotType.PASTR) {
+                    enemyPastrs.add(info);
+                }
+            } else {
+                if (info.type == RobotType.SOLDIER) {
+                    friendlySoldiers.add(info);
+                } else if (info.type == RobotType.PASTR) {
+                    friendlyPastrs.add(info);
+                }
             }
         }
+
+        seesEnemyHQ = false;
         seesEnemySoldier = enemySoldiers.length > 0;
         seesEnemyPastr = enemyPastrs.length > 0;
         seesEnemyNoise = enemyNoise.length > 0;
         seesEnemyTeamNonHQRobot = seesEnemySoldier || seesEnemyNoise || seesEnemyPastr;
         seesEnemyTeamNonHQBuilding = seesEnemyNoise || seesEnemyPastr;
+        engagedInCombat = enemySoldiers.length > 0 && currentLoc.distanceSquaredTo(enemySoldiers.arr[0].location) < RobotType.SOLDIER.attackRadiusMaxSquared;
+
+        // What type of toy soldier is this.
+        // TODO: Bovard what to do?
+        isHerder = comCommand == CAPTURE_PASTURE || comCommand == CAPTURE_SOUND;
+        isHunter = !isHerder;
     }
+
+    // TODO: WayPointing?
+    public void postProcessing() throws GameActionException {}
 }

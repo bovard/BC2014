@@ -32,7 +32,6 @@ public class MoveRandom extends Behavior {
     @Override
     public boolean run() throws GameActionException {
         // move randomly
-        rc.setIndicatorString(0, "I am stuck!!");
 
         Direction dir = MapUtils.getRandomDir();
         boolean done = false;
@@ -47,8 +46,6 @@ public class MoveRandom extends Behavior {
         }
         if (done) {
             rc.move(dir);
-        } else {
-            rc.setIndicatorString(0, "I AM STUCK!!!");
         }
         return true;
     }
