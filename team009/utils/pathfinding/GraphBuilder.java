@@ -119,6 +119,10 @@ public class GraphBuilder {
         waypoint_index = 0;
     }
 
+    public boolean isInsideCorner(int x, int y, int j, int k, int[][] map) {
+        return ((isValid(x + j + k, y + j + k) && isValid(x + k, y + j) && map[x + j + k][y + j + k] == 1 && map[x+k][y+j] != 1) || (isValid(x + (j - k), y + (k - j)) && isValid(x-k, y-j) && map[x + (j - k)][y + (k - j)] == 1 && map[x-k][y-j] != 1));
+    }
+
     /**
      * Checks all newly added obstacles for waypoints, adds any found, then
      * rebuilds the adjacency matrix. You *must* ensure that you *only* update
@@ -143,7 +147,7 @@ public class GraphBuilder {
                             waypoints[waypoint_index] = new Point(x + j, y + k);
                             waypoint_index++;
                         } else if ((Math.abs(j) == 1 || Math.abs(k) == 1) && !(Math.abs(j) == 1 && Math.abs(k) == 1)) {
-                            if ((isValid(x + j + k, y + j + k) && map[x + j + k][y + j + k] == 1) || (isValid(x + (j - k), y - (j + k)) && map[x + (j - k)][y - (j + k)] == 1)) {
+                            if (isInsideCorner(x, y, j, k, map)) {
                                 waypoints[waypoint_index] = new Point(x + j, y + k);
                                 waypoint_index++;
                             }
@@ -152,7 +156,6 @@ public class GraphBuilder {
                 }
             }
         }
-
         adjacency_matrix = new int[waypoint_index + 2][waypoint_index + 2];
         for (int i = 0; i < waypoint_index; i++) {
             for (int j = i + 1; j < waypoint_index; j++) {
