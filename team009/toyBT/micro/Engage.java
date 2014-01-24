@@ -24,7 +24,7 @@ public class Engage extends Behavior {
                 return true;
             }
         }
-        System.out.println("something weird happened in Engage");
+        //System.out.println("something weird happened in Engage");
         return true;
     }
 }

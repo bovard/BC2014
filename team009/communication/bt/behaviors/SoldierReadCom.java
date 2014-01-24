@@ -35,7 +35,7 @@ public class SoldierReadCom extends ReadBehavior {
 
         // Gets soldier count in group
         soldier.myGroupCount = Communicator.ReadTypeAndGroup(rc, SoldierSpawner.SOLDIER_TYPE_TOY_SOLDIER, robot.group).count;
-        System.out.println("MyGroupCount: " + soldier.myGroupCount);
+        //System.out.println("MyGroupCount: " + soldier.myGroupCount);
 
         return true;
     }

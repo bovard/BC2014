@@ -75,7 +75,7 @@ public class MilkInformation {
             return true;
         }
 
-        System.out.println("Milking");
+        //System.out.println("Milking");
         // Bases have been set
         if (!hasBasesSet) {
             int x = info.hq.x;
@@ -153,7 +153,7 @@ public class MilkInformation {
         }
 
         if (i == curr.x2 - 1) {
-            System.out.println("Next: " + curr.id + " : " + curr.next);
+            //System.out.println("Next: " + curr.id + " : " + curr.next);
             if (curr.next == null) {
                 finished = true;
             } else {

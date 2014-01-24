@@ -82,7 +82,7 @@ public class ToyHerdSneak extends Behavior {
             if (robot.rc.canMove(heardDirection)) {
                 robot.rc.sneak(heardDirection);
             } else {
-                System.out.println("FORGOT TO CHECK POST NooB");
+                //System.out.println("FORGOT TO CHECK POST NooB");
             }
 
         }

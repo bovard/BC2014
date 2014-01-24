@@ -35,34 +35,34 @@ public class HQShoot extends Behavior {
         //DumbCombat.Attack(rc, hq.enemies, robot.currentLoc);
         RobotInfo[] infos = CombatUtils.getRobotInfo(hq.enemies, robot.rc);
 
-        System.out.println("Shooting");
-        System.out.println("Looking for direct hits");
+        //System.out.println("Shooting");
+        //System.out.println("Looking for direct hits");
         // looking for direct hits
         for (int i = 0; i < infos.length; i++) {
             RobotInfo info = infos[i];
-            System.out.println(info.location.toString());
+            //System.out.println(info.location.toString());
 
             // TODO: Actual micro!
             if (hq.rc.canAttackSquare(info.location)) {
-                System.out.println("Shooting " + info.location.toString());
+                //System.out.println("Shooting " + info.location.toString());
                 hq.rc.attackSquare(info.location);
                 return true;
             }
         }
         // second pass, look for splash hits
-        System.out.println("Looking for splash hits");
+        //System.out.println("Looking for splash hits");
         for (int i = 0; i < infos.length; i++) {
             RobotInfo info = infos[i];
-            System.out.println(info.location.toString());
+            //System.out.println(info.location.toString());
             MapLocation toHit = info.location.add(info.location.directionTo(hq.info.hq));
             if (hq.rc.canAttackSquare(toHit)) {
-                System.out.println("Shooting " + toHit.toString());
+                //System.out.println("Shooting " + toHit.toString());
                 hq.rc.attackSquare(toHit);
                 return true;
             }
 
         }
-        System.out.println("Didn't shoot");
+        //System.out.println("Didn't shoot");
 
         return false;
     }

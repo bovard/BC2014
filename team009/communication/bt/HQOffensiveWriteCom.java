@@ -28,21 +28,21 @@ public class HQOffensiveWriteCom extends WriteBehavior {
     @Override
     public boolean run() throws GameActionException {
         if (hq.cheese) {
-            rc.setIndicatorString(0, "Running Cheese");
+            //rc.setIndicatorString(0, "Running Cheese");
             cheese.run();
         }
 
         if (hq.chase0 || hq.chase1) {
-            rc.setIndicatorString(1, "Running Chase");
+            //rc.setIndicatorString(1, "Running Chase");
             chase.run();
         } else if (hq.hunt0 || hq.hunt1) {
-            rc.setIndicatorString(1, "Running Hunt");
+            //rc.setIndicatorString(1, "Running Hunt");
             hunt.run();
         } else if (hq.oneBase) {
-            rc.setIndicatorString(1, "Running OneBase");
+            //rc.setIndicatorString(1, "Running OneBase");
             oneBase.run();
         } else if (hq.huddle) {
-            rc.setIndicatorString(1, "Running Home");
+            //rc.setIndicatorString(1, "Running Home");
             home.run();
         }
 

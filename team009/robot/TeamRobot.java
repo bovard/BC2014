@@ -99,13 +99,15 @@ public abstract class TeamRobot {
 
             } catch (Exception e) {
                 e.printStackTrace();
+                /*
                 String str = "Error: " + e.getMessage();
                 if (this instanceof ToySoldier) {
                     str += " : " + ((ToySoldier)this).group;
                     str += " : " + ((ToySoldier)this).comLocation;
                     str += " : " + ((ToySoldier)this).comCommand;
                 }
-                rc.setIndicatorString(2, str);
+                */
+                //rc.setIndicatorString(2, str);
             }
 
 
@@ -113,7 +115,7 @@ public abstract class TeamRobot {
             try {
                 this.postProcessing();
             } catch (Exception e) {
-                System.out.println("Load error: " );
+                //System.out.println("Load error: " );
                 e.printStackTrace();
             }
 
@@ -123,7 +125,7 @@ public abstract class TeamRobot {
             if (round == Clock.getRoundNum()) {
                 this.rc.yield();
             } else {
-                System.out.println("BYTECODE LIMIT EXCEEDED!");
+                //System.out.println("BYTECODE LIMIT EXCEEDED!");
             }
         }
 	}

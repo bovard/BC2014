@@ -86,7 +86,7 @@ public class GroupEngageEnemies extends Behavior {
         }
 
 
-        System.out.println("Stuck in group engage");
+        //System.out.println("Stuck in group engage");
         return false;
     }
 }

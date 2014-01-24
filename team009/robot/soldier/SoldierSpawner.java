@@ -30,31 +30,31 @@ public class SoldierSpawner {
             int type = decoder.soldierType;
             switch (type) {
                 case SOLDIER_TYPE_SOUND_TOWER:
-                    System.out.println("making new sound tower");
+                    //System.out.println("making new sound tower");
                     robot = new SoundTowerCapture(rc, info, decoder.loc);
                     break;
                 case DUMB_PASTR_HUNTER:
-                    System.out.println("making new dumb herder");
+                    //System.out.println("making new dumb herder");
                     robot = new DumbPastrHunter(rc, info);
                     break;
                 case SOLDIER_TYPE_HERDER:
-                    System.out.println("making new herder");
+                    //System.out.println("making new herder");
                     robot = new Herder(rc, info, decoder.loc);
                     break;
                 case SOLDIER_TYPE_PASTURE_CAPTURER:
-                    System.out.println("making new pasture capture");
+                    //System.out.println("making new pasture capture");
                     robot = new PastureCapture(rc, info, decoder.loc);
                     break;
                 case SOLDIER_TYPE_WOLF:
-                    System.out.println("making new wolf");
+                    //System.out.println("making new wolf");
                     robot = new Wolf(rc, info);
                     break;
                 case SOLDIER_TYPE_BACKDOOR_NOISE_PLANTER:
-                    System.out.println("making new noise planter");
+                    //System.out.println("making new noise planter");
                     robot = new BackdoorNoisePlanter(rc, info);
                     break;
                 case SOLDIER_TYPE_JACKAL:
-                    System.out.println("making new jackal");
+                    //System.out.println("making new jackal");
                     robot = new Jackal(rc, info);
                     break;
                 case SOLDIER_TYPE_DEFENDER:

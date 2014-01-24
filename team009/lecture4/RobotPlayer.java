@@ -73,7 +73,7 @@ public class RobotPlayer{
 
 		Robot[] enemyRobots = rc.senseNearbyGameObjects(Robot.class,10000,rc.getTeam().opponent());
 		if(enemyRobots.length>0){//if there are enemies
-			rc.setIndicatorString(0, "There are enemies");
+			//rc.setIndicatorString(0, "There are enemies");
 			MapLocation[] robotLocations = new MapLocation[enemyRobots.length];
 			for(int i=0;i<enemyRobots.length;i++){
 				Robot anEnemy = enemyRobots[i];
@@ -82,12 +82,12 @@ public class RobotPlayer{
 			}
 			MapLocation closestEnemyLoc = VectorFunctions.findClosest(robotLocations, rc.getLocation());
 			if(closestEnemyLoc.distanceSquaredTo(rc.getLocation())<rc.getType().attackRadiusMaxSquared){
-				rc.setIndicatorString(1, "trying to shoot");
+				//rc.setIndicatorString(1, "trying to shoot");
 				if(rc.isActive()){
 					rc.attackSquare(closestEnemyLoc);
 				}
 			}else{
-				rc.setIndicatorString(1, "trying to go closer");
+				//rc.setIndicatorString(1, "trying to go closer");
 				Direction towardClosest = rc.getLocation().directionTo(closestEnemyLoc);
 				simpleMove(towardClosest);
 			}

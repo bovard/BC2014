@@ -46,7 +46,7 @@ public class ArtilleryShotCalculator {
 			} else {
 				value += (1/RobotType.HQ.splashPower) * map[xi][yi];
 			}
-			robot.rc.setIndicatorString(0, "Value: " + value);
+			//robot.rc.setIndicatorString(0, "Value: " + value);
 			if (value > bestValue) {
 				bestValue = value;
 				x = xToCheck[i];
@@ -74,7 +74,7 @@ public class ArtilleryShotCalculator {
 					} else {
 						value += (1/RobotType.HQ.splashPower) * map[xi][yi];
 					}
-					robot.rc.setIndicatorString(0, "Value: " + value);
+					//robot.rc.setIndicatorString(0, "Value: " + value);
 					if (value > bestValue) {
 						bestValue = value;
 						x = xToCheck[i];
@@ -133,6 +133,6 @@ public class ArtilleryShotCalculator {
 				}
 			}
 		}
-		robot.rc.setIndicatorString(0, "Checking " + toCheck + " enemies");
+		//robot.rc.setIndicatorString(0, "Checking " + toCheck + " enemies");
 	}
 }

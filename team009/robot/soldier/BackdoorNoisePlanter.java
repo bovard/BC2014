@@ -38,9 +38,9 @@ public class BackdoorNoisePlanter extends BaseSoldier {
         // height,0   height,width
         //  ( I know this is odd, don't want to turn it around in teh head)
         int quadHQ = MapQuadrantUtils.getMapQuadrant(info.hq.x, info.hq.y);
-        System.out.println("Our hq is in quadrent " + quadHQ);
+        //System.out.println("Our hq is in quadrent " + quadHQ);
         int quadEnemyHQ = MapQuadrantUtils.getMapQuadrant(info.enemyHq.x, info.enemyHq.y);
-        System.out.println("Enemy hq is in quadrent " + quadEnemyHQ);
+        //System.out.println("Enemy hq is in quadrent " + quadEnemyHQ);
 
         if (quadHQ == 1) {
             if (quadEnemyHQ == 1) {
@@ -113,9 +113,9 @@ public class BackdoorNoisePlanter extends BaseSoldier {
         }
 
         wayPoints.add(info.enemyHq);
-        System.out.println("Now we have " + wayPoints.size() + " way Points");
+        //System.out.println("Now we have " + wayPoints.size() + " way Points");
         for (int i = 0; i < wayPoints.size(); i++) {
-            System.out.println(wayPoints.get(i).toString());
+            //System.out.println(wayPoints.get(i).toString());
         }
     }
 

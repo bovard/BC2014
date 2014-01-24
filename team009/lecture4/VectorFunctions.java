@@ -41,7 +41,7 @@ public class VectorFunctions {
 	public static void printPath(ArrayList<MapLocation> path, int bigBoxSize){
 		for(MapLocation m:path){
 			MapLocation actualLoc = bigBoxCenter(m,bigBoxSize);
-			System.out.println("("+actualLoc.x+","+actualLoc.y+")");
+			//System.out.println("("+actualLoc.x+","+actualLoc.y+")");
 		}
 	}
 	public static MapLocation bigBoxCenter(MapLocation bigBoxLoc, int bigBoxSize){

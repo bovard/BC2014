@@ -25,7 +25,7 @@ public class RobotPlayer {
                 if (rc.getType() == RobotType.NOISETOWER) {
                     new NoiseTower(rc, info).run();
                 }
-                System.out.println("Should never be here!");
+                //System.out.println("Should never be here!");
                 rc.yield();
             }
         } catch (Exception e) {

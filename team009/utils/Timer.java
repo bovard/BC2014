@@ -13,9 +13,9 @@ public class Timer {
 		round += Clock.getRoundNum();
 
 		if (round == 0) {
-			System.out.println("ByteCodes: " + (time + Clock.getBytecodeNum() - TIMER_COSTS));
+			//System.out.println("ByteCodes: " + (time + Clock.getBytecodeNum() - TIMER_COSTS));
 		} else {
-			System.out.println("ByteCodes: " + (time + (round * 10000) + Clock.getBytecodeNum() - TIMER_COSTS));
+	//System.out.printlnln("ByteCodes: " + (time + (round * 10000) + Clock.getBytecodeNum() - TIMER_COSTS));
 		}
 	}
 

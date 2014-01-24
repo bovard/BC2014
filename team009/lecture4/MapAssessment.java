@@ -25,17 +25,17 @@ public class MapAssessment{
 	}
 	
 	public static void printCoarseMap(){
-		System.out.println("Coarse map:");
+		//System.out.println("Coarse map:");
 		for(int x=0;x<coarseMap[0].length;x++){
 			for(int y=0;y<coarseMap.length;y++){
 				int numberOfObstacles = coarseMap[x][y];
 				System.out.print(Math.min(numberOfObstacles, 9));
 			}
-			System.out.println();
+			//System.out.println();
 		}
 	}
 	public static void printBigCoarseMap(RobotController rc){
-		System.out.println("Fine map:");
+		//System.out.println("Fine map:");
 		for(int x=0;x<coarseMap[0].length*bigBoxSize;x++){
 			for(int y=0;y<coarseMap.length*bigBoxSize;y++){
 				if(countObstacles(x,y,rc)==0){//there's no obstacle, so print the box's obstacle count
@@ -46,7 +46,7 @@ public class MapAssessment{
 				}
 				System.out.print(" ");
 			}
-			System.out.println();
+			//System.out.println();
 		}
 	}
 }

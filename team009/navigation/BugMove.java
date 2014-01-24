@@ -70,7 +70,7 @@ public class BugMove extends Move {
             return null;
 
         if (!robot.currentLoc.isAdjacentTo(lastLoc) && !robot.currentLoc.equals(lastLoc)) {
-            //System.out.println("RESETTING BECAUSE NOT AT SAME LOC");
+            ////System.out.println("RESETTING BECAUSE NOT AT SAME LOC");
             reset();
         } else {
             lastLoc = robot.currentLoc;
@@ -81,7 +81,7 @@ public class BugMove extends Move {
         if (!bug) {
             result = simpleMove(toMove);
             if (result == null) {
-                //System.out.println("ENTERING BUG STATE");
+                ////System.out.println("ENTERING BUG STATE");
                 bug = true;
                 bugStartDirection = toMove;
                 bugStart = robot.currentLoc;
