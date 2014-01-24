@@ -32,8 +32,13 @@ public class OffensiveSelector extends Decision {
     public boolean run() throws GameActionException {
         System.out.println("Running: " + hq.cheese);
         if (shoot.pre()) {
-            shoot.run();
-        } else if (hq.cheese && sound.pre()) {
+            if(shoot.run()) {
+                // if we actually shoot return
+                return true;
+            }
+        }
+
+        if (hq.cheese && sound.pre()) {
             sound.run();
         } else {
             spawn.run();
