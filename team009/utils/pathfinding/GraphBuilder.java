@@ -6,9 +6,6 @@
 package team009.utils.pathfinding;
 
 import java.util.Arrays;
-
-import team009.utils.Timer;
-import battlecode.common.Clock;
 import team009.utils.pathfinding.DeathStar;
 
 /**
@@ -31,16 +28,13 @@ public class GraphBuilder {
     private final int height;
 
     public GraphBuilder(int length, int height) {
-        System.out.println(Clock.getBytecodeNum());
         this.length = length;
         this.height = height;
-        waypoints = new Point[400];
+        waypoints = new Point[200];
         waypoint_index = 0;
 
-        obstacles = new Point[400];
+        obstacles = new Point[200];
         obstacle_index = 0;
-
-        adjacency_matrix = new int[400][400];
 
         last_object_index = 0;
     }
@@ -62,11 +56,14 @@ public class GraphBuilder {
     }
 
     /**
-     * Adds and obstacle to be later evaluated.
+     * Adds an obstacle to be later evaluated.
      *
      * @param p the position of the obstacle
      */
     public void addObstacle(Point p) {
+        if (!isValid(p.x, p.y)) {
+            return;
+        }
         obstacles[obstacle_index] = p;
         obstacle_index++;
     }
@@ -85,12 +82,9 @@ public class GraphBuilder {
         int minX = Math.min(p1.x, p2.x);
         int maxY = Math.max(p1.y, p2.y);
         int minY = Math.min(p1.y, p2.y);
-
         if (Math.abs(p1.x - p2.x) <= 1 && Math.abs(p1.y - p2.y) <= 1) {
             return true; //handle inner corner cases
         }
-
-        System.out.println(waypoint_index);
         for (int i = 0; i < waypoint_index; i++) {
             if (!waypoints[i].equals(p1) && !waypoints[i].equals(p2)) {
                 Point p3 = waypoints[i];
@@ -99,15 +93,12 @@ public class GraphBuilder {
                 }
             }
         }
-
-        Timer.StartTimer();
         for (int i = 0; i < obstacle_index; i++) {
             Point p3 = obstacles[i];
             if (p3.x >= minX && p3.x <= maxX && p3.y >= minY && p3.y <= maxY) {
                 return false;
             }
         }
-        Timer.EndTimer();
         return true;
     }
 
@@ -137,38 +128,32 @@ public class GraphBuilder {
      * before updating.
      */
     public void buildMatrix() {
-
         int[][] map = new int[length][height];
         for (int i = last_object_index; i < obstacle_index; i++) {
-            int x = obstacles[i].x;
-            int y = obstacles[i].y;
-            map[x][y] = 1;
+            map[obstacles[i].x][obstacles[i].y] = 1;
         }
-
         for (int i = last_object_index; i < obstacle_index; i++) {
             int x = obstacles[i].x;
             int y = obstacles[i].y;
             for (int j = -1; j <= 1; j++) {
                 for (int k = -1; k <= 1; k++) {
-                    if (isValid(x + j, y + k) && Math.abs(j) == 1 && Math.abs(k) == 1 && map[x + j][y] != 1 && map[x][y + k] != 1 && map[x + j][y + k] != 1 && map[x + j][y + k] == 0) {
+                    if (isValid(x + j, y + k) && map[x + j][y + k] == 0) {
                         map[x + j][y + k] = 2;
-                        waypoints[waypoint_index] = new Point(x + j, y + k);
-                        //System.out.println(obstacles[i] + "->" + waypoints[waypoint_index]);
-                        waypoint_index++;
-                    } else if (isValid(x + j, y + k) && (Math.abs(j) == 1 || Math.abs(k) == 1) && !(Math.abs(j) == 1 && Math.abs(k) == 1) && map[x + j][y + k] == 0) {
-                        if ((isValid(x + j + k, y + j + k) && map[x + j + k][y + j + k] == 1) || (isValid(x + (j - k), y - (j + k)) && map[x + (j - k)][y - (j + k)] == 1)) {
-                            map[x + j][y + k] = 2;
+                        if (Math.abs(j) == 1 && Math.abs(k) == 1 && map[x + j][y] != 1 && map[x][y + k] != 1 && map[x + j][y + k] != 1) {
                             waypoints[waypoint_index] = new Point(x + j, y + k);
-                            //System.out.println(obstacles[i] + "->" + waypoints[waypoint_index]);
                             waypoint_index++;
+                        } else if ((Math.abs(j) == 1 || Math.abs(k) == 1) && !(Math.abs(j) == 1 && Math.abs(k) == 1)) {
+                            if ((isValid(x + j + k, y + j + k) && map[x + j + k][y + j + k] == 1) || (isValid(x + (j - k), y - (j + k)) && map[x + (j - k)][y - (j + k)] == 1)) {
+                                waypoints[waypoint_index] = new Point(x + j, y + k);
+                                waypoint_index++;
+                            }
                         }
                     }
                 }
             }
-            last_object_index++;
         }
 
-        //adjacency_matrix = new int[waypoint_index + 2][waypoint_index + 2];
+        adjacency_matrix = new int[waypoint_index + 2][waypoint_index + 2];
         for (int i = 0; i < waypoint_index; i++) {
             for (int j = i + 1; j < waypoint_index; j++) {
                 if (isVisible(i, j)) {
@@ -179,6 +164,7 @@ public class GraphBuilder {
                 }
             }
         }
+        last_object_index = obstacle_index;
     }
 
     private boolean isValid(int x, int y) {
@@ -222,24 +208,30 @@ public class GraphBuilder {
     }
 
     public Point[] getPath(Point start, Point finish) {
+        int distance;
         for (int i = 0; i < waypoint_index; i++) {
             if (isVisible(start, waypoints[i])) {
-                adjacency_matrix[i][waypoint_index] = manhattan(start, waypoints[i]);
-                adjacency_matrix[waypoint_index][i] = manhattan(start, waypoints[i]);
+                distance = manhattan(start, waypoints[i]);
+                adjacency_matrix[i][waypoint_index] = distance;
+                adjacency_matrix[waypoint_index][i] = distance;
             }
         }
         for (int i = 0; i < waypoint_index; i++) {
             if (isVisible(finish, waypoints[i])) {
-                adjacency_matrix[i][waypoint_index + 1] = manhattan(start, waypoints[i]);
-                adjacency_matrix[waypoint_index + 1][i] = manhattan(start, waypoints[i]);
+                distance = manhattan(finish, waypoints[i]);
+                adjacency_matrix[i][waypoint_index + 1] = distance;
+                adjacency_matrix[waypoint_index + 1][i] = distance;
             }
         }
-        int[] path = DeathStar.findPath(adjacency_matrix, waypoint_index, waypoint_index+1);
+        int[] path = DeathStar.findPath(adjacency_matrix, waypoint_index, waypoint_index + 1);
+        if (path == null) {
+            return null;
+        }
         Point[] final_path = new Point[path.length];
         for (int i = 0; i < path.length; i++) {
             final_path[i] = waypoints[path[i]];
         }
-        final_path[path.length-1] = finish;
+        final_path[path.length - 1] = finish;
         return final_path;
     }
 
@@ -264,8 +256,7 @@ public class GraphBuilder {
         g.addObstacle(new Point(7, 8));
 
         g.buildMatrix();
-        System.out.println(Arrays.toString(g.getPath(new Point(0,0), new Point(19,19))));
-        
+        System.out.println(Arrays.toString(g.getPath(new Point(0, 0), new Point(19, 19))));
 
     }
 

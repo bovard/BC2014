@@ -23,6 +23,7 @@ public class SoundTowerBehaviorBrent extends Behavior {
     private static final int TOWER_STRAT_PULL_CARDNIAL = 0;
     private static final int TOWER_STRAT_PULL_SPIRAL_SWEEP = 1;
     private static final int TOWER_STRAT_PULL_ROTATING = 2;
+    private static final int TOWER_STRAT_PULL_WAYPOINT = 3;
 
 
     private int isAdjusted = 0;
@@ -52,7 +53,7 @@ public class SoundTowerBehaviorBrent extends Behavior {
         y = 0;
         angle = 0;
         currentDir = 0;
-        towerStrat = TOWER_STRAT_PULL_CARDNIAL;
+        towerStrat = TOWER_STRAT_PULL_WAYPOINT;
         //spin around in a cirle shooting the gun
         //TODO is pastrLocs within enviornment check????
         //pastrLocs = robot.rc.sensePastrLocations(robot.info.myTeam);
@@ -82,7 +83,7 @@ public class SoundTowerBehaviorBrent extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
-        if(false && xCheck != 35) {
+        if(xCheck != 35) {
             while(true) {
                 for(; xCheck < 35; xCheck++) {
                     if(Clock.getBytecodeNum() > 8000) {
@@ -92,14 +93,14 @@ public class SoundTowerBehaviorBrent extends Behavior {
                     for(; yCheck < 35; yCheck++) {
                         int adjX = herdFocus.x - 17 + xCheck;
                         int adjY = herdFocus.y - 17 + yCheck;
-
-                        if(adjX == robot.info.width || adjX == -1) {
-                            possibleLocations[xCheck][yCheck] = true;
-                        } else if(adjY == robot.info.height || adjY == -1) {
-                            possibleLocations[xCheck][yCheck] = true;
-                        } else {
-                            possibleLocations[xCheck][yCheck] = this.rc.senseTerrainTile(new MapLocation(adjX, adjY)) != TerrainTile.VOID;
-                        }
+                        possibleLocations[xCheck][yCheck] = this.rc.senseTerrainTile(new MapLocation(adjX, adjY)) != TerrainTile.VOID;
+//                        if(adjX == robot.info.width || adjX == -1) {
+//                            possibleLocations[xCheck][yCheck] = true;
+//                        } else if(adjY == robot.info.height || adjY == -1) {
+//                            possibleLocations[xCheck][yCheck] = true;
+//                        } else {
+//
+//                        }
                     }
 
                     yCheck = 0;
@@ -117,6 +118,9 @@ public class SoundTowerBehaviorBrent extends Behavior {
             while(!done && count < 15) {
                 switch(towerStrat)
                 {
+                    case TOWER_STRAT_PULL_WAYPOINT:
+                        loc = pullInWaypoint();
+                        break;
                     case TOWER_STRAT_PULL_ROTATING:
                         loc = pullInRotatingCardinal();
                         break;
@@ -260,7 +264,6 @@ public class SoundTowerBehaviorBrent extends Behavior {
     public void createGraph ()
     {
         graphBuilder = new GraphBuilder(35,35);
-
 
         for(int i = 0; i < possibleLocations.length; i++) {
             for(int j = 0; j < possibleLocations[0].length; j++) {
