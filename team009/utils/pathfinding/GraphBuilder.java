@@ -211,6 +211,10 @@ public class GraphBuilder {
     }
 
     public Point[] getPath(Point start, Point finish) {
+        if(isVisible(start, finish)) {
+            return new Point[] { finish };
+        }
+
         int distance;
         for (int i = 0; i < waypoint_index; i++) {
             if (isVisible(start, waypoints[i])) {

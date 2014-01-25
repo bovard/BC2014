@@ -38,6 +38,7 @@ public class SoundTowerBehaviorBrent extends Behavior {
     private Direction lastDirection;
     private double[][] cowSpots;
     private GraphBuilder graphBuilder;
+    private MapLocation lastPosition;
 
     //Address this by the x adjust
     private final int[] ValidY = {17,17,17,17,16,16,16,15,15,14,14,13,12,11,10,8,6,3};
@@ -213,45 +214,53 @@ public class SoundTowerBehaviorBrent extends Behavior {
 
     public MapLocation pullInWaypoint()
     {
-        if(currentPath == null || currentPath.length - currentNode < 3) {
-
+        if(currentPath == null || currentPath.length - currentNode < 1) {
             Direction dir = directions[currentDir];
             MapLocation loc = robot.currentLoc.add(dir, radius);
+            while(MapUtils.isOnMap(loc.add(1,1), robot.info.width + 2, robot.info.height + 2) && rc.senseTerrainTile(loc) == TerrainTile.VOID) {
+                radius--;
+                loc = robot.currentLoc.add(dir, radius);
+            }
 
+            radius = MAX_DISTANCE;
+            lastPosition = loc;
             currentDir++;
             if(currentDir == directions.length) {
                 currentDir = 0;
             }
 
-            System.out.println("start");
-            //currentPath = findPath(herdFocus.x - loc.x + 17, herdFocus.y - loc.y + 17);
-            currentPath = findPath(10, 30);
+            System.out.println(currentDir);
+            currentPath = findPath(herdFocus.x - loc.x + 17, herdFocus.y - loc.y + 17);
             System.out.println("done");
             currentNode = 0;
         }
 
-        if(currentNode < currentPath.length - 1) {
-            Point current = currentPath[currentNode];
-            Point next = currentPath[currentNode + 1];
+        if(currentNode < currentPath.length) {
+            MapLocation currentTarget =  new MapLocation(currentPath[currentNode].x, currentPath[currentNode].y);
+            lastPosition = lastPosition.add(lastPosition.directionTo(currentTarget));
 
-            MapLocation curLoc = new MapLocation(current.x, current.y);
-            MapLocation nextLoc = new MapLocation(next.x, next.y);
-
-            Direction nextDir = curLoc.directionTo(nextLoc);
-
-            if(lastDirection == null) {
-                lastDirection = nextDir;
+            if(currentTarget.x == lastPosition.x && currentTarget.y == lastPosition.y) {
+                currentNode++;
             }
-
-            if(nextDir != lastDirection) {
-                lastDirection = nextDir;
-                return new MapLocation(herdFocus.x + currentPath[currentNode].x - 17, herdFocus.y + currentPath[currentNode].y - 17).subtract(nextDir);
-            }
+//            MapLocation curLoc = new MapLocation(current.x, current.y);
+//            MapLocation nextLoc = new MapLocation(next.x, next.y);
+//
+//            Direction nextDir = curLoc.directionTo(nextLoc);
+//
+//            if(lastDirection == null) {
+//                lastDirection = nextDir;
+//            }
+//
+//            if(nextDir != lastDirection) {
+//                lastDirection = nextDir;
+//                lastPosition = new MapLocation(herdFocus.x + currentPath[currentNode].x - 17, herdFocus.y + currentPath[currentNode].y - 17).subtract(nextDir);
+//                return lastPosition;
+//            }
         }
 
 
         if(currentPath.length > 0) {
-            return new MapLocation(herdFocus.x + currentPath[currentNode].x - 17, herdFocus.y + currentPath[currentNode++].y - 17);
+            return new MapLocation(herdFocus.x + lastPosition.x - 17, herdFocus.y + lastPosition.y - 17);
         }
 
         return new MapLocation(herdFocus.x, herdFocus.y);
@@ -280,7 +289,7 @@ public class SoundTowerBehaviorBrent extends Behavior {
         return ((x + y) * (x + y + 1) >> 1) + y;
     }
 
-    private static final int MAX_DISTANCE = 17;
+    private static final int MAX_DISTANCE = 15;
     private static final int MAX_DISTANCE_SQUARED = 300;
 }
 
