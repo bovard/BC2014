@@ -10,7 +10,7 @@ import team009.utils.ChaseStrategyUtil;
 import team009.utils.CheesePostProcess;
 import team009.utils.MilkInformation;
 
-public class Offensive extends HQ {
+public class Offensive extends HQPreprocessor {
     // Default behavior is one base and both groups defend it
     // If both groups get big, the second can break away and hunt.
     public boolean huddle = false;
@@ -25,11 +25,6 @@ public class Offensive extends HQ {
 
     public int group0Count;
     public int group1Count;
-    public boolean finishedPostCalc = false;
-
-    public MilkInformation milkInformation;
-    public CheesePostProcess cheeseStrat;
-    public ChaseStrategyUtil chaseStrategy;
 
     public MapLocation center;
     public MapLocation bestCoverageLocation;
@@ -44,9 +39,6 @@ public class Offensive extends HQ {
         comRoot = new HQCom(this);
         largeMap = info.width * info.height > BehaviorConstants.MAP_LARGE_MINIMUM_AREA;
         mediumMap = !largeMap && info.width * info.height > BehaviorConstants.MAP_MEDIUM_MINIMUM_AREA;
-        milkInformation = new MilkInformation(this);
-        cheeseStrat = new CheesePostProcess(this);
-        chaseStrategy = new ChaseStrategyUtil(this);
     }
 
     @Override
@@ -61,22 +53,22 @@ public class Offensive extends HQ {
         boolean enough0Attack = group0Count >= BehaviorConstants.HQ_REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
         boolean enough1Attack = group1Count >= BehaviorConstants.HQ_REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
         boolean combinedEnoughAttack = group0Count + group1Count >= BehaviorConstants.HQ_REQUIRED_SOLDIER_COUNT_FOR_GROUP_ATTACK;
-
-        // TODO: cheese
-        if (BehaviorConstants.CHEESE_ENABLED && cheeseStrat.cheese) {
-            cheese = true;
-        }
-
-        // TODO: Chase strat
-        if (BehaviorConstants.CHASE_ENABLED && chaseStrategy.chase && (!BehaviorConstants.CHASE_CAN_CANCEL_FOR_HUNT || !hasPastures) &&
-                Clock.getRoundNum() > BehaviorConstants.CHASE_MINIMUM_ROUND_NUMBER) {
-            chase0 = group0Count > BehaviorConstants.CHASE_REQUIRED_SOLDIER_COUNT;
-            chase1 = group1Count > BehaviorConstants.CHASE_REQUIRED_SOLDIER_COUNT;
-        }
+//
+//        // TODO: cheese
+//        if (BehaviorConstants.CHEESE_ENABLED && cheeseStrat.cheese) {
+//            cheese = true;
+//        }
+//
+//        // TODO: Chase strat
+//        if (BehaviorConstants.CHASE_ENABLED && chaseStrategy.chase && (!BehaviorConstants.CHASE_CAN_CANCEL_FOR_HUNT || !hasPastures) &&
+//                Clock.getRoundNum() > BehaviorConstants.CHASE_MINIMUM_ROUND_NUMBER) {
+//            chase0 = group0Count > BehaviorConstants.CHASE_REQUIRED_SOLDIER_COUNT;
+//            chase1 = group1Count > BehaviorConstants.CHASE_REQUIRED_SOLDIER_COUNT;
+//        }
 
 
         // TODO: Large Map Strategy?
-        else if (largeMap && false) {
+        if (largeMap && false) {
 
         }
 
@@ -101,29 +93,6 @@ public class Offensive extends HQ {
     @Override
     public void postProcessing() throws GameActionException {
         super.postProcessing();
-        if (finishedPostCalc || hqPostProcessing) {
-            return;
-        }
-
-        if (bestCoverageLocation == null) {
-            _calculateRallyPoint();
-        }
-
-        if (!milkInformation.finished) {
-            milkInformation.calc();
-            return;
-        }
-
-        if (!chaseStrategy.finished) {
-            chaseStrategy.calc();
-            return;
-        }
-
-        cheeseStrat.calc();
-
-        if (cheeseStrat.finished) {
-            finishedPostCalc = true;
-        }
     }
 
     public MapLocation getNextMilkingSpot() {
