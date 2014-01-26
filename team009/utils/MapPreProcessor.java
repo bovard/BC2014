@@ -8,18 +8,31 @@ import team009.robot.hq.HQ;
 
 public class MapPreProcessor {
     public int[][] map;
+    public int[][] coarseMap;
     public double[][] milks;
     public boolean finished = false;
     public int width;
     public int height;
+    public int coarseWidth;
+    public int coarseHeight;
+    public int coarseDivisor = COARSE_TILE_SIZE;
 
-    private int i = 0;
+    private int x = 0;
     private RobotController rc;
     public MapPreProcessor(HQ hq) {
         width = hq.info.width;
         height = hq.info.height;
         rc = hq.rc;
         map = new int[width][height];
+        if (width * height > 2000) {
+            coarseDivisor = COARSE_TILE_SIZE_LARGE;
+        }
+
+        coarseWidth = (int)Math.ceil(width / (1.0 * coarseDivisor));
+        coarseHeight = (int)Math.ceil(height / (1.0 * coarseDivisor));
+
+        System.out.println("Width: " + width + ", " + height + " :: " + coarseWidth + ", " + coarseHeight);
+        coarseMap = new int[coarseDivisor][coarseDivisor];
     }
 
     public void calc() {
@@ -27,27 +40,59 @@ public class MapPreProcessor {
             return;
         }
 
+        int coarseDivisor = this.coarseDivisor;
         int k = 0;
-        int rounds = Timer.GetRounds(map[0].length * 15);
-        int width = this.width; // saves 1 byte code doing local scope as opposed to class scope
+        int rounds = Timer.GetRounds((int)(coarseDivisor * 40), 200);
         int[][] map = this.map;
-        int i = this.i;
+        int[][] coarseMap = this.coarseMap;
+        int x = this.x;
+        int VOID = this.VOID;
+        int NORMAL = this.NORMAL;
+        int ROAD = this.ROAD;
+        int coarseWidth = this.coarseWidth;
+        int coarseHeight = this.coarseHeight;
+        TerrainTile tVOID = TerrainTile.VOID;
+        TerrainTile tNORMAL = TerrainTile.NORMAL;
+        TerrainTile tROAD = TerrainTile.ROAD;
         RobotController rc = this.rc;
 
-        while (k < rounds && i < width) {
-            for (; i < width; i++, k++) {
-                for (int j = 0; j < height; j++) {
-                    map[i][j] = rc.senseTerrainTile(new MapLocation(i, j)) == TerrainTile.VOID ? 1 : 0;
+        while (k < rounds && x < coarseDivisor) {
+            for (; x < coarseDivisor; x++, k++) {
+                for (int y = 0; y < coarseDivisor; y++) {
+                    int roads = 0;
+                    int normals = 0;
+                    int voids = 0;
+                    int xOffset = x * coarseWidth;
+                    int yOffset = y * coarseHeight;
+
+                    for (int x0 = 0; x0 < coarseWidth; x0++) {
+                        for (int y0 = 0; y0 < coarseHeight; y0++) {
+                            TerrainTile tile = rc.senseTerrainTile(new MapLocation(xOffset + x0, yOffset + y0));
+                            if (tile == tVOID) {
+                                map[xOffset + x0][yOffset + y0] = VOID;
+                                voids++;
+                            } else if (tile == tNORMAL) {
+                                map[xOffset + x0][yOffset + y0] = NORMAL;
+                                normals++;
+                            } else if (tile == tROAD) {
+                                map[xOffset + x0][yOffset + y0] = ROAD;
+                                roads++;
+                            }
+                        }
+                    }
+                    coarseMap[x][y] = (int)(normals - Math.pow(roads, 2) + voids > 0 ? Math.pow(2, voids + 1) : 0);
+                    if (coarseMap[x][y] < 0) {
+                        coarseMap[x][y] = 0;
+                    }
                 }
             }
         }
 
-        finished = i == width;
+        finished = x == coarseDivisor;
         if (finished) {
             milks = rc.senseCowGrowth();
         }
-
-        this.i = i;
+        this.x = x;
     }
 
     public static final int DirectionToInt(Direction dir) {
@@ -70,4 +115,10 @@ public class MapPreProcessor {
         }
         return -1;
     }
+
+    public static final int COARSE_TILE_SIZE = 10;
+    public static final int COARSE_TILE_SIZE_LARGE = 20;
+    public static final int VOID = 2;
+    public static final int NORMAL = 1;
+    public static final int ROAD = 0;
 }

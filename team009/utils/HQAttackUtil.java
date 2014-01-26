@@ -2,7 +2,6 @@ package team009.utils;
 
 import battlecode.common.Clock;
 import battlecode.common.MapLocation;
-import team009.robot.TeamRobot;
 import team009.robot.soldier.ToySoldier;
 
 public class HQAttackUtil {
