@@ -1,9 +1,11 @@
 package team009.toyBT;
 
 import battlecode.common.*;
+import team009.RobotInformation;
 import team009.combat.CombatUtils;
 import team009.navigation.BugMove;
 import team009.robot.soldier.ToySoldier;
+import team009.utils.HQAttackUtil;
 import team009.utils.SmartMapLocationArray;
 import team009.utils.SmartRobotInfoArray;
 
@@ -83,8 +85,16 @@ public class ToyCombat {
 
             // We outnumber or equal
             else {
-                MapLocation target = nearestEnemy == null ? nmeLocs[0] : nearestEnemy;
-                _moveOrAttack(rc, currentLoc, target, nmeLocs);
+
+                // If the enemy centroid is within enemy hq range, do not engage first
+                if (soldier.hqAttack.inProximity(currentLoc) && soldier.hqAttack.toClose(nmeCentroid)) {
+                    if (nearestEnemy != null) {
+                        rc.attackSquare(nearestEnemy);
+                    }
+                } else {
+                    MapLocation target = nearestEnemy == null ? nmeLocs[0] : nearestEnemy;
+                    _moveOrAttack(rc, currentLoc, target, nmeLocs);
+                }
             }
         } else {
             if (soldier.enemyPastrs.length > 0) {

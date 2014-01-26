@@ -7,6 +7,7 @@ import team009.communication.bt.SoldierCom;
 import team009.communication.decoders.GroupCommandDecoder;
 import team009.robot.TeamRobot;
 import team009.toyBT.ToySelector;
+import team009.utils.HQAttackUtil;
 import team009.utils.SmartRobotInfoArray;
 
 public class ToySoldier extends TeamRobot {
@@ -24,6 +25,7 @@ public class ToySoldier extends TeamRobot {
     public SmartRobotInfoArray friendlyPastrs;
     public SmartRobotInfoArray enemyPastrs;
     public SmartRobotInfoArray enemyNoise;
+    public RobotInfo enemyHqInfo;
     public GroupCommandDecoder groupCommand;
     public GroupCommandDecoder hqCommand;
     public Robot[] enemies = new Robot[0];
@@ -36,6 +38,7 @@ public class ToySoldier extends TeamRobot {
     public GroupCommandDecoder decoder;
     public int sensorRadiusSquared = RobotType.SOLDIER.sensorRadiusSquared;
     public int myGroupCount = 0;
+    public HQAttackUtil hqAttack;
 
 
     // Permanent behaviors from coms.
@@ -47,6 +50,7 @@ public class ToySoldier extends TeamRobot {
         treeRoot = new ToySelector(this);
         comRoot = new SoldierCom(this);
         comLocation = new MapLocation(0, 0);
+        hqAttack = new HQAttackUtil(this);
     }
 
     @Override
@@ -79,6 +83,7 @@ public class ToySoldier extends TeamRobot {
             if (info.team == this.info.enemyTeam) {
                 if (info.type == RobotType.HQ) {
                     seesEnemyHQ = true;
+                    enemyHqInfo = info;
                 } else if (info.type == RobotType.SOLDIER) {
                     enemySoldiers.add(info);
                 } else if (info.type == RobotType.NOISETOWER) {
@@ -107,6 +112,12 @@ public class ToySoldier extends TeamRobot {
         // TODO: Bovard what to do?
         isHerder = comCommand == CAPTURE_PASTURE || comCommand == CAPTURE_SOUND;
         isHunter = !isHerder;
+
+        // Checks to see if we can sense hq.
+        if (seesEnemyHQ) {
+            rc.setIndicatorString(2, "setting action delay: " + enemyHqInfo.actionDelay + " : at Round: " + round);
+            hqAttack.setActionDelay(enemyHqInfo.actionDelay);
+        }
     }
 
     // TODO: WayPointing?
