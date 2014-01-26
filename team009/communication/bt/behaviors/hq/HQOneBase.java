@@ -4,12 +4,12 @@ import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import team009.communication.bt.behaviors.WriteBehavior;
-import team009.robot.hq.Offensive;
+import team009.robot.hq.Qualifier;
 
 public class HQOneBase extends WriteBehavior {
-    Offensive hq;
+    Qualifier hq;
 
-    public HQOneBase(Offensive off) {
+    public HQOneBase(Qualifier off) {
         super(off);
         hq = off;
     }

@@ -1,6 +1,5 @@
 package team009.communication.bt.behaviors;
 
-import _team0_6_3__oneBaseChase_1.communication.decoders.SoldierDecoder;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import team009.communication.Communicator;

@@ -4,16 +4,17 @@ import battlecode.common.GameActionException;
 import team009.communication.bt.behaviors.WriteBehavior;
 import team009.communication.bt.behaviors.hq.*;
 import team009.robot.hq.Offensive;
+import team009.robot.hq.Qualifier;
 
 public class HQOffensiveWriteCom extends WriteBehavior {
-    Offensive hq;
+    Qualifier hq;
 
     HQOneBase oneBase;
     HQHunt hunt;
     HQReturnToHome home;
     HQSurround surround;
 
-    public HQOffensiveWriteCom(Offensive off) {
+    public HQOffensiveWriteCom(Qualifier off) {
         super(off);
         hq = off;
 
