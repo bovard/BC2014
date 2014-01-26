@@ -36,7 +36,6 @@ public class SoldierCountDecoder extends CommunicationDecoder {
             double x = centroid.x * count + loc.x;
             double y = centroid.y * count + loc.y;
 
-            System.out.println("Centroid(" + count + "): " + centroid + " : (" + x + ", " + y + ") " + loc);
             count++;
             centroid = new MapLocation((int)Math.ceil(x / count), (int)Math.ceil(y / count));
         }

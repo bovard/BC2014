@@ -38,8 +38,6 @@ public class SoldierReadCom extends ReadBehavior {
         soldier.myGroupCount = dec.count;
         soldier.groupCentroid = dec.centroid;
 
-        System.out.println("Centroid: " + soldier.groupCentroid);
-
         return true;
     }
 }
