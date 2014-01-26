@@ -58,11 +58,11 @@ public class ToySelector extends Decision {
             return engageEnemy.run();
         }
         if (destruct.pre()) {
-            destruct.run();
+            return destruct.run();
         } else if (nearHq.pre()) {
-            nearHq.run();
+            return nearHq.run();
         } else if (attack.pre()) {
-            attack.run();
+            return attack.run();
         }
 
         if (soldier.isHerder) {
