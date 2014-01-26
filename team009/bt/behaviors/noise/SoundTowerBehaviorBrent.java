@@ -217,20 +217,22 @@ public class SoundTowerBehaviorBrent extends Behavior {
         if(currentPath == null || currentPath.length - currentNode < 1) {
             Direction dir = directions[currentDir];
             MapLocation loc = robot.currentLoc.add(dir, radius);
-            while(MapUtils.isOnMap(loc.add(1,1), robot.info.width + 2, robot.info.height + 2) && rc.senseTerrainTile(loc) == TerrainTile.VOID) {
+            while(!MapUtils.isOnMap(loc, robot.info.width, robot.info.height) || rc.senseTerrainTile(loc) == TerrainTile.VOID) {
                 radius--;
                 loc = robot.currentLoc.add(dir, radius);
             }
 
+            System.out.println("x:" + loc.x + " y: " + loc.y);
             radius = MAX_DISTANCE;
-            lastPosition = loc;
             currentDir++;
             if(currentDir == directions.length) {
                 currentDir = 0;
             }
 
             System.out.println(currentDir);
-            currentPath = findPath(herdFocus.x - loc.x + 17, herdFocus.y - loc.y + 17);
+            lastPosition = new MapLocation(loc.x - herdFocus.x + 17, loc.y - herdFocus.y + 17);
+            currentPath = findPath(loc.x - herdFocus.x + 17, loc.y - herdFocus.y + 17);
+            System.out.println(currentPath);
             System.out.println("done");
             currentNode = 0;
         }
