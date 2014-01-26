@@ -17,19 +17,22 @@ public abstract class HQ extends TeamRobot {
 
     public boolean hqPostProcessing = true;
     public int maxSoldiers;
-    public SoldierCountDecoder[] soldierCounts;
+    public SoldierCountDecoder soldierCounts;
+    public SoldierCountDecoder pastrCounts;
+    public SoldierCountDecoder noiseCounts;
     public boolean seesEnemy = false;
     public Robot[] enemies = new Robot[0];
     public boolean hasPastures = false;
     public boolean weHavePastures = false;
     public boolean hasHQPastures = false;
     public SmartMapLocationArray enemyPastrs;
+    public SmartMapLocationArray pastrLocations = new SmartMapLocationArray();
+    public SmartMapLocationArray noiseLocations = new SmartMapLocationArray();
     public MapPreProcessor map;
 
     public HQ(RobotController rc, RobotInformation info) {
         super(rc, info);
         maxSoldiers = Communicator.MAX_GROUP_COUNT;
-        soldierCounts = new SoldierCountDecoder[maxSoldiers];
         map = new MapPreProcessor(this);
         twoWayComPosition = 0;
 
@@ -79,7 +82,14 @@ public abstract class HQ extends TeamRobot {
     }
 
     public int getCount(int group) {
-        return soldierCounts[group] == null ? 0 : soldierCounts[group].count;
+        if (group == 0) {
+            return soldierCounts == null ? 0 : soldierCounts.count;
+        } else if (group == TeamRobot.PASTR_GROUP) {
+            return pastrCounts == null ? 0 : pastrCounts.count;
+        } else if (group == TeamRobot.NOISE_TOWER_GROUP) {
+            return noiseCounts == null ? 0 : noiseCounts.count;
+        }
+        return 0;
     }
 
     // make this a more optimal spot
@@ -97,6 +107,10 @@ public abstract class HQ extends TeamRobot {
 
     public void comCapture(MapLocation loc, int group) throws GameActionException {
         Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, CAPTURE_PASTURE, loc, 200);
+    }
+
+    public void comHQSurround(MapLocation loc, int group) throws GameActionException {
+        Communicator.WriteToGroup(rc, group, Communicator.GROUP_HQ_CHANNEL, HQ_SURROUND, loc, 200);
     }
 
     public void comSoundTower(MapLocation loc, int group) throws GameActionException {
@@ -117,6 +131,30 @@ public abstract class HQ extends TeamRobot {
 
         return false;
     }
+    // TODO: $IMPROVEMENT$ We should make the group number have a channel to grab pasture location from
+    public void createHerder(int group, MapLocation pasture) throws GameActionException {
+    }
+
+    public void createSoundTower(int group, MapLocation towerLocation) throws GameActionException {
+    }
+
+    public void createNoiseTower(int group, MapLocation towerLocation) throws GameActionException {
+    }
+
+    public void createDumbPastrHunter() throws GameActionException {
+    }
+
+    public void createPastureCapturer(int group, MapLocation pasture) throws GameActionException {
+    }
+
+    public void createBackDoorNoisePlanter(int group) throws GameActionException {
+    }
+
+    public void createJackal(int group) throws GameActionException {
+    }
+
+    public void createDefender(int group) throws GameActionException {
+    }
 
     /**
      * Clears the coms if the location in the coms are not the same as the location provided.
@@ -136,40 +174,7 @@ public abstract class HQ extends TeamRobot {
     }
 
     public void createToySoldier(int group) throws GameActionException {
-        _spawn(SoldierSpawner.SOLDIER_TYPE_TOY_SOLDIER, group, null);
-    }
-
-    // TODO: $IMPROVEMENT$ We should make the group number have a channel to grab pasture location from
-    public void createHerder(int group, MapLocation pasture) throws GameActionException {
-        _spawn(SoldierSpawner.SOLDIER_TYPE_HERDER, group, pasture);
-    }
-
-    public void createSoundTower(int group, MapLocation towerLocation) throws GameActionException {
-        _spawn(SoldierSpawner.SOLDIER_TYPE_SOUND_TOWER, group, towerLocation);
-    }
-
-    public void createNoiseTower(int group, MapLocation towerLocation) throws GameActionException {
-        createSoundTower(group, towerLocation);
-    }
-
-    public void createDumbPastrHunter() throws GameActionException {
-        _spawn(SoldierSpawner.DUMB_PASTR_HUNTER, 0, null);
-    }
-
-    public void createPastureCapturer(int group, MapLocation pasture) throws GameActionException {
-        _spawn(SoldierSpawner.SOLDIER_TYPE_PASTURE_CAPTURER, group, pasture);
-    }
-
-    public void createBackDoorNoisePlanter(int group) throws GameActionException {
-        _spawn(SoldierSpawner.SOLDIER_TYPE_BACKDOOR_NOISE_PLANTER, group, null);
-    }
-
-    public void createJackal(int group) throws GameActionException {
-        _spawn(SoldierSpawner.SOLDIER_TYPE_JACKAL, group, null);
-    }
-
-    public void createDefender(int group) throws GameActionException {
-        _spawn(SoldierSpawner.SOLDIER_TYPE_DEFENDER, group, null);
+        _spawn(SOLDIER_TYPE_TOY_SOLDIER, group, null);
     }
 
     private void _spawn(int soldierType, int group, MapLocation location) throws GameActionException {
@@ -180,7 +185,7 @@ public abstract class HQ extends TeamRobot {
         rc.spawn(dir);
 
         Communicator.WriteNewSoldier(rc, soldierType, group, Communicator.TWO_WAY_HQ_COM_BASE + twoWayComPosition, location);
-        twoWayComPosition = (twoWayComPosition + 1) % BehaviorConstants.HQ_SOLDIER_COM_MAX;
+        twoWayComPosition = (twoWayComPosition + 1) % Communicator.TWO_WAY_COM_LENGTH;
     }
 
     private Direction _getSpawnDirection() {

@@ -9,6 +9,6 @@ public class HQCom extends Com {
         super(robot);
         write = new HQOffensiveWriteCom(robot);
         read = new HQStateCom(robot);
-        extraCom = new HQClearStateCom(robot);
+        postCom = new HQClearStateCom(robot);
     }
 }

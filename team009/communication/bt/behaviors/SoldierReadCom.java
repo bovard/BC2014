@@ -1,12 +1,12 @@
 package team009.communication.bt.behaviors;
 
+import _team0_6_3__oneBaseChase_1.communication.decoders.SoldierDecoder;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import team009.communication.Communicator;
+import team009.communication.decoders.SoldierCountDecoder;
 import team009.robot.TeamRobot;
-import team009.robot.soldier.SoldierSpawner;
 import team009.robot.soldier.ToySoldier;
-import team009.utils.Timer;
 
 public class SoldierReadCom extends ReadBehavior {
     ToySoldier soldier;
@@ -34,8 +34,11 @@ public class SoldierReadCom extends ReadBehavior {
         }
 
         // Gets soldier count in group
-        soldier.myGroupCount = Communicator.ReadTypeAndGroup(rc, SoldierSpawner.SOLDIER_TYPE_TOY_SOLDIER, robot.group).count;
-        System.out.println("MyGroupCount: " + soldier.myGroupCount);
+        SoldierCountDecoder dec = Communicator.ReadTypeAndGroup(rc, TeamRobot.SOLDIER_TYPE_TOY_SOLDIER, robot.group);
+        soldier.myGroupCount = dec.count;
+        soldier.groupCentroid = dec.centroid;
+
+        System.out.println("Centroid: " + soldier.groupCentroid);
 
         return true;
     }

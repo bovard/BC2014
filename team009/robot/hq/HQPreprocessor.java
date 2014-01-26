@@ -3,30 +3,30 @@ package team009.robot.hq;
 import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
 import team009.RobotInformation;
-import team009.utils.ChaseStrategyUtil;
-import team009.utils.CheesePostProcess;
-import team009.utils.MapPreProcessor;
-import team009.utils.MilkInformation;
+import team009.utils.*;
 
-/**
- * Created by mpaulson on 1/25/14.
- */
 public abstract class HQPreprocessor extends HQ {
 
 
     public MilkInformation milkInformation;
     public MapPreProcessor map;
+    public RallyPointProcessor rally;
     protected boolean finishedPostCalc = false;
 
     HQPreprocessor(RobotController rc, RobotInformation info) {
         super(rc, info);
         map = new MapPreProcessor(this);
         milkInformation = new MilkInformation(this);
+        rally = new RallyPointProcessor(this);
     }
 
     @Override
     public void postProcessing() throws GameActionException {
         super.postProcessing();
+
+        if (!rally.finished) {
+            rally.calc();
+        }
 
         if (!map.finished) {
             map.calc();
@@ -38,6 +38,6 @@ public abstract class HQPreprocessor extends HQ {
             return;
         }
 
-        finishedPostCalc = milkInformation.finished;
+        finishedPostCalc = true;
     }
 }
