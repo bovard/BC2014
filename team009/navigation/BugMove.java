@@ -1,9 +1,6 @@
 package team009.navigation;
 
-import battlecode.common.Direction;
-import battlecode.common.GameActionException;
-import battlecode.common.MapLocation;
-import battlecode.common.TerrainTile;
+import battlecode.common.*;
 import team009.MapUtils;
 import team009.robot.TeamRobot;
 
@@ -15,11 +12,13 @@ public class BugMove extends Move {
     private MapLocation bugStart;
     private Direction bugStartDirection;
     private MapLocation lastLoc;
+    private int initialRound;
 
     public BugMove(TeamRobot robot) {
         super(robot);
         bug = false;
         lastLoc = robot.currentLoc;
+        initialRound = Clock.getRoundNum();
     }
 
     private void reset() {
@@ -87,6 +86,7 @@ public class BugMove extends Move {
                 bugStart = robot.currentLoc;
                 startRound = robot.round;
                 lastLoc = robot.currentLoc;
+                trackRight = initialRound % 2 == 0;
                 int count = 0;
                 while(!robot.rc.canMove(toMove) && count < 9) {
                     count++;

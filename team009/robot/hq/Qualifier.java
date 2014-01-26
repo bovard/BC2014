@@ -36,6 +36,9 @@ public class Qualifier extends HQPreprocessor {
 
         // Gets the different groups
         boolean enough = group0Count >= BehaviorConstants.HQ_REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
+        if (soldierCounts != null) {
+            System.out.println("Centroid: " + soldierCounts.centroid);
+        }
 
 //        hunt = enough && hasPastures;
 //        soundTower = !surround && enough && milkInformation.finished && noiseLocations.length == 0;
