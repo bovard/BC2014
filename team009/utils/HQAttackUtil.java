@@ -21,7 +21,7 @@ public class HQAttackUtil {
     }
 
     public boolean inProximity(MapLocation location) {
-        return location.add(location.directionTo(soldier.info.enemyHq), 3).distanceSquaredTo(soldier.info.enemyHq) <= soldier.info.hqAttackRadius;
+        return location.add(location.directionTo(soldier.info.enemyHq), 2).distanceSquaredTo(soldier.info.enemyHq) <= soldier.info.hqAttackRadius;
     }
 
     public void setActionDelay(double actionDelay) {

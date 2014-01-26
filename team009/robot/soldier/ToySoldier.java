@@ -47,10 +47,10 @@ public class ToySoldier extends TeamRobot {
 
     public ToySoldier(RobotController rc, RobotInformation info) {
         super(rc, info);
+        hqAttack = new HQAttackUtil(this);
         treeRoot = new ToySelector(this);
         comRoot = new SoldierCom(this);
         comLocation = new MapLocation(0, 0);
-        hqAttack = new HQAttackUtil(this);
     }
 
     @Override
