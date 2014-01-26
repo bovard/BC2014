@@ -14,6 +14,7 @@ public class ToySelector extends Decision {
     GroupReturnToBase returnToBase;
     ToyEngageEnemy engageEnemy;
     ToyHerderSelector herder;
+    NearEnemyHQ nearHq;
     ToySoldier soldier;
     public ToySelector(ToySoldier robot) {
         super(robot);
@@ -39,6 +40,8 @@ public class ToySelector extends Decision {
 
         // Becomes the herder.
         herder = new ToyHerderSelector(robot);
+
+        nearHq = new NearEnemyHQ(robot);
     }
 
     @Override
@@ -50,12 +53,14 @@ public class ToySelector extends Decision {
 
         // NOTE:  This is obviously brittle, but its really efficient.
         // Byte code critical code
-        rc.setIndicatorString(0, "Command: " + soldier.comCommand + " : Location: " + soldier.comLocation);
+        rc.setIndicatorString(0, "Command: " + soldier.comCommand + " : Location: " + soldier.comLocation + " : group: " + soldier.group);
         if (engageEnemy.pre()) {
             return engageEnemy.run();
         }
         if (destruct.pre()) {
             destruct.run();
+        } else if (nearHq.pre()) {
+            nearHq.run();
         } else if (attack.pre()) {
             attack.run();
         }

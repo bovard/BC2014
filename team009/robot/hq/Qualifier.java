@@ -37,10 +37,11 @@ public class Qualifier extends HQPreprocessor {
         // Gets the different groups
         boolean enough = group0Count >= BehaviorConstants.HQ_REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
 
-        hunt = enough && hasPastures;
-        soundTower = !surround && enough && milkInformation.finished && noiseLocations.length == 0;
-        oneBase = !surround && enough && !soundTower && round > BehaviorConstants.ONE_BASE_ROUND_START && pastrLocations.length == 0;
-        huddle = !surround && !hunt;
+//        hunt = enough && hasPastures;
+//        soundTower = !surround && enough && milkInformation.finished && noiseLocations.length == 0;
+//        oneBase = !surround && enough && !soundTower && round > BehaviorConstants.ONE_BASE_ROUND_START && pastrLocations.length == 0;
+//        huddle = !surround && !hunt;
+        surround = true;
 
         // TODO: How to get out of oneBase?
 //        soundTower = !surround && enough && milkInformation.finished && noiseLocations.length == 0;
