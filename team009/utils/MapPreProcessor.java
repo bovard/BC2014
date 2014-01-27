@@ -82,7 +82,7 @@ public class MapPreProcessor {
                             }
                         }
                     }
-                    coarseMap[x][y] = normals - roads * 3 + voids * 5;
+                    coarseMap[x][y] = normals + roads + voids;
                     if (voids >= coarseWidth || voids >= coarseHeight) {
                         coarseMap[x][y] += 100;
                     }
@@ -124,7 +124,7 @@ public class MapPreProcessor {
 
     public static final int COARSE_TILE_SIZE = 10;
     public static final int COARSE_TILE_SIZE_LARGE = 20;
-    public static final int VOID = 2;
-    public static final int NORMAL = 1;
-    public static final int ROAD = 0;
+    public static final int VOID = 3;
+    public static final int NORMAL = 2;
+    public static final int ROAD = 1;
 }
