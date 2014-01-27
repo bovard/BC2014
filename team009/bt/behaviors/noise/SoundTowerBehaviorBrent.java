@@ -210,24 +210,34 @@ public class SoundTowerBehaviorBrent extends Behavior {
 
     public MapLocation pullInWaypoint()
     {
+        if(lastPosition != null && manhattan(new Point(lastPosition.x, lastPosition.y), new Point(17, 17)) <= 5) {
+            currentPath = null;
+        }
+
         if(currentPath == null || currentPath.length - currentNode < 1) {
             Direction dir = directions[currentDir];
 
             MapLocation loc = robot.currentLoc.add(dir, radius);
-            while(!MapUtils.isOnMap(loc, robot.info.width, robot.info.height) || rc.senseTerrainTile(loc) == TerrainTile.VOID) {
-                radius--;
-                loc = robot.currentLoc.add(dir, radius);
-
-                if(radius < 4) {
-                    radius = MAX_DISTANCE;
-
-                    currentDir++;
-                    if(currentDir == directions.length) {
-                        currentDir = 0;
-                    }
-                    dir = directions[currentDir];
-                    loc = robot.currentLoc.add(dir, radius);
-                }
+            if(!MapUtils.isOnMap(loc, robot.info.width, robot.info.height) || rc.senseTerrainTile(loc) == TerrainTile.VOID) {
+                return pullInCardinalDirections();
+//                radius--;
+//                loc = robot.currentLoc.add(dir, radius);
+//
+//                if(loc.x == -2 || loc.x == robot.info.width + 1 || loc.y == -2 || loc.y == robot.info.height + 1) {
+//                    System.out.println("card");
+//
+//                }
+//
+//                if(radius < 4) {
+//                    radius = MAX_DISTANCE;
+//
+//                    currentDir++;
+//                    if(currentDir == directions.length) {
+//                        currentDir = 0;
+//                    }
+//                    dir = directions[currentDir];
+//                    loc = robot.currentLoc.add(dir, radius);
+//                }
             }
 
             radius = MAX_DISTANCE;
@@ -247,7 +257,6 @@ public class SoundTowerBehaviorBrent extends Behavior {
             currentNode = 0;
         }
 
-
         if(currentNode < currentPath.length) {
             MapLocation currentTarget =  new MapLocation(currentPath[currentNode].x, currentPath[currentNode].y);
             lastPosition = lastPosition.add(lastPosition.directionTo(currentTarget));
@@ -258,7 +267,7 @@ public class SoundTowerBehaviorBrent extends Behavior {
 
                 if(currentNode < currentPath.length) {
                     currentTarget = new MapLocation(currentPath[currentNode].x, currentPath[currentNode].y);
-                    lastPosition = lastPosition.add(lastPosition.directionTo(currentTarget), -3);
+                    lastPosition = lastPosition.add(lastPosition.directionTo(currentTarget), -4);
                 }
             }
 //            MapLocation curLoc = new MapLocation(current.x, current.y);
