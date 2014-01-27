@@ -37,8 +37,10 @@ public class MapPreProcessor {
 
     public void calc() {
         if (finished) {
+            System.out.println("Finished MapPreProcessor");
             return;
         }
+        System.out.println("MapPreProcessor");
 
         int coarseDivisor = this.coarseDivisor;
         int k = 0;
@@ -80,7 +82,11 @@ public class MapPreProcessor {
                             }
                         }
                     }
-                    coarseMap[x][y] = (int)(normals - Math.pow(roads, 2) + voids > 0 ? Math.pow(2, voids + 1) : 0);
+                    coarseMap[x][y] = normals - roads * 3 + voids * 5;
+                    if (voids >= coarseWidth || voids >= coarseHeight) {
+                        coarseMap[x][y] += 100;
+                    }
+
                     if (coarseMap[x][y] < 0) {
                         coarseMap[x][y] = 0;
                     }
