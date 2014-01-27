@@ -33,7 +33,7 @@ public class SoundTowerBehaviorBrent extends Behavior {
     private int yCheck = 0;
     private Point[] currentPath;
     private MapLocation lastPoint;
-    private Point[][] cachedPaths = new Point[10][];
+    private Point[][] cachedPaths = new Point[8][];
     private int currentNode = 0;
     private Direction lastDirection;
     private double[][] cowSpots;
@@ -229,13 +229,16 @@ public class SoundTowerBehaviorBrent extends Behavior {
                 currentDir = 0;
             }
 
-            System.out.println(currentDir);
             lastPosition = new MapLocation(loc.x - herdFocus.x + 17, loc.y - herdFocus.y + 17);
-            currentPath = findPath(loc.x - herdFocus.x + 17, loc.y - herdFocus.y + 17);
-            System.out.println(currentPath);
-            System.out.println("done");
+            currentPath = findPath(lastPosition.x, lastPosition.y);
+
+            for(int i = 0; i < currentPath.length; i++) {
+                System.out.println(currentPath[i]);
+            }
+
             currentNode = 0;
         }
+
 
         if(currentNode < currentPath.length) {
             MapLocation currentTarget =  new MapLocation(currentPath[currentNode].x, currentPath[currentNode].y);
@@ -277,10 +280,11 @@ public class SoundTowerBehaviorBrent extends Behavior {
         graphBuilder = new GraphBuilder(35,35);
 
         for(int i = 0; i < possibleLocations.length; i++) {
-            for(int j = 0; j < possibleLocations[0].length; j++) {
+            for(int j = 0; j < possibleLocations[i].length; j++) {
                 if(!possibleLocations[i][j]) {
-                    graphBuilder.addObstacle(new Point(i,j));
+                    graphBuilder.addObstacle(new Point(i, j));
                 }
+
             }
         }
 

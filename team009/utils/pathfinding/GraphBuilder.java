@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -5,7 +6,7 @@
  */
 package team009.utils.pathfinding;
 
-import java.util.Arrays;
+import team009.utils.Timer;
 
 /**
  * The backbone, arms, legs, and spleen of the pathfinder. This is responsible
@@ -33,13 +34,16 @@ public class GraphBuilder {
 
     private final int[][] map;
 
+    public static int MAX_OBSTACLES = 400;
+    public static int MAX_WAYPOINTS = 500;
+
     public GraphBuilder(int length, int height) {
         this.length = length;
         this.height = height;
-        waypoints = new Point[200];
+        waypoints = new Point[MAX_WAYPOINTS];
         waypoint_index = 0;
 
-        obstacles = new Point[200];
+        obstacles = new Point[MAX_OBSTACLES];
         obstacle_index = 0;
 
         insideCorners = new boolean[200];
@@ -101,22 +105,26 @@ public class GraphBuilder {
         int minX = Math.min(p1.x, p2.x);
         int maxY = Math.max(p1.y, p2.y);
         int minY = Math.min(p1.y, p2.y);
+
         if (Math.abs(p1.x - p2.x) <= 1 && Math.abs(p1.y - p2.y) <= 1) {
             return true; //handle inner corner cases
         }
-        for (int i = 0; i < waypoint_index; i++) {
-            if (!waypoints[i].equals(p1) && !waypoints[i].equals(p2)) {
-                Point p3 = waypoints[i];
-                if (p3.x >= minX && p3.x <= maxX && p3.y >= minY && p3.y <= maxY && !insideCorners[i]) {
-                    return false;
-                }
-            }
-        }
-        for (int i = 0; i < obstacle_index; i++) {
-            Point p3 = obstacles[i];
-            if (p3.x >= minX && p3.x <= maxX && p3.y >= minY && p3.y <= maxY) {
+
+        double x_slope = (p2.x - p1.x);
+        double y_slope = (p2.y - p1.y);
+        double distance = euclidean(p1, p2);
+        x_slope /= distance;
+        y_slope /= distance;
+        double temp_distance = 0;
+        double currentX = p1.x;
+        double currentY = p1.y;
+        while (isValid((int) currentX, (int) currentY) && (Math.abs(currentX - p2.x) > .5 || Math.abs(currentY - p2.y) > .5) && temp_distance < distance) {
+            if (map[(int)currentX][(int)currentY] == 1) {
                 return false;
             }
+            currentX += x_slope;
+            currentY += y_slope;
+            temp_distance += Math.abs(y_slope / x_slope);
         }
         return true;
     }
@@ -147,11 +155,13 @@ public class GraphBuilder {
             for (int j = -1; j <= 1; j++) {
                 for (int k = -1; k <= 1; k++) {
                     if (isValid(x + j, y + k) && map[x + j][y + k] == 0) {
-                        map[x + j][y + k] = 2;
-                        if (Math.abs(j) == 1 && Math.abs(k) == 1 && map[x + j][y] != 1 && map[x][y + k] != 1 && map[x + j][y + k] != 1) {
+                        if (Math.abs(j) + Math.abs(k) == 2 && isOutsideCorner(x + j, y + k)) {
+                            map[x + j][y + k] = 2;
                             waypoints[waypoint_index] = new Point(x + j, y + k);
                             waypoint_index++;
-                        } else if ((Math.abs(j) == 1 || Math.abs(k) == 1) && isInsideCorner(x, y, j, k, map)) {
+                        } else if ((Math.abs(j) == 1 || Math.abs(k) == 1) && isInsideCorner(x + j, y + k)) {
+                            map[x + j][y + k] = 2;
+
                             insideCorners[waypoint_index] = true;
                             waypoints[waypoint_index] = new Point(x + j, y + k);
                             waypoint_index++;
@@ -174,8 +184,48 @@ public class GraphBuilder {
         last_object_index = obstacle_index;
     }
 
-    private boolean isInsideCorner(int x, int y, int j, int k, int[][] map) {
-        return ((isValid(x + j + k, y + j + k) && isValid(x + k, y + j) && map[x + j + k][y + j + k] == 1 && map[x + k][y + j] != 1) || (isValid(x + (j - k), y + (k - j)) && isValid(x - k, y - j) && map[x + (j - k)][y + (k - j)] == 1 && map[x - k][y - j] != 1));
+    private boolean isOutsideCorner(int x, int y) {
+        if (isValid(x - 1, y - 1) && map[x - 1][y - 1] == 1) {
+            if (isValid(x - 1, y) && map[x - 1][y] != 1 && isValid(x, y - 1) && map[x][y - 1] != 1) {
+                return true;
+            }
+        }
+        if (isValid(x + 1, y - 1) && map[x + 1][y - 1] == 1) {
+            if (isValid(x + 1, y) && map[x + 1][y] != 1 && isValid(x, y - 1) && map[x][y - 1] != 1) {
+                return true;
+            }
+        }
+        if (isValid(x + 1, y + 1) && map[x + 1][y + 1] == 1) {
+            if (isValid(x + 1, y) && map[x + 1][y] != 1 && isValid(x, y + 1) && map[x][y + 1] != 1) {
+                return true;
+            }
+        }
+        if (isValid(x - 1, y + 1) && map[x - 1][y + 1] == 1) {
+            if (isValid(x - 1, y) && map[x - 1][y] != 1 && isValid(x, y + 1) && map[x][y + 1] != 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isInsideCorner(int x, int y) {
+        if (isValid(x, y - 1) && map[x][y - 1] == 1) {
+            if (isValid(x + 1, y) && map[x + 1][y] == 1 && map[x + 1][y - 1] != 1) {
+                return true;
+            }
+            if (isValid(x - 1, y) && map[x - 1][y] == 1 && map[x - 1][y - 1] != 1) {
+                return true;
+            }
+        }
+        if (isValid(x, y + 1) && map[x][y + 1] == 1) {
+            if (isValid(x + 1, y) && map[x + 1][y] == 1 && map[x + 1][y + 1] != 1) {
+                return true;
+            }
+            if (isValid(x - 1, y) && map[x - 1][y] == 1 && map[x - 1][y + 1] != 1) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -235,22 +285,36 @@ public class GraphBuilder {
      * it is guaranteed that the next is visible.
      */
     public Point[] getPath(Point start, Point finish) {
+        Timer.StartTimer();
         int distance;
+        waypoints[waypoint_index] = start;
         for (int i = 0; i < waypoint_index; i++) { //Place the start into the adjacency matrix
             if (isVisible(start, waypoints[i])) { //Check which waypoints it can see
                 distance = manhattan(start, waypoints[i]); //if it can see it, measure the distance
                 adjacency_matrix[i][waypoint_index] = distance; //place it into the matrix
                 adjacency_matrix[waypoint_index][i] = distance; //Retain symmetry
+            } else {
+                adjacency_matrix[i][waypoint_index] = 0; //place it into the matrix
+                adjacency_matrix[waypoint_index][i] = 0; //Retain symmetry
             }
         }
-        for (int i = 0; i < waypoint_index; i++) { //Place the finish into the adjacency matrix
+
+        waypoints[waypoint_index + 1] = finish;
+        for (int i = 0; i < waypoint_index + 1; i++) { //Place the finish into the adjacency matrix
             if (isVisible(finish, waypoints[i])) { //check visiblity
                 distance = manhattan(finish, waypoints[i]); //measure distance
                 adjacency_matrix[i][waypoint_index + 1] = distance; //place into matrix
                 adjacency_matrix[waypoint_index + 1][i] = distance; //retain symmetry
+            } else {
+                adjacency_matrix[i][waypoint_index+1] = 0; //place it into the matrix
+                adjacency_matrix[waypoint_index+1][i] = 0; //Retain symmetry
             }
         }
+        Timer.EndTimer();
+
+        Timer.StartTimer();
         int[] path = DeathStar.findPath(adjacency_matrix, waypoint_index, waypoint_index + 1); //find the path
+        Timer.EndTimer();
         if (path == null) { //if null, return null
             return null;
         }
