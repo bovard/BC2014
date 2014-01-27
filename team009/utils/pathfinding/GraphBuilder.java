@@ -129,6 +129,10 @@ public class GraphBuilder {
         return true;
     }
 
+    private double euclidean(Point p1, Point p2) {
+        return Math.sqrt((p1.x-p2.x) * (p1.x-p2.x) + (p1.y-p2.y) * (p1.y-p2.y));
+    }
+
     /**
      * Finds the Manhattan distance between the two given points.
      *
