@@ -86,10 +86,6 @@ public class MapPreProcessor {
                     if (voids >= coarseWidth || voids >= coarseHeight) {
                         coarseMap[x][y] += 100;
                     }
-
-                    if (coarseMap[x][y] < 0) {
-                        coarseMap[x][y] = 0;
-                    }
                 }
             }
         }
@@ -99,6 +95,12 @@ public class MapPreProcessor {
             milks = rc.senseCowGrowth();
         }
         this.x = x;
+    }
+
+    public MapLocation getCoarseMapLocation(MapLocation loc) {
+        int x = loc.x / coarseWidth;
+        int y = loc.y / coarseHeight;
+        return new MapLocation(x + coarseWidth / 2, y + coarseHeight / 2);
     }
 
     public static final int DirectionToInt(Direction dir) {
@@ -122,8 +124,8 @@ public class MapPreProcessor {
         return -1;
     }
 
-    public static final int COARSE_TILE_SIZE = 10;
-    public static final int COARSE_TILE_SIZE_LARGE = 20;
+    public static final int COARSE_TILE_SIZE = 5;
+    public static final int COARSE_TILE_SIZE_LARGE = 8;
     public static final int VOID = 3;
     public static final int NORMAL = 2;
     public static final int ROAD = 1;
