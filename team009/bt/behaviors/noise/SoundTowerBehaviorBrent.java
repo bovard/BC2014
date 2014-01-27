@@ -84,24 +84,25 @@ public class SoundTowerBehaviorBrent extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
-        if(xCheck != 35) {
+        MapLocation loc = null;
+        if(towerStrat == TOWER_STRAT_PULL_WAYPOINT && xCheck != 35) {
+            outerloop:
             while(true) {
                 for(; xCheck < 35; xCheck++) {
                     if(Clock.getBytecodeNum() > 8000) {
-                        return true;
+                        boolean done = false;
+                        while(!done) {
+                            loc = pullInCardinalDirections();
+                            done = rc.canAttackSquare(loc) && MapUtils.isOnMap(loc.add(1,1), robot.info.width + 2, robot.info.height + 2);
+                        }
+
+                        break outerloop;
                     }
 
                     for(; yCheck < 35; yCheck++) {
                         int adjX = herdFocus.x - 17 + xCheck;
                         int adjY = herdFocus.y - 17 + yCheck;
                         possibleLocations[xCheck][yCheck] = this.rc.senseTerrainTile(new MapLocation(adjX, adjY)) != TerrainTile.VOID;
-//                        if(adjX == robot.info.width || adjX == -1) {
-//                            possibleLocations[xCheck][yCheck] = true;
-//                        } else if(adjY == robot.info.height || adjY == -1) {
-//                            possibleLocations[xCheck][yCheck] = true;
-//                        } else {
-//
-//                        }
                     }
 
                     yCheck = 0;
@@ -111,8 +112,6 @@ public class SoundTowerBehaviorBrent extends Behavior {
                 return true;
             }
         } else {
-            MapLocation loc = null;
-
             boolean done = false;
             int count = 0;
 
@@ -134,15 +133,12 @@ public class SoundTowerBehaviorBrent extends Behavior {
                         break;
                 }
 
-
                 done = rc.canAttackSquare(loc) && MapUtils.isOnMap(loc.add(1,1), robot.info.width + 2, robot.info.height + 2);
                 count++;
             }
-
-
-            robot.rc.attackSquare(loc);
         }
 
+        robot.rc.attackSquare(loc);
         return true;
     }
 
@@ -216,26 +212,38 @@ public class SoundTowerBehaviorBrent extends Behavior {
     {
         if(currentPath == null || currentPath.length - currentNode < 1) {
             Direction dir = directions[currentDir];
+
             MapLocation loc = robot.currentLoc.add(dir, radius);
             while(!MapUtils.isOnMap(loc, robot.info.width, robot.info.height) || rc.senseTerrainTile(loc) == TerrainTile.VOID) {
                 radius--;
                 loc = robot.currentLoc.add(dir, radius);
+
+                if(radius < 4) {
+                    radius = MAX_DISTANCE;
+
+                    currentDir++;
+                    if(currentDir == directions.length) {
+                        currentDir = 0;
+                    }
+                    dir = directions[currentDir];
+                    loc = robot.currentLoc.add(dir, radius);
+                }
             }
 
-            System.out.println("x:" + loc.x + " y: " + loc.y);
             radius = MAX_DISTANCE;
+            lastPosition = new MapLocation(loc.x - herdFocus.x + 17, loc.y - herdFocus.y + 17);
+
+            if(cachedPaths[currentDir] == null || cachedPaths[currentDir].length == 0) {
+                currentPath = findPath(lastPosition.x, lastPosition.y);
+                cachedPaths[currentDir] = currentPath;
+            } else {
+                currentPath = cachedPaths[currentDir];
+            }
+
             currentDir++;
             if(currentDir == directions.length) {
                 currentDir = 0;
             }
-
-            lastPosition = new MapLocation(loc.x - herdFocus.x + 17, loc.y - herdFocus.y + 17);
-            currentPath = findPath(lastPosition.x, lastPosition.y);
-
-            for(int i = 0; i < currentPath.length; i++) {
-                System.out.println(currentPath[i]);
-            }
-
             currentNode = 0;
         }
 

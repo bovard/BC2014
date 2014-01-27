@@ -1,12 +1,9 @@
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package team009.utils.pathfinding;
 
 import team009.utils.Timer;
+
+import java.util.Arrays;
 
 /**
  * The backbone, arms, legs, and spleen of the pathfinder. This is responsible
@@ -34,8 +31,8 @@ public class GraphBuilder {
 
     private final int[][] map;
 
-    public static int MAX_OBSTACLES = 400;
-    public static int MAX_WAYPOINTS = 500;
+    public static int MAX_OBSTACLES = 1000;
+    public static int MAX_WAYPOINTS = 800;
 
     public GraphBuilder(int length, int height) {
         this.length = length;
@@ -46,7 +43,7 @@ public class GraphBuilder {
         obstacles = new Point[MAX_OBSTACLES];
         obstacle_index = 0;
 
-        insideCorners = new boolean[200];
+        insideCorners = new boolean[MAX_WAYPOINTS];
 
         map = new int[length][height];
 
@@ -101,37 +98,39 @@ public class GraphBuilder {
      * be.
      */
     private boolean isVisible(Point p1, Point p2) {
-        int maxX = Math.max(p1.x, p2.x);
-        int minX = Math.min(p1.x, p2.x);
-        int maxY = Math.max(p1.y, p2.y);
-        int minY = Math.min(p1.y, p2.y);
-
-        if (Math.abs(p1.x - p2.x) <= 1 && Math.abs(p1.y - p2.y) <= 1) {
-            return true; //handle inner corner cases
-        }
-
-        double x_slope = (p2.x - p1.x);
-        double y_slope = (p2.y - p1.y);
-        double distance = euclidean(p1, p2);
-        x_slope /= distance;
-        y_slope /= distance;
-        double temp_distance = 0;
         double currentX = p1.x;
         double currentY = p1.y;
-        while (isValid((int) currentX, (int) currentY) && (Math.abs(currentX - p2.x) > .5 || Math.abs(currentY - p2.y) > .5) && temp_distance < distance) {
-            if (map[(int)currentX][(int)currentY] == 1) {
-                return false;
+        int x_slope = (p2.x - p1.x);
+
+        if(x_slope != 0) {
+            int xDelta = x_slope > 0 ? 1 : -1;
+            double y_slope = (p2.y - currentY) / Math.abs(x_slope);
+
+            int curX = (int)currentX;
+            int curY = (int)currentY;
+            while (curX != p2.x) {
+                if (map[curX][curY] == 1) {
+                    return false;
+                }
+
+                curX += xDelta;
+                currentY += y_slope;
+                curY = (int)currentY;
             }
-            currentX += x_slope;
-            currentY += y_slope;
-            temp_distance += Math.abs(y_slope / x_slope);
+        } else {
+            int curY = (int)currentY;
+            int yDelta = p2.y - currentY > 0 ? 1 : -1;
+            while (curY != p2.y) {
+                if (map[p1.x][curY] == 1) {
+                    return false;
+                }
+                curY += yDelta;
+            }
         }
         return true;
     }
 
-    private double euclidean(Point p1, Point p2) {
-        return Math.sqrt((p1.x-p2.x) * (p1.x-p2.x) + (p1.y-p2.y) * (p1.y-p2.y));
-    }
+    private double euclidean(Point p1, Point p2) {return Math.sqrt((p1.x-p2.x)*(p1.x-p2.x) + (p1.y-p2.y)*(p1.y-p2.y));}
 
     /**
      * Finds the Manhattan distance between the two given points.
@@ -159,13 +158,12 @@ public class GraphBuilder {
             for (int j = -1; j <= 1; j++) {
                 for (int k = -1; k <= 1; k++) {
                     if (isValid(x + j, y + k) && map[x + j][y + k] == 0) {
-                        if (Math.abs(j) + Math.abs(k) == 2 && isOutsideCorner(x + j, y + k)) {
+                        if (isOutsideCorner(x + j, y + k)) {
                             map[x + j][y + k] = 2;
                             waypoints[waypoint_index] = new Point(x + j, y + k);
                             waypoint_index++;
-                        } else if ((Math.abs(j) == 1 || Math.abs(k) == 1) && isInsideCorner(x + j, y + k)) {
+                        } else if (isInsideCorner(x + j, y + k)) {
                             map[x + j][y + k] = 2;
-
                             insideCorners[waypoint_index] = true;
                             waypoints[waypoint_index] = new Point(x + j, y + k);
                             waypoint_index++;
@@ -302,7 +300,9 @@ public class GraphBuilder {
                 adjacency_matrix[waypoint_index][i] = 0; //Retain symmetry
             }
         }
+        Timer.EndTimer();
 
+        Timer.StartTimer();
         waypoints[waypoint_index + 1] = finish;
         for (int i = 0; i < waypoint_index + 1; i++) { //Place the finish into the adjacency matrix
             if (isVisible(finish, waypoints[i])) { //check visiblity
@@ -310,15 +310,12 @@ public class GraphBuilder {
                 adjacency_matrix[i][waypoint_index + 1] = distance; //place into matrix
                 adjacency_matrix[waypoint_index + 1][i] = distance; //retain symmetry
             } else {
-                adjacency_matrix[i][waypoint_index+1] = 0; //place it into the matrix
-                adjacency_matrix[waypoint_index+1][i] = 0; //Retain symmetry
+                adjacency_matrix[i][waypoint_index + 1] = 0; //place it into the matrix
+                adjacency_matrix[waypoint_index + 1][i] = 0; //Retain symmetry
             }
         }
-        Timer.EndTimer();
 
-        Timer.StartTimer();
         int[] path = DeathStar.findPath(adjacency_matrix, waypoint_index, waypoint_index + 1); //find the path
-        Timer.EndTimer();
         if (path == null) { //if null, return null
             return null;
         }
@@ -327,7 +324,31 @@ public class GraphBuilder {
             final_path[i] = waypoints[path[i]];
         }
         final_path[path.length - 1] = finish;
+        Timer.EndTimer();
+
         return final_path;
+    }
+
+    public static void main(String[] args) {
+        GraphBuilder g = new GraphBuilder(20, 20);
+        Point[] obstacles = new Point[]{new Point(5, 5), new Point(6, 5), new Point(5, 6), new Point(6, 6), new Point(3, 10), new Point(4, 10), new Point(5, 10), new Point(6, 10)};
+        for (Point p : obstacles) {
+            g.addObstacle(p);
+        }
+        g.buildMatrix();
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 20; j++) {
+                Point temp = new Point(j, i);
+                if (Arrays.asList(obstacles).contains(temp)) {
+                    System.out.print(2 + " ");
+                } else {
+                    System.out.print(((g.isVisible(new Point(19, 19), new Point(j, i))) ? 1 : 0) + " ");
+                }
+            }
+            System.out.println();
+        }
+        System.out.println(Arrays.toString(g.getPath(new Point(0, 0), new Point(19, 19))));
+
     }
 
 }
