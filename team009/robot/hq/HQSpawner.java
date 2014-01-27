@@ -16,6 +16,7 @@ public class HQSpawner {
     public static final int MICRO_TEST = 8;
     public static final int HQ_TEST = 9;
     public static final int DARK_HORSE = 10;
+    public static final int QUALIFIER = 11;
 
     public static HQ getHQ(RobotController rc, RobotInformation info) {
         HQ robot = null;
@@ -28,7 +29,8 @@ public class HQSpawner {
         //type = BACK_DOOR_TEST;
         //type = DEFENSIVE_PASTURE;
         //type = NOISE_TEST;
-        type = OFFENSIVE;
+//        type = OFFENSIVE;
+        type = QUALIFIER;
 
         switch(type) {
             case DEFENSIVE_PASTURE:
@@ -36,6 +38,9 @@ public class HQSpawner {
                 break;
             case OFFENSIVE:
                 robot = new Offensive(rc, info);
+                break;
+            case QUALIFIER:
+                robot = new Qualifier(rc, info);
                 break;
             case BALANCED:
                 //robot =

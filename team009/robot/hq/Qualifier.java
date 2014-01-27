@@ -5,12 +5,11 @@ import team009.BehaviorConstants;
 import team009.RobotInformation;
 import team009.bt.Node;
 import team009.bt.decisions.hq.OffensiveSelector;
+import team009.bt.decisions.hq.QualifierSelector;
 import team009.communication.bt.HQCom;
-import team009.utils.ChaseStrategyUtil;
-import team009.utils.CheesePostProcess;
 import team009.utils.MilkInformation;
 
-public class Offensive extends HQPreprocessor {
+public class Qualifier extends HQPreprocessor {
     // Default behavior is one base and both groups defend it
     // If both groups get big, the second can break away and hunt.
     public boolean huddle = false;
@@ -22,10 +21,10 @@ public class Offensive extends HQPreprocessor {
 
     private int milkingSpot = 0;
 
-    public Offensive(RobotController rc, RobotInformation info) {
+    public Qualifier(RobotController rc, RobotInformation info) {
         super(rc, info);
         treeRoot = getTreeRoot();
-//        comRoot = new HQCom(this);
+        comRoot = new HQCom(this);
     }
 
     @Override
@@ -38,10 +37,11 @@ public class Offensive extends HQPreprocessor {
         // Gets the different groups
         boolean enough = group0Count >= BehaviorConstants.HQ_REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
 
-        hunt = enough && hasPastures;
-        soundTower = !surround && enough && milkInformation.finished && noiseLocations.length == 0;
-        oneBase = !surround && enough && !soundTower && round > BehaviorConstants.ONE_BASE_ROUND_START && pastrLocations.length == 0;
-        huddle = !surround && !hunt;
+//        hunt = enough && hasPastures;
+//        soundTower = !surround && enough && milkInformation.finished && noiseLocations.length == 0;
+//        oneBase = !surround && enough && !soundTower && round > BehaviorConstants.ONE_BASE_ROUND_START && pastrLocations.length == 0;
+//        huddle = !surround && !hunt;
+        surround = true;
 
         // TODO: How to get out of oneBase?
 //        soundTower = !surround && enough && milkInformation.finished && noiseLocations.length == 0;
@@ -62,6 +62,7 @@ public class Offensive extends HQPreprocessor {
 
     @Override
     protected Node getTreeRoot() {
-        return new OffensiveSelector(this);
+        return new QualifierSelector(this);
     }
 }
+

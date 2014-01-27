@@ -4,21 +4,18 @@ import battlecode.common.GameActionException;
 import team009.communication.bt.behaviors.WriteBehavior;
 import team009.robot.hq.Qualifier;
 
-public class HQReturnToHome extends WriteBehavior {
+public class HQSurround extends WriteBehavior {
     Qualifier hq;
 
-    public HQReturnToHome(Qualifier off) {
+    public HQSurround(Qualifier off) {
         super(off);
         hq = off;
     }
 
     @Override
     public boolean run() throws GameActionException {
-        if (hq.rally.finished) {
-            hq.comReturnHome(hq.rally.rallyPoint, 0);
-        } else {
-            hq.comReturnHome(hq.rally.center, 0);
-        }
+        hq.comDefend(robot.info.enemyHq, 0);
         return true;
     }
 }
+

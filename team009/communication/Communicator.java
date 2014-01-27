@@ -2,7 +2,7 @@ package team009.communication;
 
 import battlecode.common.*;
 import team009.communication.decoders.*;
-import team009.robot.soldier.SoldierSpawner;
+import team009.robot.TeamRobot;
 
 public class Communicator {
 
@@ -25,18 +25,23 @@ public class Communicator {
         _Broadcast(rc, _GroupChannel(group, channel), decoder);
     }
 
-    public static void WriteTypeAndGroup(RobotController rc, int soldierType, int group) throws GameActionException {
+    public static void WriteTypeAndGroup(RobotController rc, int soldierType, int group, MapLocation location) throws GameActionException {
         int channel = soldierType * MAX_GROUP_COUNT + group;
         SoldierCountDecoder decoder = ReadTypeAndGroup(rc, soldierType, group);
 
+        decoder.addSoldier(location);
+
         // Incs the channel
-        decoder.count++;
         _Broadcast(rc, channel, decoder);
     }
 
     // The two way communication
     public static void WriteTwoWayCommunicate(RobotController rc, int channel, int command, MapLocation from, MapLocation to) throws GameActionException {
         _Broadcast(rc, channel, new TwoWayDecoder(from, to, command).getData());
+    }
+
+    public static void WritePassComChannel(RobotController rc, int comChannel, boolean sound) throws GameActionException {
+        _Broadcast(rc, sound ? NOISE_TOWER_COM_PASS_CHANNEL : PASTR_COM_PASS_CHANNEL, new ComPassDecoder(comChannel));
     }
 
     //-----------------------------------------------------
@@ -52,8 +57,9 @@ public class Communicator {
         int data = rc.readBroadcast(channel);
 
         if (data == 0) {
-            return new SoldierCountDecoder(soldierType, group);
+            return new SoldierCountDecoder(soldierType, group, new MapLocation(0, 0));
         }
+
         return new SoldierCountDecoder(data);
     }
 
@@ -70,12 +76,17 @@ public class Communicator {
         }
 
         _Broadcast(rc, groupChannel, decoder.getData());
+        rc.setIndicatorString(1, "Read from readType: " + decoder.toString() + " : ");
         return decoder;
     }
 
     // The two way communication
     public static TwoWayDecoder ReadTwoWayCommunicate(RobotController rc, int channel) throws GameActionException {
-        return new TwoWayDecoder(rc.readBroadcast(channel));
+        return new TwoWayDecoder(rc.readBroadcast(TWO_WAY_HQ_COM_BASE + channel));
+    }
+
+    public static int ReadPassComChannel(RobotController rc, boolean sound) throws GameActionException {
+        return rc.readBroadcast(sound ? NOISE_TOWER_COM_PASS_CHANNEL : PASTR_COM_PASS_CHANNEL);
     }
 
     //-----------------------------------------------------
@@ -88,6 +99,10 @@ public class Communicator {
 
     public static void ClearGroupChannel(RobotController rc, int group, int channel) throws GameActionException {
         _Broadcast(rc, _GroupChannel(group, channel), 0);
+    }
+
+    public static void ClearTwoWayChannel(RobotController rc, int channel) throws GameActionException {
+        _Broadcast(rc, TWO_WAY_HQ_COM_BASE + channel, 0);
     }
 
     public static boolean ReadRound(int round) {
@@ -123,10 +138,13 @@ public class Communicator {
     public static final int GROUP_HQ_CHANNEL = 1;
     public static final int GROUP_CENTROID_CHANNEL = 2;
     protected static final int GROUP_CHANNEL_COUNT = 3;
-    protected static final int GROUP_CHANNEL_BASE = SOLDIER_TYPE_CHANNEL_BASE + MAX_GROUP_COUNT * SoldierSpawner.SOLDIER_COUNT;
+    protected static final int GROUP_CHANNEL_BASE = SOLDIER_TYPE_CHANNEL_BASE + MAX_GROUP_COUNT * TeamRobot.SOLDIER_COUNT;
 
     // The two way communications HQ < - > Soldier
     public static final int TWO_WAY_HQ_COM_BASE = GROUP_CHANNEL_BASE + MAX_GROUP_COUNT * GROUP_CHANNEL_COUNT;
+    public static final int TWO_WAY_COM_LENGTH = 35;
+    public static final int NOISE_TOWER_COM_PASS_CHANNEL = 4000;
+    public static final int PASTR_COM_PASS_CHANNEL = 4010;
 
     // Group channels go for group channel count + 5;
     public static final int INFORMATION_ROUND_MOD = 4;

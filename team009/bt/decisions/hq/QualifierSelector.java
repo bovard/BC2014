@@ -1,25 +1,22 @@
 package team009.bt.decisions.hq;
 
 import battlecode.common.GameActionException;
-import team009.bt.behaviors.hq.HQCheese;
 import team009.bt.behaviors.hq.HQOffensive;
 import team009.bt.behaviors.hq.HQShoot;
 import team009.bt.decisions.Decision;
-import team009.robot.hq.Offensive;
+import team009.robot.hq.Qualifier;
 
 // TODO: Make this more efficient by hard coding the available states.
-public class OffensiveSelector extends Decision {
+public class QualifierSelector extends Decision {
     HQShoot shoot;
     HQOffensive spawn;
-    HQCheese sound;
 
-    Offensive hq;
+    Qualifier hq;
 
-    public OffensiveSelector(Offensive robot) {
+    public QualifierSelector(Qualifier robot) {
         super(robot);
         shoot = new HQShoot(robot);
         spawn = new HQOffensive(robot);
-        sound = new HQCheese(robot);
         hq = robot;
     }
 
@@ -42,3 +39,4 @@ public class OffensiveSelector extends Decision {
         return true;
     }
 }
+

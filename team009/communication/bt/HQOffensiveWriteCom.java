@@ -4,45 +4,39 @@ import battlecode.common.GameActionException;
 import team009.communication.bt.behaviors.WriteBehavior;
 import team009.communication.bt.behaviors.hq.*;
 import team009.robot.hq.Offensive;
+import team009.robot.hq.Qualifier;
 
 public class HQOffensiveWriteCom extends WriteBehavior {
-    Offensive hq;
+    Qualifier hq;
 
-    HQCheeseCom cheese;
     HQOneBase oneBase;
-    HQChase chase;
     HQHunt hunt;
     HQReturnToHome home;
+    HQSurround surround;
 
-    public HQOffensiveWriteCom(Offensive off) {
+    public HQOffensiveWriteCom(Qualifier off) {
         super(off);
         hq = off;
 
         oneBase = new HQOneBase(off);
-        chase = new HQChase(off);
         hunt = new HQHunt(off);
         home = new HQReturnToHome(off);
-        cheese = new HQCheeseCom(off);
+        surround = new HQSurround(off);
     }
 
     @Override
     public boolean run() throws GameActionException {
-        if (hq.cheese) {
-            rc.setIndicatorString(0, "Running Cheese");
-            cheese.run();
-        }
-
-        if (hq.chase0 || hq.chase1) {
-            rc.setIndicatorString(1, "Running Chase");
-            chase.run();
-        } else if (hq.hunt0 || hq.hunt1) {
+        if (hq.hunt) {
             rc.setIndicatorString(1, "Running Hunt");
             hunt.run();
-        } else if (hq.oneBase) {
+        } else if (hq.surround) {
+            rc.setIndicatorString(1, "Running surround");
+            surround.run();
+        } else if (hq.oneBase || hq.soundTower) {
             rc.setIndicatorString(1, "Running OneBase");
             oneBase.run();
         } else if (hq.huddle) {
-            rc.setIndicatorString(1, "Running Home");
+            rc.setIndicatorString(1, "Running Home: " + hq.rally.rallyPoint);
             home.run();
         }
 

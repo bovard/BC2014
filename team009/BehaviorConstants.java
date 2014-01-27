@@ -16,15 +16,15 @@ public class BehaviorConstants {
 
     // One base strat
     public static final boolean ONE_BASE_ENABLED = true;
+    public static final int ONE_BASE_ROUND_START = 500;
 
     // Map Sizing
     public static final int MAP_LARGE_MINIMUM_AREA = 2000;
     public static final int MAP_MEDIUM_MINIMUM_AREA = 1200;
 
     // HQ Constants
-    public static final int HQ_REQUIRED_SOLDIER_COUNT_FOR_ATTACK = 4;
+    public static final int HQ_REQUIRED_SOLDIER_COUNT_FOR_ATTACK = 5;
     public static final int HQ_REQUIRED_SOLDIER_COUNT_FOR_GROUP_ATTACK = 6;
-    public static final int HQ_SOLDIER_COM_MAX = 35;
     public static final int HQ_SMALL_MAP_ONE_BASE_ROUND_NUMBER = 500;
 
     // Milk Selection picking
@@ -40,4 +40,7 @@ public class BehaviorConstants {
     public static final int NOISE_TOWER_REDUCTION = 2;
     public static final boolean NOISE_TOWER_ENABLE_WITH_PASTURE = false;
     public static final boolean NOISE_TOWER_FIRST = false;
+
+    // Hunting Vars
+    public static final boolean HUNT_AND_GATHER = true;
 }

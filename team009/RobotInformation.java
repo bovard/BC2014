@@ -3,7 +3,8 @@ package team009;
 import battlecode.common.*;
 
 public class RobotInformation {
-	public Team myTeam;
+    public static final int HQ_PROXIMITY = (int)Math.pow(Math.sqrt(RobotType.HQ.attackRadiusMaxSquared) + 2.22, 2);
+    public Team myTeam;
 	public Team enemyTeam;
     public Robot robot;
     public RobotInfo info;
@@ -16,6 +17,7 @@ public class RobotInformation {
 	public int enemyHqDistance;
     public Direction enemyDir;
 	public RobotController rc;
+    public int hqAttackRadius;
 
 	/**
 	 * Will construct a robot information. These are common operations that
@@ -35,6 +37,6 @@ public class RobotInformation {
         info = rc.senseRobotInfo(robot);
         enemyDir = hq.directionTo(enemyHq);
         center = new MapLocation(height/2, width/2);
+        hqAttackRadius = RobotType.HQ.attackRadiusMaxSquared;
 	}
-
 }
