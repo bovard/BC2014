@@ -82,7 +82,8 @@ public class MapPreProcessor {
                             }
                         }
                     }
-                    coarseMap[x][y] = normals + roads + voids;
+                    coarseMap[x][y] = 2*normals + roads + 4*voids + 1000000 * (voids/coarseDivisor*coarseDivisor) + 10000 * (voids/coarseDivisor);
+                    //coarseMap[x][y] = normals + roads + voids;
                     if (voids >= coarseWidth || voids >= coarseHeight) {
                         coarseMap[x][y] += 100;
                     }
