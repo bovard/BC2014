@@ -55,13 +55,13 @@ public class AStar {
         if (pathCache[startSquare][endSquare] != -1) {
             return pathCache[startSquare][endSquare];
         } else {
-            return findPath(startSquare, endSquare);
+            return _findPath(startSquare, endSquare);
         }
 
     }
 
 
-    private int findPath(int startSquare, int endSquare) {
+    private int _findPath(int startSquare, int endSquare) {
         int[] f_scores = new int[numNodes]; // the estimated cost of getting to the goal
         int[] g_scores = new int[numNodes]; // the cost of getting here
         int[] cameFrom = new int[numNodes];
@@ -74,19 +74,19 @@ public class AStar {
         ArrayList<Integer> closed = new ArrayList<Integer>(); // the list of nodes already evaluated
 
         g_scores[startSquare] = 0;
-        f_scores[startSquare] = heuristic(startSquare, endSquare);
+        f_scores[startSquare] = _heuristic(startSquare, endSquare);
 
         while (open.size() > 0) {
-            int current = findLowestF(open, f_scores);
+            int current = _findLowestF(open, f_scores);
 
             if (current == endSquare) {
-                return cacheAndReturnNextNode(cameFrom, startSquare, endSquare);
+                return _cacheAndReturnNextNode(cameFrom, startSquare, endSquare);
             }
 
             open.remove(current);
             closed.add(current);
 
-            SmartIntArray neighbors = neighbors(current);
+            SmartIntArray neighbors = _neighbors(current);
 
             for (int i = neighbors.length - 1 ; i >= 0; i--) {
                 int neighbor = neighbors.arr[i];
@@ -95,12 +95,12 @@ public class AStar {
                     continue;
                 }
 
-                int tentative_score = g_scores[neighbor] + distBetween(neighbor, current);
+                int tentative_score = g_scores[neighbor] + _distBetween(neighbor, current);
 
                 if (!open.contains(neighbor) || g_scores[neighbor] > tentative_score) {
                     cameFrom[neighbor] = current;
                     g_scores[neighbor] = tentative_score;
-                    f_scores[neighbor] = g_scores[neighbor] + heuristic(neighbor, endSquare);
+                    f_scores[neighbor] = g_scores[neighbor] + _heuristic(neighbor, endSquare);
                     if (!open.contains(neighbor)) {
                         open.add(neighbor);
                     }
@@ -110,7 +110,7 @@ public class AStar {
         return -1;
     }
 
-    private SmartIntArray neighbors(int loc) {
+    private SmartIntArray _neighbors(int loc) {
         SmartIntArray neighbors = new SmartIntArray();
         int x = loc / maxY;
         int y = loc % maxY;
@@ -150,7 +150,7 @@ public class AStar {
      * @param current
      * @return
      */
-    private int distBetween(int neighbor, int current) {
+    private int _distBetween(int neighbor, int current) {
         if (Math.abs(current - neighbor) <= maxY) {
             // the squares are orthagonal
             return map[neighbor/maxY][neighbor % maxY];
@@ -170,7 +170,7 @@ public class AStar {
      * @param goal the goal node
      * @return
      */
-    private int cacheAndReturnNextNode(int[] cameFrom, int start, int goal) {
+    private int _cacheAndReturnNextNode(int[] cameFrom, int start, int goal) {
         boolean done = false;
         int current = cameFrom[goal];
         pathCache[current][goal] = goal;
@@ -191,7 +191,9 @@ public class AStar {
     }
 
 
-    private static int findLowestF(ArrayList<Integer> open, int[] f_scores) {
+    private static int _findLowestF(ArrayList<Integer> open, int[] f_scores) {
+        // TODO: this is called a lot, optimize the sh*t out of it
+        // TODO: move this up to the main method to save on bytecodes
         int min = Integer.MAX_VALUE;
         int minLoc = -1;
         for (int loc : open) {
@@ -206,7 +208,7 @@ public class AStar {
     }
 
 
-    private int heuristic(int startNode, int goalNode) {
+    private int _heuristic(int startNode, int goalNode) {
         // TODO: this is called a lot, optimize the sh*t out of it
         int[] start = new int[]{startNode/maxY, startNode % maxY};
         int [] goal = new int[]{goalNode/maxY, goalNode % maxY};
