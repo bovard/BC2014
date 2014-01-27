@@ -140,7 +140,19 @@ public class GraphBuilder {
      * @return the Manhattan distance between the points.
      */
     private int manhattan(Point p1, Point p2) {
-        return Math.abs(p1.x - p2.x) + Math.abs(p1.y - p2.y);
+        if(p1.x > p2.x) {
+            if(p1.y > p2.y) {
+                return p1.x - p2.x + p1.y - p2.y;
+            } else {
+                return p1.x - p2.x + p2.y - p1.y;
+            }
+        } else {
+            if(p1.y > p2.y) {
+                return p2.x - p1.x + p1.y - p2.y;
+            } else {
+                return p2.x - p1.x + p2.y - p1.y;
+            }
+        }
     }
 
     /**
@@ -152,6 +164,8 @@ public class GraphBuilder {
      * before updating.
      */
     public void buildMatrix() {
+        Timer.StartTimer();
+        System.out.println(obstacle_index);
         for (int i = last_object_index; i < obstacle_index; i++) {
             int x = obstacles[i].x;
             int y = obstacles[i].y;
@@ -172,38 +186,42 @@ public class GraphBuilder {
                 }
             }
         }
+        Timer.EndTimer();
+
+        Timer.StartTimer();
         adjacency_matrix = new int[waypoint_index + 2][waypoint_index + 2];
         for (int i = 0; i < waypoint_index; i++) {
             for (int j = i + 1; j < waypoint_index; j++) {
                 if (isVisible(i, j)) {
                     int distance = manhattan(waypoints[i], waypoints[j]);
+
                     adjacency_matrix[i][j] = distance;
                     adjacency_matrix[j][i] = distance;
-
                 }
             }
         }
         last_object_index = obstacle_index;
+        Timer.EndTimer();
     }
 
     private boolean isOutsideCorner(int x, int y) {
-        if (isValid(x - 1, y - 1) && map[x - 1][y - 1] == 1) {
-            if (isValid(x - 1, y) && map[x - 1][y] != 1 && isValid(x, y - 1) && map[x][y - 1] != 1) {
+        if (x > 0 && y > 0 && map[x - 1][y - 1] == 1) {
+            if (map[x - 1][y] != 1 && map[x][y - 1] != 1) {
                 return true;
             }
         }
-        if (isValid(x + 1, y - 1) && map[x + 1][y - 1] == 1) {
-            if (isValid(x + 1, y) && map[x + 1][y] != 1 && isValid(x, y - 1) && map[x][y - 1] != 1) {
+        if (x + 1 < length && y > 0 && map[x + 1][y - 1] == 1) {
+            if (map[x + 1][y] != 1 && map[x][y - 1] != 1) {
                 return true;
             }
         }
-        if (isValid(x + 1, y + 1) && map[x + 1][y + 1] == 1) {
-            if (isValid(x + 1, y) && map[x + 1][y] != 1 && isValid(x, y + 1) && map[x][y + 1] != 1) {
+        if (x + 1 < length && y + 1 < height && map[x + 1][y + 1] == 1) {
+            if (map[x + 1][y] != 1 && map[x][y + 1] != 1) {
                 return true;
             }
         }
-        if (isValid(x - 1, y + 1) && map[x - 1][y + 1] == 1) {
-            if (isValid(x - 1, y) && map[x - 1][y] != 1 && isValid(x, y + 1) && map[x][y + 1] != 1) {
+        if (x > 0 && y + 1 < height && map[x - 1][y + 1] == 1) {
+            if (map[x - 1][y] != 1 && map[x][y + 1] != 1) {
                 return true;
             }
         }

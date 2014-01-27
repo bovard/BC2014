@@ -252,8 +252,14 @@ public class SoundTowerBehaviorBrent extends Behavior {
             MapLocation currentTarget =  new MapLocation(currentPath[currentNode].x, currentPath[currentNode].y);
             lastPosition = lastPosition.add(lastPosition.directionTo(currentTarget));
 
-            if(currentTarget.x == lastPosition.x && currentTarget.y == lastPosition.y) {
+            if(manhattan(new Point(currentTarget.x, currentTarget.y), new Point(lastPosition.x, lastPosition.y)) <= 2) {
                 currentNode++;
+                lastPosition = lastPosition.add(lastPosition.directionTo(currentTarget), 3);
+
+                if(currentNode < currentPath.length) {
+                    currentTarget = new MapLocation(currentPath[currentNode].x, currentPath[currentNode].y);
+                    lastPosition = lastPosition.add(lastPosition.directionTo(currentTarget), -3);
+                }
             }
 //            MapLocation curLoc = new MapLocation(current.x, current.y);
 //            MapLocation nextLoc = new MapLocation(next.x, next.y);
@@ -301,6 +307,22 @@ public class SoundTowerBehaviorBrent extends Behavior {
 
     public static int pairingFunction(int x, int y) {
         return ((x + y) * (x + y + 1) >> 1) + y;
+    }
+
+    private int manhattan(Point p1, Point p2) {
+        if(p1.x > p2.x) {
+            if(p1.y > p2.y) {
+                return p1.x - p2.x + p1.y - p2.y;
+            } else {
+                return p1.x - p2.x + p2.y - p1.y;
+            }
+        } else {
+            if(p1.y > p2.y) {
+                return p2.x - p1.x + p1.y - p2.y;
+            } else {
+                return p2.x - p1.x + p2.y - p1.y;
+            }
+        }
     }
 
     private static final int MAX_DISTANCE = 15;
