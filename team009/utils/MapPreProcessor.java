@@ -83,6 +83,12 @@ public class MapPreProcessor {
                             }
                         }
                     }
+                    // approximate number of rounds to move over each square
+                    // normals take 2 rounds
+                    // roads take 1
+                    // single voids take 4 (have to take an extra turn to get around them)
+                    // if the square is full of voids (voids/(coarseDivisor^2)) = 1, make the value IMPASSIBLE
+                    // if the square is potentially blocked (voids/coarseDivor) = 1, make it very painful to move through
                     coarseMap[x][y] = 2*normals + roads + 4*voids + BehaviorConstants.IMPASSIBLE * (voids/(coarseDivisor*coarseDivisor)) + 10000 * (voids/coarseDivisor);
                     //coarseMap[x][y] = normals + roads + voids;
                     if (voids >= coarseWidth || voids >= coarseHeight) {
