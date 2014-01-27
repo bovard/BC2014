@@ -1,5 +1,7 @@
 package team009.utils;
 
+import team009.BehaviorConstants;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -120,7 +122,9 @@ public class AStar {
             for (int i = -1; i <= 1; i ++) {
                 for (int j = -1; j <= 1; j ++) {
                     if (i!= 0 || j!=0) {
-                        neighbors.add( maxY * (x + i) + (y + j));
+                        if (map[maxY * (x + i)][y+j] < BehaviorConstants.IMPASSIBLE) {
+                            neighbors.add( maxY * (x + i) + (y + j));
+                        }
                     }
 
                 }

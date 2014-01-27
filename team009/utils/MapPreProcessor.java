@@ -4,6 +4,7 @@ import battlecode.common.Direction;
 import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
 import battlecode.common.TerrainTile;
+import team009.BehaviorConstants;
 import team009.robot.hq.HQ;
 
 public class MapPreProcessor {
@@ -82,7 +83,7 @@ public class MapPreProcessor {
                             }
                         }
                     }
-                    coarseMap[x][y] = 2*normals + roads + 4*voids + 1000000 * (voids/(coarseDivisor*coarseDivisor)) + 10000 * (voids/coarseDivisor);
+                    coarseMap[x][y] = 2*normals + roads + 4*voids + BehaviorConstants.IMPASSIBLE * (voids/(coarseDivisor*coarseDivisor)) + 10000 * (voids/coarseDivisor);
                     //coarseMap[x][y] = normals + roads + voids;
                     if (voids >= coarseWidth || voids >= coarseHeight) {
                         coarseMap[x][y] += 100;
