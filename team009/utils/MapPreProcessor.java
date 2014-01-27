@@ -37,10 +37,8 @@ public class MapPreProcessor {
 
     public void calc() {
         if (finished) {
-            System.out.println("Finished MapPreProcessor");
             return;
         }
-        System.out.println("MapPreProcessor");
 
         int coarseDivisor = this.coarseDivisor;
         int k = 0;
