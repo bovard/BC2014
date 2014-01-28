@@ -5,7 +5,7 @@ import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
 import battlecode.common.TerrainTile;
 import team009.BehaviorConstants;
-import team009.robot.hq.HQ;
+import team009.hq.HQ;
 
 public class MapPreProcessor {
     public int[][] map;
@@ -39,10 +39,8 @@ public class MapPreProcessor {
 
     public void calc() {
         if (finished) {
-            System.out.println("Finished MapPreProcessor");
             return;
         }
-        System.out.println("MapPreProcessor");
 
         int coarseDivisor = this.coarseDivisor;
         int k = 0;

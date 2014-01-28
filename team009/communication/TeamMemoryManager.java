@@ -1,7 +1,7 @@
 package team009.communication;
 
 import team009.robot.TeamRobot;
-import team009.robot.hq.HQSpawner;
+import team009.hq.HQSpawner;
 
 public class TeamMemoryManager {
     public static int PASTURES_KILLED = 0;

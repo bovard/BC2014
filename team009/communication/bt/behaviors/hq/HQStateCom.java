@@ -2,11 +2,10 @@ package team009.communication.bt.behaviors.hq;
 
 import battlecode.common.GameActionException;
 import team009.communication.Communicator;
-import team009.communication.decoders.SoldierCountDecoder;
 import team009.communication.bt.behaviors.ReadBehavior;
 import team009.communication.decoders.TwoWayDecoder;
 import team009.robot.TeamRobot;
-import team009.robot.hq.HQ;
+import team009.hq.HQ;
 import team009.utils.SmartMapLocationArray;
 
 public class HQStateCom extends ReadBehavior {

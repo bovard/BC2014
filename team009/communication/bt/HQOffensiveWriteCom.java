@@ -3,8 +3,7 @@ package team009.communication.bt;
 import battlecode.common.GameActionException;
 import team009.communication.bt.behaviors.WriteBehavior;
 import team009.communication.bt.behaviors.hq.*;
-import team009.robot.hq.Offensive;
-import team009.robot.hq.Qualifier;
+import team009.hq.robot.Qualifier;
 
 public class HQOffensiveWriteCom extends WriteBehavior {
     Qualifier hq;
