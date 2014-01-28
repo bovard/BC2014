@@ -43,4 +43,11 @@ public class BehaviorConstants {
 
     // Hunting Vars
     public static final boolean HUNT_AND_GATHER = true;
+
+
+
+
+
+    // Astar and path
+    public static final int IMPASSIBLE = 1000000;
 }
