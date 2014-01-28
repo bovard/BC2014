@@ -42,10 +42,10 @@ public class AStar {
         return maxY * x + y;
     }
 
-    public int mapLocationToSquareID(MapLocation loc, int courseNum) {
+    public int mapLocationToSquareID(MapLocation loc, int coarseHeight, int coarseWidth) {
         System.out.println("MapLocation to SquareID");
         System.out.println("loc x/y = " + loc.x + "/" + loc.y);
-        return maxY * (loc.x / courseNum) + loc.y / courseNum;
+        return maxY * (loc.x / coarseWidth) + loc.y / coarseHeight;
     }
 
 
@@ -64,6 +64,7 @@ public class AStar {
     public int getNextSquare(int startSquare, int endSquare) {
         System.out.println("getNextSquare " + startSquare + " to " + endSquare);
         System.out.println(pathCache.length + " " + pathCache[0].length + " " + pathCache[0][1]);
+        System.out.println("Path cache is " + pathCache[startSquare][endSquare]);
         if (pathCache[startSquare][endSquare] != -1) {
             return pathCache[startSquare][endSquare];
         } else {
@@ -89,14 +90,19 @@ public class AStar {
         f_scores[startSquare] = _heuristic(startSquare, endSquare);
 
         while (open.size() > 0) {
+            System.out.println("Starting a loop");
             int current = _findLowestF(open, f_scores);
+            System.out.println("Looking at square " + current);
 
             if (current == endSquare) {
+                System.out.println("Made it to dest");
                 return _cacheAndReturnNextNode(cameFrom, startSquare, endSquare);
             }
 
-            open.remove(current);
-            closed.add(current);
+            System.out.println("Removing from open");
+            open.remove(new Integer(current));
+            System.out.println("Adding to closed");
+            closed.add(new Integer(current));
 
             SmartIntArray neighbors = _neighbors(current);
 
@@ -123,6 +129,8 @@ public class AStar {
     }
 
     private SmartIntArray _neighbors(int loc) {
+        System.out.println("Neighbors");
+        Timer.StartTimer();
         SmartIntArray neighbors = new SmartIntArray();
         int x = loc / maxY;
         int y = loc % maxY;
@@ -133,7 +141,7 @@ public class AStar {
                 for (int j = -1; j <= 1; j ++) {
                     if (i!= 0 || j!=0) {
                         if (map[maxY * (x + i)][y+j] < BehaviorConstants.IMPASSIBLE) {
-                            neighbors.add( maxY * (x + i) + (y + j));
+                            neighbors.add();
                         }
                     }
 
@@ -153,6 +161,7 @@ public class AStar {
             }
 
         }
+        Timer.EndTimer();
         return neighbors;
     }
 
@@ -185,8 +194,10 @@ public class AStar {
      * @return
      */
     private int _cacheAndReturnNextNode(int[] cameFrom, int start, int goal) {
+        System.out.println("Goal met from " + start + " to " + goal + "!!!!!!!!!!!!!!========");
         boolean done = false;
         int current = cameFrom[goal];
+        System.out.println("Go to node " + current);
         pathCache[current][goal] = goal;
 
         if (current == goal) {
@@ -199,7 +210,11 @@ public class AStar {
             int temp = previous;
             previous = cameFrom[previous];
             current = temp;
-        } while (previous != goal);
+            System.out.println("Go to node " + current);
+        } while (previous != start);
+
+        pathCache[start][goal] = current;
+
 
         return current;
     }
@@ -218,6 +233,7 @@ public class AStar {
 
         }
         // if minLoc = -1 here something is very wrong!
+        System.out.println("Found " + minLoc + " at distance " + min);
         return minLoc;
     }
 

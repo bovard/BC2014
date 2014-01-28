@@ -16,6 +16,8 @@ public abstract class HQPreprocessor extends HQ {
     public RallyPointProcessor rally;
     protected boolean finishedPostCalc = false;
     private int donePath = 0;
+    private boolean initStar = false;
+    private AStar a;
 
     public HQPreprocessor(RobotController rc, RobotInformation info) {
         super(rc, info);
@@ -36,6 +38,12 @@ public abstract class HQPreprocessor extends HQ {
             map.calc();
             return;
         }
+        if (!initStar) {
+            initStar = true;
+            System.out.println("Starting AStar init at " + Clock.getBytecodeNum());
+            a = new AStar(map.coarseMap, map.minValue);
+            System.out.println("Finishing AStar init at " + Clock.getBytecodeNum());
+        }
 
         if (!milkInformation.finished) {
             milkInformation.calc();
@@ -43,20 +51,25 @@ public abstract class HQPreprocessor extends HQ {
         }
 
         if (donePath < 2) {
-            System.out.println("Starting AStar init at " + Clock.getBytecodeNum());
-            AStar a = new AStar(map.coarseMap, map.minValue);
-            System.out.println("Finishing AStar init at " + Clock.getBytecodeNum());
-            System.out.println("MapHas: " + map.coarseDivisor);
-            MapLocation hq = rc.getLocation();
-            MapLocation eHQ = rc.senseEnemyHQLocation();
-            int startSquare = a.mapLocationToSquareID(hq, map.coarseDivisor);
-            int endSquare = a.mapLocationToSquareID(eHQ, map.coarseDivisor);
-            System.out.println("Going from " + startSquare + " to " + endSquare);
-            System.out.println("Starting AStar getNextSquare at " + Clock.getBytecodeNum());
-            a.getNextSquare(startSquare, endSquare);
-            System.out.println("Ending AStar getNextSquare at " + Clock.getBytecodeNum());
-            donePath++;
-            return;
+            try {
+                System.out.println("MapHas: " + map.coarseDivisor);
+                MapLocation hq = rc.getLocation();
+                MapLocation eHQ = rc.senseEnemyHQLocation();
+                int startSquare = a.mapLocationToSquareID(hq, map.coarseHeight, map.coarseWidth);
+                int endSquare = a.mapLocationToSquareID(eHQ, map.coarseHeight, map.coarseWidth);
+                System.out.println("Going from " + startSquare + " to " + endSquare);
+                int startRound = Clock.getRoundNum();
+                System.out.println("Starting AStar getNextSquare at " + Clock.getBytecodeNum());
+                a.getNextSquare(startSquare, endSquare);
+                System.out.println("Ending AStar getNextSquare at " + Clock.getBytecodeNum());
+                System.out.println("Ended in " + (Clock.getRoundNum() - startRound) + " Rounds");
+                donePath++;
+                return;
+            } catch (Exception e) {
+                e.printStackTrace();
+                donePath++;
+                return;
+            }
         }
 
 
