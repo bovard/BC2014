@@ -17,6 +17,7 @@ public class MapPreProcessor {
     public int coarseWidth;
     public int coarseHeight;
     public int coarseDivisor = COARSE_TILE_SIZE;
+    public int minValue = Integer.MAX_VALUE;
 
     private int x = 0;
     private RobotController rc;
@@ -90,6 +91,10 @@ public class MapPreProcessor {
                     // if the square is full of voids (voids/(coarseDivisor^2)) = 1, make the value IMPASSIBLE
                     // if the square is potentially blocked (voids/coarseDivor) = 1, make it very painful to move through
                     coarseMap[x][y] = 2*normals + roads + 4*voids + BehaviorConstants.IMPASSIBLE * (voids/(coarseDivisor*coarseDivisor)) + 10000 * (voids/coarseDivisor);
+                    // need to keep track of the min value for a* to work effectively
+                    if (coarseMap[x][y] < minValue) {
+                        minValue = coarseMap[x][y];
+                    }
                     //coarseMap[x][y] = normals + roads + voids;
                     if (voids >= coarseWidth || voids >= coarseHeight) {
                         coarseMap[x][y] += 100;
