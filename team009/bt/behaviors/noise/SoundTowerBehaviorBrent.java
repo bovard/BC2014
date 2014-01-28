@@ -36,7 +36,7 @@ public class SoundTowerBehaviorBrent extends Behavior {
     private boolean isDone = false;
     private Point[] currentPath;
     private MapLocation lastPoint;
-    private Point[][] cachedPaths = new Point[8][];
+    private Point[][] cachedPaths = new Point[16][];
     private int currentNode = 0;
     private Direction lastDirection;
     private double[][] cowSpots;
@@ -203,13 +203,16 @@ public class SoundTowerBehaviorBrent extends Behavior {
         if(radius <= 5) {
             radius = MAX_DISTANCE; //range of the noise tower
             currentDir++;
+            if(currentDir == directions.length) {
+                currentDir = 0;
+            }
 
             angle = angle+45;
 
             if(angle >= 360) {
                 angle = 0 + isAdjusted == 0 ? 0 : 22;
                 isAdjusted = isAdjusted == 0 ? 1 : 0;
-                towerStrat = TOWER_STRAT_PULL_SPIRAL_SWEEP;
+                //towerStrat = TOWER_STRAT_PULL_SPIRAL_SWEEP;
             }
         }
 
@@ -240,11 +243,12 @@ public class SoundTowerBehaviorBrent extends Behavior {
             radius = MAX_DISTANCE;
             lastPosition = new MapLocation(loc.x - herdFocus.x + 17, loc.y - herdFocus.y + 17);
 
-            if(cachedPaths[currentDir] == null || cachedPaths[currentDir].length == 0) {
+            int index = currentDir;
+            if(cachedPaths[index] == null || cachedPaths[index].length == 0) {
                 currentPath = findPath(lastPosition.x, lastPosition.y);
-                cachedPaths[currentDir] = currentPath;
+                cachedPaths[index] = currentPath;
             } else {
-                currentPath = cachedPaths[currentDir];
+                currentPath = cachedPaths[index];
             }
 
             currentDir++;
