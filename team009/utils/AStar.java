@@ -31,7 +31,7 @@ public class AStar {
         maxY = map[0].length;
         numNodes = maxX * maxY;
         pathCache = new int[numNodes][numNodes];
-        for (int i = maxX - 1; i >= 0; i--) {
+        for (int i = numNodes - 1; i >= 0; i--) {
             Arrays.fill(pathCache[i], -1);
         }
         System.out.println("Course map is " + maxX + " by " + maxY);
