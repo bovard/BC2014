@@ -33,8 +33,8 @@ public class QualifierSelector extends Decision {
         }
 
         // Communications information
-        if (q.soldierCounts.count > 8 && q.soldierCounts.centroid.distanceSquaredTo(q.info.enemyHq) < 100) {
-            rc.setIndicatorString(2, "Surround Technique: " + q.soldierCounts.centroid);
+        if (q.soldierCounts == null || q.soldierCounts.count < 8 && q.soldierCounts.centroid.distanceSquaredTo(q.info.enemyHq) > 64) {
+            rc.setIndicatorString(2, "Surround Technique: " + q.soldierCounts.centroid.distanceSquaredTo(q.info.enemyHq));
             q.surround = true;
         } else if (q.hasPastures) {
             rc.setIndicatorString(2, "Hunting Pastrs: " + q.soldierCounts.centroid);
@@ -46,7 +46,7 @@ public class QualifierSelector extends Decision {
             rc.setIndicatorString(2, "Noise/Sound: " + q.surround + " : " + q.oneBase + " : " + q.soundTower);
         }
 
-        if (ran) {
+        if (!ran) {
             spawn.run();
         }
 
