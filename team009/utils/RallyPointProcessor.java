@@ -4,7 +4,7 @@ import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import team009.RobotInformation;
-import team009.robot.hq.HQPreprocessor;
+import team009.hq.HQPreprocessor;
 
 public class RallyPointProcessor {
     public HQPreprocessor hq;

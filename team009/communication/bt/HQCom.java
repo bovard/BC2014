@@ -2,7 +2,7 @@ package team009.communication.bt;
 
 import team009.communication.bt.behaviors.hq.HQClearStateCom;
 import team009.communication.bt.behaviors.hq.HQStateCom;
-import team009.robot.hq.Qualifier;
+import team009.hq.robot.Qualifier;
 
 public class HQCom extends Com {
     public HQCom(Qualifier robot) {

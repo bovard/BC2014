@@ -2,7 +2,7 @@ package team009.communication.bt.behaviors.hq;
 
 import battlecode.common.GameActionException;
 import team009.communication.bt.behaviors.WriteBehavior;
-import team009.robot.hq.Qualifier;
+import team009.hq.robot.Qualifier;
 
 public class HQHunt extends WriteBehavior {
     Qualifier hq;

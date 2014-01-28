@@ -4,7 +4,7 @@ import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import team009.communication.bt.behaviors.WriteBehavior;
-import team009.robot.hq.Qualifier;
+import team009.hq.robot.Qualifier;
 
 public class HQOneBase extends WriteBehavior {
     Qualifier hq;
