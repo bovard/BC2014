@@ -268,7 +268,7 @@ public class SoundTowerBehaviorBrent extends Behavior {
 
                 if(currentNode < currentPath.length) {
                     currentTarget = new MapLocation(currentPath[currentNode].x, currentPath[currentNode].y);
-                    lastPosition = lastPosition.add(lastPosition.directionTo(currentTarget), -4);
+                    lastPosition = lastPosition.add(lastPosition.directionTo(currentTarget), -5);
                 }
             }
 //            MapLocation curLoc = new MapLocation(current.x, current.y);
