@@ -58,6 +58,8 @@ public class MapPreProcessor {
         TerrainTile tROAD = TerrainTile.ROAD;
         RobotController rc = this.rc;
 
+        int coarseMin = Math.min(coarseHeight, coarseWidth);
+
         while (k < rounds && x < coarseDivisor) {
             for (; x < coarseDivisor; x++, k++) {
                 for (int y = 0; y < coarseDivisor; y++) {
@@ -88,11 +90,12 @@ public class MapPreProcessor {
                     // single voids take 4 (have to take an extra turn to get around them)
                     // if the square is full of voids (voids/(coarseDivisor^2)) = 1, make the value IMPASSIBLE
                     // if the square is potentially blocked (voids/coarseDivor) = 1, make it very painful to move through
-                    coarseMap[x][y] = 2*normals + roads + 4*voids + BehaviorConstants.IMPASSIBLE * (voids/(coarseDivisor*coarseDivisor)) + 10000 * (voids/coarseDivisor);
+                    coarseMap[x][y] = 2*normals + roads + 4*voids + BehaviorConstants.IMPASSIBLE * (voids/(coarseWidth*coarseHeight)) + 10000 * (voids/coarseMin);
                     // need to keep track of the min value for a* to work effectively
                     if (coarseMap[x][y] < minValue) {
                         minValue = coarseMap[x][y];
                     }
+                    System.out.println(coarseMap[x][y]);
                     //coarseMap[x][y] = normals + roads + voids;
                     if (voids >= coarseWidth || voids >= coarseHeight) {
                         coarseMap[x][y] += 100;

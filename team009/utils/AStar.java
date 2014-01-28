@@ -129,19 +129,21 @@ public class AStar {
     }
 
     private SmartIntArray _neighbors(int loc) {
-        System.out.println("Neighbors");
+        System.out.println("_neighbors");
         Timer.StartTimer();
         SmartIntArray neighbors = new SmartIntArray();
         int x = loc / maxY;
         int y = loc % maxY;
 
+        System.out.println("Looking at neighbors for " + loc);
         // if we are safe in the middle of the map add the surrounding 8
         if (x > 0 && y > 0 && x < maxX - 2 && y < maxY - 2) {
             for (int i = -1; i <= 1; i ++) {
                 for (int j = -1; j <= 1; j ++) {
                     if (i!= 0 || j!=0) {
-                        if (map[maxY * (x + i)][y+j] < BehaviorConstants.IMPASSIBLE) {
-                            neighbors.add();
+                        if (map[x + i][y + j] < BehaviorConstants.IMPASSIBLE) {
+                            System.out.println("Adding " + maxY * (x + i) + (y + j));
+                            neighbors.add( maxY * (x + i) + (y + j));
                         }
                     }
 
@@ -155,7 +157,10 @@ public class AStar {
             for (int i = -1; i <= 1; i ++) {
                 for (int j = -1; j <= 1; j ++) {
                     if ((i!= 0 || j!=0) && x + i >= 0 && x + i < maxX && y + j >= 0 && y + j < maxY) {
-                        neighbors.add( maxY * (x + i) + (y + j));
+                        if (map[x + i][y + j] < BehaviorConstants.IMPASSIBLE) {
+                            System.out.println("Adding " + maxY * (x + i) + (y + j));
+                            neighbors.add( maxY * (x + i) + (y + j));
+                        }
                     }
                 }
             }
@@ -195,6 +200,8 @@ public class AStar {
      */
     private int _cacheAndReturnNextNode(int[] cameFrom, int start, int goal) {
         System.out.println("Goal met from " + start + " to " + goal + "!!!!!!!!!!!!!!========");
+        System.out.println("Cache And Return");
+        Timer.StartTimer();
         boolean done = false;
         int current = cameFrom[goal];
         System.out.println("Go to node " + current);
@@ -214,7 +221,7 @@ public class AStar {
         } while (previous != start);
 
         pathCache[start][goal] = current;
-
+        Timer.EndTimer();
 
         return current;
     }
@@ -223,6 +230,8 @@ public class AStar {
     private static int _findLowestF(ArrayList<Integer> open, int[] f_scores) {
         // TODO: this is called a lot, optimize the sh*t out of it
         // TODO: move this up to the main method to save on bytecodes
+        System.out.println("_findLowestF");
+        Timer.StartTimer();
         int min = Integer.MAX_VALUE;
         int minLoc = -1;
         for (int loc : open) {
@@ -233,6 +242,7 @@ public class AStar {
 
         }
         // if minLoc = -1 here something is very wrong!
+        Timer.EndTimer();
         System.out.println("Found " + minLoc + " at distance " + min);
         return minLoc;
     }
