@@ -1,9 +1,7 @@
 package team009.hq.bt.selectors;
 
 import battlecode.common.GameActionException;
-import team009.hq.bt.behaviors.HQCheese;
-import team009.hq.bt.behaviors.HQOffensive;
-import team009.hq.bt.behaviors.HQShoot;
+import team009.hq.bt.behaviors.*;
 import team009.bt.decisions.Decision;
 import team009.hq.robot.Offensive;
 
@@ -11,7 +9,6 @@ import team009.hq.robot.Offensive;
 public class OffensiveSelector extends Decision {
     HQShoot shoot;
     HQOffensive spawn;
-    HQCheese sound;
 
     Offensive hq;
 
@@ -19,7 +16,6 @@ public class OffensiveSelector extends Decision {
         super(robot);
         shoot = new HQShoot(robot);
         spawn = new HQOffensive(robot);
-        sound = new HQCheese(robot);
         hq = robot;
     }
 

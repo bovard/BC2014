@@ -11,13 +11,13 @@ public class QualifierSelector extends Decision {
     HQShoot shoot;
     HQOffensive spawn;
 
-    Qualifier hq;
+    Qualifier q;
 
     public QualifierSelector(Qualifier robot) {
         super(robot);
         shoot = new HQShoot(robot);
         spawn = new HQOffensive(robot);
-        hq = robot;
+        q = robot;
     }
 
     @Override
@@ -27,14 +27,28 @@ public class QualifierSelector extends Decision {
 
     @Override
     public boolean run() throws GameActionException {
+        boolean ran = false;
         if (shoot.pre()) {
-            if(shoot.run()) {
-                // if we actually shoot return
-                return true;
-            }
+            ran = shoot.run();
         }
 
-        spawn.run();
+        // Communications information
+        if (q.soldierCounts.count > 8 && q.soldierCounts.centroid.distanceSquaredTo(q.info.enemyHq) < 100) {
+            rc.setIndicatorString(2, "Surround Technique: " + q.soldierCounts.centroid);
+            q.surround = true;
+        } else if (q.hasPastures) {
+            rc.setIndicatorString(2, "Hunting Pastrs: " + q.soldierCounts.centroid);
+            q.hunt = true;
+        } else {
+            q.soundTower = q.noiseCounts.count == 0;
+            q.oneBase = !q.soundTower &&  q.pastrCounts.count == 0;
+            q.surround = !q.soundTower && !q.oneBase;
+            rc.setIndicatorString(2, "Noise/Sound: " + q.surround + " : " + q.oneBase + " : " + q.soundTower);
+        }
+
+        if (ran) {
+            spawn.run();
+        }
 
         return true;
     }
