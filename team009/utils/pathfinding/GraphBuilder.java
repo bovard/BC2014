@@ -1,6 +1,7 @@
 
 package team009.utils.pathfinding;
 
+import battlecode.common.Clock;
 import team009.utils.Timer;
 
 import java.util.Arrays;
@@ -23,6 +24,8 @@ public class GraphBuilder {
     private final boolean[] insideCorners;
 
     private int[][] adjacency_matrix;
+    private int matrixComputeI = 0;
+    private int matrixComputeJ = 1;
 
     private int last_object_index;
 
@@ -163,10 +166,9 @@ public class GraphBuilder {
      * objects incrementally and update simultaneously, use the reset() method
      * before updating.
      */
-    public void buildMatrix() {
-        Timer.StartTimer();
-        System.out.println(obstacle_index);
+    public boolean buildMatrix() {
         for (int i = last_object_index; i < obstacle_index; i++) {
+
             int x = obstacles[i].x;
             int y = obstacles[i].y;
             for (int j = -1; j <= 1; j++) {
@@ -185,23 +187,36 @@ public class GraphBuilder {
                     }
                 }
             }
-        }
-        Timer.EndTimer();
 
-        Timer.StartTimer();
-        adjacency_matrix = new int[waypoint_index + 2][waypoint_index + 2];
-        for (int i = 0; i < waypoint_index; i++) {
-            for (int j = i + 1; j < waypoint_index; j++) {
-                if (isVisible(i, j)) {
-                    int distance = manhattan(waypoints[i], waypoints[j]);
-
-                    adjacency_matrix[i][j] = distance;
-                    adjacency_matrix[j][i] = distance;
-                }
+            if(Clock.getBytecodeNum() > 8800) {
+                last_object_index = i;
+                return false;
             }
         }
         last_object_index = obstacle_index;
-        Timer.EndTimer();
+
+        if(matrixComputeI == 0 && matrixComputeJ == 1)
+            adjacency_matrix = new int[waypoint_index + 2][waypoint_index + 2];
+
+        for (; matrixComputeI < waypoint_index; matrixComputeI++) {
+            for (; matrixComputeJ < waypoint_index; matrixComputeJ++) {
+                if (isVisible(matrixComputeI, matrixComputeJ)) {
+                    int distance = manhattan(waypoints[matrixComputeI], waypoints[matrixComputeJ]);
+
+                    adjacency_matrix[matrixComputeI][matrixComputeJ] = distance;
+                    adjacency_matrix[matrixComputeJ][matrixComputeI] = distance;
+                }
+
+                if(Clock.getBytecodeNum() > 9500) {
+                    return false;
+                }
+            }
+
+            matrixComputeJ = matrixComputeI + 2;
+        }
+
+
+        return true;
     }
 
     private boolean isOutsideCorner(int x, int y) {
@@ -305,7 +320,6 @@ public class GraphBuilder {
      * it is guaranteed that the next is visible.
      */
     public Point[] getPath(Point start, Point finish) {
-        Timer.StartTimer();
         int distance;
         waypoints[waypoint_index] = start;
         for (int i = 0; i < waypoint_index; i++) { //Place the start into the adjacency matrix
@@ -318,9 +332,7 @@ public class GraphBuilder {
                 adjacency_matrix[waypoint_index][i] = 0; //Retain symmetry
             }
         }
-        Timer.EndTimer();
 
-        Timer.StartTimer();
         waypoints[waypoint_index + 1] = finish;
         for (int i = 0; i < waypoint_index + 1; i++) { //Place the finish into the adjacency matrix
             if (isVisible(finish, waypoints[i])) { //check visiblity
@@ -342,7 +354,6 @@ public class GraphBuilder {
             final_path[i] = waypoints[path[i]];
         }
         final_path[path.length - 1] = finish;
-        Timer.EndTimer();
 
         return final_path;
     }
@@ -370,3 +381,4 @@ public class GraphBuilder {
     }
 
 }
+

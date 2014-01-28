@@ -31,6 +31,9 @@ public class SoundTowerBehaviorBrent extends Behavior {
     private boolean[][] possibleLocations = new boolean[35][35];
     private int xCheck = 0;
     private int yCheck = 0;
+    private int obsX = 0;
+    private int obsY = 0;
+    private boolean isDone = false;
     private Point[] currentPath;
     private MapLocation lastPoint;
     private Point[][] cachedPaths = new Point[8][];
@@ -85,7 +88,7 @@ public class SoundTowerBehaviorBrent extends Behavior {
     @Override
     public boolean run() throws GameActionException {
         MapLocation loc = null;
-        if(towerStrat == TOWER_STRAT_PULL_WAYPOINT && xCheck != 35) {
+        if(towerStrat == TOWER_STRAT_PULL_WAYPOINT && !isDone) {
             outerloop:
             while(true) {
                 for(; xCheck < 35; xCheck++) {
@@ -93,7 +96,7 @@ public class SoundTowerBehaviorBrent extends Behavior {
                         boolean done = false;
                         while(!done) {
                             loc = pullInCardinalDirections();
-                            done = rc.canAttackSquare(loc) && MapUtils.isOnMap(loc.add(1,1), robot.info.width + 2, robot.info.height + 2);
+                            done = rc.canAttackSquare(loc) && MapUtils.isOnMap(loc.add(2,2), robot.info.width + 4, robot.info.height + 4);
                         }
 
                         break outerloop;
@@ -109,6 +112,17 @@ public class SoundTowerBehaviorBrent extends Behavior {
                 }
 
                 createGraph();
+
+                if(!isDone) {
+                    boolean done = false;
+                    while(!done) {
+                        loc = pullInCardinalDirections();
+                        done = rc.canAttackSquare(loc) && MapUtils.isOnMap(loc.add(2,2), robot.info.width + 4, robot.info.height + 4);
+                    }
+
+                    break outerloop;
+                }
+
                 return true;
             }
         } else {
@@ -133,7 +147,7 @@ public class SoundTowerBehaviorBrent extends Behavior {
                         break;
                 }
 
-                done = rc.canAttackSquare(loc) && MapUtils.isOnMap(loc.add(1,1), robot.info.width + 2, robot.info.height + 2);
+                done = rc.canAttackSquare(loc) && MapUtils.isOnMap(loc.add(2,2), robot.info.width + 4, robot.info.height + 4);
                 count++;
             }
         }
@@ -169,7 +183,7 @@ public class SoundTowerBehaviorBrent extends Behavior {
             if(currentDir == directions.length) {
                 currentDir = 0;
                 //switch to other strat
-                towerStrat = TOWER_STRAT_PULL_SPIRAL_SWEEP;
+                //towerStrat = TOWER_STRAT_PULL_SPIRAL_SWEEP;
             }
         }
 
@@ -220,25 +234,8 @@ public class SoundTowerBehaviorBrent extends Behavior {
             MapLocation loc = robot.currentLoc.add(dir, radius);
             if(!MapUtils.isOnMap(loc, robot.info.width, robot.info.height) || rc.senseTerrainTile(loc) == TerrainTile.VOID) {
                 return pullInCardinalDirections();
-//                radius--;
-//                loc = robot.currentLoc.add(dir, radius);
-//
-//                if(loc.x == -2 || loc.x == robot.info.width + 1 || loc.y == -2 || loc.y == robot.info.height + 1) {
-//                    System.out.println("card");
-//
-//                }
-//
-//                if(radius < 4) {
-//                    radius = MAX_DISTANCE;
-//
-//                    currentDir++;
-//                    if(currentDir == directions.length) {
-//                        currentDir = 0;
-//                    }
-//                    dir = directions[currentDir];
-//                    loc = robot.currentLoc.add(dir, radius);
-//                }
             }
+
 
             radius = MAX_DISTANCE;
             lastPosition = new MapLocation(loc.x - herdFocus.x + 17, loc.y - herdFocus.y + 17);
@@ -300,18 +297,20 @@ public class SoundTowerBehaviorBrent extends Behavior {
 
     public void createGraph ()
     {
-        graphBuilder = new GraphBuilder(35,35);
+        if(graphBuilder == null)
+            graphBuilder = new GraphBuilder(35,35);
 
-        for(int i = 0; i < possibleLocations.length; i++) {
-            for(int j = 0; j < possibleLocations[i].length; j++) {
-                if(!possibleLocations[i][j]) {
-                    graphBuilder.addObstacle(new Point(i, j));
+        for(; obsX < possibleLocations.length; obsX++) {
+            for(; obsY < possibleLocations[obsX].length; obsY++) {
+                if(!possibleLocations[obsX][obsY]) {
+
+                    graphBuilder.addObstacle(new Point(obsX, obsY));
                 }
-
             }
+            obsY = 0;
         }
 
-        graphBuilder.buildMatrix();
+        isDone = graphBuilder.buildMatrix();
     }
 
     public static int pairingFunction(int x, int y) {
@@ -337,4 +336,3 @@ public class SoundTowerBehaviorBrent extends Behavior {
     private static final int MAX_DISTANCE = 15;
     private static final int MAX_DISTANCE_SQUARED = 300;
 }
-
