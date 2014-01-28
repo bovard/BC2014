@@ -132,28 +132,44 @@ public abstract class HQ extends TeamRobot {
         return false;
     }
     // TODO: $IMPROVEMENT$ We should make the group number have a channel to grab pasture location from
+    @Deprecated
     public void createHerder(int group, MapLocation pasture) throws GameActionException {
+        System.out.println("You told us to spawn a herder but we can't!");
     }
 
+    @Deprecated
     public void createSoundTower(int group, MapLocation towerLocation) throws GameActionException {
+        System.out.println("You told us to spawn a soundtower but we can't!");
     }
 
+    @Deprecated
     public void createNoiseTower(int group, MapLocation towerLocation) throws GameActionException {
+        System.out.println("You told us to spawn a noisetower but we can't!");
     }
 
+    @Deprecated
     public void createDumbPastrHunter() throws GameActionException {
+        System.out.println("You told us to spawn a dumbPastHunter but we can't!");
     }
 
+    @Deprecated
     public void createPastureCapturer(int group, MapLocation pasture) throws GameActionException {
+        System.out.println("You told us to spawn a pastrCaptuerer but we can't!");
     }
 
+    @Deprecated
     public void createBackDoorNoisePlanter(int group) throws GameActionException {
+        System.out.println("You told us to spawn a backdoor noiseplanter but we can't!");
     }
 
+    @Deprecated
     public void createJackal(int group) throws GameActionException {
+        System.out.println("You told us to spawn a jackal but we can't!");
     }
 
+    @Deprecated
     public void createDefender(int group) throws GameActionException {
+        System.out.println("You told us to spawn a defender but we can't!");
     }
 
     /**
