@@ -41,7 +41,7 @@ public abstract class HQPreprocessor extends HQ {
         if (!initStar) {
             initStar = true;
             System.out.println("Starting AStar init at " + Clock.getBytecodeNum());
-            a = new AStar(map.coarseMap, map.minValue);
+            a = new AStar(map.coarseMap, map.minValue, map.coarseWidth, map.coarseWidth);
             System.out.println("Finishing AStar init at " + Clock.getBytecodeNum());
         }
 
