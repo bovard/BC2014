@@ -128,6 +128,11 @@ public class AStar {
         return -1;
     }
 
+    /**
+     * Given a node number, returns the node number of it's non-impassible on-map neighbors
+     * @param loc the node number
+     * @return the non-impassible neightbors
+     */
     private SmartIntArray _neighbors(int loc) {
         System.out.println("_neighbors");
         Timer.StartTimer();
@@ -227,6 +232,12 @@ public class AStar {
     }
 
 
+    /**
+     * looks through all the node ints in open for the one with the lowest f
+     * @param open
+     * @param f_scores
+     * @return
+     */
     private static int _findLowestF(ArrayList<Integer> open, int[] f_scores) {
         // TODO: this is called a lot, optimize the sh*t out of it
         // TODO: move this up to the main method to save on bytecodes
