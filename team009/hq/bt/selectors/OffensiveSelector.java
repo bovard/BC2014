@@ -8,14 +8,14 @@ import team009.hq.robot.Offensive;
 // TODO: Make this more efficient by hard coding the available states.
 public class OffensiveSelector extends Decision {
     HQShoot shoot;
-    HQOffensive spawn;
+    HQSpawn spawn;
 
     Offensive hq;
 
     public OffensiveSelector(Offensive robot) {
         super(robot);
         shoot = new HQShoot(robot);
-        spawn = new HQOffensive(robot);
+        spawn = new HQSpawn(robot);
         hq = robot;
     }
 

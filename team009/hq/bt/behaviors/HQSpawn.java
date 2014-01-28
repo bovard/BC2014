@@ -5,10 +5,10 @@ import battlecode.common.GameConstants;
 import team009.bt.behaviors.Behavior;
 import team009.hq.HQ;
 
-public class HQOffensive extends Behavior {
+public class HQSpawn extends Behavior {
     private HQ hq;
 
-    public HQOffensive(HQ robot) {
+    public HQSpawn(HQ robot) {
         super(robot);
         hq = robot;
     }
