@@ -1,9 +1,11 @@
 package team009.toyBT;
 
 import battlecode.common.*;
+import team009.RobotInformation;
 import team009.combat.CombatUtils;
 import team009.navigation.BugMove;
 import team009.robot.soldier.ToySoldier;
+import team009.utils.HQAttackUtil;
 import team009.utils.SmartMapLocationArray;
 import team009.utils.SmartRobotInfoArray;
 
@@ -70,7 +72,7 @@ public class ToyCombat {
                 // Move closer without getting into attackable range.
                 // TODO: Add if a friend is in firing range, move toward the enemy
                 // TODO: Group Centroid channel?  It may come in handy here.
-                if (nearestEnemy == null) {
+                if (nearestEnemy == null && !soldier.hqAttack.inProximity(currentLoc)) {
                     Direction dir = _combatAvoid(rc, currentLoc, nmeCentroid, nmeLocs);
                     if (dir != null) {
                         rc.move(dir);
@@ -82,8 +84,17 @@ public class ToyCombat {
 
             // We outnumber or equal
             else {
-                MapLocation target = nearestEnemy == null ? nmeLocs[0] : nearestEnemy;
-                _moveOrAttack(rc, currentLoc, target, nmeLocs);
+
+                rc.setIndicatorString(2, "Location: " + soldier.hqAttack.inProximity(currentLoc) + " : nearestEnemy: " + nearestEnemy + " : " + soldier.hqAttack.toClose(nmeCentroid));
+                // If the enemy centroid is within enemy hq range, do not engage first
+                if (soldier.hqAttack.inProximity(currentLoc) && soldier.hqAttack.toClose(nmeCentroid)) {
+                    if (nearestEnemy != null) {
+                        rc.attackSquare(nearestEnemy);
+                    }
+                } else {
+                    MapLocation target = nearestEnemy == null ? nmeLocs[0] : nearestEnemy;
+                    _moveOrAttack(rc, currentLoc, target, nmeLocs);
+                }
             }
         } else {
             if (soldier.enemyPastrs.length > 0) {
@@ -140,7 +151,9 @@ public class ToyCombat {
             return null;
         }
 
-        if (rc.canMove(dirTo) && !_tooDangerous(from.add(dirTo), enemies)) {
+        MapLocation newLoc = from.add(dirTo);
+        HQAttackUtil hqAttack = soldier.hqAttack;
+        if (rc.canMove(dirTo) && !_tooDangerous(newLoc, enemies) && !hqAttack.toClose(newLoc)) {
             return dirTo;
         }
 
@@ -150,12 +163,14 @@ public class ToyCombat {
         // Will search the entire space.
         for (int i = 0; i < 4; i++) {
             leftTo = leftTo.rotateLeft();
-            if (rc.canMove(leftTo) && !_tooDangerous(from.add(leftTo), enemies)) {
+            newLoc = from.add(leftTo);
+            if (rc.canMove(leftTo) && !_tooDangerous(newLoc, enemies) && !hqAttack.toClose(newLoc)) {
                 return leftTo;
             }
 
             rightTo = rightTo.rotateRight();
-            if (rc.canMove(rightTo) && !_tooDangerous(from.add(rightTo), enemies)) {
+            newLoc = from.add(rightTo);
+            if (rc.canMove(rightTo) && !_tooDangerous(newLoc, enemies) && !hqAttack.toClose(newLoc)) {
                 return rightTo;
             }
         }
@@ -201,9 +216,6 @@ public class ToyCombat {
 
     // If the location provided is to dangerous
     private boolean _tooDangerous(MapLocation loc, MapLocation[] enemies) {
-        if (soldier.info.enemyHq.distanceSquaredTo(loc) <= hqMaxDistance) {
-            return true;
-        }
 
         // Our move is worse
         // TODO: This may be a bad decision

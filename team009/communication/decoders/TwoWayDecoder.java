@@ -3,8 +3,8 @@ package team009.communication.decoders;
 import battlecode.common.MapLocation;
 
 public class TwoWayDecoder extends CommunicationDecoder {
-    MapLocation from, to;
-    int command;
+    public MapLocation from, to;
+    public int command;
 
     public TwoWayDecoder(MapLocation from, MapLocation to, int command) {
         this.from = from;
@@ -22,6 +22,10 @@ public class TwoWayDecoder extends CommunicationDecoder {
         return TwoPositionMapDecoder.getDataFromLocation(from, 1) +
                TwoPositionMapDecoder.getDataFromLocation(to, 2) +
                TwoPositionMapDecoder.COMMAND_MULTIPLIER * command;
+    }
+
+    public String toString() {
+        return "Command: " + command + " : " + from + " : " + to;
     }
 
 }

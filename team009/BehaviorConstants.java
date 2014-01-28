@@ -12,17 +12,19 @@ public class BehaviorConstants {
 
     // Cheese // TODO: very strict.  Only works on 2 levels. neighbors and rushlane
     public static final boolean CHEESE_ENABLED = true;
-    public static final double CHEESE_MILK_MULTIPLIER = 1.5;
-    public static final int CHEESE_HQ_ENEMY_MINIMUM_DISTANCE = 900;
+    public static final double CHEESE_MULTIPLIER = 1.5;
+
+    // One base strat
+    public static final boolean ONE_BASE_ENABLED = true;
+    public static final int ONE_BASE_ROUND_START = 500;
 
     // Map Sizing
     public static final int MAP_LARGE_MINIMUM_AREA = 2000;
     public static final int MAP_MEDIUM_MINIMUM_AREA = 1200;
 
     // HQ Constants
-    public static final int HQ_REQUIRED_SOLDIER_COUNT_FOR_ATTACK = 4;
+    public static final int HQ_REQUIRED_SOLDIER_COUNT_FOR_ATTACK = 5;
     public static final int HQ_REQUIRED_SOLDIER_COUNT_FOR_GROUP_ATTACK = 6;
-    public static final int HQ_SOLDIER_COM_MAX = 35;
     public static final int HQ_SMALL_MAP_ONE_BASE_ROUND_NUMBER = 500;
 
     // Milk Selection picking
@@ -31,11 +33,21 @@ public class BehaviorConstants {
     public static final int MILK_INFO_STRAT = MILK_INFO_STRAT_CORNERS;
 
     // Soldier Coms
-    public static final double ATTACK_SOLDIER_MULTIPLIER = (5.0);
+    public static final double SOLDIER_COM_ATTACK_MULTIPLIER = (1.5);
     public static final int ATTACK_SOLDIER_MAX = 15;
 
     // Sound tower
     public static final int NOISE_TOWER_REDUCTION = 2;
     public static final boolean NOISE_TOWER_ENABLE_WITH_PASTURE = false;
     public static final boolean NOISE_TOWER_FIRST = false;
+
+    // Hunting Vars
+    public static final boolean HUNT_AND_GATHER = true;
+
+
+
+
+
+    // Astar and path
+    public static final int IMPASSIBLE = 1000000;
 }

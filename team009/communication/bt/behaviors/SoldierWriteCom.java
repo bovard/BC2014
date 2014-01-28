@@ -18,7 +18,7 @@ public class SoldierWriteCom extends WriteBehavior {
 
     public boolean run() throws GameActionException {
         // writes out any information about its environment.
-        Communicator.WriteTypeAndGroup(rc, soldier.type, soldier.group);
+        Communicator.WriteTypeAndGroup(rc, soldier.type, soldier.group, soldier.currentLoc);
 
         // If there is no decoder or no data, then write out information about the environment.
         if (soldier.seesEnemyTeamNonHQRobot) {

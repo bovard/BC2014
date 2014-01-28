@@ -2,20 +2,23 @@ package team009.communication.bt.behaviors.hq;
 
 import battlecode.common.GameActionException;
 import team009.communication.bt.behaviors.WriteBehavior;
-import team009.robot.hq.Seeding;
+import team009.hq.robot.Qualifier;
 
 public class HQReturnToHome extends WriteBehavior {
-    Seeding hq;
+    Qualifier hq;
 
-    public HQReturnToHome(Seeding off) {
+    public HQReturnToHome(Qualifier off) {
         super(off);
         hq = off;
     }
 
     @Override
     public boolean run() throws GameActionException {
-        hq.comReturnHome(hq.bestCoverageLocation, 0);
-        hq.comReturnHome(hq.bestCoverageLocation, 1);
+        if (hq.rally.finished) {
+            hq.comReturnHome(hq.rally.rallyPoint, 0);
+        } else {
+            hq.comReturnHome(hq.rally.center, 0);
+        }
         return true;
     }
 }
