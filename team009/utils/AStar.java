@@ -142,7 +142,7 @@ public class AStar {
                 for (int j = -1; j <= 1; j ++) {
                     if (i!= 0 || j!=0) {
                         if (map[x + i][y + j] < BehaviorConstants.IMPASSIBLE) {
-                            System.out.println("Adding " + maxY * (x + i) + (y + j));
+                            System.out.println("Adding " + (maxY * (x + i) + (y + j)));
                             neighbors.add( maxY * (x + i) + (y + j));
                         }
                     }
@@ -158,7 +158,7 @@ public class AStar {
                 for (int j = -1; j <= 1; j ++) {
                     if ((i!= 0 || j!=0) && x + i >= 0 && x + i < maxX && y + j >= 0 && y + j < maxY) {
                         if (map[x + i][y + j] < BehaviorConstants.IMPASSIBLE) {
-                            System.out.println("Adding " + maxY * (x + i) + (y + j));
+                            System.out.println("Adding " + (maxY * (x + i) + (y + j)));
                             neighbors.add( maxY * (x + i) + (y + j));
                         }
                     }
@@ -207,7 +207,7 @@ public class AStar {
         System.out.println("Go to node " + current);
         pathCache[current][goal] = goal;
 
-        if (current == goal) {
+        if (current == start) {
             return goal;
         }
 
