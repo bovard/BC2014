@@ -1,5 +1,6 @@
 package team009.utils;
 
+import battlecode.common.MapLocation;
 import team009.BehaviorConstants;
 
 import java.util.ArrayList;
@@ -29,15 +30,22 @@ public class AStar {
         maxX = map.length;
         maxY = map[0].length;
         numNodes = maxX * maxY;
-        pathCache = new int[maxX][maxY];
+        pathCache = new int[numNodes][numNodes];
         for (int i = maxX - 1; i >= 0; i--) {
             Arrays.fill(pathCache[i], -1);
         }
+        System.out.println("Course map is " + maxX + " by " + maxY);
     }
 
 
-    public int coordsToSquareID(int x, int y) {
+    public int coarseCoordsToSquareID(int x, int y) {
         return maxY * x + y;
+    }
+
+    public int mapLocationToSquareID(MapLocation loc, int courseNum) {
+        System.out.println("MapLocation to SquareID");
+        System.out.println("loc x/y = " + loc.x + "/" + loc.y);
+        return maxY * (loc.x / courseNum) + loc.y / courseNum;
     }
 
 
@@ -54,6 +62,8 @@ public class AStar {
      * @return the next square you should move to
      */
     public int getNextSquare(int startSquare, int endSquare) {
+        System.out.println("getNextSquare " + startSquare + " to " + endSquare);
+        System.out.println(pathCache.length + " " + pathCache[0].length + " " + pathCache[0][1]);
         if (pathCache[startSquare][endSquare] != -1) {
             return pathCache[startSquare][endSquare];
         } else {
