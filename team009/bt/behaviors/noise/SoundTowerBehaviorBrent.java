@@ -57,7 +57,7 @@ public class SoundTowerBehaviorBrent extends Behavior {
         y = 0;
         angle = 0;
         currentDir = 0;
-        towerStrat = TOWER_STRAT_PULL_WAYPOINT;
+        towerStrat = TOWER_STRAT_PULL_CARDNIAL;
         //spin around in a cirle shooting the gun
         //TODO is pastrLocs within enviornment check????
         //pastrLocs = robot.rc.sensePastrLocations(robot.info.myTeam);
