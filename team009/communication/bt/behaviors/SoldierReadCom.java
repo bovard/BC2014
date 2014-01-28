@@ -3,6 +3,8 @@ package team009.communication.bt.behaviors;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import team009.communication.Communicator;
+import team009.robot.TeamRobot;
+import team009.robot.soldier.SoldierSpawner;
 import team009.robot.soldier.ToySoldier;
 import team009.utils.Timer;
 
@@ -30,6 +32,10 @@ public class SoldierReadCom extends ReadBehavior {
         } else {
             soldier.comCommand = 0;
         }
+
+        // Gets soldier count in group
+        soldier.myGroupCount = Communicator.ReadTypeAndGroup(rc, SoldierSpawner.SOLDIER_TYPE_TOY_SOLDIER, robot.group).count;
+        System.out.println("MyGroupCount: " + soldier.myGroupCount);
 
         return true;
     }

@@ -1,17 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package team009.utils.pathfinding;
+
+import battlecode.common.Clock;
+import team009.utils.Timer;
 
 import java.util.Arrays;
 
-import team009.utils.Timer;
-import battlecode.common.Clock;
-import team009.utils.pathfinding.DeathStar;
-
 /**
+ * The backbone, arms, legs, and spleen of the pathfinder. This is responsible
+ * for constructing the adjacency matrix used to construct the path. Is super
+ * sexy
  *
  * @author alexhuleatt
  */
@@ -23,32 +21,39 @@ public class GraphBuilder {
     private final Point[] obstacles;
     private int obstacle_index;
 
+    private final boolean[] insideCorners;
+
     private int[][] adjacency_matrix;
+    private int matrixComputeI = 0;
+    private int matrixComputeJ = 1;
 
     private int last_object_index;
 
     private final int length;
     private final int height;
 
+    private final int[][] map;
+
+    public static int MAX_OBSTACLES = 1000;
+    public static int MAX_WAYPOINTS = 800;
+
     public GraphBuilder(int length, int height) {
-        System.out.println(Clock.getBytecodeNum());
         this.length = length;
         this.height = height;
-        waypoints = new Point[400];
+        waypoints = new Point[MAX_WAYPOINTS];
         waypoint_index = 0;
 
-        obstacles = new Point[400];
+        obstacles = new Point[MAX_OBSTACLES];
         obstacle_index = 0;
 
-        adjacency_matrix = new int[400][400];
+        insideCorners = new boolean[MAX_WAYPOINTS];
+
+        map = new int[length][height];
 
         last_object_index = 0;
     }
 
     /**
-     * getIndex(getWaypoint(x)) produces x if x is a valid waypoint, the
-     * opposite is true.
-     *
      * @param p the position of the point
      * @return The index of the given waypoint in the waypoints array.
      */
@@ -62,11 +67,15 @@ public class GraphBuilder {
     }
 
     /**
-     * Adds and obstacle to be later evaluated.
+     * Adds an obstacle to be later evaluated.
      *
      * @param p the position of the obstacle
      */
     public void addObstacle(Point p) {
+        if (!isValid(p.x, p.y)) {
+            return;
+        }
+        map[p.x][p.y] = 1;
         obstacles[obstacle_index] = p;
         obstacle_index++;
     }
@@ -76,56 +85,77 @@ public class GraphBuilder {
      * @param b the index of the second waypoint to check
      * @return true if the waypoint a is visible to waypoint b, false otherwise.
      */
-    public boolean isVisible(int a, int b) {
+    private boolean isVisible(int a, int b) {
         return isVisible(waypoints[a], waypoints[b]);
     }
 
-    public boolean isVisible(Point p1, Point p2) {
-        int maxX = Math.max(p1.x, p2.x);
-        int minX = Math.min(p1.x, p2.x);
-        int maxY = Math.max(p1.y, p2.y);
-        int minY = Math.min(p1.y, p2.y);
+    /**
+     * Checks to see if two points are visible to each other. Uses a rectangle
+     * bounded by the two points to determine visibility. It is guaranteed that
+     * no object exists on any path equal to or less than the length of the
+     * Manhattan distance between the two points.
+     *
+     * @param p1 the first point
+     * @param p2 the second point
+     * @return true if they are visible to each other, false if they might not
+     * be.
+     */
+    private boolean isVisible(Point p1, Point p2) {
+        double currentX = p1.x;
+        double currentY = p1.y;
+        int x_slope = (p2.x - p1.x);
 
-        if (Math.abs(p1.x - p2.x) <= 1 && Math.abs(p1.y - p2.y) <= 1) {
-            return true; //handle inner corner cases
-        }
+        if(x_slope != 0) {
+            int xDelta = x_slope > 0 ? 1 : -1;
+            double y_slope = (p2.y - currentY) / Math.abs(x_slope);
 
-        System.out.println(waypoint_index);
-        for (int i = 0; i < waypoint_index; i++) {
-            if (!waypoints[i].equals(p1) && !waypoints[i].equals(p2)) {
-                Point p3 = waypoints[i];
-                if (p3.x >= minX && p3.x <= maxX && p3.y >= minY && p3.y <= maxY) {
+            int curX = (int)currentX;
+            int curY = (int)currentY;
+            while (curX != p2.x) {
+                if (map[curX][curY] == 1) {
                     return false;
                 }
-            }
-        }
 
-        Timer.StartTimer();
-        for (int i = 0; i < obstacle_index; i++) {
-            Point p3 = obstacles[i];
-            if (p3.x >= minX && p3.x <= maxX && p3.y >= minY && p3.y <= maxY) {
-                return false;
+                curX += xDelta;
+                currentY += y_slope;
+                curY = (int)currentY;
+            }
+        } else {
+            int curY = (int)currentY;
+            int yDelta = p2.y - currentY > 0 ? 1 : -1;
+            while (curY != p2.y) {
+                if (map[p1.x][curY] == 1) {
+                    return false;
+                }
+                curY += yDelta;
             }
         }
-        Timer.EndTimer();
         return true;
     }
 
-    private int manhattan(Point p1, Point p2) {
-        return Math.abs(p1.x - p2.x) + Math.abs(p1.y - p2.y);
-    }
-
-    private int manhattan(Point p1, int x, int y) {
-        return Math.abs(p1.x - x) + Math.abs(p1.y - y);
-    }
+    private double euclidean(Point p1, Point p2) {return Math.sqrt((p1.x-p2.x)*(p1.x-p2.x) + (p1.y-p2.y)*(p1.y-p2.y));}
 
     /**
-     * Resets where to begin evaluating obstacles, such that all obstacles are
-     * evaluated for waypoints.
+     * Finds the Manhattan distance between the two given points.
+     *
+     * @param p1 first coordinate
+     * @param p2 second coordinate
+     * @return the Manhattan distance between the points.
      */
-    public void reset() {
-        last_object_index = 0;
-        waypoint_index = 0;
+    private int manhattan(Point p1, Point p2) {
+        if(p1.x > p2.x) {
+            if(p1.y > p2.y) {
+                return p1.x - p2.x + p1.y - p2.y;
+            } else {
+                return p1.x - p2.x + p2.y - p1.y;
+            }
+        } else {
+            if(p1.y > p2.y) {
+                return p2.x - p1.x + p1.y - p2.y;
+            } else {
+                return p2.x - p1.x + p2.y - p1.y;
+            }
+        }
     }
 
     /**
@@ -136,51 +166,110 @@ public class GraphBuilder {
      * objects incrementally and update simultaneously, use the reset() method
      * before updating.
      */
-    public void buildMatrix() {
-
-        int[][] map = new int[length][height];
+    public boolean buildMatrix() {
         for (int i = last_object_index; i < obstacle_index; i++) {
-            int x = obstacles[i].x;
-            int y = obstacles[i].y;
-            map[x][y] = 1;
-        }
 
-        for (int i = last_object_index; i < obstacle_index; i++) {
             int x = obstacles[i].x;
             int y = obstacles[i].y;
             for (int j = -1; j <= 1; j++) {
                 for (int k = -1; k <= 1; k++) {
-                    if (isValid(x + j, y + k) && Math.abs(j) == 1 && Math.abs(k) == 1 && map[x + j][y] != 1 && map[x][y + k] != 1 && map[x + j][y + k] != 1 && map[x + j][y + k] == 0) {
-                        map[x + j][y + k] = 2;
-                        waypoints[waypoint_index] = new Point(x + j, y + k);
-                        //System.out.println(obstacles[i] + "->" + waypoints[waypoint_index]);
-                        waypoint_index++;
-                    } else if (isValid(x + j, y + k) && (Math.abs(j) == 1 || Math.abs(k) == 1) && !(Math.abs(j) == 1 && Math.abs(k) == 1) && map[x + j][y + k] == 0) {
-                        if ((isValid(x + j + k, y + j + k) && map[x + j + k][y + j + k] == 1) || (isValid(x + (j - k), y - (j + k)) && map[x + (j - k)][y - (j + k)] == 1)) {
+                    if (isValid(x + j, y + k) && map[x + j][y + k] == 0) {
+                        if (isOutsideCorner(x + j, y + k)) {
                             map[x + j][y + k] = 2;
                             waypoints[waypoint_index] = new Point(x + j, y + k);
-                            //System.out.println(obstacles[i] + "->" + waypoints[waypoint_index]);
+                            waypoint_index++;
+                        } else if (isInsideCorner(x + j, y + k)) {
+                            map[x + j][y + k] = 2;
+                            insideCorners[waypoint_index] = true;
+                            waypoints[waypoint_index] = new Point(x + j, y + k);
                             waypoint_index++;
                         }
                     }
                 }
             }
-            last_object_index++;
-        }
 
-        //adjacency_matrix = new int[waypoint_index + 2][waypoint_index + 2];
-        for (int i = 0; i < waypoint_index; i++) {
-            for (int j = i + 1; j < waypoint_index; j++) {
-                if (isVisible(i, j)) {
-                    int distance = manhattan(waypoints[i], waypoints[j]);
-                    adjacency_matrix[i][j] = distance;
-                    adjacency_matrix[j][i] = distance;
-
-                }
+            if(Clock.getBytecodeNum() > 8800) {
+                last_object_index = i;
+                return false;
             }
         }
+        last_object_index = obstacle_index;
+
+        if(matrixComputeI == 0 && matrixComputeJ == 1)
+            adjacency_matrix = new int[waypoint_index + 2][waypoint_index + 2];
+
+        for (; matrixComputeI < waypoint_index; matrixComputeI++) {
+            for (; matrixComputeJ < waypoint_index; matrixComputeJ++) {
+                if (isVisible(matrixComputeI, matrixComputeJ)) {
+                    int distance = manhattan(waypoints[matrixComputeI], waypoints[matrixComputeJ]);
+
+                    adjacency_matrix[matrixComputeI][matrixComputeJ] = distance;
+                    adjacency_matrix[matrixComputeJ][matrixComputeI] = distance;
+                }
+
+                if(Clock.getBytecodeNum() > 9500) {
+                    return false;
+                }
+            }
+
+            matrixComputeJ = matrixComputeI + 2;
+        }
+
+
+        return true;
     }
 
+    private boolean isOutsideCorner(int x, int y) {
+        if (x > 0 && y > 0 && map[x - 1][y - 1] == 1) {
+            if (map[x - 1][y] != 1 && map[x][y - 1] != 1) {
+                return true;
+            }
+        }
+        if (x + 1 < length && y > 0 && map[x + 1][y - 1] == 1) {
+            if (map[x + 1][y] != 1 && map[x][y - 1] != 1) {
+                return true;
+            }
+        }
+        if (x + 1 < length && y + 1 < height && map[x + 1][y + 1] == 1) {
+            if (map[x + 1][y] != 1 && map[x][y + 1] != 1) {
+                return true;
+            }
+        }
+        if (x > 0 && y + 1 < height && map[x - 1][y + 1] == 1) {
+            if (map[x - 1][y] != 1 && map[x][y + 1] != 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isInsideCorner(int x, int y) {
+        if (isValid(x, y - 1) && map[x][y - 1] == 1) {
+            if (isValid(x + 1, y) && map[x + 1][y] == 1 && map[x + 1][y - 1] != 1) {
+                return true;
+            }
+            if (isValid(x - 1, y) && map[x - 1][y] == 1 && map[x - 1][y - 1] != 1) {
+                return true;
+            }
+        }
+        if (isValid(x, y + 1) && map[x][y + 1] == 1) {
+            if (isValid(x + 1, y) && map[x + 1][y] == 1 && map[x + 1][y + 1] != 1) {
+                return true;
+            }
+            if (isValid(x - 1, y) && map[x - 1][y] == 1 && map[x - 1][y + 1] != 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @return true if the coordinates are inside the boundaries of the map,
+     * else false
+     */
     private boolean isValid(int x, int y) {
         return (x < length && x >= 0 && y < height && y >= 0);
     }
@@ -221,51 +310,73 @@ public class GraphBuilder {
         return waypoints[val];
     }
 
+    /**
+     * Given two points, finds a near-optimal path between them using the
+     * already-made adjacency matrix.
+     *
+     * @param start the initial position
+     * @param finish the desired ending location
+     * @return a list of waypoints describing where to go. From each waypoint,
+     * it is guaranteed that the next is visible.
+     */
     public Point[] getPath(Point start, Point finish) {
-        for (int i = 0; i < waypoint_index; i++) {
-            if (isVisible(start, waypoints[i])) {
-                adjacency_matrix[i][waypoint_index] = manhattan(start, waypoints[i]);
-                adjacency_matrix[waypoint_index][i] = manhattan(start, waypoints[i]);
+        int distance;
+        waypoints[waypoint_index] = start;
+        for (int i = 0; i < waypoint_index; i++) { //Place the start into the adjacency matrix
+            if (isVisible(start, waypoints[i])) { //Check which waypoints it can see
+                distance = manhattan(start, waypoints[i]); //if it can see it, measure the distance
+                adjacency_matrix[i][waypoint_index] = distance; //place it into the matrix
+                adjacency_matrix[waypoint_index][i] = distance; //Retain symmetry
+            } else {
+                adjacency_matrix[i][waypoint_index] = 0; //place it into the matrix
+                adjacency_matrix[waypoint_index][i] = 0; //Retain symmetry
             }
         }
-        for (int i = 0; i < waypoint_index; i++) {
-            if (isVisible(finish, waypoints[i])) {
-                adjacency_matrix[i][waypoint_index + 1] = manhattan(start, waypoints[i]);
-                adjacency_matrix[waypoint_index + 1][i] = manhattan(start, waypoints[i]);
+
+        waypoints[waypoint_index + 1] = finish;
+        for (int i = 0; i < waypoint_index + 1; i++) { //Place the finish into the adjacency matrix
+            if (isVisible(finish, waypoints[i])) { //check visiblity
+                distance = manhattan(finish, waypoints[i]); //measure distance
+                adjacency_matrix[i][waypoint_index + 1] = distance; //place into matrix
+                adjacency_matrix[waypoint_index + 1][i] = distance; //retain symmetry
+            } else {
+                adjacency_matrix[i][waypoint_index + 1] = 0; //place it into the matrix
+                adjacency_matrix[waypoint_index + 1][i] = 0; //Retain symmetry
             }
         }
-        int[] path = DeathStar.findPath(adjacency_matrix, waypoint_index, waypoint_index+1);
-        Point[] final_path = new Point[path.length];
+
+        int[] path = DeathStar.findPath(adjacency_matrix, waypoint_index, waypoint_index + 1); //find the path
+        if (path == null) { //if null, return null
+            return null;
+        }
+        Point[] final_path = new Point[path.length]; //convert the path from indices to positions
         for (int i = 0; i < path.length; i++) {
             final_path[i] = waypoints[path[i]];
         }
-        final_path[path.length-1] = finish;
+        final_path[path.length - 1] = finish;
+
         return final_path;
     }
 
     public static void main(String[] args) {
         GraphBuilder g = new GraphBuilder(20, 20);
-        g.addObstacle(new Point(10, 11));
-        g.addObstacle(new Point(10, 12));
-        g.addObstacle(new Point(10, 13));
-        g.addObstacle(new Point(10, 14));
-
-        g.addObstacle(new Point(11, 15));
-        g.addObstacle(new Point(11, 16));
-        g.addObstacle(new Point(11, 17));
-        g.addObstacle(new Point(11, 18));
-        g.addObstacle(new Point(11, 19));
-
-        g.addObstacle(new Point(5, 3));
-        g.addObstacle(new Point(5, 4));
-        g.addObstacle(new Point(5, 5));
-        g.addObstacle(new Point(4, 5));
-
-        g.addObstacle(new Point(7, 8));
-
+        Point[] obstacles = new Point[]{new Point(5, 5), new Point(6, 5), new Point(5, 6), new Point(6, 6), new Point(3, 10), new Point(4, 10), new Point(5, 10), new Point(6, 10)};
+        for (Point p : obstacles) {
+            g.addObstacle(p);
+        }
         g.buildMatrix();
-        System.out.println(Arrays.toString(g.getPath(new Point(0,0), new Point(19,19))));
-        
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 20; j++) {
+                Point temp = new Point(j, i);
+                if (Arrays.asList(obstacles).contains(temp)) {
+                    System.out.print(2 + " ");
+                } else {
+                    System.out.print(((g.isVisible(new Point(19, 19), new Point(j, i))) ? 1 : 0) + " ");
+                }
+            }
+            System.out.println();
+        }
+        System.out.println(Arrays.toString(g.getPath(new Point(0, 0), new Point(19, 19))));
 
     }
 

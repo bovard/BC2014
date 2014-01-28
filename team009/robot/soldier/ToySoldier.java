@@ -35,6 +35,7 @@ public class ToySoldier extends TeamRobot {
     public double health;
     public GroupCommandDecoder decoder;
     public int sensorRadiusSquared = RobotType.SOLDIER.sensorRadiusSquared;
+    public int myGroupCount = 0;
 
 
     // Permanent behaviors from coms.
