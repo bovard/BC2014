@@ -33,7 +33,7 @@ public class QualifierSelector extends Decision {
         }
 
         // Communications information
-        if (q.soldierCounts == null || q.soldierCounts.count < 8 && q.soldierCounts.centroid.distanceSquaredTo(q.info.enemyHq) > 64) {
+        if (q.soldierCounts == null || q.soldierCounts.count < 8 || q.soldierCounts.count > 8 && q.soldierCounts.centroid.distanceSquaredTo(q.info.enemyHq) > 64) {
             rc.setIndicatorString(2, "Surround Technique: " + q.soldierCounts.centroid.distanceSquaredTo(q.info.enemyHq));
             q.surround = true;
         } else if (q.hasPastures) {
