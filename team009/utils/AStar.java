@@ -29,7 +29,7 @@ public class AStar {
     private int[] g_scores; // the cost of getting here
     private int[] cameFrom;
     private ArrayList<Integer> open; // the list of nodes to evaluate
-    private ArrayList<Integer> closed; // the list of nodes already evaluated
+    private SmartIntArray closed; // the list of nodes already evaluated
     private int startSquare;
     private int endSquare;
 
@@ -133,7 +133,7 @@ public class AStar {
         cameFrom = new int[numNodes];
 
         open = new ArrayList<Integer>(); // the list of nodes to evaluate
-        closed = new ArrayList<Integer>(); // the list of nodes already evaluated
+        closed = new SmartIntArray(); // the list of nodes already evaluated
         open.add(startSquare);
         g_scores[startSquare] = 0;
         f_scores[startSquare] = _heuristic(startSquare, endSquare);
