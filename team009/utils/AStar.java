@@ -77,6 +77,12 @@ public class AStar {
         return new MapLocation(x, y);
     }
 
+    /**
+     * Checks the cache for a path from current to destination
+     * @param currentLocation
+     * @param destination
+     * @return null if it's not in the cache, the next waypoint if it is
+     */
     public MapLocation getCachedWayPoint(MapLocation currentLocation, MapLocation destination) {
         int startSquare = _mapLocationToSquareID(currentLocation);
         int endSquare = _mapLocationToSquareID(destination);
