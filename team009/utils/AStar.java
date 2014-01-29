@@ -77,6 +77,15 @@ public class AStar {
         return new MapLocation(x, y);
     }
 
+    public MapLocation getCachedWayPoint(MapLocation currentLocation, MapLocation destination) {
+        int startSquare = _mapLocationToSquareID(currentLocation);
+        int endSquare = _mapLocationToSquareID(destination);
+        if (pathCache[startSquare][endSquare] != -1) {
+            return _getSquareCenterFromSquareID(pathCache[startSquare][endSquare]);
+        }
+        return null;
+    }
+
     /**
      * Given your a currentLocation and destination returns the next MapLocation waypoint you should go to
      * @param currentLocation the location of the bot
