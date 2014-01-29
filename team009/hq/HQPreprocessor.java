@@ -37,11 +37,13 @@ public abstract class HQPreprocessor extends HQ {
             map.calc();
             return;
         }
+
         if (!initStar) {
             initStar = true;
             System.out.println("Starting AStar init at " + Clock.getBytecodeNum());
             a = new AStar(map.coarseMap, map.minValue, map.coarseWidth, map.coarseHeight);
             System.out.println("Finishing AStar init at " + Clock.getBytecodeNum());
+            return;
         }
 
         if (!milkInformation.finished) {
@@ -49,25 +51,6 @@ public abstract class HQPreprocessor extends HQ {
             return;
         }
 
-        if (donePath < 2) {
-            try {
-                System.out.println("MapHas: " + map.coarseDivisor);
-                MapLocation hq = rc.getLocation();
-                MapLocation eHQ = rc.senseEnemyHQLocation();
-                int startRound = Clock.getRoundNum();
-                MapLocation result = null;
-                while (result == null) {
-                    result = a.getNextWayPoint(hq, eHQ);
-                }
-                System.out.println("Ended in " + (Clock.getRoundNum() - startRound) + " Rounds");
-                donePath++;
-                return;
-            } catch (Exception e) {
-                e.printStackTrace();
-                donePath++;
-                return;
-            }
-        }
 
 
         finishedPostCalc = true;

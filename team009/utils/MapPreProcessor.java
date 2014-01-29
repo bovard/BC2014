@@ -94,6 +94,7 @@ public class MapPreProcessor {
                 // if the square is full of voids (voids/(coarseDivisor^2)) = 1, make the value IMPASSIBLE
                 // if the square is potentially blocked (voids/coarseDivor) = 1, make it very painful to move through
                 // TODO: Bovard don't write stupid looking code
+                // TODO: Michael: your face
                 coarseMap[x][y] = 2*normals + roads + 4*voids + 3*offMaps + BehaviorConstants.IMPASSIBLE * (voids/(coarseWidth*coarseWidth)) + 10000 * (voids/coarseWidth);
                 // need to keep track of the min value for a* to work effectively
                 if (coarseMap[x][y] < minValue) {
