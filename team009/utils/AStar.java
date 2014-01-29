@@ -2,6 +2,7 @@ package team009.utils;
 
 import battlecode.common.MapLocation;
 import team009.BehaviorConstants;
+import team009.utils.pathfinding.IntHeap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +29,7 @@ public class AStar {
     private int[] f_scores; // the estimated cost of getting to the goal
     private int[] g_scores; // the cost of getting here
     private int[] cameFrom;
-    private ArrayList<Integer> open; // the list of nodes to evaluate
+    private IntHeap open; // the list of nodes to evaluate
     private SmartIntArray closed; // the list of nodes already evaluated
     private int startSquare;
     private int endSquare;
@@ -83,19 +84,30 @@ public class AStar {
      * @return
      */
     public MapLocation getNextWayPoint(MapLocation currentLocation, MapLocation destination) {
-        int result = _getNextSquare(_mapLocationToSquareID(currentLocation), _mapLocationToSquareID(destination));
-        if (result == -2) {
-            // something went wrong with the run, restart it!
-            busy = false;
-            return null;
-        } else if (result == -1) {
-            // we aren't done processing yet
-            return null;
-        } else {
-            // we are done!
-            busy = false;
-            return _getSquareCenterFromSquareID(result);
+        int size = 1;
+        if (busy) {
+            size = open.size() + closed.size();
         }
+        int numTimesToRun = 1;
+        if (size == 1) {
+            numTimesToRun = 3;
+        } else if (size < 15) {
+            numTimesToRun = 2;
+        }
+        for (int i = numTimesToRun; i > 0; i--) {
+            int result = _getNextSquare(_mapLocationToSquareID(currentLocation), _mapLocationToSquareID(destination));
+            if (result == -2) {
+                // something went wrong with the run, restart it!
+                busy = false;
+            } else if (result == -1) {
+                // we aren't done processing yet
+            } else {
+                // we are done!
+                busy = false;
+                return _getSquareCenterFromSquareID(result);
+            }
+        }
+        return null;
     }
 
 
@@ -132,26 +144,25 @@ public class AStar {
         g_scores = new int[numNodes]; // the cost of getting here
         cameFrom = new int[numNodes];
 
-        open = new ArrayList<Integer>(); // the list of nodes to evaluate
+        open = new IntHeap(10000); // the list of nodes to evaluate
         closed = new SmartIntArray(); // the list of nodes already evaluated
-        open.add(startSquare);
         g_scores[startSquare] = 0;
         f_scores[startSquare] = _heuristic(startSquare, endSquare);
+        open.add(startSquare, f_scores[startSquare]);
     }
 
 
     private int _loop() {
-        if (open.size() > 0) {
+        if (!open.isEmpty()) {
             System.out.println("Starting a loop");
             System.out.println("=====================================================");
             Timer.StartTimer();
-            int current = _findLowestF(open, f_scores);
+            int current = open.pop();
 
             if (current == endSquare) {
                 return _cacheAndReturnNextNode(cameFrom, startSquare, endSquare);
             }
 
-            open.remove(new Integer(current));
             closed.add(current);
 
             SmartIntArray neighbors = _neighbors(current);
@@ -170,7 +181,7 @@ public class AStar {
                     g_scores[neighbor] = tentative_score;
                     f_scores[neighbor] = g_scores[neighbor] + _heuristic(neighbor, endSquare);
                     if (!open.contains(neighbor)) {
-                        open.add(neighbor);
+                        open.add(neighbor, f_scores[neighbor]);
                     }
                 }
             }

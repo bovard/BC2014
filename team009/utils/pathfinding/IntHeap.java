@@ -87,6 +87,19 @@ public class IntHeap {
         }
     }
 
+    public int size() {
+        return index;
+    }
+
+    public boolean contains(int n) {
+        for (int i = index - 1; i >= 0; i--) {
+            if (points[i] == n) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isEmpty() {
         return (index == 0);
     }
