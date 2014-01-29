@@ -57,7 +57,7 @@ public class SoundTowerBehaviorBrent extends Behavior {
         y = 0;
         angle = 0;
         currentDir = 0;
-        towerStrat = TOWER_STRAT_PULL_WAYPOINT;
+        towerStrat = TOWER_STRAT_PULL_CARDNIAL;
         //spin around in a cirle shooting the gun
         //TODO is pastrLocs within enviornment check????
         //pastrLocs = robot.rc.sensePastrLocations(robot.info.myTeam);
@@ -258,13 +258,15 @@ public class SoundTowerBehaviorBrent extends Behavior {
             currentNode = 0;
         }
 
+
+
         if(currentNode < currentPath.length) {
             MapLocation currentTarget =  new MapLocation(currentPath[currentNode].x, currentPath[currentNode].y);
             lastPosition = lastPosition.add(lastPosition.directionTo(currentTarget));
 
-            if(manhattan(new Point(currentTarget.x, currentTarget.y), new Point(lastPosition.x, lastPosition.y)) <= 2) {
+            if(currentTarget.distanceSquaredTo(lastPosition) <= 18) {
                 currentNode++;
-                lastPosition = lastPosition.add(lastPosition.directionTo(currentTarget), 3);
+                lastPosition = lastPosition.add(lastPosition.directionTo(currentTarget), 4);
 
                 if(currentNode < currentPath.length) {
                     currentTarget = new MapLocation(currentPath[currentNode].x, currentPath[currentNode].y);
