@@ -329,7 +329,9 @@ public class AStar {
      * @param f_scores
      * @return
      */
+    @Deprecated
     private static int _findLowestF(ArrayList<Integer> open, int[] f_scores) {
+        // Note: This isn't called any more!
         // TODO: this is called a lot, optimize the sh*t out of it
         // TODO: move this up to the main method to save on bytecodes
         //System.out.println("_findLowestF");
