@@ -22,7 +22,8 @@ public class SmartIntArray {
     }
 
     public boolean contains(int n) {
-        for (int i = length - 1; i >= 0; i--) {
+        // saves 2 bytecode per loop!
+        for (int i = length; --i >= 0; )  {
             if (arr[i] == n) {
                 return true;
             }

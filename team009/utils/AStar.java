@@ -214,21 +214,42 @@ public class AStar {
         //System.out.println("Looking at neighbors for " + loc);
         // if we are safe in the middle of the map add the surrounding 8
         if (x > 0 && y > 0 && x < numCoarseSquaresX - 2 && y < numCoarseSquaresY - 2) {
-            for (int i = -1; i <= 1; i ++) {
-                for (int j = -1; j <= 1; j ++) {
-                    if (i!= 0 || j!=0) {
-                        if (map[x + i][y + j] < BehaviorConstants.IMPASSIBLE) {
-                            //System.out.println("Adding " + (numCoarseSquaresY * (x + i) + (y + j)));
-                            neighbors.add( numCoarseSquaresY * (x + i) + (y + j));
-                        }
-                    }
-
-                }
+            // 1, 1
+            if (map[x + 1][y + 1] < BehaviorConstants.IMPASSIBLE) {
+                neighbors.add(numCoarseSquaresY * (x + 1) + y + 1);
             }
-        }
+            // 1, 0
+            if (map[x + 1][y] < BehaviorConstants.IMPASSIBLE) {
+                neighbors.add(numCoarseSquaresY * (x + 1) + y);
+            }
+            // 1, -1
+            if (map[x + 1][y - 1] < BehaviorConstants.IMPASSIBLE) {
+                neighbors.add(numCoarseSquaresY * (x + 1) + y - 1);
+            }
+            // 0, 1
+            if (map[x][y + 1] < BehaviorConstants.IMPASSIBLE) {
+                neighbors.add(numCoarseSquaresY * x + y + 1);
+            }
+            // 0, -1
+            if (map[x][y - 1] < BehaviorConstants.IMPASSIBLE) {
+                neighbors.add(numCoarseSquaresY * x  + y - 1);
+            }
+            // -1, 1
+            if (map[x - 1][y + 1] < BehaviorConstants.IMPASSIBLE) {
+                neighbors.add(numCoarseSquaresY * (x - 1) + y + 1);
+            }
+            // -1, 0
+            if (map[x - 1][y] < BehaviorConstants.IMPASSIBLE) {
+                neighbors.add(numCoarseSquaresY * (x - 1) + y);
+            }
+            // -1, -1
+            if (map[x - 1][y - 1] < BehaviorConstants.IMPASSIBLE) {
+                neighbors.add(numCoarseSquaresY * (x - 1) + y - 1);
+            }
 
+        }
         // else we have to do a safe add
-        // TODO: this could be split into cases and optimised? there are 8 cases :(
+        // TODO: get this out of for loops to optimize! there are 2 top level if and 2 sub levels for each top level
         else {
             for (int i = -1; i <= 1; i ++) {
                 for (int j = -1; j <= 1; j ++) {
