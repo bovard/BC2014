@@ -21,4 +21,13 @@ public class SmartIntArray {
         return length;
     }
 
+    public boolean contains(int n) {
+        for (int i = length - 1; i >= 0; i--) {
+            if (arr[i] == n) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

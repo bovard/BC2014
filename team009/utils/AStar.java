@@ -12,6 +12,7 @@ public class AStar {
     private static final double SQRT_2 = Math.sqrt(2);
 
 
+    // things we need to know
     private int[][] map;
     private int minMapValue;
     private int[][] pathCache;
@@ -20,6 +21,18 @@ public class AStar {
     private int numMapLocationsPerCoarseSquareX;
     private int numMapLocationsPerCoarseSquareY;
     private int numNodes;
+
+
+    // things we need to set-up tear-down for every run
+    public boolean busy = false;
+    private int[] f_scores; // the estimated cost of getting to the goal
+    private int[] g_scores; // the cost of getting here
+    private int[] cameFrom;
+    private ArrayList<Integer> open; // the list of nodes to evaluate
+    private ArrayList<Integer> closed; // the list of nodes already evaluated
+    private int startSquare;
+    private int endSquare;
+
 
     /**
      * AStar! Needs a map of int values for the square and the minMapValue
@@ -40,27 +53,49 @@ public class AStar {
         for (int i = numNodes - 1; i >= 0; i--) {
             Arrays.fill(pathCache[i], -1);
         }
-        System.out.println("Course map is " + numCoarseSquaresX + " by " + numCoarseSquaresY);
+        //System.out.println("Course map is " + numCoarseSquaresX + " by " + numCoarseSquaresY);
     }
 
-    public int mapLocationToSquareID(MapLocation loc, int coarseHeight, int coarseWidth) {
-        System.out.println("MapLocation to SquareID");
-        System.out.println("loc x/y = " + loc.x + "/" + loc.y);
-        return numCoarseSquaresY * (loc.x / coarseWidth) + loc.y / coarseHeight;
+    private int _mapLocationToSquareID(MapLocation loc) {
+        //System.out.println("MapLocation to SquareID");
+        //System.out.println("loc x/y = " + loc.x + "/" + loc.y);
+        return numCoarseSquaresY * (loc.x / numMapLocationsPerCoarseSquareX) + loc.y / numMapLocationsPerCoarseSquareY;
     }
 
 
     private void _printSquareMapLocationCenter(int squareID) {
-        MapLocation m = getSquareCenterFromSquareID(squareID);
+        MapLocation m = _getSquareCenterFromSquareID(squareID);
         System.out.println("MapLocation center for squareID " + squareID + " is " + m.toString());
     }
 
-    public MapLocation getSquareCenterFromSquareID(int squareID) {
+    private MapLocation _getSquareCenterFromSquareID(int squareID) {
         int x = squareID / numCoarseSquaresY;
         int y = squareID % numCoarseSquaresY;
-        x = (x * numMapLocationsPerCoarseSquareX + x * (numMapLocationsPerCoarseSquareX + 1))/2;
-        y = (y * numMapLocationsPerCoarseSquareX + y * (numMapLocationsPerCoarseSquareX + 1))/2;
+        x = ((2 * x + 1) * numMapLocationsPerCoarseSquareX)/2;
+        y = ((2 * y + 1) * numMapLocationsPerCoarseSquareY)/2;
         return new MapLocation(x, y);
+    }
+
+    /**
+     * Given your a currentLocation and destination returns the next MapLocation waypoint you should go to
+     * @param currentLocation the location of the bot
+     * @param destination the location the bot would like to go to
+     * @return
+     */
+    public MapLocation getNextWayPoint(MapLocation currentLocation, MapLocation destination) {
+        int result = _getNextSquare(_mapLocationToSquareID(currentLocation), _mapLocationToSquareID(destination));
+        if (result == -2) {
+            // something went wrong with the run, restart it!
+            busy = false;
+            return null;
+        } else if (result == -1) {
+            // we aren't done processing yet
+            return null;
+        } else {
+            // we are done!
+            busy = false;
+            return _getSquareCenterFromSquareID(result);
+        }
     }
 
 
@@ -69,50 +104,55 @@ public class AStar {
      * from startSquare, uses a cahce if possible
      * @param startSquare the squareID you're starting at
      * @param endSquare the squareID you're trying to get to
-     * @return the next square you should move to
+     * @return the next square you should move to or null if not done processing
      */
-    public int getNextSquare(int startSquare, int endSquare) {
-        System.out.println("getNextSquare " + startSquare + " to " + endSquare);
-        System.out.println(pathCache.length + " " + pathCache[0].length + " " + pathCache[0][1]);
-        System.out.println("Path cache is " + pathCache[startSquare][endSquare]);
+    private int _getNextSquare(int startSquare, int endSquare) {
+        //System.out.println("_getNextSquare " + startSquare + " to " + endSquare);
+        //System.out.println(pathCache.length + " " + pathCache[0].length + " " + pathCache[0][1]);
+        //System.out.println("Path cache is " + pathCache[startSquare][endSquare]);
         if (pathCache[startSquare][endSquare] != -1) {
+            // checked to see if it's cached first
             return pathCache[startSquare][endSquare];
         } else {
-            return _findPath(startSquare, endSquare);
+            // if it's not start a new run if we aren't currently doing one
+            if (!busy) {
+                _startNewRun(startSquare, endSquare);
+                busy = true;
+            }
+            return _loop();
         }
 
     }
 
+    private void _startNewRun(int startSquare, int endSquare) {
+        busy = true;
+        this.startSquare = startSquare;
+        this.endSquare = endSquare;
+        f_scores = new int[numNodes]; // the estimated cost of getting to the goal
+        g_scores = new int[numNodes]; // the cost of getting here
+        cameFrom = new int[numNodes];
 
-    private int _findPath(int startSquare, int endSquare) {
-        int[] f_scores = new int[numNodes]; // the estimated cost of getting to the goal
-        int[] g_scores = new int[numNodes]; // the cost of getting here
-        int[] cameFrom = new int[numNodes];
-
-        // TODO: open could be a min heap so we can avoid searching it every time
-        // if this was a min heap we could just always remove the 0th element
-        // easily could create a class to do this?
-        ArrayList<Integer> open = new ArrayList<Integer>(); // the list of nodes to evaluate
+        open = new ArrayList<Integer>(); // the list of nodes to evaluate
+        closed = new ArrayList<Integer>(); // the list of nodes already evaluated
         open.add(startSquare);
-        ArrayList<Integer> closed = new ArrayList<Integer>(); // the list of nodes already evaluated
-
         g_scores[startSquare] = 0;
         f_scores[startSquare] = _heuristic(startSquare, endSquare);
+    }
 
-        while (open.size() > 0) {
+
+    private int _loop() {
+        if (open.size() > 0) {
             System.out.println("Starting a loop");
+            System.out.println("=====================================================");
+            Timer.StartTimer();
             int current = _findLowestF(open, f_scores);
-            System.out.println("Looking at square " + current);
 
             if (current == endSquare) {
-                System.out.println("Made it to dest");
                 return _cacheAndReturnNextNode(cameFrom, startSquare, endSquare);
             }
 
-            System.out.println("Removing from open");
             open.remove(new Integer(current));
-            System.out.println("Adding to closed");
-            closed.add(new Integer(current));
+            closed.add(current);
 
             SmartIntArray neighbors = _neighbors(current);
 
@@ -134,6 +174,13 @@ public class AStar {
                     }
                 }
             }
+            System.out.println("Ending a loop =====================================================");
+            Timer.EndTimer();
+            System.out.println("Size of open " + open.size());
+            System.out.println("Size of closed " + closed.size());
+
+        } else {
+            return -2;
         }
         return -1;
     }
@@ -144,20 +191,19 @@ public class AStar {
      * @return the non-impassible neightbors
      */
     private SmartIntArray _neighbors(int loc) {
-        System.out.println("_neighbors");
-        Timer.StartTimer();
+        //System.out.println("_neighbors");
         SmartIntArray neighbors = new SmartIntArray();
         int x = loc / numCoarseSquaresY;
         int y = loc % numCoarseSquaresY;
 
-        System.out.println("Looking at neighbors for " + loc);
+        //System.out.println("Looking at neighbors for " + loc);
         // if we are safe in the middle of the map add the surrounding 8
         if (x > 0 && y > 0 && x < numCoarseSquaresX - 2 && y < numCoarseSquaresY - 2) {
             for (int i = -1; i <= 1; i ++) {
                 for (int j = -1; j <= 1; j ++) {
                     if (i!= 0 || j!=0) {
                         if (map[x + i][y + j] < BehaviorConstants.IMPASSIBLE) {
-                            System.out.println("Adding " + (numCoarseSquaresY * (x + i) + (y + j)));
+                            //System.out.println("Adding " + (numCoarseSquaresY * (x + i) + (y + j)));
                             neighbors.add( numCoarseSquaresY * (x + i) + (y + j));
                         }
                     }
@@ -173,7 +219,7 @@ public class AStar {
                 for (int j = -1; j <= 1; j ++) {
                     if ((i!= 0 || j!=0) && x + i >= 0 && x + i < numCoarseSquaresX && y + j >= 0 && y + j < numCoarseSquaresY) {
                         if (map[x + i][y + j] < BehaviorConstants.IMPASSIBLE) {
-                            System.out.println("Adding " + (numCoarseSquaresY * (x + i) + (y + j)));
+                            //System.out.println("Adding " + (numCoarseSquaresY * (x + i) + (y + j)));
                             neighbors.add( numCoarseSquaresY * (x + i) + (y + j));
                         }
                     }
@@ -181,7 +227,6 @@ public class AStar {
             }
 
         }
-        Timer.EndTimer();
         return neighbors;
     }
 
@@ -214,16 +259,15 @@ public class AStar {
      * @return
      */
     private int _cacheAndReturnNextNode(int[] cameFrom, int start, int goal) {
-        System.out.println("Goal met from " + start + " to " + goal + "!!!!!!!!!!!!!!========");
-        System.out.println("Cache And Return");
-        Timer.StartTimer();
-        boolean done = false;
+        //System.out.println("Cache And Return");
+        System.out.println("From goal working backwards, you should go:");
+        _printSquareMapLocationCenter(goal);
         int current = cameFrom[goal];
-        System.out.println("Go to node " + current);
         _printSquareMapLocationCenter(current);
         pathCache[current][goal] = goal;
 
         if (current == start) {
+            _printSquareMapLocationCenter(start);
             return goal;
         }
 
@@ -233,12 +277,11 @@ public class AStar {
             int temp = previous;
             previous = cameFrom[previous];
             current = temp;
-            System.out.println("Go to node " + current);
             _printSquareMapLocationCenter(current);
         } while (previous != start);
 
         pathCache[start][goal] = current;
-        Timer.EndTimer();
+        _printSquareMapLocationCenter(start);
 
         return current;
     }
@@ -253,8 +296,7 @@ public class AStar {
     private static int _findLowestF(ArrayList<Integer> open, int[] f_scores) {
         // TODO: this is called a lot, optimize the sh*t out of it
         // TODO: move this up to the main method to save on bytecodes
-        System.out.println("_findLowestF");
-        Timer.StartTimer();
+        //System.out.println("_findLowestF");
         int min = Integer.MAX_VALUE;
         int minLoc = -1;
         for (int loc : open) {
@@ -265,8 +307,10 @@ public class AStar {
 
         }
         // if minLoc = -1 here something is very wrong!
-        Timer.EndTimer();
-        System.out.println("Found " + minLoc + " at distance " + min);
+        if (minLoc == -1) {
+            System.out.println("WE ARE IN TROUBLE");
+        }
+        //System.out.println("Found " + minLoc + " at distance " + min);
         return minLoc;
     }
 
