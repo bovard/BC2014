@@ -48,16 +48,16 @@ public class HQStateCom extends ReadBehavior {
                 hq.pastrLocations.add(dec.from);
             } else if (dec.command == TeamRobot.REQUEST_LOCATION) {
                 if (((HQPreprocessor)hq).a != null) {
-                    MapLocation from = dec.from;
-                    MapLocation to = dec.to;
-                    MapLocation result = ((HQPreprocessor)hq).a.getCachedWayPoint(from, to);
+                    MapLocation fromBot = dec.from;
+                    MapLocation toBot = dec.to;
+                    MapLocation result = ((HQPreprocessor)hq).a.getCachedWayPoint(fromBot, toBot);
                     if (result == null) {
                         // we haven't found a map location for you, sorry!
                         // if we don't have a job processing, process this one!
                         // this seems like the best lowest/cost idea
-                        if (from == null && to == null) {
-                            this.from = from;
-                            this.to = to;
+                        if (fromBot == null && toBot == null) {
+                            this.from = fromBot;
+                            this.to = toBot;
                         }
                         // we don't have a position for you, better luck next time
                         // TODO: Michael we didn't find a location, send failure back
