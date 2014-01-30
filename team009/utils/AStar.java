@@ -126,8 +126,11 @@ public class AStar {
         //System.out.println("_getNextSquare " + startSquare + " to " + endSquare);
         //System.out.println(pathCache.length + " " + pathCache[0].length + " " + pathCache[0][1]);
         //System.out.println("Path cache is " + pathCache[startSquare][endSquare]);
-        if (pathCache[startSquare][endSquare] != -1) {
+        if (pathCache[startSquare][endSquare] != 0) {
             // checked to see if it's cached first
+            if (pathCache[startSquare][endSquare] == -1) {
+                return 0;
+            }
             return pathCache[startSquare][endSquare];
         } else {
             // if it's not start a new run if we aren't currently doing one
