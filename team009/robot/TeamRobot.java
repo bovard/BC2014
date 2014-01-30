@@ -27,6 +27,8 @@ public abstract class TeamRobot {
     public static final int WAY_POINT_RECEIVED = 2;
     public static final int POSITION_OF_NOISE_TOWER = 3;
     public static final int POSITION_OF_PASTR = 4;
+    public static final int REQUEST_LOCATION = 5;
+    public static final int LOCATION_RESULT = 6;
 
     public static final int SOLDIER_GROUP = 0;
     public static final int NOISE_TOWER_GROUP = 1;

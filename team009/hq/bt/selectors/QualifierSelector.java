@@ -1,6 +1,7 @@
 package team009.hq.bt.selectors;
 
 import battlecode.common.GameActionException;
+import team009.hq.bt.behaviors.HQQualifierSpawn;
 import team009.hq.bt.behaviors.HQSpawn;
 import team009.hq.bt.behaviors.HQQualifier;
 import team009.hq.bt.behaviors.HQShoot;
@@ -10,7 +11,7 @@ import team009.hq.robot.Qualifier;
 // TODO: Make this more efficient by hard coding the available states.
 public class QualifierSelector extends Decision {
     HQShoot shoot;
-    HQSpawn spawn;
+    HQQualifierSpawn spawn;
     HQQualifier qualifierBehavior;
 
     Qualifier q;
@@ -18,7 +19,7 @@ public class QualifierSelector extends Decision {
     public QualifierSelector(Qualifier robot) {
         super(robot);
         shoot = new HQShoot(robot);
-        spawn = new HQSpawn(robot);
+        spawn = new HQQualifierSpawn(robot);
         qualifierBehavior = new HQQualifier(robot);
         q = robot;
     }

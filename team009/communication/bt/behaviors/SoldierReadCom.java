@@ -4,6 +4,7 @@ import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import team009.communication.Communicator;
 import team009.communication.decoders.SoldierCountDecoder;
+import team009.communication.decoders.TwoWayDecoder;
 import team009.robot.TeamRobot;
 import team009.robot.soldier.ToySoldier;
 
@@ -37,6 +38,13 @@ public class SoldierReadCom extends ReadBehavior {
         SoldierCountDecoder dec = Communicator.ReadTypeAndGroup(rc, TeamRobot.SOLDIER_TYPE_TOY_SOLDIER, robot.group);
         soldier.myGroupCount = dec.count;
         soldier.groupCentroid = dec.centroid;
+
+        if (soldier.locationRequested) {
+            TwoWayDecoder twoWay = Communicator.ReadTwoWayCommunicate(rc, soldier.twoWayChannel);
+            if (twoWay.command == TeamRobot.LOCATION_RESULT) {
+
+            }
+        }
 
         return true;
     }

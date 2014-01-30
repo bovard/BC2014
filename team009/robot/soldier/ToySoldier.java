@@ -40,6 +40,11 @@ public class ToySoldier extends TeamRobot {
     public int myGroupCount = 0;
     public HQAttackUtil hqAttack;
 
+    public boolean requestLocation = false;
+    public boolean locationRequested = false;
+    public MapLocation start = null;
+    public MapLocation end = null;
+
 
     // Permanent behaviors from coms.
     public boolean isHunter = true;

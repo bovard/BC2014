@@ -13,7 +13,7 @@ public class ToySelector extends Decision {
     GroupAttackPasture attackPasture;
     GroupReturnToBase returnToBase;
     ToyEngageEnemy engageEnemy;
-    ToyHerderSelector herder;
+    CaptureDefend capture;
     NearEnemyHQ nearHq;
     ToySoldier soldier;
     public ToySelector(ToySoldier robot) {
@@ -38,8 +38,8 @@ public class ToySelector extends Decision {
         // returns to base as group
         returnToBase = new GroupReturnToBase(robot);
 
-        // Becomes the herder.
-        herder = new ToyHerderSelector(robot);
+        // For capturing and defending sound/pastrs
+        capture = new CaptureDefend(robot);
 
         nearHq = new NearEnemyHQ(robot);
     }
@@ -66,7 +66,7 @@ public class ToySelector extends Decision {
         }
 
         if (soldier.isHerder) {
-            herder.run();
+            capture.run();
         } else if (soldier.isHunter) {
             if (defend.pre()) {
                 defend.run();

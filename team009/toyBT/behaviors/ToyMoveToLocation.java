@@ -36,13 +36,7 @@ public class ToyMoveToLocation extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
-        if (!currentLocation.equals(soldier.comLocation)) {
-            snailMove.setDestination(soldier.comLocation);
-            bugMove.setDestination(soldier.comLocation);
-            currentLocation = soldier.comLocation;
-            expectedSteps = 4 * (int)Math.sqrt(currentLocation.distanceSquaredTo(robot.currentLoc));
-        }
-
+        update();
         if (currentMove.stepsTaken > expectedSteps) {
             if (usingSnail) {
                 bugMove.setDestination(soldier.comLocation);
@@ -60,7 +54,15 @@ public class ToyMoveToLocation extends Behavior {
         } else {
             currentMove.move();
         }
-        //move.sneak();
         return true;
+    }
+
+    protected void update() throws GameActionException {
+        if (!currentLocation.equals(soldier.comLocation)) {
+            snailMove.setDestination(soldier.comLocation);
+            bugMove.setDestination(soldier.comLocation);
+            currentLocation = soldier.comLocation;
+            expectedSteps = 4 * (int)Math.sqrt(currentLocation.distanceSquaredTo(robot.currentLoc));
+        }
     }
 }
