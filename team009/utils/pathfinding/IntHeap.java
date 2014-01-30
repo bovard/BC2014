@@ -66,7 +66,7 @@ public class IntHeap {
         int current_cost = costs[0];
         while (true) {
             int left_index = temp_index << 1 + 1;
-            int right_index = temp_index << 2 + 2;
+            int right_index = temp_index << 1 + 2;
             int min_cost = current_cost;
             int min_index = 0;
             if (left_index < index && costs[left_index] < min_cost) {
