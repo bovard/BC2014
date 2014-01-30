@@ -19,7 +19,6 @@ public class HQQualifier extends Behavior {
     public boolean run() throws GameActionException {
 
         // Communications information
-        rc.setIndicatorString(2, "Surround Technique: " + (q.soldierCounts == null) + " || " + (q.soldierCounts.count < 8) + " || " + (q.soldierCounts.count >= 8) + " && " + q.soldierCounts.centroid.distanceSquaredTo(q.info.enemyHq) + " > 80 ");
         if (q.soldierCounts == null || q.soldierCounts.count < 8 || q.soldierCounts.count >= 8 && q.soldierCounts.centroid.distanceSquaredTo(q.info.enemyHq) > 80) {
             q.surround = true;
             q.groupToSpawn = 0;

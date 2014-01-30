@@ -1,6 +1,8 @@
 package team009.toyBT.behaviors;
 
+import battlecode.common.Direction;
 import battlecode.common.GameActionException;
+import battlecode.common.MapLocation;
 import battlecode.common.RobotType;
 import team009.robot.TeamRobot;
 import team009.robot.soldier.ToySoldier;
@@ -33,6 +35,12 @@ public class CaptureDefend extends ToyMoveToLocation {
                 rc.construct(RobotType.PASTR);
             } else if (sound) {
                 rc.construct(RobotType.NOISETOWER);
+            }
+        } else {
+            Direction dir = soldier.currentLoc.directionTo(currentLocation);
+            MapLocation loc = soldier.currentLoc.add(dir, 2);
+            if (!loc.isAdjacentTo(currentLocation) && !loc.equals(currentLocation)) {
+                super.run();
             }
         }
 

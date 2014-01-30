@@ -29,10 +29,11 @@ public class HQOneBase extends WriteBehavior {
         }
 
         if (hasSound) {
-            System.out.println("Sending out information.");
-            hq.comCapture(bestSpot, 0, false);
+            System.out.println("BestSpot: " + bestSpot);
+            hq.comCapture(bestSpot, hq.groupToSpawn);
         } else {
-            hq.comSoundTower(noiseLoc, 0);
+            System.out.println("Noise: " + noiseLoc);
+            hq.comSoundTower(noiseLoc, hq.groupToSpawn);
         }
         return true;
     }
