@@ -44,7 +44,7 @@ public class IntHeap {
             index++;
         }
         while (true) {
-            int parent_index = (temp_index - 1) >> 1;
+            int parent_index = (temp_index - 1) / 2;
             int parent_cost = costs[parent_index];
             if (cost < parent_cost) {
                 swap(temp_index, parent_index);
