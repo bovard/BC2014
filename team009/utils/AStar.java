@@ -99,6 +99,9 @@ public class AStar {
      * @return
      */
     public MapLocation getNextWayPoint(MapLocation currentLocation, MapLocation destination) {
+        if (_mapLocationToSquareID(currentLocation) == _mapLocationToSquareID(destination)) {
+            return destination;
+        }
         int result = _getNextSquare(_mapLocationToSquareID(currentLocation), _mapLocationToSquareID(destination));
         if (result == -2) {
             // something went wrong with the run, restart it!
@@ -299,6 +302,7 @@ public class AStar {
      */
     private int _cacheAndReturnNextNode(int[] cameFrom, int start, int goal) {
         //System.out.println("Cache And Return");
+        System.out.println("Goal " + goal + " start " + start);
         System.out.println("From goal working backwards, you should go:");
         _printSquareMapLocationCenter(goal);
         int current = cameFrom[goal];
@@ -325,7 +329,7 @@ public class AStar {
             previous = cameFrom[previous];
             current = temp;
             _printSquareMapLocationCenter(current);
-        } while (previous != start);
+        } while (previous != start && current != start);
 
         if (current == 0) {
             pathCache[start][goal] = -1;

@@ -36,6 +36,12 @@ public abstract class HQPreprocessor extends HQ {
             return;
         }
 
+
+        if (!milkInformation.finished) {
+            milkInformation.calc();
+            return;
+        }
+
         if (!initStar) {
             initStar = true;
             System.out.println("Starting AStar init at " + Clock.getBytecodeNum());
@@ -43,13 +49,6 @@ public abstract class HQPreprocessor extends HQ {
             System.out.println("Finishing AStar init at " + Clock.getBytecodeNum());
             return;
         }
-
-        if (!milkInformation.finished) {
-            milkInformation.calc();
-            return;
-        }
-
-
 
         finishedPostCalc = true;
     }
