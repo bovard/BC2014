@@ -27,6 +27,7 @@ public class HQStateCom extends ReadBehavior {
         // if we have an aStar and we are processing, process away!
         if (((HQPreprocessor)hq).a != null && to != null && from != null) {
             MapLocation done = ((HQPreprocessor)hq).a.getNextWayPoint(from, to);
+            System.out.println("Done: " + done);
             // the Map Location will be non null if it's done processing!
             if (done != null) {
                 from = null;
@@ -52,6 +53,7 @@ public class HQStateCom extends ReadBehavior {
                     MapLocation fromBot = dec.from;
                     MapLocation toBot = dec.to;
                     MapLocation result = ((HQPreprocessor)hq).a.getCachedWayPoint(fromBot, toBot);
+                    System.out.println("Result: " + result + " : " + fromBot + " : " + toBot);
                     if (result == null) {
                         if (this.from == null && this.to == null) {
                             this.from = fromBot;
@@ -59,6 +61,7 @@ public class HQStateCom extends ReadBehavior {
                         }
                     } else {
                         Communicator.WriteTwoWayCommunicate(rc, i + Communicator.TWO_WAY_HQ_COM_BASE, TeamRobot.LOCATION_RESULT, fromBot, result);
+                        System.out.println("TwoWay(" + (i + Communicator.TWO_WAY_HQ_COM_BASE) + "): ");
                         clear = false;
                     }
                 }
