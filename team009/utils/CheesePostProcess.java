@@ -3,7 +3,7 @@ package team009.utils;
 import battlecode.common.*;
 import team009.RobotInformation;
 import team009.BehaviorConstants;
-import team009.robot.hq.HQ;
+import team009.hq.HQ;
 
 public class CheesePostProcess {
     private RobotController rc;
@@ -63,7 +63,10 @@ public class CheesePostProcess {
             finished = dir == Direction.NORTH;
         }
 
-        cheese = finished && milkTotal > (width > height ? width : height) * BehaviorConstants.CHEESE_MULTIPLIER;
+//        cheese = finished && milkTotal > (width > height ? width : height) * BehaviorConstants.CHEESE_MILK_MULTIPLIER;
+//        if (finished) {
+//            System.out.println("MilkTotal: " + milkTotal + " > " + ((width > height ? width : height) * BehaviorConstants.CHEESE_MILK_MULTIPLIER));
+//        }
     }
 
     /**

@@ -4,7 +4,7 @@ import battlecode.common.RobotController;
 import battlecode.common.RobotType;
 import team009.robot.NoiseTower;
 import team009.robot.Pastr;
-import team009.robot.hq.HQSpawner;
+import team009.hq.HQSpawner;
 import team009.robot.soldier.SoldierSpawner;
 
 public class RobotPlayer {

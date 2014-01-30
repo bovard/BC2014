@@ -53,8 +53,7 @@ public class ToyMoveToLocation extends Behavior {
             }
             usingSnail = !usingSnail;
         }
-        robot.rc.setIndicatorString(1, (usingSnail ? "Snail: " : "Bug: ") + expectedSteps + " : " + currentMove.stepsTaken);
-        //TODO determine when to sneak based on if near friendly PASTR
+
         if (soldier.friendlyPastrs.length > 0 &&
             soldier.friendlyPastrs.arr[0].location.distanceSquaredTo(soldier.currentLoc) < attackRadius) {
             currentMove.sneak();

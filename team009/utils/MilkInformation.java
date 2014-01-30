@@ -3,14 +3,14 @@ package team009.utils;
 import battlecode.common.*;
 import team009.RobotInformation;
 import team009.BehaviorConstants;
-import team009.robot.hq.HQ;
+import team009.hq.HQPreprocessor;
 
 public class MilkInformation {
 
     // Controls
     RobotController rc;
     RobotInformation info;
-    HQ hq;
+    HQPreprocessor hq;
     Box[] boxes;
     int i = 0;
     int j = 0;
@@ -28,7 +28,7 @@ public class MilkInformation {
      * A milk information will parse out the map and determine the
      * "sweet" spots for milking
      */
-    public MilkInformation(HQ hq) {
+    public MilkInformation(HQPreprocessor hq) {
         this.rc = hq.rc;
         this.info = hq.info;
         this.hq = hq;
@@ -75,7 +75,6 @@ public class MilkInformation {
             return true;
         }
 
-        System.out.println("Milking");
         // Bases have been set
         if (!hasBasesSet) {
             int x = info.hq.x;
@@ -114,7 +113,6 @@ public class MilkInformation {
         int yMax = curr.y2 - 1;
         while (k < roundsToProcess && i < curr.x2 - 1) {
             for (; i < curr.x2 - 1 && k < roundsToProcess; i++, k++) {
-                Timer.StartTimer();
                 double[] row = milks[i];
                 int[] mapRow = map[i];
                 for (j = curr.y == 0 ? 1 : curr.y; j < yMax; j++) {
@@ -148,7 +146,6 @@ public class MilkInformation {
                         }
                     }
                 }
-                Timer.EndTimer();
             }
         }
 
