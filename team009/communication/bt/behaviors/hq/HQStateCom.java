@@ -55,9 +55,9 @@ public class HQStateCom extends ReadBehavior {
                         // we haven't found a map location for you, sorry!
                         // if we don't have a job processing, process this one!
                         // this seems like the best lowest/cost idea
-                        if (fromBot == null && toBot == null) {
-                            this.from = fromBot;
-                            this.to = toBot;
+                        if (from == null && to == null) {
+                            from = fromBot;
+                            to = toBot;
                         }
                         // we don't have a position for you, better luck next time
                         // TODO: Michael we didn't find a location, send failure back
