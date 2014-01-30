@@ -58,7 +58,7 @@ public class SoundTowerBehaviorBrent extends Behavior {
         y = 0;
         angle = 0;
         currentDir = 0;
-        towerStrat = 10;
+        towerStrat = TOWER_STRAT_PULL_CARDNIAL;
         graphBuilder = new GraphBuilder(35,35);
         //spin around in a cirle shooting the gun
         //TODO is pastrLocs within enviornment check????
@@ -261,6 +261,11 @@ public class SoundTowerBehaviorBrent extends Behavior {
                 currentDir = 0;
             }
             currentNode = 0;
+
+            MapLocation currentTarget =  new MapLocation(currentPath[currentNode].x, currentPath[currentNode].y);
+            Direction dirToPos = lastPosition.directionTo(currentTarget);
+            int distance = -1 * (int)Math.sqrt(lastPosition.distanceSquaredTo(currentTarget));
+            lastPosition = currentTarget.add(dirToPos,distance);
         }
 
 
