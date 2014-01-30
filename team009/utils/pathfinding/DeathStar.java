@@ -20,7 +20,7 @@ public class DeathStar {
      * @return the sequence of vertices to travel through, or null if no path exists
      */
     public static int[] findPath(int[][] adj_matrix, int start, int finish) {
-        IntHeap to_evaluate = new IntHeap(adj_matrix.length); //Uses a simple heap as a priority queue
+        IntHeap to_evaluate = new IntHeap(500); //Uses a simple heap as a priority queue
         int[] min_costs = new int[adj_matrix.length]; //the minimum cost to get to a vertex
         int[] min_index = new int[adj_matrix.length]; //the vertex's lowest cost neighbor
         boolean[] closed_set = new boolean[adj_matrix.length];

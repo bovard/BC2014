@@ -171,32 +171,36 @@ public class GraphBuilder {
 
             int x = obstacles[i].x;
             int y = obstacles[i].y;
+            Timer.StartTimer();
             for (int j = -1; j <= 1; j++) {
                 for (int k = -1; k <= 1; k++) {
-                    if (isValid(x + j, y + k) && map[x + j][y + k] == 0) {
-                        if (isOutsideCorner(x + j, y + k)) {
-                            map[x + j][y + k] = 2;
-                            waypoints[waypoint_index] = new Point(x + j, y + k);
+                    int adjX = x+j;
+                    int adjY = y+k;
+                    if (adjX < length && adjX >= 0 && adjY < height && adjY >= 0 && map[adjX][adjY] == 0) {
+                        if (isOutsideCorner(x + j, adjY)) {
+                            map[adjX][adjY] = 2;
+                            waypoints[waypoint_index] = new Point(adjX, adjY);
                             waypoint_index++;
-                        } else if (isInsideCorner(x + j, y + k)) {
-                            map[x + j][y + k] = 2;
+                        } else if (isInsideCorner(adjX, y + k)) {
+                            map[adjX][adjY] = 2;
                             insideCorners[waypoint_index] = true;
-                            waypoints[waypoint_index] = new Point(x + j, y + k);
+                            waypoints[waypoint_index] = new Point(adjX, adjY);
                             waypoint_index++;
                         }
                     }
                 }
             }
-
-            if(Clock.getBytecodeNum() > 8800) {
+            Timer.EndTimer();
+            if(Clock.getBytecodeNum() > 3000) {
                 last_object_index = i;
                 return false;
             }
         }
         last_object_index = obstacle_index;
 
-        if(matrixComputeI == 0 && matrixComputeJ == 1)
+        if(matrixComputeI == 0 && matrixComputeJ == 1) {
             adjacency_matrix = new int[waypoint_index + 2][waypoint_index + 2];
+        }
 
         for (; matrixComputeI < waypoint_index; matrixComputeI++) {
             for (; matrixComputeJ < waypoint_index; matrixComputeJ++) {
@@ -207,7 +211,7 @@ public class GraphBuilder {
                     adjacency_matrix[matrixComputeJ][matrixComputeI] = distance;
                 }
 
-                if(Clock.getBytecodeNum() > 9500) {
+                if(Clock.getBytecodeNum() > 800) {
                     return false;
                 }
             }
