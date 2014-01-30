@@ -27,9 +27,6 @@ public class GroupEngageEnemies extends Behavior {
         if (((ToySoldier)robot).enemySoldiers.length < ((ToySoldier)robot).friendlySoldiers.length) {
             // if we aren't next to our ally get there!
             if (!((ToySoldier) robot).friendlySoldiers.arr[0].location.isAdjacentTo(((ToySoldier) robot).currentLoc)) {
-                MapLocation nearestAlly = soldier.friendlySoldiers.arr[0].location;
-                Direction toAlly = soldier.currentLoc.directionTo(nearestAlly);
-
                 if (robot.rc.canMove(toAlly)) {
                     robot.rc.move(toAlly);
                     return true;
