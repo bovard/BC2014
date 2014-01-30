@@ -10,8 +10,6 @@ import team009.robot.TeamRobot;
 import team009.hq.HQ;
 import team009.utils.SmartMapLocationArray;
 
-import java.util.ArrayList;
-
 public class HQStateCom extends ReadBehavior {
     HQ hq;
 
@@ -21,7 +19,8 @@ public class HQStateCom extends ReadBehavior {
     public HQStateCom(HQ hq) {
         super(hq);
         this.hq = hq;
-
+        from = rc.senseHQLocation();
+        to = rc.senseEnemyHQLocation();
     }
 
     public boolean run() throws GameActionException {
