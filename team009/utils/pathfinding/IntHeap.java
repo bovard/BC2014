@@ -87,6 +87,20 @@ public class IntHeap {
         }
     }
 
+    public int size() {
+        return index;
+    }
+
+    public boolean contains(int n) {
+        // loops saves 2 bytecode per iteration!
+        for (int i = index; --i >= 0;) {
+            if (points[i] == n) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isEmpty() {
         return (index == 0);
     }

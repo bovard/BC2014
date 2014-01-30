@@ -6,8 +6,8 @@ import team009.bt.behaviors.Behavior;
 import team009.robot.TeamRobot;
 import team009.robot.soldier.ToySoldier;
 
-public class Engage extends Behavior {
-    public Engage(TeamRobot robot) {
+public class ShootSomeone extends Behavior {
+    public ShootSomeone(TeamRobot robot) {
         super(robot);
     }
 
