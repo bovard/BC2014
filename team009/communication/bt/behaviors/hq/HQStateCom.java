@@ -37,6 +37,7 @@ public class HQStateCom extends ReadBehavior {
                     MapLocation fromBot = dec.from;
                     MapLocation toBot = dec.to;
                     MapLocation result = ((HQPreprocessor)hq).a.getCachedWayPoint(fromBot, toBot);
+                    System.out.println("Result: " + result + " : " + fromBot + " : " + toBot);
                     if (result == null) {
                         if (((HQPreprocessor)hq).from == null && ((HQPreprocessor)hq).to == null) {
                             ((HQPreprocessor)hq).from = fromBot;
@@ -44,6 +45,7 @@ public class HQStateCom extends ReadBehavior {
                         }
                     } else {
                         Communicator.WriteTwoWayCommunicate(rc, i + Communicator.TWO_WAY_HQ_COM_BASE, TeamRobot.LOCATION_RESULT, fromBot, result);
+                        System.out.println("TwoWay(" + (i + Communicator.TWO_WAY_HQ_COM_BASE) + "): ");
                         clear = false;
                     }
                 }
