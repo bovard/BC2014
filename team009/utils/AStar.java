@@ -51,10 +51,6 @@ public class AStar {
         this.numMapLocationsPerCoarseSquareY = numMapLocationsPerCoarseSquareY;
         numNodes = numCoarseSquaresX * numCoarseSquaresY;
         pathCache = new int[numNodes][numNodes];
-        for (int i = numNodes - 1; i >= 0; i--) {
-            Arrays.fill(pathCache[i], -1);
-        }
-        //System.out.println("Course map is " + numCoarseSquaresX + " by " + numCoarseSquaresY);
     }
 
     private int _mapLocationToSquareID(MapLocation loc) {
@@ -86,9 +82,13 @@ public class AStar {
     public MapLocation getCachedWayPoint(MapLocation currentLocation, MapLocation destination) {
         int startSquare = _mapLocationToSquareID(currentLocation);
         int endSquare = _mapLocationToSquareID(destination);
-        if (pathCache[startSquare][endSquare] != -1) {
+        if (pathCache[startSquare][endSquare] != 0) {
+            if (pathCache[startSquare][endSquare] == -1) {
+                return _getSquareCenterFromSquareID(0);
+            }
             return _getSquareCenterFromSquareID(pathCache[startSquare][endSquare]);
         }
+
         return null;
     }
 
@@ -300,7 +300,11 @@ public class AStar {
         _printSquareMapLocationCenter(goal);
         int current = cameFrom[goal];
         _printSquareMapLocationCenter(current);
-        pathCache[current][goal] = goal;
+        if (goal == 0) {
+            pathCache[current][goal] = -1;
+        } else {
+            pathCache[current][goal] = goal;
+        }
 
         if (current == start) {
             _printSquareMapLocationCenter(start);
@@ -309,14 +313,22 @@ public class AStar {
 
         int previous = cameFrom[current];
         do {
-            pathCache[previous][goal] = current;
+            if (current == 0) {
+                pathCache[previous][goal] = -1;
+            } else {
+                pathCache[previous][goal] = current;
+            }
             int temp = previous;
             previous = cameFrom[previous];
             current = temp;
             _printSquareMapLocationCenter(current);
         } while (previous != start);
 
-        pathCache[start][goal] = current;
+        if (current == 0) {
+            pathCache[start][goal] = -1;
+        } else {
+            pathCache[start][goal] = current;
+        }
         _printSquareMapLocationCenter(start);
 
         return current;
