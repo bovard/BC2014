@@ -53,26 +53,10 @@ public class HQStateCom extends ReadBehavior {
                     MapLocation to = dec.to;
                     MapLocation result = ((HQPreprocessor)hq).a.getCachedWayPoint(from, to);
                     if (result == null) {
-                        // we haven't found a map location for you, sorry!
-                        // if we don't have a job processing, process this one!
-                        // this seems like the best lowest/cost idea
-                        if (from == null && to == null) {
-                            this.from = from;
-                            this.to = to;
-                        }
-                        // we don't have a position for you, better luck next time
-                        // TODO: Michael we didn't find a location, send failure back
-                        // Communicator.WriteTwoWayCommunicate(rc, TeamRobot.LOCATION_RESULT);
+                        // Nothing, channel is cleared below
                     } else {
-                        // we do have a way point for you, sending it back
-                        // TODO: Michael send result back
-                        // Communicator.WriteTwoWayCommunicate(rc, TeamRobot.LOCATION_RESULT);
+                        Communicator.WriteTwoWayCommunicate(rc, i + Communicator.TWO_WAY_HQ_COM_BASE, TeamRobot.LOCATION_RESULT, from, result);
                     }
-
-
-
-
-
                 }
             }
             Communicator.ClearTwoWayChannel(rc, i);
