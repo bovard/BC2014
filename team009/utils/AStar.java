@@ -30,7 +30,7 @@ public class AStar {
     private int[] f_scores; // the estimated cost of getting to the goal
     private int[] g_scores; // the cost of getting here
     private int[] cameFrom;
-    private IntHeap open; // the list of nodes to evaluate
+    private ArrayList<Integer> open; // the list of nodes to evaluate
     private SmartIntArray closed; // the list of nodes already evaluated
     private int startSquare;
     private int endSquare;
@@ -156,11 +156,11 @@ public class AStar {
         g_scores = new int[numNodes]; // the cost of getting here
         cameFrom = new int[numNodes];
 
-        open = new IntHeap(10000); // the list of nodes to evaluate
+        open = new ArrayList<Integer>(); // the list of nodes to evaluate
         closed = new SmartIntArray(); // the list of nodes already evaluated
         g_scores[startSquare] = 0;
         f_scores[startSquare] = _heuristic(startSquare, endSquare);
-        open.add(startSquare, f_scores[startSquare]);
+        open.add(startSquare);
     }
 
 
@@ -168,7 +168,8 @@ public class AStar {
         if (!open.isEmpty()) {
             System.out.println("Starting a loop at " + Clock.getBytecodeNum() + " bytecodes");
             Timer.StartTimer();
-            int current = open.pop();
+            int current = _findLowestF(open, f_scores);
+            open.remove(new Integer(current));
 
             if (current == endSquare) {
                 return _cacheAndReturnNextNode(cameFrom, startSquare, endSquare);
@@ -192,7 +193,7 @@ public class AStar {
                     g_scores[neighbor] = tentative_score;
                     f_scores[neighbor] = g_scores[neighbor] + _heuristic(neighbor, endSquare);
                     if (!open.contains(neighbor)) {
-                        open.add(neighbor, f_scores[neighbor]);
+                        open.add(neighbor);
                     }
                 }
             }
@@ -348,7 +349,6 @@ public class AStar {
      * @param f_scores
      * @return
      */
-    @Deprecated
     private static int _findLowestF(ArrayList<Integer> open, int[] f_scores) {
         // Note: This isn't called any more!
         // TODO: this is called a lot, optimize the sh*t out of it
