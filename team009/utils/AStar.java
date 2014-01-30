@@ -166,8 +166,8 @@ public class AStar {
 
     private int _loop() {
         if (!open.isEmpty()) {
-            System.out.println("Starting a loop at " + Clock.getBytecodeNum() + " bytecodes");
-            Timer.StartTimer();
+            //System.out.println("Starting a loop at " + Clock.getBytecodeNum() + " bytecodes");
+            //Timer.StartTimer();
             if (neighborsIndex == 0 && Clock.getBytecodesLeft() > 4200) {
                 current = _findLowestF(open, f_scores);
                 open.remove(new Integer(current));
@@ -203,7 +203,7 @@ public class AStar {
                     }
                 }
             }
-            Timer.EndTimer();
+            //Timer.EndTimer();
             //System.out.println("Size of open " + open.size());
             //System.out.println("Size of closed " + closed.size());
 
