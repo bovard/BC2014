@@ -18,6 +18,7 @@ public class ToyMoveToLocation extends Behavior {
     ToySoldier soldier;
     private int attackRadius = 0;
     private int expectedSteps = 0;
+    private int lastRoundFromRequest = 0;
 
     public ToyMoveToLocation(ToySoldier robot) {
         super(robot);
@@ -36,13 +37,7 @@ public class ToyMoveToLocation extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
-        if (!currentLocation.equals(soldier.comLocation)) {
-            snailMove.setDestination(soldier.comLocation);
-            bugMove.setDestination(soldier.comLocation);
-            currentLocation = soldier.comLocation;
-            expectedSteps = 4 * (int)Math.sqrt(currentLocation.distanceSquaredTo(robot.currentLoc));
-        }
-
+        update();
         if (currentMove.stepsTaken > expectedSteps) {
             if (usingSnail) {
                 bugMove.setDestination(soldier.comLocation);
@@ -60,7 +55,34 @@ public class ToyMoveToLocation extends Behavior {
         } else {
             currentMove.move();
         }
-        //move.sneak();
         return true;
+    }
+
+    protected void update() throws GameActionException {
+        if (!currentLocation.equals(soldier.comLocation)) {
+            snailMove.setDestination(soldier.comLocation);
+            bugMove.setDestination(soldier.comLocation);
+            currentLocation = soldier.comLocation;
+            expectedSteps = 4 * (int)Math.sqrt(currentLocation.distanceSquaredTo(robot.currentLoc));
+            requestLocations(soldier.currentLoc);
+        } else if (soldier.locationResult != null && currentMove.destination != null && !currentMove.destination.equals(soldier.locationResult)) {
+            snailMove.setDestination(soldier.locationResult);
+            bugMove.setDestination(soldier.locationResult);
+            if (soldier.locationResult.distanceSquaredTo(soldier.currentLoc) <= 4) {
+                System.out.println("OMG: We need next way point");
+                requestLocations(soldier.locationResult);
+            }
+        }
+
+        if (soldier.locationResult == null && !soldier.locationRequested && !soldier.requestLocation) {
+            requestLocations(soldier.currentLoc);
+        }
+    }
+
+    protected void requestLocations(MapLocation start) throws GameActionException {
+        soldier.requestLocation = true;
+        soldier.start = start;
+        soldier.end = currentLocation;
+        System.out.println("Requesting Locations: " + start + " --> " + soldier.end);
     }
 }

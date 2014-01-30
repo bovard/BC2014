@@ -63,10 +63,8 @@ public class CheesePostProcess {
             finished = dir == Direction.NORTH;
         }
 
-//        cheese = finished && milkTotal > (width > height ? width : height) * BehaviorConstants.CHEESE_MILK_MULTIPLIER;
-//        if (finished) {
-//            System.out.println("MilkTotal: " + milkTotal + " > " + ((width > height ? width : height) * BehaviorConstants.CHEESE_MILK_MULTIPLIER));
-//        }
+        // TODO: WE DO NOT CHEESE
+        finished = true;
     }
 
     /**

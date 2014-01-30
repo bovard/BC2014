@@ -43,6 +43,6 @@ public class SoloEngageEnemies extends Behavior {
             return true;
         }
         // otherwise just stand there!
-        return true;
+        return false;
     }
 }

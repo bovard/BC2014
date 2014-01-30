@@ -17,6 +17,7 @@ public class Qualifier extends HQPreprocessor {
     public boolean soundTower = false;
     public boolean hunt = false;
     public boolean surround = false;
+    public int groupToSpawn = 0;
 
     public Qualifier(RobotController rc, RobotInformation info) {
         super(rc, info);

@@ -25,11 +25,14 @@ public class HQQualifier extends Behavior {
         if (q.soldierCounts == null || q.soldierCounts.count < 8 || q.soldierCounts.count > 8 && q.soldierCounts.centroid.distanceSquaredTo(q.info.enemyHq) > 80) {
             rc.setIndicatorString(2, "Surround Technique: " + q.soldierCounts.centroid.distanceSquaredTo(q.info.enemyHq));
             q.surround = true;
+            q.groupToSpawn = 0;
         } else if (q.hasPastures) {
             rc.setIndicatorString(2, "Hunting Pastrs: " + q.soldierCounts.centroid);
             q.hunt = true;
+            q.groupToSpawn = 0;
         } else {
             q.soundTower = q.noiseCounts.count == 0;
+            q.groupToSpawn = 1;
             q.oneBase = !q.soundTower &&  q.pastrCounts.count == 0;
             q.surround = !q.soundTower && !q.oneBase;
             rc.setIndicatorString(2, "Noise/Sound: " + q.surround + " : " + q.oneBase + " : " + q.soundTower);
