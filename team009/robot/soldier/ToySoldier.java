@@ -21,6 +21,7 @@ public class ToySoldier extends TeamRobot {
     public boolean seesEnemyHQ = false;
     public boolean engagedInCombat = false;
     public SmartRobotInfoArray enemySoldiers;
+    public int enemySoldiersInCombatRange = 0;
     public SmartRobotInfoArray friendlySoldiers;
     public SmartRobotInfoArray friendlyPastrs;
     public SmartRobotInfoArray enemyPastrs;
@@ -106,7 +107,14 @@ public class ToySoldier extends TeamRobot {
         seesEnemyNoise = enemyNoise.length > 0;
         seesEnemyTeamNonHQRobot = seesEnemySoldier || seesEnemyNoise || seesEnemyPastr;
         seesEnemyTeamNonHQBuilding = seesEnemyNoise || seesEnemyPastr;
-        engagedInCombat = enemySoldiers.length > 0 && currentLoc.distanceSquaredTo(enemySoldiers.arr[0].location) < RobotType.SOLDIER.attackRadiusMaxSquared;
+
+        enemySoldiersInCombatRange = 0;
+        while(enemySoldiersInCombatRange < enemySoldiers.length &&
+              currentLoc.distanceSquaredTo(enemySoldiers.arr[enemySoldiersInCombatRange].location) <= RobotType.SOLDIER.attackRadiusMaxSquared) {
+            enemySoldiersInCombatRange++;
+        }
+
+        engagedInCombat = enemySoldiersInCombatRange > 0;
 
         // What type of toy soldier is this.
         // TODO: Bovard what to do?
@@ -118,6 +126,18 @@ public class ToySoldier extends TeamRobot {
             rc.setIndicatorString(2, "setting action delay: " + enemyHqInfo.actionDelay + " : at Round: " + round);
             hqAttack.setActionDelay(enemyHqInfo.actionDelay);
         }
+    }
+
+    public void suicide(int enemiesHit) throws GameActionException {
+        // TODO: when we suicide, if we hit more than 2 people add to the suicide com channel
+        // if we only hit 2 do nothing
+        // if we only hit 1 subtract 1
+        // if we hit zero subtract 2
+
+        // this will be used to see if the enemy has anti-suicide micro
+        // aka are our suicides working!
+        // (we only consider suicide if the value > 0, starts at 5ish?)
+        rc.selfDestruct();
     }
 
     // TODO: WayPointing?

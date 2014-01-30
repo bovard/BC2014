@@ -40,7 +40,7 @@ public class AStar {
      * @param map the value-filled coarse map
      * @param minMapValue the min value on the coarse map
      * @param numMapLocationsPerCoarseSquareX the number of MapLocations x per coarse square
-     * @param numMapLocationsPerCoarseSquareY the nubmer of MapLocations y per coarse square
+     * @param numMapLocationsPerCoarseSquareY the number of MapLocations y per coarse square
      */
     public AStar(int[][] map, int minMapValue, int numMapLocationsPerCoarseSquareX, int numMapLocationsPerCoarseSquareY) {
         this.map = map;
