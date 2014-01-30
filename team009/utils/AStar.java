@@ -148,6 +148,7 @@ public class AStar {
 
     private void _startNewRun(int startSquare, int endSquare) {
         busy = true;
+        System.out.println("Starting a run from square " + startSquare + " to square " + endSquare);
         this.startSquare = startSquare;
         this.endSquare = endSquare;
         f_scores = new int[numNodes]; // the estimated cost of getting to the goal
@@ -165,7 +166,6 @@ public class AStar {
     private int _loop() {
         if (!open.isEmpty()) {
             System.out.println("Starting a loop");
-            System.out.println("=====================================================");
             Timer.StartTimer();
             int current = open.pop();
 
@@ -195,7 +195,6 @@ public class AStar {
                     }
                 }
             }
-            System.out.println("Ending a loop =====================================================");
             Timer.EndTimer();
             System.out.println("Size of open " + open.size());
             System.out.println("Size of closed " + closed.size());
