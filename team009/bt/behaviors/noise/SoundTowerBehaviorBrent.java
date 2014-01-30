@@ -4,6 +4,7 @@ import battlecode.common.*;
 import team009.MapUtils;
 import team009.bt.behaviors.Behavior;
 import team009.robot.NoiseTower;
+import team009.utils.Timer;
 import team009.utils.pathfinding.*;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class SoundTowerBehaviorBrent extends Behavior {
 
     private boolean[][] possibleLocations = new boolean[35][35];
     private int xCheck = 0;
-    private int yCheck = 0;
+    private int yCheck = -1;
     private int obsX = 0;
     private int obsY = 0;
     private boolean isDone = false;
@@ -57,7 +58,8 @@ public class SoundTowerBehaviorBrent extends Behavior {
         y = 0;
         angle = 0;
         currentDir = 0;
-        towerStrat = TOWER_STRAT_PULL_CARDNIAL;
+        towerStrat = 10;
+        graphBuilder = new GraphBuilder(35,35);
         //spin around in a cirle shooting the gun
         //TODO is pastrLocs within enviornment check????
         //pastrLocs = robot.rc.sensePastrLocations(robot.info.myTeam);
@@ -91,8 +93,8 @@ public class SoundTowerBehaviorBrent extends Behavior {
         if(towerStrat == TOWER_STRAT_PULL_WAYPOINT && !isDone) {
             outerloop:
             while(true) {
-                for(; xCheck < 35; xCheck++) {
-                    if(Clock.getBytecodeNum() > 8000) {
+                for(; xCheck < 35;xCheck++) {
+                    if(Clock.getBytecodeNum() > 2500) {
                         boolean done = false;
                         while(!done) {
                             loc = pullInCardinalDirections();
@@ -102,13 +104,16 @@ public class SoundTowerBehaviorBrent extends Behavior {
                         break outerloop;
                     }
 
-                    for(; yCheck < 35; yCheck++) {
-                        int adjX = herdFocus.x - 17 + xCheck;
-                        int adjY = herdFocus.y - 17 + yCheck;
-                        possibleLocations[xCheck][yCheck] = this.rc.senseTerrainTile(new MapLocation(adjX, adjY)) != TerrainTile.VOID;
+                    int adjX = herdFocus.x - 17 + xCheck;
+                    int adjY = herdFocus.y - 17 + yCheck;
+                    for(; ++yCheck < 35;) {
+                        adjY++;
+
+                        if(this.rc.senseTerrainTile(new MapLocation(adjX, adjY)) == TerrainTile.VOID)
+                            graphBuilder.addObstacle(new Point(xCheck, yCheck));
                     }
 
-                    yCheck = 0;
+                    yCheck = -1;
                 }
 
                 createGraph();
@@ -303,19 +308,6 @@ public class SoundTowerBehaviorBrent extends Behavior {
 
     public void createGraph ()
     {
-        if(graphBuilder == null)
-            graphBuilder = new GraphBuilder(35,35);
-
-        for(; obsX < possibleLocations.length; obsX++) {
-            for(; obsY < possibleLocations[obsX].length; obsY++) {
-                if(!possibleLocations[obsX][obsY]) {
-
-                    graphBuilder.addObstacle(new Point(obsX, obsY));
-                }
-            }
-            obsY = 0;
-        }
-
         isDone = graphBuilder.buildMatrix();
     }
 
@@ -339,6 +331,6 @@ public class SoundTowerBehaviorBrent extends Behavior {
         }
     }
 
-    private static final int MAX_DISTANCE = 15;
+    private static final int MAX_DISTANCE = 17;
     private static final int MAX_DISTANCE_SQUARED = 300;
 }
