@@ -41,7 +41,8 @@ public class HQStateCom extends ReadBehavior {
 
         hq.noiseLocations = new SmartMapLocationArray();
         for (int i = 0; i < Communicator.TWO_WAY_COM_LENGTH; i++) {
-            TwoWayDecoder dec = Communicator.ReadTwoWayCommunicate(rc, i);
+            TwoWayDecoder dec = Communicator.ReadTwoWayCommunicate(rc, Communicator.TWO_WAY_HQ_COM_BASE + i);
+            boolean clear = true;
             if (dec.command == TeamRobot.POSITION_OF_NOISE_TOWER) {
                 hq.noiseLocations.add(dec.from);
             } else if (dec.command == TeamRobot.POSITION_OF_PASTR) {
@@ -52,16 +53,19 @@ public class HQStateCom extends ReadBehavior {
                     MapLocation toBot = dec.to;
                     MapLocation result = ((HQPreprocessor)hq).a.getCachedWayPoint(fromBot, toBot);
                     if (result == null) {
-                        if (fromBot == null && toBot == null) {
+                        if (this.from == null && this.to == null) {
                             this.from = fromBot;
                             this.to = toBot;
                         }
                     } else {
-                        Communicator.WriteTwoWayCommunicate(rc, i + Communicator.TWO_WAY_HQ_COM_BASE, TeamRobot.LOCATION_RESULT, from, result);
+                        Communicator.WriteTwoWayCommunicate(rc, i + Communicator.TWO_WAY_HQ_COM_BASE, TeamRobot.LOCATION_RESULT, fromBot, result);
+                        clear = false;
                     }
                 }
             }
-            Communicator.ClearTwoWayChannel(rc, i);
+            if (clear) {
+                Communicator.ClearTwoWayChannel(rc, i);
+            }
         }
 
         return true;

@@ -36,8 +36,10 @@ public class Communicator {
     }
 
     // The two way communication
-    public static void WriteTwoWayCommunicate(RobotController rc, int channel, int command, MapLocation from, MapLocation to) throws GameActionException {
-        _Broadcast(rc, channel, new TwoWayDecoder(from, to, command).getData());
+    public static TwoWayDecoder WriteTwoWayCommunicate(RobotController rc, int channel, int command, MapLocation from, MapLocation to) throws GameActionException {
+        TwoWayDecoder dec = new TwoWayDecoder(from, to, command);
+        _Broadcast(rc, channel, dec.getData());
+        return dec;
     }
 
     public static void WritePassComChannel(RobotController rc, int comChannel, boolean sound) throws GameActionException {
@@ -76,13 +78,12 @@ public class Communicator {
         }
 
         _Broadcast(rc, groupChannel, decoder.getData());
-        rc.setIndicatorString(1, "Read from readType: " + decoder.toString() + " : ");
         return decoder;
     }
 
     // The two way communication
     public static TwoWayDecoder ReadTwoWayCommunicate(RobotController rc, int channel) throws GameActionException {
-        return new TwoWayDecoder(rc.readBroadcast(TWO_WAY_HQ_COM_BASE + channel));
+        return new TwoWayDecoder(rc.readBroadcast(channel));
     }
 
     public static int ReadPassComChannel(RobotController rc, boolean sound) throws GameActionException {

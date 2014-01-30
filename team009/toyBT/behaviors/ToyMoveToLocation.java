@@ -68,8 +68,7 @@ public class ToyMoveToLocation extends Behavior {
         } else if (soldier.locationResult != null && currentMove.destination != null && !currentMove.destination.equals(soldier.locationResult)) {
             snailMove.setDestination(soldier.locationResult);
             bugMove.setDestination(soldier.locationResult);
-            if (soldier.locationResult.distanceSquaredTo(soldier.currentLoc) <= 4) {
-                System.out.println("OMG: We need next way point");
+            if (soldier.locationResult.distanceSquaredTo(soldier.currentLoc) <= 8) {
                 requestLocations(soldier.locationResult);
             }
         }
@@ -83,6 +82,5 @@ public class ToyMoveToLocation extends Behavior {
         soldier.requestLocation = true;
         soldier.start = start;
         soldier.end = currentLocation;
-        System.out.println("Requesting Locations: " + start + " --> " + soldier.end);
     }
 }
