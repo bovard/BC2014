@@ -42,8 +42,13 @@ public class SoldierReadCom extends ReadBehavior {
         if (soldier.locationRequested) {
             TwoWayDecoder twoWay = Communicator.ReadTwoWayCommunicate(rc, soldier.twoWayChannel);
             if (twoWay.command == TeamRobot.LOCATION_RESULT) {
-
+                soldier.locationResult = twoWay.to;
+            } else {
+                soldier.locationResult = null;
             }
+            soldier.locationRequested = false;
+        } else {
+            soldier.locationResult = null;
         }
 
         return true;

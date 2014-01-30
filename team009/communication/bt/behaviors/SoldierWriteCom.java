@@ -32,6 +32,7 @@ public class SoldierWriteCom extends WriteBehavior {
             Communicator.WriteTwoWayCommunicate(rc, soldier.twoWayChannel, TeamRobot.REQUEST_LOCATION, soldier.start, soldier.end);
             soldier.requestLocation = false;
             soldier.locationRequested = true;
+            soldier.locationResult = null;
         }
 
         return true;

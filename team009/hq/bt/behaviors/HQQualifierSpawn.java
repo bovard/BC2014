@@ -7,6 +7,7 @@ import team009.hq.robot.Qualifier;
 
 public class HQQualifierSpawn extends Behavior {
     private Qualifier q;
+    private int spawned = 0;
 
     public HQQualifierSpawn(Qualifier robot) {
         super(robot);
@@ -37,10 +38,11 @@ public class HQQualifierSpawn extends Behavior {
         int robotCount = robot.rc.senseRobotCount();
 
         // spawn guys
-        if (robot.rc.isActive() && robotCount < GameConstants.MAX_ROBOTS) {
+        if (spawned == 0 && robot.rc.isActive() && robotCount < GameConstants.MAX_ROBOTS) {
             q.createToySoldier(q.groupToSpawn);
             return true;
         }
+        spawned++;
 
         return true;
     }

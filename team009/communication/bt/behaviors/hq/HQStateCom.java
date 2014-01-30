@@ -48,11 +48,14 @@ public class HQStateCom extends ReadBehavior {
                 hq.pastrLocations.add(dec.from);
             } else if (dec.command == TeamRobot.REQUEST_LOCATION) {
                 if (((HQPreprocessor)hq).a != null) {
-                    MapLocation from = dec.from;
-                    MapLocation to = dec.to;
-                    MapLocation result = ((HQPreprocessor)hq).a.getCachedWayPoint(from, to);
+                    MapLocation fromBot = dec.from;
+                    MapLocation toBot = dec.to;
+                    MapLocation result = ((HQPreprocessor)hq).a.getCachedWayPoint(fromBot, toBot);
                     if (result == null) {
-                        // Nothing, channel is cleared below
+                        if (fromBot == null && toBot == null) {
+                            this.from = fromBot;
+                            this.to = toBot;
+                        }
                     } else {
                         Communicator.WriteTwoWayCommunicate(rc, i + Communicator.TWO_WAY_HQ_COM_BASE, TeamRobot.LOCATION_RESULT, from, result);
                     }

@@ -45,6 +45,7 @@ public class ToySoldier extends TeamRobot {
     public boolean locationRequested = false;
     public MapLocation start = null;
     public MapLocation end = null;
+    public MapLocation locationResult = null;
 
 
     // Permanent behaviors from coms.
