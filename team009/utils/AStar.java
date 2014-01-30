@@ -1,5 +1,6 @@
 package team009.utils;
 
+import battlecode.common.Clock;
 import battlecode.common.MapLocation;
 import team009.BehaviorConstants;
 import team009.utils.pathfinding.IntHeap;
@@ -165,7 +166,7 @@ public class AStar {
 
     private int _loop() {
         if (!open.isEmpty()) {
-            System.out.println("Starting a loop");
+            System.out.println("Starting a loop at " + Clock.getBytecodeNum() + " bytecodes");
             Timer.StartTimer();
             int current = open.pop();
 
