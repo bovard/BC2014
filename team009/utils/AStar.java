@@ -32,6 +32,9 @@ public class AStar {
     private SmartIntArray closed; // the list of nodes already evaluated
     private int startSquare;
     private int endSquare;
+    private SmartIntArray neighbors;
+    private int neighborsIndex = 0;
+    private int current = -1;
 
 
     /**
@@ -161,24 +164,29 @@ public class AStar {
         open.add(startSquare);
     }
 
-
     private int _loop() {
         if (!open.isEmpty()) {
             System.out.println("Starting a loop at " + Clock.getBytecodeNum() + " bytecodes");
             Timer.StartTimer();
-            int current = _findLowestF(open, f_scores);
-            open.remove(new Integer(current));
+            if (neighborsIndex == 0 && Clock.getBytecodesLeft() > 4200) {
+                current = _findLowestF(open, f_scores);
+                open.remove(new Integer(current));
 
-            if (current == endSquare) {
-                return _cacheAndReturnNextNode(cameFrom, startSquare, endSquare);
+                if (current == endSquare) {
+                    return _cacheAndReturnNextNode(cameFrom, startSquare, endSquare);
+                }
+
+                closed.add(current);
+
+                neighbors = _neighbors(current);
+                neighborsIndex = neighbors.length;
+
+
             }
 
-            closed.add(current);
-
-            SmartIntArray neighbors = _neighbors(current);
-
-            for (int i = neighbors.length - 1 ; i >= 0; i--) {
-                int neighbor = neighbors.arr[i];
+            while(neighborsIndex > 0 && Clock.getBytecodesLeft() > 20 * (open.size() + closed.size()) + 600) {
+                neighborsIndex--;
+                int neighbor = neighbors.arr[neighborsIndex];
 
                 if (closed.contains(neighbor)) {
                     continue;
