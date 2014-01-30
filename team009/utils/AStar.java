@@ -3,10 +3,8 @@ package team009.utils;
 import battlecode.common.Clock;
 import battlecode.common.MapLocation;
 import team009.BehaviorConstants;
-import team009.utils.pathfinding.IntHeap;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class AStar {
     private static final int X = 0;
@@ -198,8 +196,8 @@ public class AStar {
                 }
             }
             Timer.EndTimer();
-            System.out.println("Size of open " + open.size());
-            System.out.println("Size of closed " + closed.size());
+            //System.out.println("Size of open " + open.size());
+            //System.out.println("Size of closed " + closed.size());
 
         } else {
             return -2;
