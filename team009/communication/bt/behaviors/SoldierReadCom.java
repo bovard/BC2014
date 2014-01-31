@@ -23,7 +23,9 @@ public class SoldierReadCom extends ReadBehavior {
         soldier.groupCommand = Communicator.ReadFromGroup(rc, soldier.group, Communicator.GROUP_SOLDIER_CHANEL);
         soldier.hqCommand = Communicator.ReadFromGroup(rc, soldier.group, Communicator.GROUP_HQ_CHANNEL);
 
-        rc.setIndicatorString(1, soldier.hqCommand.toString());
+        rc.setIndicatorString(0, "GroupCommand: " + soldier.groupCommand.toString());
+        rc.setIndicatorString(1, "HQCommand: " + soldier.hqCommand.toString());
+
         if (soldier.groupCommand.command > 0 && !soldier.comLocation.equals(zero)) {
             soldier.comLocation = soldier.groupCommand.location;
             soldier.comCommand = soldier.groupCommand.command;

@@ -41,11 +41,13 @@ public abstract class HQPreprocessor extends HQ {
 
         if (!map.finished) {
             map.calc();
+            System.out.println("Map: " + map.finished);
             return;
         }
 
 
         if (!milkInformation.finished) {
+            System.out.println("Milk: " + milkInformation.finished);
             milkInformation.calc();
             return;
         }

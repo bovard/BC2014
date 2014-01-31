@@ -15,7 +15,10 @@ public class CaptureDefend extends ToyMoveToLocation {
 
     @Override
     public boolean pre() throws GameActionException {
-        return (pastr = soldier.comCommand == TeamRobot.CAPTURE_PASTURE) || (sound = soldier.comCommand == TeamRobot.CAPTURE_SOUND);
+        pastr = soldier.comCommand == TeamRobot.CAPTURE_PASTURE;
+        sound = soldier.comCommand == TeamRobot.CAPTURE_SOUND;
+        rc.setIndicatorString(2, soldier.round + ": " + pastr + " : " + sound);
+        return pastr || sound;
     }
 
     @Override
@@ -37,11 +40,7 @@ public class CaptureDefend extends ToyMoveToLocation {
                 rc.construct(RobotType.NOISETOWER);
             }
         } else {
-            Direction dir = soldier.currentLoc.directionTo(currentLocation);
-            MapLocation loc = soldier.currentLoc.add(dir, 2);
-            if (!loc.isAdjacentTo(currentLocation) && !loc.equals(currentLocation)) {
-                super.run();
-            }
+            super.run();
         }
 
         return true;

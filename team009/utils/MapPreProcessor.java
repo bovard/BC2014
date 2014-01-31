@@ -45,6 +45,10 @@ public class MapPreProcessor {
             return;
         }
 
+        if (milks == null) {
+            milks = rc.senseCowGrowth();
+        }
+
         int[][] map = this.map;
         int[][] coarseMap = this.coarseMap;
         int x = this.x;
@@ -109,9 +113,6 @@ public class MapPreProcessor {
         }
 
         finished = x == coarseTilesW;
-        if (finished) {
-            milks = rc.senseCowGrowth();
-        }
         this.x = x;
     }
 

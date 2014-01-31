@@ -53,7 +53,6 @@ public class ToySelector extends Decision {
 
         // NOTE:  This is obviously brittle, but its really efficient.
         // Byte code critical code
-        rc.setIndicatorString(0, "Command: " + soldier.comCommand + " : Location: " + soldier.comLocation + " : group: " + soldier.group);
         if (engageEnemy.pre()) {
             return engageEnemy.run();
         }
@@ -65,7 +64,7 @@ public class ToySelector extends Decision {
             return attack.run();
         }
 
-        if (soldier.isHerder) {
+        if (capture.pre()) {
             capture.run();
         } else if (soldier.isHunter) {
             if (defend.pre()) {

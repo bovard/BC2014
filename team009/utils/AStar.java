@@ -64,7 +64,6 @@ public class AStar {
 
     private void _printSquareMapLocationCenter(int squareID) {
         MapLocation m = _getSquareCenterFromSquareID(squareID);
-        System.out.println("MapLocation center for squareID " + squareID + " is " + m.toString());
     }
 
     private MapLocation _getSquareCenterFromSquareID(int squareID) {
