@@ -46,6 +46,7 @@ public class HQQualifier extends Behavior {
         // huntZero communicating enemies that are not near enemy hq
         // otherwise create a base
 
+        q.huddleOne = q.baseOne = q.huntComOne = q.baseOne = false;
         if (q.soldierCountsZero == null || q.soldierCountsZero.count < 4) {
             q.huddleOne = true;
         } else if (distToEnemeyHQ > BehaviorConstants.MAP_DISTANCE_TO_ENEMY_HQ) {
