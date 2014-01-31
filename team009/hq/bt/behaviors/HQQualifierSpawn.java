@@ -40,11 +40,11 @@ public class HQQualifierSpawn extends Behavior {
         // spawn guys
         if (robot.rc.isActive() && robotCount < GameConstants.MAX_ROBOTS) {
             // q.soldierCountsZero is only group 0
-            if (q.soldierCountsZero.count < BehaviorConstants.GROUP_0_SIZE_SMALL_MAP) {
+//            if (q.soldierCountsZero.count < BehaviorConstants.GROUP_0_SIZE_SMALL_MAP) {
                 q.createToySoldier(0);
-            } else {
-                q.createToySoldier(1);
-            }
+//            } else {
+//                q.createToySoldier(1);
+//            }
         }
 
         return true;
