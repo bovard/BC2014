@@ -30,10 +30,10 @@ public class HQOneBase extends WriteBehavior {
 
         if (hasSound) {
             System.out.println("BestSpot: " + bestSpot);
-            hq.comCapture(bestSpot, hq.groupToSpawn);
+            hq.comCapture(bestSpot, 0);
         } else {
             System.out.println("Noise: " + noiseLoc);
-            hq.comSoundTower(noiseLoc, hq.groupToSpawn);
+            hq.comSoundTower(noiseLoc, 0);
         }
         return true;
     }

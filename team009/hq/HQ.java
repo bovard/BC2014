@@ -1,14 +1,12 @@
 package team009.hq;
 
 import battlecode.common.*;
-import team009.BehaviorConstants;
 import team009.MapUtils;
 import team009.RobotInformation;
 import team009.communication.Communicator;
 import team009.communication.decoders.GroupCommandDecoder;
 import team009.communication.decoders.SoldierCountDecoder;
 import team009.robot.TeamRobot;
-import team009.robot.soldier.SoldierSpawner;
 import team009.utils.MapPreProcessor;
 import team009.utils.SmartMapLocationArray;
 
@@ -17,12 +15,13 @@ public abstract class HQ extends TeamRobot {
 
     public boolean hqPostProcessing = true;
     public int maxSoldiers;
-    public SoldierCountDecoder soldierCounts;
+    public SoldierCountDecoder soldierCountsZero;
+    public SoldierCountDecoder soldierCountsOne;
     public SoldierCountDecoder pastrCounts;
     public SoldierCountDecoder noiseCounts;
     public boolean seesEnemy = false;
     public Robot[] enemies = new Robot[0];
-    public boolean hasPastures = false;
+    public boolean enemyHasPastures = false;
     public boolean weHavePastures = false;
     public boolean hasHQPastures = false;
     public SmartMapLocationArray enemyPastrs;
@@ -68,7 +67,7 @@ public abstract class HQ extends TeamRobot {
             }
         }
 
-        hasPastures = enemyPastrs.length > 0;
+        enemyHasPastures = enemyPastrs.length > 0;
     }
 
     @Override
@@ -83,7 +82,7 @@ public abstract class HQ extends TeamRobot {
 
     public int getCount(int group) {
         if (group == 0) {
-            return soldierCounts == null ? 0 : soldierCounts.count;
+            return soldierCountsZero == null ? 0 : soldierCountsZero.count;
         } else if (group == TeamRobot.PASTR_GROUP) {
             return pastrCounts == null ? 0 : pastrCounts.count;
         } else if (group == TeamRobot.NOISE_TOWER_GROUP) {

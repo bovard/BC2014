@@ -11,13 +11,17 @@ import team009.utils.MilkInformation;
 
 public class Qualifier extends HQPreprocessor {
     // Default behavior is one base and both groups defend it
-    // If both groups get big, the second can break away and hunt.
-    public boolean huddle = false;
-    public boolean oneBase = false;
-    public boolean soundTower = false;
-    public boolean hunt = false;
-    public boolean surround = false;
-    public int groupToSpawn = 0;
+    // If both groups get big, the second can break away and huntZero.
+    // group zero behaviors
+    public boolean huddleZero = false;
+    public boolean baseZero = false;
+    public boolean huntZero = false;
+    public boolean surroundZero = false;
+
+    // group one behaviors
+    public boolean huntComOne = false;
+    public boolean baseOne = false;
+    public boolean huddleOne = false;
 
     public Qualifier(RobotController rc, RobotInformation info) {
         super(rc, info);

@@ -21,6 +21,8 @@ public class BehaviorConstants {
     // Map Sizing
     public static final int MAP_LARGE_MINIMUM_AREA = 2000;
     public static final int MAP_MEDIUM_MINIMUM_AREA = 1200;
+    // used to decide if we build 2 quick pastrs (too far away) or go for the surroundZero
+    public static final int MAP_DISTANCE_TO_ENEMY_HQ = 10000;
 
     // HQ Constants
     public static final int HQ_REQUIRED_SOLDIER_COUNT_FOR_ATTACK = 5;
@@ -44,9 +46,9 @@ public class BehaviorConstants {
     // Hunting Vars
     public static final boolean HUNT_AND_GATHER = true;
 
-
-
-
+    // Group Size
+    public static final int GROUP_0_SIZE_SMALL_MAP = 5;
+    public static final int GROUP_0_SIZE_LARGE_MAP = 15;
 
     // Astar and path
     public static final int IMPASSIBLE = 1000000;

@@ -10,7 +10,7 @@ import team009.utils.MilkInformation;
 
 public class Offensive extends HQPreprocessor {
     // Default behavior is one base and both groups defend it
-    // If both groups get big, the second can break away and hunt.
+    // If both groups get big, the second can break away and huntZero.
     public boolean huddle = false;
     public boolean oneBase = false;
     public boolean soundTower = false;
@@ -36,14 +36,14 @@ public class Offensive extends HQPreprocessor {
         // Gets the different groups
         boolean enough = group0Count >= BehaviorConstants.HQ_REQUIRED_SOLDIER_COUNT_FOR_ATTACK;
 
-        hunt = enough && hasPastures;
+        hunt = enough && enemyHasPastures;
         soundTower = !surround && enough && milkInformation.finished && noiseLocations.length == 0;
         oneBase = !surround && enough && !soundTower && round > BehaviorConstants.ONE_BASE_ROUND_START && pastrLocations.length == 0;
         huddle = !surround && !hunt;
 
-        // TODO: How to get out of oneBase?
-//        soundTower = !surround && enough && milkInformation.finished && noiseLocations.length == 0;
-//        hunt = !surround && enough && hasPastures && !oneBase;
+        // TODO: How to get out of baseZero?
+//        soundTowerOne = !surroundZero && enough && milkInformation.finished && noiseLocations.length == 0;
+//        huntZero = !surroundZero && enough && enemyHasPastures && !baseZero;
     }
 
     @Override

@@ -18,26 +18,47 @@ public class HQOffensiveWriteCom extends WriteBehavior {
         hq = off;
 
         oneBase = new HQOneBase(off);
-        hunt = new HQHunt(off);
-        home = new HQReturnToHome(off);
-        surround = new HQSurround(off);
     }
 
     @Override
     public boolean run() throws GameActionException {
-        if (hq.hunt) {
-            rc.setIndicatorString(1, "Running Hunt");
-            hunt.run();
-        } else if (hq.surround) {
-            rc.setIndicatorString(1, "Running surround");
-            surround.run();
-        } else if (hq.oneBase || hq.soundTower) {
-            rc.setIndicatorString(1, "Running OneBase");
+        if (hq.huntZero) {
+            rc.setIndicatorString(1, "Group 0: Running Hunt");
+            hq.comAttackPasture(hq.enemyPastrs.arr[0], 0);
+        } else if (hq.surroundZero) {
+            rc.setIndicatorString(1, "Group 0: Running surround");
+            hq.comDefend(robot.info.enemyHq, 0);
+        } else if (hq.baseZero) {
+            rc.setIndicatorString(1, "Group 0: Running base");
             oneBase.run();
-        } else if (hq.huddle) {
-            rc.setIndicatorString(1, "Running Home: " + hq.rally.rallyPoint);
-            home.run();
+        } else if (hq.huddleZero) {
+            rc.setIndicatorString(1, "Group 0: Running Home: " + hq.rally.rallyPoint);
+            if (hq.rally.finished) {
+                hq.comReturnHome(hq.rally.rallyPoint, 0);
+            } else {
+                hq.comReturnHome(hq.rally.center, 0);
+            }
         }
+
+        if (hq.huntComOne) {
+            rc.setIndicatorString(2, "Group 1: Running Hunt Com");
+            //TODO: This
+            if (hq.enemyPastrs.arr.length > 1) {
+                hq.comAttackPasture(hq.enemyPastrs.arr[1], 1);
+            }
+        } else if (hq.baseOne) {
+            rc.setIndicatorString(2, "Group 1: Running base");
+            oneBase.run();
+        } else if (hq.huddleOne) {
+            rc.setIndicatorString(2, "Group 1: Running Home: " + hq.rally.rallyPoint);
+            if (hq.rally.finished) {
+                hq.comReturnHome(hq.rally.rallyPoint, 1);
+            } else {
+                hq.comReturnHome(hq.rally.center, 1);
+            }
+        }
+
+
 
         return true;
     }

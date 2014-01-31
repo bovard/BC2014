@@ -2,6 +2,7 @@ package team009.hq.bt.behaviors;
 
 import battlecode.common.GameActionException;
 import battlecode.common.GameConstants;
+import team009.BehaviorConstants;
 import team009.bt.behaviors.Behavior;
 import team009.hq.robot.Qualifier;
 
@@ -38,7 +39,12 @@ public class HQQualifierSpawn extends Behavior {
 
         // spawn guys
         if (robot.rc.isActive() && robotCount < GameConstants.MAX_ROBOTS) {
-            q.createToySoldier(q.groupToSpawn);
+            // q.soldierCountsZero is only group 0
+            if (q.soldierCountsZero.count < BehaviorConstants.GROUP_0_SIZE_SMALL_MAP) {
+                q.createToySoldier(0);
+            } else {
+                q.createToySoldier(1);
+            }
         }
 
         return true;
