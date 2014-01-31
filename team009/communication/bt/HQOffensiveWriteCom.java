@@ -9,9 +9,6 @@ public class HQOffensiveWriteCom extends WriteBehavior {
     Qualifier hq;
 
     HQOneBase oneBase;
-    HQHunt hunt;
-    HQReturnToHome home;
-    HQSurround surround;
 
     public HQOffensiveWriteCom(Qualifier off) {
         super(off);
