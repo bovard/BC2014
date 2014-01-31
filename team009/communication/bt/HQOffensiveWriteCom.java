@@ -19,8 +19,10 @@ public class HQOffensiveWriteCom extends WriteBehavior {
 
     @Override
     public boolean run() throws GameActionException {
+        rc.setIndicatorString(1, "");
+        rc.setIndicatorString(2, "");
         if (hq.huntZero) {
-            rc.setIndicatorString(1, "Group 0: Running Hunt");
+            rc.setIndicatorString(1, "Group 0: Running Hunt: " + hq.enemyPastrs.arr[0]);
             hq.comAttackPasture(hq.enemyPastrs.arr[0], 0);
         } else if (hq.surroundZero) {
             rc.setIndicatorString(1, "Group 0: Running surround");

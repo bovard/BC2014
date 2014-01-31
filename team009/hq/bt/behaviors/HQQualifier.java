@@ -49,13 +49,13 @@ public class HQQualifier extends Behavior {
         q.huddleOne = q.baseOne = q.huntComOne = q.baseOne = false;
         if (q.soldierCountsZero == null || q.soldierCountsZero.count < 4) {
             q.huddleOne = true;
-        } else if (distToEnemeyHQ > BehaviorConstants.MAP_DISTANCE_TO_ENEMY_HQ) {
+        } else if (false && distToEnemeyHQ > BehaviorConstants.MAP_DISTANCE_TO_ENEMY_HQ) {
             q.baseOne = true;
         } else if (false) {
             // TODO: this
             q.huntComOne = true;
         } else {
-            q.baseOne = true;
+            q.baseOne = false;
         }
 
         return true;

@@ -22,6 +22,10 @@ public class Communicator {
     public static void WriteToGroup(RobotController rc, int group, int channel, int command, MapLocation location, int ttl) throws GameActionException {
         GroupCommandDecoder decoder = new GroupCommandDecoder(group, command, location, ttl);
 
+        if (channel == 1) {
+            System.out.println("HQ Is Writing" + _GroupChannel(group, channel) + ": " + decoder.toString());
+        } else {
+        }
         _Broadcast(rc, _GroupChannel(group, channel), decoder);
     }
 
@@ -70,7 +74,9 @@ public class Communicator {
         // TODO: $DEBUG$
         GroupCommandDecoder decoder = new GroupCommandDecoder(rc.readBroadcast(groupChannel));
 
-        // No Coms yet on this channel
+        if (channel == 1) {
+            System.out.println("Soldier is Reading" + _GroupChannel(group, channel) + ": " + decoder.toString());
+        }
 
         // Shortcut it, clear the channel
         if (decoder.command == 0) {
