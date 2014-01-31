@@ -2,6 +2,7 @@ package team009.communication.bt;
 
 import battlecode.common.Clock;
 import battlecode.common.GameActionException;
+import battlecode.common.MapLocation;
 import team009.communication.bt.behaviors.WriteBehavior;
 import team009.communication.bt.behaviors.hq.*;
 import team009.hq.robot.Qualifier;
@@ -26,9 +27,11 @@ public class HQOffensiveWriteCom extends WriteBehavior {
         rc.setIndicatorString(1, "");
         rc.setIndicatorString(2, "");
         if (hq.huntZero) {
-            rc.setIndicatorString(1, "Group 0: Running Hunt Pastr: " + hq.enemyPastrs.arr[0] + " round: " + Clock.getRoundNum());
-            // TODO: change this to a min heap based on distance to our hq // or negative disance to enemy hq
-            hq.comAttackPasture(hq.enemyPastrs.arr[0], 0);
+            // get the pastr that is furthest from the enemy hq
+            int pastr = hq.sortedPastrs.pop();
+            MapLocation pastrLoc = new MapLocation(pastr / hq.info.width, pastr % hq.info.width);
+            rc.setIndicatorString(1, "Group 0: Running Hunt Pastr: " + pastrLoc + " round: " + Clock.getRoundNum());
+            hq.comAttackPasture(pastrLoc, 0);
         } else if (hq.surroundZero) {
             rc.setIndicatorString(1, "Group 0: Running surround round: " + Clock.getRoundNum());
             hq.comDefend(robot.info.enemyHq, 0);
@@ -48,9 +51,11 @@ public class HQOffensiveWriteCom extends WriteBehavior {
         }
 
         if (hq.huntPastrOne) {
-            rc.setIndicatorString(2, "Group 1: Running Hunt: " + hq.enemyPastrs.arr[0] + " round: " + Clock.getRoundNum());
-            hq.comAttackPasture(hq.enemyPastrs.arr[0], 1);
-            // TODO: change this to a min heap based on distance to our hq // or negative disance to enemy hq
+            // get the pastr that is furthest from the enemy hq
+            int pastr = hq.sortedPastrs.pop();
+            MapLocation pastrLoc = new MapLocation(pastr / hq.info.width, pastr % hq.info.width);
+            rc.setIndicatorString(2, "Group 1: Running Hunt: " + pastrLoc + " round: " + Clock.getRoundNum());
+            hq.comAttackPasture(pastrLoc, 1);
         } else if (hq.baseOne) {
             rc.setIndicatorString(2, "Group 1: Running base round: " + Clock.getRoundNum());
             groupOneBase.run();

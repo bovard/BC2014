@@ -27,7 +27,7 @@ public class HQQualifier extends Behavior {
             q.groupToSpawn = 0;
 
             // group zero
-            if (!q.milkInformation.finished) {
+            if (!q.milkInformation.finished && !q.weHavePastures) {
                 q.huddleZero = true;
             } else {
                 q.baseZero = true;
@@ -63,11 +63,11 @@ public class HQQualifier extends Behavior {
             }
 
             // group 1
-            if (q.enemyHasPastures) {
+            if (q.enemyHasPastures && !q.weHavePastures) {
                 q.huntPastrOne = true;
-            } else if (q.soldierCountsOne == null || q.soldierCountsOne.count < 4) {
+            } else if (q.soldierCountsOne == null || q.soldierCountsOne.count < 4 && !q.weHavePastures) {
                 q.huddleOne = true;
-            }  else if (false) {
+            }  else if (false && !q.weHavePastures) {
                 // TODO: implement this
                 q.huntComOne = true;
             } else {

@@ -9,6 +9,7 @@ import team009.communication.decoders.SoldierCountDecoder;
 import team009.robot.TeamRobot;
 import team009.utils.MapPreProcessor;
 import team009.utils.SmartMapLocationArray;
+import team009.utils.pathfinding.IntHeap;
 
 public abstract class HQ extends TeamRobot {
     private int twoWayComPosition;
@@ -26,6 +27,7 @@ public abstract class HQ extends TeamRobot {
     public boolean hasHQPastures = false;
     public SmartMapLocationArray enemyPastrs;
     public SmartMapLocationArray pastrLocations = new SmartMapLocationArray();
+    public IntHeap sortedPastrs = new IntHeap(100);
     public SmartMapLocationArray noiseLocations = new SmartMapLocationArray();
     public MapPreProcessor map;
 
@@ -59,12 +61,15 @@ public abstract class HQ extends TeamRobot {
         weHavePastures = homePastrs.length > 0;
 
         enemyPastrs = new SmartMapLocationArray();
+        // sorted Pastrs is a list of sorted pastr locations in distance away form enemy hq
+        sortedPastrs = new IntHeap(100);
         for (int i = 0, j = 0; i < 2 && j < pastrs.length; j++) {
             if (pastrs[i].isAdjacentTo(info.enemyHq)) {
                 hasHQPastures = true;
             } else {
                 enemyPastrs.add(pastrs[i]);
             }
+            sortedPastrs.add(pastrs[i].x * info.width + pastrs[i].y, - 1 * pastrs[i].distanceSquaredTo(info.enemyHq));
         }
 
         enemyHasPastures = enemyPastrs.length > 0;
