@@ -56,10 +56,12 @@ public class ToySelector extends Decision {
 
     public boolean run() throws GameActionException {
 
+        robot.rc.setIndicatorString(2, "Running loop!");
         // NOTE:  This is obviously brittle, but its really efficient.
         // Byte code critical code
-        if (engageEnemy.pre()) {
-            return engageEnemy.run();
+        if (micro.pre()) {
+            robot.rc.setIndicatorString(2, "Running micro!");
+            return micro.run();
         }
         if (destruct.pre()) {
             return destruct.run();

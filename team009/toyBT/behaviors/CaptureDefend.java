@@ -17,7 +17,7 @@ public class CaptureDefend extends ToyMoveToLocation {
     public boolean pre() throws GameActionException {
         pastr = soldier.comCommand == TeamRobot.CAPTURE_PASTURE;
         sound = soldier.comCommand == TeamRobot.CAPTURE_SOUND;
-        rc.setIndicatorString(2, soldier.round + ": " + pastr + " : " + sound);
+        //rc.setIndicatorString(2, soldier.round + ": " + pastr + " : " + sound);
         return pastr || sound;
     }
 

@@ -1,9 +1,9 @@
 package team009.toyBT.micro;
 
+import battlecode.common.Clock;
 import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
-import battlecode.common.RobotType;
 import team009.bt.behaviors.Behavior;
 import team009.robot.soldier.ToySoldier;
 
@@ -17,13 +17,13 @@ public class Retreat extends Behavior {
     @Override
     public boolean pre() throws GameActionException {
         // if we are outnumbered, full health, and they aren't too close
-        return soldier.enemySoldiers.length > soldier.friendlySoldiers.length + 1
-                && soldier.health == RobotType.SOLDIER.maxHealth
+        return soldier.enemySoldiers.length > soldier.friendlySoldiers.length + 2
                 && soldier.enemySoldiers.arr[0].location.distanceSquaredTo(robot.currentLoc) > 5;
     }
 
     @Override
     public boolean run() throws GameActionException {
+        robot.rc.setIndicatorString(2, "Retreating " + Clock.getRoundNum());
         // we are here and outnumbered but we can move away possibly?
         // if we are surrounded this will work out very poorly
         MapLocation nearestEnemy = soldier.enemySoldiers.arr[0].location;

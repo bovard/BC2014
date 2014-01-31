@@ -54,7 +54,7 @@ public class HQTest extends HQ {
             } catch (Exception e) {
                 e.printStackTrace();
                 String str = "Error: " + e.getMessage();
-                rc.setIndicatorString(2, str);
+                //rc.setIndicatorString(2, str);
             }
 
 

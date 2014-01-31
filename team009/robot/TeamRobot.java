@@ -124,7 +124,7 @@ public abstract class TeamRobot {
                     str += " : " + ((ToySoldier)this).comLocation;
                     str += " : " + ((ToySoldier)this).comCommand;
                 }
-                rc.setIndicatorString(2, str);
+                //rc.setIndicatorString(2, str);
             }
 
 

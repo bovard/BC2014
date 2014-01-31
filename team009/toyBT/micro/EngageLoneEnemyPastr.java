@@ -1,5 +1,6 @@
 package team009.toyBT.micro;
 
+import battlecode.common.Clock;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import battlecode.common.RobotInfo;
@@ -24,6 +25,7 @@ public class EngageLoneEnemyPastr extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
+        robot.rc.setIndicatorString(2, "Engage Pastr " + Clock.getRoundNum());
         // assume that they are sorted in closest to furthest
         RobotInfo pastr = ((ToySoldier)robot).enemyPastrs.arr[0];
 

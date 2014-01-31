@@ -1,8 +1,8 @@
 package team009.toyBT.micro;
 
+import battlecode.common.Clock;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
-import battlecode.common.RobotInfo;
 import team009.bt.behaviors.Behavior;
 import team009.navigation.BugMove;
 import team009.robot.soldier.ToySoldier;
@@ -24,6 +24,7 @@ public class EnageLoneEnemyNoise extends Behavior {
     @Override
     public boolean run() throws GameActionException {
         // assume senseNearbyGameObjects returns them in distance from us
+        robot.rc.setIndicatorString(2, "Engage Pastr " + Clock.getRoundNum());
         MapLocation toAttack = ((ToySoldier)robot).enemyNoise.arr[0].location;
 
         if (robot.rc.canAttackSquare(toAttack)) {

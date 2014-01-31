@@ -115,9 +115,12 @@ public class ToySoldier extends TeamRobot {
         seesEnemyTeamNonHQBuilding = seesEnemyNoise || seesEnemyPastr;
 
         enemySoldiersInCombatRange = 0;
-        while(enemySoldiersInCombatRange < enemySoldiers.length &&
-              currentLoc.distanceSquaredTo(enemySoldiers.arr[enemySoldiersInCombatRange].location) <= RobotType.SOLDIER.attackRadiusMaxSquared) {
-            enemySoldiersInCombatRange++;
+        int i = 0;
+        while(i < enemySoldiers.length) {
+            if (currentLoc.distanceSquaredTo(enemySoldiers.arr[i].location) <= RobotType.SOLDIER.attackRadiusMaxSquared) {
+                enemySoldiersInCombatRange++;
+            }
+            i++;
         }
 
         engagedInCombat = enemySoldiersInCombatRange > 0;

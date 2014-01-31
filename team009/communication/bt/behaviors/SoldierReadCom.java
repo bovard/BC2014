@@ -26,7 +26,7 @@ public class SoldierReadCom extends ReadBehavior {
 
         rc.setIndicatorString(0, "GroupCommand: " + soldier.groupCommand.toString());
         rc.setIndicatorString(1, "HQCommand: " + soldier.hqCommand.toString());
-        rc.setIndicatorString(2, "" + Clock.getRoundNum());
+        //rc.setIndicatorString(2, "" + Clock.getRoundNum());
 
         if (soldier.groupCommand.command > 0 && !soldier.comLocation.equals(zero)) {
             soldier.comLocation = soldier.groupCommand.location;

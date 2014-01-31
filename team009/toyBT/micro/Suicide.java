@@ -18,11 +18,12 @@ public class Suicide extends Behavior {
     @Override
     public boolean pre() throws GameActionException {
         // TODO: add a comm channel where you say if they have micro to avoid suicide
-        return soldier.enemySoldiers.length >= 3 && !soldier.seesEnemyHQ;
+        return false && soldier.enemySoldiers.length >= 3 && !soldier.seesEnemyHQ;
     }
 
     @Override
     public boolean run() throws GameActionException {
+        robot.rc.setIndicatorString(2, "Suiciding " + Clock.getRoundNum());
         MapLocation nearestEnemy = soldier.enemySoldiers.arr[0].location;
         Direction toEnemy = robot.currentLoc.directionTo(nearestEnemy);
 

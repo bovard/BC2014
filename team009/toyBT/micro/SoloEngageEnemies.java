@@ -1,5 +1,6 @@
 package team009.toyBT.micro;
 
+import battlecode.common.Clock;
 import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
@@ -18,7 +19,7 @@ public class SoloEngageEnemies extends Behavior {
 
     @Override
     public boolean pre() throws GameActionException {
-        return ((ToySoldier)robot).seesEnemySoldier && ((ToySoldier)robot).allies.length == 0;
+        return ((ToySoldier)robot).seesEnemySoldier && ((ToySoldier)robot).friendlySoldiers.length == 0;
     }
 
     /**
@@ -28,6 +29,7 @@ public class SoloEngageEnemies extends Behavior {
      */
     @Override
     public boolean run() throws GameActionException {
+        robot.rc.setIndicatorString(2, "Solo Engage " + Clock.getRoundNum());
         MapLocation enemyMass = CombatUtils.findCenterOfMass(((ToySoldier)robot).enemySoldiers.arr);
         Direction toMove = enemyMass.directionTo(((ToySoldier) robot).currentLoc);
         if (robot.rc.canMove(toMove)) {
