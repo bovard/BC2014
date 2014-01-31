@@ -134,6 +134,7 @@ public class MilkInformation {
                         }
                     }
                     if (val > oneBaseBest) {
+                        System.out.println("One Base");
                         oneBaseBestSpot = new MapLocation(i, j);
                         oneBaseBest = val;
                     } else if (val == oneBaseBest) {
