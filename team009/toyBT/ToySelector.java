@@ -4,6 +4,7 @@ import battlecode.common.GameActionException;
 import team009.bt.decisions.Decision;
 import team009.robot.soldier.ToySoldier;
 import team009.toyBT.behaviors.*;
+import team009.toyBT.micro.MicroSelector;
 import team009.toyBT.selectors.ToyHerderSelector;
 
 public class ToySelector extends Decision {
@@ -16,12 +17,16 @@ public class ToySelector extends Decision {
     CaptureDefend capture;
     NearEnemyHQ nearHq;
     ToySoldier soldier;
+    MicroSelector micro;
     public ToySelector(ToySoldier robot) {
         super(robot);
         soldier = robot;
 
         // Kill dem enemies
         engageEnemy = new ToyEngageEnemy(robot);
+
+        // Kill dem enemies v2
+        micro = new MicroSelector(robot);
 
         // Attack as a group
         destruct = new GroupDestruct(robot);
