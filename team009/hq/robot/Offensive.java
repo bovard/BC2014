@@ -52,10 +52,10 @@ public class Offensive extends HQPreprocessor {
     }
 
     public MapLocation getNextMilkingSpot() {
-        MilkInformation.Box box = milkInformation.targetBoxes[milkingSpot];
-
-        milkingSpot = (milkingSpot + 1) % milkInformation.targetBoxes.length;
-        return box.bestSpot;
+//        MilkInformation.Box box = milkInformation.targetBoxes[milkingSpot];
+//
+//        milkingSpot = (milkingSpot + 1) % milkInformation.targetBoxes.length;
+        return null;
     }
 
     @Override
