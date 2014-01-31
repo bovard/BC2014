@@ -11,7 +11,6 @@ public class HQQualifier extends Behavior {
     public HQQualifier(Qualifier q) {
         super(q);
         this.q = q;
-        distToEnemeyHQ = q.info.hq.distanceSquaredTo(q.info.enemyHq);
     }
     @Override
     public boolean pre() throws GameActionException {
@@ -20,44 +19,70 @@ public class HQQualifier extends Behavior {
 
     @Override
     public boolean run() throws GameActionException {
+        q.baseZero = q.surroundZero = q.huntZero = q.huddleZero = false;
+        q.huddleOne = q.baseOne = q.huntComOne = q.baseOne = q.huntPastrOne = false;
+
+        // large map strat
+        if (q.info.enemyHqDistance > BehaviorConstants.MAP_DISTANCE_TO_ENEMY_HQ) {
+            q.groupToSpawn = 0;
+
+            // group zero
+            if (!q.milkInformation.finished) {
+                q.huddleZero = true;
+            } else if (distToEnemeyHQ > BehaviorConstants.MAP_DISTANCE_TO_ENEMY_HQ) {
+                q.baseZero = true;
+            }
+
+
+            // group one
+
+            // if we see there are more than 1 enemy pastr, hunt them!
+            if (q.enemyPastrs.arr.length > 1) {
+                q.huntPastrOne = true;
+                if (q.soldierCountsOne.count < q.soldierCountsZero.count) {
+                    q.groupToSpawn = 1;
+                }
+            }
+            // just huddle
+            else {
+                q.huddleOne = true;
+            }
+
+        }
+
+        // small map strategy
+        else {
+            q.groupToSpawn = 0;
+
+            // group 0
+            if (q.enemyHasPastures) {
+                q.huntZero = true;
+            } else {
+                q.surroundZero = true;
+            }
+
+            // group 1
+            if (q.enemyHasPastures) {
+                q.huntPastrOne = true;
+            } else if (false) {
+                q.huntComOne = true;
+            } else {
+                q.baseOne = true;
+            }
+
+            if (q.soldierCountsZero.count > BehaviorConstants.GROUP_0_SIZE_SMALL_MAP) {
+                q.groupToSpawn = 1;
+            }
+
+
+        }
+
 
         // Communications information
         // should communicate between two different groups
 
-        // group 0
-        // if map is too large, create a base
-        // otherwise kill pastrs
-        // otherwise surroundZero
-        // otherwise huddleZero
-        q.baseZero = q.surroundZero = q.huntZero = q.huddleZero = false;
-        if (q.soldierCountsZero == null || q.soldierCountsZero.count < 4) {
-            q.huddleZero = true;
-        } else if (distToEnemeyHQ > BehaviorConstants.MAP_DISTANCE_TO_ENEMY_HQ) {
-            q.baseZero = true;
-        } else if (q.enemyHasPastures) {
-            q.huntZero = true;
-        } else {
-            q.surroundZero = true;
-        }
 
 
-
-        // group 1
-        // if map is too large, create a base
-        // huntZero communicating enemies that are not near enemy hq
-        // otherwise create a base
-
-//        q.huddleOne = q.baseOne = q.huntComOne = q.baseOne = false;
-//        if (q.soldierCountsZero == null || q.soldierCountsZero.count < 4) {
-//            q.huddleOne = true;
-//        } else if (false && distToEnemeyHQ > BehaviorConstants.MAP_DISTANCE_TO_ENEMY_HQ) {
-//            q.baseOne = true;
-//        } else if (false) {
-//            // TODO: this
-//            q.huntComOne = true;
-//        } else {
-//            q.baseOne = false;
-//        }
 
         return true;
     }

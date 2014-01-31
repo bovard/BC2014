@@ -22,6 +22,9 @@ public class Qualifier extends HQPreprocessor {
     public boolean huntComOne = false;
     public boolean baseOne = false;
     public boolean huddleOne = false;
+    public boolean huntPastrOne = false;
+
+    public int groupToSpawn = 0;
 
     public Qualifier(RobotController rc, RobotInformation info) {
         super(rc, info);

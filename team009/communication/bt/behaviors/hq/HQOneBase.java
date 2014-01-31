@@ -8,10 +8,12 @@ import team009.hq.robot.Qualifier;
 
 public class HQOneBase extends WriteBehavior {
     Qualifier hq;
+    int group;
 
-    public HQOneBase(Qualifier off) {
+    public HQOneBase(Qualifier off, int group) {
         super(off);
         hq = off;
+        this.group = group;
     }
 
     @Override
@@ -30,10 +32,10 @@ public class HQOneBase extends WriteBehavior {
 
         if (hasSound) {
             System.out.println("BestSpot: " + bestSpot);
-            hq.comCapture(bestSpot, 0);
+            hq.comCapture(bestSpot, group);
         } else {
             System.out.println("Noise: " + noiseLoc);
-            hq.comSoundTower(noiseLoc, 0);
+            hq.comSoundTower(noiseLoc, group);
         }
         return true;
     }
