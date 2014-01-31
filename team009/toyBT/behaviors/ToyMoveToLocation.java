@@ -68,7 +68,7 @@ public class ToyMoveToLocation extends Behavior {
         } else if (soldier.locationResult != null && currentMove.destination != null && !currentMove.destination.equals(soldier.locationResult)) {
             snailMove.setDestination(soldier.locationResult);
             bugMove.setDestination(soldier.locationResult);
-            if (soldier.locationResult.distanceSquaredTo(soldier.currentLoc) <= 8) {
+            if (soldier.locationResult.distanceSquaredTo(soldier.currentLoc) <= 25) {
                 requestLocations(soldier.locationResult);
             }
         }
