@@ -29,7 +29,7 @@ public class HQQualifier extends Behavior {
             // group zero
             if (!q.milkInformation.finished) {
                 q.huddleZero = true;
-            } else if (distToEnemeyHQ > BehaviorConstants.MAP_DISTANCE_TO_ENEMY_HQ) {
+            } else {
                 q.baseZero = true;
             }
 
@@ -39,7 +39,8 @@ public class HQQualifier extends Behavior {
             // if we see there are more than 1 enemy pastr, hunt them!
             if (q.enemyPastrs.arr.length > 1) {
                 q.huntPastrOne = true;
-                if (q.soldierCountsOne.count < q.soldierCountsZero.count) {
+                if (q.soldierCountsZero != null && q.soldierCountsOne != null && q.soldierCountsOne.count < q.soldierCountsZero.count) {
+                    System.out.println("more 0s than 1, spawning a 1");
                     q.groupToSpawn = 1;
                 }
             }
@@ -64,13 +65,17 @@ public class HQQualifier extends Behavior {
             // group 1
             if (q.enemyHasPastures) {
                 q.huntPastrOne = true;
-            } else if (false) {
+            } else if (q.soldierCountsOne == null || q.soldierCountsOne.count < 4) {
+                q.huddleOne = true;
+            }  else if (false) {
+                // TODO: implement this
                 q.huntComOne = true;
             } else {
                 q.baseOne = true;
             }
 
-            if (q.soldierCountsZero.count > BehaviorConstants.GROUP_0_SIZE_SMALL_MAP) {
+            if (q.soldierCountsOne != null && q.soldierCountsZero.count > BehaviorConstants.GROUP_0_SIZE_SMALL_MAP) {
+                System.out.println(q.soldierCountsZero.count + " soldiers in group 0, spawning group 1 now!");
                 q.groupToSpawn = 1;
             }
 

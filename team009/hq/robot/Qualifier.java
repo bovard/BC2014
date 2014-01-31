@@ -1,13 +1,11 @@
 package team009.hq.robot;
 
 import battlecode.common.*;
-import team009.BehaviorConstants;
 import team009.RobotInformation;
 import team009.bt.Node;
 import team009.hq.HQPreprocessor;
 import team009.hq.bt.selectors.QualifierSelector;
 import team009.communication.bt.HQCom;
-import team009.utils.MilkInformation;
 
 public class Qualifier extends HQPreprocessor {
     // Default behavior is one base and both groups defend it

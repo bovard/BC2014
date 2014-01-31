@@ -23,7 +23,7 @@ public class Communicator {
         GroupCommandDecoder decoder = new GroupCommandDecoder(group, command, location, ttl);
 
         if (channel == 1) {
-            System.out.println("HQ Is Writing" + _GroupChannel(group, channel) + ": " + decoder.toString());
+            //System.out.println("HQ Is Writing" + _GroupChannel(group, channel) + ": " + decoder.toString());
         } else {
         }
         _Broadcast(rc, _GroupChannel(group, channel), decoder);
@@ -75,7 +75,7 @@ public class Communicator {
         GroupCommandDecoder decoder = new GroupCommandDecoder(rc.readBroadcast(groupChannel));
 
         if (channel == 1) {
-            System.out.println("Soldier is Reading" + _GroupChannel(group, channel) + ": " + decoder.toString());
+            //System.out.println("Soldier is Reading" + _GroupChannel(group, channel) + ": " + decoder.toString());
         }
 
         // Shortcut it, clear the channel
