@@ -23,6 +23,7 @@ public class HQQualifier extends Behavior {
 
         // Communications information
         // should communicate between two different groups
+
         // group 0
         // if map is too large, create a base
         // otherwise kill pastrs
