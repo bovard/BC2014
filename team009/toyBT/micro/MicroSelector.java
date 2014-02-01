@@ -8,6 +8,7 @@ public class MicroSelector extends Selector {
     public MicroSelector(ToySoldier robot) {
         super(robot);
         addChild(new CombatSelector(robot));
+        addChild(new HQEngageEnemies(robot));
         addChild(new SoloEngageEnemies(robot));
         addChild(new GroupEngageEnemies(robot));
         addChild(new EngageLoneEnemyPastr(robot));

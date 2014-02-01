@@ -5,7 +5,6 @@ import battlecode.common.Direction;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import team009.bt.behaviors.Behavior;
-import team009.combat.CombatUtils;
 import team009.navigation.BugMove;
 import team009.robot.soldier.ToySoldier;
 
@@ -30,7 +29,7 @@ public class SoloEngageEnemies extends Behavior {
     @Override
     public boolean run() throws GameActionException {
         robot.rc.setIndicatorString(2, "Solo Engage " + Clock.getRoundNum());
-        MapLocation enemyMass = CombatUtils.findCenterOfMass(((ToySoldier)robot).enemySoldiers.arr);
+        MapLocation enemyMass = ((ToySoldier)robot).nearestEnemy.location;
         Direction toMove = enemyMass.directionTo(((ToySoldier) robot).currentLoc);
         if (robot.rc.canMove(toMove)) {
             robot.rc.move(toMove);

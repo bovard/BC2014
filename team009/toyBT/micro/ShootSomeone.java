@@ -32,19 +32,22 @@ public class ShootSomeone extends Behavior {
     @Override
     public boolean run() throws GameActionException {
         soldier.rc.setIndicatorString(2, "Shooting someone");
-        SmartRobotInfoArray nmeInfos = soldier.enemySoldiers;
-        MapLocation[] nmeLocs = new MapLocation[soldier.enemySoldiers.length];
-        int[] nmeHps = new int[soldier.enemySoldiers.length];
 
-        _fillData(nmeInfos, nmeLocs, nmeHps);
-        _sort(nmeInfos, nmeLocs, nmeHps);
-        SmartMapLocationArray currentAttackableEnemies = new SmartMapLocationArray();
-        for (RobotInfo info: soldier.enemySoldiersInRange.arr) {
-            currentAttackableEnemies.add(info.location);
+        double lowestHP = RobotType.SOLDIER.maxHealth;
+        MapLocation lowestHPLoc = null;
+        for (int i = soldier.enemySoldiers.length; --i >= 0; ) {
+            if (soldier.enemySoldiers.arr[i].health < lowestHP) {
+                lowestHP = soldier.enemySoldiers.arr[i].health;
+                lowestHPLoc = soldier.enemySoldiers.arr[i].location;
+            }
         }
+
         MapLocation nearestEnemy = soldier.nearestEnemy.location;
 
-        MapLocation target = nearestEnemy == null ? nmeLocs[0] : nearestEnemy;
+        MapLocation target = nearestEnemy;
+        if (lowestHPLoc != null) {
+            target = lowestHPLoc;
+        }
 
         if (robot.rc.canAttackSquare(target)) {
             robot.rc.attackSquare(target);

@@ -23,6 +23,7 @@ public class ToySoldier extends TeamRobot {
       public SmartRobotInfoArray enemySoldiers;
       public SmartRobotInfoArray enemySoldiersInRange;
       public int enemySoldiersInCombatRange = 0;
+      public int alliedSoldiersInCombatRange = 0;
       public SmartRobotInfoArray friendlySoldiers;
       public SmartRobotInfoArray friendlyPastrs;
       public SmartRobotInfoArray enemyPastrs;
@@ -84,28 +85,26 @@ public class ToySoldier extends TeamRobot {
           enemyPastrs = new SmartRobotInfoArray();
           friendlySoldiers = new SmartRobotInfoArray();
           friendlyPastrs = new SmartRobotInfoArray();
+          alliedSoldiersInCombatRange = 0;
+          seesEnemyHQ = false;
 
           // micro stuff
-          // TODO: get a better picture by sensing how many of our allies are soliders?
-          // TODO: Morph this into one call (thats an extra 100 byte codes for no reason)
           nearestAllyDistance = 100;
           nearestAlly = null;
           nearestEnemyDistance = 100;
           nearestEnemy = null;
-          enemySoldiersInCombatRange = 0;
           Robot[] robots = rc.senseNearbyGameObjects(Robot.class, sensorRadiusSquared);
           for (Robot r : robots) {
               RobotInfo info = rc.senseRobotInfo(r);
 
               if (info.team == this.info.enemyTeam) {
                   if (info.type == RobotType.HQ) {
-                      seesEnemyHQ = true;
                       enemyHqInfo = info;
+                      seesEnemyHQ = true;
                   } else if (info.type == RobotType.SOLDIER) {
                       enemySoldiers.add(info);
                       int dist = info.location.distanceSquaredTo(currentLoc);
-                      if (dist < RobotType.SOLDIER.attackRadiusMaxSquared) {
-                          enemySoldiersInCombatRange++;
+                      if (dist <= RobotType.SOLDIER.attackRadiusMaxSquared) {
                           enemySoldiersInRange.add(info);
                       }
                       if (dist < nearestEnemyDistance) {
@@ -122,21 +121,21 @@ public class ToySoldier extends TeamRobot {
                   if (info.type == RobotType.SOLDIER) {
                       friendlySoldiers.add(info);
                       int dist = info.location.distanceSquaredTo(currentLoc);
-                      if (dist < RobotType.SOLDIER.attackRadiusMaxSquared) {
-                          enemySoldiersInCombatRange++;
+                      if (dist <= RobotType.SOLDIER.attackRadiusMaxSquared) {
+                          alliedSoldiersInCombatRange++;
                       }
-                      if (dist < nearestEnemyDistance) {
-                          nearestEnemyDistance = dist;
-                          nearestEnemy = info;
+                      if (dist < nearestAllyDistance) {
+                          nearestAllyDistance = dist;
+                          nearestAlly = info;
                       }
                   } else if (info.type == RobotType.PASTR) {
                       friendlyPastrs.add(info);
                   }
               }
           }
+          enemySoldiersInCombatRange = enemySoldiersInRange.length;
           engagedInCombat = enemySoldiersInCombatRange > 0;
 
-          seesEnemyHQ = false;
           seesEnemySoldier = enemySoldiers.length > 0;
           seesEnemyPastr = enemyPastrs.length > 0;
           seesEnemyNoise = enemyNoise.length > 0;
