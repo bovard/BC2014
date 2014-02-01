@@ -12,6 +12,7 @@ public class CombatSelector extends Selector {
         // then check to see if we can retreat safely
         // else shoot someone
 
+        children.add(new SuicideAvoid(robot));
         children.add(new Retreat(robot));
         children.add(new Suicide(robot));
         children.add(new ShootSomeone(robot));
