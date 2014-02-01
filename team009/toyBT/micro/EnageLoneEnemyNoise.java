@@ -18,7 +18,7 @@ public class EnageLoneEnemyNoise extends Behavior {
 
     @Override
     public boolean pre() throws GameActionException {
-        return ((ToySoldier)robot).seesEnemyNoise;
+        return ((ToySoldier)robot).seesEnemyNoise && !((ToySoldier)robot).seesEnemyHQ;
     }
 
     @Override

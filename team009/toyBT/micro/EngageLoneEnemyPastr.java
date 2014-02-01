@@ -20,7 +20,7 @@ public class EngageLoneEnemyPastr extends Behavior {
 
     @Override
     public boolean pre() throws GameActionException {
-        return ((ToySoldier)robot).seesEnemyPastr;
+        return ((ToySoldier)robot).seesEnemyPastr ;
     }
 
     @Override
@@ -36,9 +36,11 @@ public class EngageLoneEnemyPastr extends Behavior {
             return true;
         }
 
-        move.setDestination(pastr.location);
-        if (move.move()) {
-            return true;
+        if (!((ToySoldier)robot).seesEnemyHQ)  {
+            move.setDestination(pastr.location);
+            if (move.move()) {
+                return true;
+            }
         }
 
         MapLocation toShoot = CombatUtils.canSeePastrButNotShootItKillCowsInstead(pastr.location, robot);

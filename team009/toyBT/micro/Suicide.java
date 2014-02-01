@@ -2,7 +2,6 @@ package team009.toyBT.micro;
 
 import battlecode.common.*;
 import team009.bt.behaviors.Behavior;
-import team009.navigation.BugMove;
 import team009.robot.soldier.ToySoldier;
 
 public class Suicide extends Behavior {
