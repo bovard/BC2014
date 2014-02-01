@@ -38,8 +38,11 @@ public class ShootSomeone extends Behavior {
 
         _fillData(nmeInfos, nmeLocs, nmeHps);
         _sort(nmeInfos, nmeLocs, nmeHps);
-        SmartMapLocationArray currentAttackableEnemies = _getAttackableEnemies(soldier.currentLoc, nmeLocs);
-        MapLocation nearestEnemy = currentAttackableEnemies.arr[0];
+        SmartMapLocationArray currentAttackableEnemies = new SmartMapLocationArray();
+        for (RobotInfo info: soldier.enemySoldiersInRange.arr) {
+            currentAttackableEnemies.add(info.location);
+        }
+        MapLocation nearestEnemy = soldier.nearestEnemy.location;
 
         MapLocation target = nearestEnemy == null ? nmeLocs[0] : nearestEnemy;
 
