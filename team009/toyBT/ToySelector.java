@@ -18,6 +18,7 @@ public class ToySelector extends Decision {
     NearEnemyHQ nearHq;
     ToySoldier soldier;
     MicroSelector micro;
+    HealAtHQ heal;
     public ToySelector(ToySoldier robot) {
         super(robot);
         soldier = robot;
@@ -27,6 +28,9 @@ public class ToySelector extends Decision {
 
         // Kill dem enemies v2
         micro = new MicroSelector(robot);
+
+        // heal theyself
+        heal = new HealAtHQ(robot);
 
         // Attack as a group
         destruct = new GroupDestruct(robot);
@@ -62,6 +66,9 @@ public class ToySelector extends Decision {
         if (micro.pre()) {
             robot.rc.setIndicatorString(2, "Running micro!");
             return micro.run();
+        }
+        if (heal.pre()) {
+            return heal.run();
         }
         if (destruct.pre()) {
             return destruct.run();
