@@ -8,6 +8,8 @@ import team009.communication.bt.behaviors.WriteBehavior;
 import team009.hq.robot.Qualifier;
 import team009.utils.MapQuadrantUtils;
 
+import java.util.ArrayList;
+
 public class HQOneBase extends WriteBehavior {
     Qualifier hq;
     int group;
@@ -28,11 +30,24 @@ public class HQOneBase extends WriteBehavior {
         MapQuadrantUtils.width = robot.info.width;
         MapQuadrantUtils.height = robot.info.height;
         int ourQuad = MapQuadrantUtils.getMapQuadrant(robot.info.hq);
-        int newQuad = ourQuad + 1;
-        if (newQuad > 4) {
-            newQuad = 1;
+        int enemyQuad = MapQuadrantUtils.getMapQuadrant(robot.info.enemyHq);
+        ArrayList<Integer> corners = new ArrayList<Integer>();
+        corners.add(1);
+        corners.add(2);
+        corners.add(3);
+        corners.add(4);
+        corners.remove(new Integer(ourQuad));
+        corners.remove(new Integer(enemyQuad));
+
+        int cornerZeroDist = MapQuadrantUtils.getMapCornerForQuadrant(corners.get(0)).distanceSquaredTo(robot.info.hq);
+        int cornerOneDist = MapQuadrantUtils.getMapCornerForQuadrant(corners.get(1)).distanceSquaredTo(robot.info.hq);
+
+        if (cornerZeroDist < cornerOneDist) {
+            corner = MapQuadrantUtils.getMapCornerForQuadrant(corners.get(0));
+        } else {
+            corner = MapQuadrantUtils.getMapCornerForQuadrant(corners.get(1));
         }
-        corner = MapQuadrantUtils.getMapCornerForQuadrant(newQuad);
+
         cowGrowth = robot.rc.senseCowGrowth();
         calcPastrSpot();
     }
