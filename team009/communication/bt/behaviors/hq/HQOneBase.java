@@ -80,7 +80,7 @@ public class HQOneBase extends WriteBehavior {
     private void calcPastrSpot() {
         boolean done = false;
         pastrSpot = corner;
-        int moveOutOfCorner = 7;
+        int moveOutOfCorner = 5;
         // move a little bit out of the corner
         for (int i = 0; i < moveOutOfCorner; i++) {
             pastrSpot = pastrSpot.add(pastrSpot.directionTo(robot.info.center));
