@@ -22,12 +22,12 @@ public class GroupEngageEnemies extends Behavior {
     @Override
     public boolean run() throws GameActionException {
         robot.rc.setIndicatorString(2, "Group Engage " + Clock.getRoundNum());
-        MapLocation nearestAlly = soldier.friendlySoldiers.arr[0].location;
+        MapLocation nearestAlly = soldier.nearestAlly.location;
         Direction toAlly = soldier.currentLoc.directionTo(nearestAlly);
         // if we outnumber them
-        if (((ToySoldier)robot).enemySoldiers.length < ((ToySoldier)robot).friendlySoldiers.length) {
+        if (((ToySoldier)robot).enemySoldiers.length < ((ToySoldier)robot).friendlySoldiers.length + 1) {
             // if we aren't next to our ally get there!
-            if (!((ToySoldier) robot).friendlySoldiers.arr[0].location.isAdjacentTo(((ToySoldier) robot).currentLoc)) {
+            if (!nearestAlly.isAdjacentTo(((ToySoldier) robot).currentLoc)) {
                 robot.rc.setIndicatorString(2, "Not adjacent!" + ((ToySoldier) robot).currentLoc + " " + ((ToySoldier) robot).friendlySoldiers.arr[0].location);
                 if (robot.rc.canMove(toAlly)) {
                     robot.rc.move(toAlly);
@@ -54,10 +54,11 @@ public class GroupEngageEnemies extends Behavior {
                         return true;
                     }
                 }
+                robot.rc.setIndicatorString(2, "Can't get adjacent!" + ((ToySoldier) robot).currentLoc + " " + ((ToySoldier) robot).friendlySoldiers.arr[0].location);
                 return false;
             }
 
-            MapLocation nearestEnemy = soldier.enemySoldiers.arr[0].location;
+            MapLocation nearestEnemy = soldier.nearestEnemy.location;
             Direction toEnemy = soldier.currentLoc.directionTo(nearestEnemy);
 
             // we're next to our ally, try to form a wall toward the nearest enemy
@@ -66,6 +67,7 @@ public class GroupEngageEnemies extends Behavior {
             MapLocation rightLoc = nearestAlly.add(toEnemy.rotateRight().rotateRight());
             Direction toRight = soldier.currentLoc.directionTo(rightLoc);
 
+            robot.rc.setIndicatorString(2, "Trying to get to a wall!" + ((ToySoldier) robot).currentLoc + " " + ((ToySoldier) robot).friendlySoldiers.arr[0].location);
             // try to move in position to the left
             if (soldier.currentLoc.distanceSquaredTo(leftLoc) < soldier.currentLoc.distanceSquaredTo(rightLoc)) {
                 if (soldier.currentLoc.isAdjacentTo(leftLoc) && soldier.rc.canMove(toLeft)) {
@@ -103,7 +105,7 @@ public class GroupEngageEnemies extends Behavior {
         }
 
         // if they outnumber us
-        robot.rc.setIndicatorString(2, "We are outnumbered! " + ((ToySoldier)robot).enemySoldiers.length  + " > " + ((ToySoldier)robot).friendlySoldiers.length);
+        robot.rc.setIndicatorString(2, "We are outnumbered! " + ((ToySoldier) robot).enemySoldiers.length + " > " + ((ToySoldier) robot).friendlySoldiers.length + 1);
         // retreat!
         MapLocation nearestEnemyLoc = ((ToySoldier)robot).enemySoldiers.arr[0].location;
         Direction toMove = nearestEnemyLoc.directionTo(((ToySoldier) robot).currentLoc);

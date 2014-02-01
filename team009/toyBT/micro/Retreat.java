@@ -17,7 +17,7 @@ public class Retreat extends Behavior {
     @Override
     public boolean pre() throws GameActionException {
         // if we are outnumbered, full health, and they aren't too close
-        return soldier.enemySoldiers.length > soldier.friendlySoldiers.length + 2
+        return soldier.enemySoldiers.length > soldier.friendlySoldiers.length + 1
                 && soldier.enemySoldiers.arr[0].location.distanceSquaredTo(robot.currentLoc) > 5;
     }
 
