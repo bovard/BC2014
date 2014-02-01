@@ -27,7 +27,7 @@ public class HQQualifier extends Behavior {
             q.groupToSpawn = 0;
 
             // group zero
-            if (!q.milkInformation.finished && !q.weHavePastures) {
+            if (!q.weHavePastures) {
                 q.huddleZero = true;
             } else {
                 q.baseZero = true;

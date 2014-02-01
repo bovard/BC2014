@@ -46,11 +46,11 @@ public abstract class HQPreprocessor extends HQ {
         }
 
 
-        if (!milkInformation.finished) {
-            System.out.println("Milk: " + milkInformation.finished);
-            milkInformation.calc();
-            return;
-        }
+//        if (!milkInformation.finished) {
+//            System.out.println("Milk: " + milkInformation.finished);
+//            milkInformation.calc();
+//            return;
+//        }
 
         if (!initStar) {
             initStar = true;
