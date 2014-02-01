@@ -45,14 +45,18 @@ public class HQEngageEnemies extends Behavior{
             return false;
         }
 
+
         MapLocation nearestAlly = soldier.nearestAlly.location;
+        if (soldier.nearestAlly != null) {
+            nearestAlly = soldier.nearestAlly.location;
+        }
         Direction toAlly = soldier.currentLoc.directionTo(nearestAlly);
         Direction toEnemyHQLeft = toEnemyHQ.rotateLeft();
         Direction toEnemyHQRight = toEnemyHQ.rotateRight();
 
         // if we outnumber them!
         if (soldier.enemySoldiers.length < soldier.alliedSoldiersInCombatRange + 1) {
-            if (!nearestAlly.isAdjacentTo(((ToySoldier) robot).currentLoc)) {
+            if (soldier.nearestAlly == null && !soldier.nearestAlly.location.isAdjacentTo(((ToySoldier) robot).currentLoc)) {
                 Direction toTry = toAlly;
                 if (toTry != toEnemyHQ && toTry != toEnemyHQLeft && toTry != toEnemyHQRight && robot.rc.canMove(toTry)) {
                     robot.rc.move(toTry);

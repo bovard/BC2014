@@ -30,17 +30,26 @@ public class CaptureDefend extends ToyMoveToLocation {
             if (rc.senseObjectAtLocation(currentLocation) == null) {
                 super.run();
             }
+            return true;
         }
 
         // If we are equal, then construct
-        else if (currentLocation.equals(soldier.currentLoc)) {
+        if (currentLocation.equals(soldier.currentLoc)) {
             if (pastr) {
                 rc.construct(RobotType.PASTR);
             } else if (sound) {
                 rc.construct(RobotType.NOISETOWER);
             }
-        } else {
-            super.run();
+            return true;
+        }
+
+        MapLocation adjacent = robot.currentLoc.add(robot.currentLoc.directionTo(currentLocation));
+        if (adjacent.isAdjacentTo(currentLocation)) {
+           if (robot.rc.senseObjectAtLocation(adjacent) == null) {
+               super.run();
+
+           }
+           return true;
         }
 
         return true;
