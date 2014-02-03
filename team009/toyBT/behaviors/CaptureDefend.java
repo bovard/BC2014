@@ -47,11 +47,11 @@ public class CaptureDefend extends ToyMoveToLocation {
         if (adjacent.isAdjacentTo(currentLocation)) {
            if (robot.rc.senseObjectAtLocation(adjacent) == null) {
                super.run();
-
            }
            return true;
         }
 
+        super.run();
         return true;
     }
 }

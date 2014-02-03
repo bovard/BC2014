@@ -51,7 +51,8 @@ public class Retreat extends Behavior {
 
         for (int i = soldier.enemySoldiersInCombatRange; --i>=0;) {
             Direction toNewEnemy = soldier.currentLoc.directionTo(soldier.enemySoldiers.arr[i].location);
-            if (toNewEnemy != toEnemy || toNewEnemy != left || toNewEnemy != right) {
+            if (toNewEnemy != toEnemy && toNewEnemy != left && toNewEnemy != right) {
+                System.out.println("OMG: " + toNewEnemy + " == " + toEnemy);
                 return false;
             }
         }
